@@ -5,25 +5,30 @@
 
 DWORD* __cdecl PostLoadEngineLibrary(DWORD* a1)
 {
-    MessageBoxA(NULL, "PostLoadEngine", "", 0);
-
     auto result = Patch::DoCall<DWORD*(DWORD*)>(0x4797E0)(a1);
 
     return result;
 }
 
-int __stdcall VideoGetDeviceCaps(HDC hdc, int index)
+signed int __fastcall GetSaveLoadingErrorCode(void* _THIS,  DWORD* a1, int a2)
 {
-    return GetDeviceCaps(hdc, index);
-};
+    auto result = Patch::DoCall<signed int(void*, DWORD*, int)>(0x429670)(_THIS, a1, a2);;
+
+    return 0;
+}
 
 BOOL MainInit(const HMODULE hModule)
 {
     const auto mod = GetModuleHandle(NULL);
-    Patch::Call(0x4898D9, Patch::GetP(PostLoadEngineLibrary)); // LoadLibraryA Call in Gol .dll seeking function
+    Patch::Call(0x4898D9, Patch::GetP(PostLoadEngineLibrary)); // first function called after GoL loading
 
+    //Patch::Call(0x42AAAF, Patch::GetP(GetSaveLoadingErrorCode));
+    //Patch::Call(0x42A678, Patch::GetP(GetSaveLoadingErrorCode));
+    
 #ifdef _DEBUG
-    Patch::Nop(0x48ACB6, 2); // Patch DX Media check to skip the intro videos
+    // Patch DX Media check to skip the intro videos
+    Patch::Nop(0x48ACB6, 2);
+
 #endif
 
 #ifdef _DEBUG
