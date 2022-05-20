@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include <string>
 
-#include "Patch.h"
+#include "patch/Patch.h"
 
 DWORD* __cdecl PostLoadEngineLibrary(DWORD* a1)
 {

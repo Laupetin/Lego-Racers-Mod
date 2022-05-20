@@ -39,4 +39,20 @@ public:
     {
         Data(ptr, &data, sizeof(T));
     }
+
+    template <typename T> static std::function<T> DoCall(uintptr_t function)
+    {
+        return std::function<T>(reinterpret_cast<T*>(function));
+    }
+
+    template <typename T> static std::function<T> DoCall(void* function)
+    {
+        return DoCall<T>(reinterpret_cast<DWORD>(function));
+    }
+
+    template<typename T>
+    static __forceinline void* GetP(T a)
+    {
+        return *reinterpret_cast<void**>(&a);
+    }
 };
