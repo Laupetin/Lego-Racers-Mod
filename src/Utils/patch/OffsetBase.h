@@ -72,9 +72,8 @@ struct LazyOffsetInitializationTarget
 template <size_t EnvironmentCount>
 class OffsetManagerStorage final : public Singleton<OffsetManagerStorage<EnvironmentCount>>, OffsetManager
 {
-    //static constexpr auto NO_OFFSET_SELECTED = std::numeric_limits<size_t>::max();
-    static constexpr auto NO_OFFSET_SELECTED = UINT32_MAX;
-    size_t m_selected_offset_index = NO_OFFSET_SELECTED;
+    static constexpr auto NO_ENVIRONMENT_SELECTED = SIZE_MAX;
+    size_t m_selected_environment_index = NO_ENVIRONMENT_SELECTED;
 
     std::mutex m_value_mutex;
     std::vector<std::array<uintptr_t, EnvironmentCount>> m_lazy_values;
@@ -88,14 +87,14 @@ public:
         m_manager = this;
     }
 
-    [[nodiscard]] bool IsOffsetSelected() const
+    [[nodiscard]] bool IsAnyEnvironmentSelected() const
     {
-        return m_selected_offset_index != NO_OFFSET_SELECTED;
+        return m_selected_environment_index != NO_ENVIRONMENT_SELECTED;
     }
 
-    [[nodiscard]] size_t GetSelectedOffset() const
+    [[nodiscard]] size_t GetSelectedEnvironment() const
     {
-        return m_selected_offset_index;
+        return m_selected_environment_index;
     }
 
     void SetSelectedEnvironment(const size_t environmentIndex)
@@ -105,7 +104,7 @@ public:
             return;
 
         std::scoped_lock lock(m_init_mutex);
-        m_selected_offset_index = environmentIndex;
+        m_selected_environment_index = environmentIndex;
         for (const auto& target : m_lazy_offset_initialization_targets)
         {
             if (target.m_lazy_lookup_index >= m_lazy_values.size())
@@ -122,10 +121,10 @@ public:
         if (lazyLookupIndex > m_lazy_values.size())
             return 0;
 
-        if (m_selected_offset_index == NO_OFFSET_SELECTED)
+        if (m_selected_environment_index == NO_ENVIRONMENT_SELECTED)
             return 0;
 
-        return m_lazy_values[lazyLookupIndex][m_selected_offset_index];
+        return m_lazy_values[lazyLookupIndex][m_selected_environment_index];
     }
 
     void DoRegisterLazyInitialization(ILazyOffsetInitTarget* target, const size_t lazyLookupIndex) override
@@ -139,8 +138,8 @@ public:
 
         m_lazy_offset_initialization_targets.emplace_back(target, lazyLookupIndex);
 
-        if (m_selected_offset_index != NO_OFFSET_SELECTED)
-            target->SetLazyValue(m_lazy_values[lazyLookupIndex][m_selected_offset_index]);
+        if (m_selected_environment_index != NO_ENVIRONMENT_SELECTED)
+            target->SetLazyValue(m_lazy_values[lazyLookupIndex][m_selected_environment_index]);
     }
 
     [[nodiscard]] size_t ReserveLazyLookupIndex()
@@ -167,8 +166,7 @@ public:
 class OffsetValue
 {
 public:
-    //static constexpr size_t NO_LAZY_EVALUATION = std::numeric_limits<size_t>::max();
-    static constexpr size_t NO_LAZY_EVALUATION = UINT32_MAX;
+    static constexpr size_t NO_LAZY_EVALUATION = SIZE_MAX;
 
     size_t m_lazy_evaluation_index;
     uintptr_t m_fixed_value;
@@ -200,14 +198,14 @@ public:
     Offset& _envName(const uintptr_t value)                                                     \
     {                                                                                           \
         auto& storage = OffsetManagerStorage<OFFSET_COUNT_VALUE>::Instance();                   \
-        if (!storage.IsOffsetSelected())                                                        \
-        { MessageBoxA(NULL, "1", "", 0);                                                                                       \
+        if (!storage.IsAnyEnvironmentSelected())                                                \
+        {                                                                                       \
             if (m_value.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)             \
                 m_value.m_lazy_evaluation_index = storage.ReserveLazyLookupIndex();             \
             storage.SetLazyLookupValue(m_value.m_lazy_evaluation_index, (_envIndex), value);    \
         }                                                                                       \
-        else if (storage.GetSelectedOffset() == (_envIndex))                                    \
-        {           MessageBoxA(NULL, "2", "", 0);                                                                            \
+        else if (storage.GetSelectedEnvironment() == (_envIndex))                               \
+        {                                                                                       \
             m_value.m_fixed_value = value;                                                      \
         }                                                                                       \
                                                                                                 \
