@@ -16,25 +16,22 @@ DWORD* __cdecl PostLoadEngineLibrary(DWORD* a1)
 
 signed int GetSaveLoadingErrorCode(void* _THIS,  DWORD* a1)
 {
-    //auto result = Patch::DoCall<signed int(void*, DWORD*, int)>(0x429670)(_THIS, a1, a2);
-    //saveLoadingBaseFunc(_THIS, a1, a2);
+    auto result = saveLoadingBaseFunc(_THIS, a1); // Returns 17 if save has been modified (0x11)
 
+    // This crashes if the save has been tampered with, but later 
     return 0;
 }
 
 BOOL MainInit(const HMODULE hModule)
 {
-    OffsetManager::Instance().InitAll(0);
     OffsetManager::Instance().SetTargetCompiler(TargetCompiler::MSVC);
+    OffsetManager::Instance().InitAll(0);
 
     const auto mod = GetModuleHandle(NULL);
     Patch::Call(0x4898D9, Patch::GetP(PostLoadEngineLibrary)); // first function called after GoL loading
 
     static CallDetourThiscall<int(void*, DWORD*)> saveLoadingDetour;
     saveLoadingDetour.Init(0x42AAAF, &GetSaveLoadingErrorCode);
-
-    //Patch::Call(0x42AAAF, Patch::GetP(GetSaveLoadingErrorCode));
-    //Patch::Call(0x42A678, Patch::GetP(GetSaveLoadingErrorCode));
     
 #ifdef _DEBUG
     // Patch DX Media check to skip the intro videos
