@@ -1,11 +1,12 @@
 #include <Windows.h>
 #include <string>
 
+#include "RacersOffset.h"
 #include "patch/Patch.h"
 #include "patch/Detour.h"
 #include "patch/Offset.h"
 
-FunctionOffsetThiscall<int(void*, DWORD*)> saveLoadingBaseFunc({0x429670});
+FunctionOffsetThiscall<int(void*, DWORD*)> saveLoadingBaseFunc(Offset().Racers01(0x429670));
 
 DWORD* __cdecl PostLoadEngineLibrary(DWORD* a1)
 {
@@ -24,8 +25,10 @@ signed int GetSaveLoadingErrorCode(void* _THIS,  DWORD* a1)
 
 BOOL MainInit(const HMODULE hModule)
 {
-    OffsetManager::Instance().SetTargetCompiler(TargetCompiler::MSVC);
-    OffsetManager::Instance().InitAll(0);
+    MessageBoxA(NULL, "OnStart222", "DEBUG", 0);
+
+    TrampolineGlobals::Instance().SetTargetCompiler(TargetCompiler::MSVC);
+    Offset::ApplyRacers01();
 
     const auto mod = GetModuleHandle(NULL);
     Patch::Call(0x4898D9, Patch::GetP(PostLoadEngineLibrary)); // first function called after GoL loading
@@ -36,7 +39,6 @@ BOOL MainInit(const HMODULE hModule)
 #ifdef _DEBUG
     // Patch DX Media check to skip the intro videos
     Patch::Nop(0x48ACB6, 2);
-
 #endif
 
 #ifdef _DEBUG

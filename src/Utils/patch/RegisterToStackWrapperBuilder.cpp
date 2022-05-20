@@ -33,7 +33,7 @@ public:
         }
     }
 
-    std::unique_ptr<IAsmWrapper> BuildWrapper(const CallDetails from, const CallDetails to) const
+    [[nodiscard]] std::unique_ptr<IAsmWrapper> BuildWrapper(const CallDetails from, const CallDetails to) const
     {
         Register nextRegister;
         asmjit::CodeHolder code;
@@ -74,7 +74,7 @@ public:
             }
 
             ThrowIfError(assembler.call(reinterpret_cast<uintptr_t>(m_offset)));
-            
+
             if (!(to.m_compiler == TargetCompiler::MSVC && to.m_calling_convention == CallingConvention::C_THISCALL))
             {
                 // Thiscall is callee cleanup on msvc

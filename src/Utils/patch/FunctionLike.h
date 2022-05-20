@@ -34,7 +34,7 @@ public:
         return m_func;
     }
 
-    uintptr_t Addr() const
+    [[nodiscard]] uintptr_t Addr() const
     {
         if (m_func == nullptr)
             throw std::exception("Tried accessing uninitialized function offset.");

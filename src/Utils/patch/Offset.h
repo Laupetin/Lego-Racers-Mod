@@ -2,143 +2,104 @@
 
 #include <cstdint>
 #include <functional>
-#include <initializer_list>
-#include <mutex>
 
 #include "FunctionLike.h"
 #include "CallDetails.h"
+#include "OffsetBase.h"
 #include "Singleton.h"
 #include "StackToRegisterWrapperBuilder.h"
 #include "UsercallConfiguration.h"
 
 class BaseOffset;
 
-class OffsetManager : public Singleton<OffsetManager>
+class TrampolineGlobals : public Singleton<TrampolineGlobals>
 {
-    friend class BaseOffset;
-
-    std::mutex m_offset_mutex;
-    std::vector<BaseOffset*> m_offsets;
     TargetCompiler m_compiler = TargetCompiler::UNKNOWN;
 
-    void AddOffset(BaseOffset* offset);
-
 public:
-    TargetCompiler GetTargetCompiler() const;
+    [[nodiscard]] TargetCompiler GetTargetCompiler() const;
     void SetTargetCompiler(TargetCompiler targetCompiler);
-
-    void AssertOffsetCount(int offsetCount);
-    void InitAll(int offsetIndex);
-};
-
-class BaseOffset
-{
-protected:
-    std::vector<uintptr_t> m_offsets;
-    void* m_offset;
-
-public:
-    BaseOffset(std::initializer_list<uintptr_t> offsets);
-    virtual ~BaseOffset() = default;
-    BaseOffset(const BaseOffset& other) = delete;
-    BaseOffset(BaseOffset&& other) noexcept = delete;
-    BaseOffset& operator=(const BaseOffset& other) = delete;
-    BaseOffset& operator=(BaseOffset&& other) noexcept = delete;
-
-    virtual void Init(int offsetIndex);
-    virtual bool IsInitialized();
-    virtual int OffsetCount();
-};
-
-template <typename T>
-class FieldOffset final : public BaseOffset
-{
-public:
-    FieldOffset(const std::initializer_list<uintptr_t> offsets)
-        : BaseOffset(offsets)
-    {
-    }
-
-    T& operator*()
-    {
-        if (m_offset == nullptr)
-            throw std::exception("Tried accessing uninitialized function offset.");
-
-        return *static_cast<T*>(m_offset);
-    }
-
-    T& operator->()
-    {
-        if (m_offset == nullptr)
-            throw std::exception("Tried accessing uninitialized function offset.");
-
-        return *static_cast<T*>(m_offset);
-    }
-
-    T* Ptr() const
-    {
-        if (m_offset == nullptr)
-            throw std::exception("Tried accessing uninitialized function offset.");
-
-        return static_cast<T*>(m_offset);
-    }
 };
 
 template <class T>
-class FunctionOffset final : public _Get_function_impl<T>::type, public BaseOffset
+class FunctionOffset final : public _Get_function_impl<T>::type, ILazyOffsetInitTarget
 {
 public:
-    using BaseOffset::m_offset;
     using _Get_function_impl<T>::type::m_func;
 
-    FunctionOffset(const std::initializer_list<uintptr_t> offsets)
-        : _Get_function_impl<T>::type(),
-          BaseOffset(offsets)
+    explicit FunctionOffset(const OffsetValue value)
+        : _Get_function_impl<T>::type()
     {
+        if (value.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)
+            m_func = reinterpret_cast<void*>(value.m_fixed_value);
+        else
+            OffsetManager::RegisterLazyInitialization(this, value.m_lazy_evaluation_index);
     }
 
-    void Init(const int offsetIndex) override
+    explicit FunctionOffset(void* value)
+        : _Get_function_impl<T>::type()
     {
-        BaseOffset::Init(offsetIndex);
-        m_func = m_offset;
+        m_func = value;
+    }
+
+    explicit FunctionOffset(const uintptr_t value)
+        : _Get_function_impl<T>::type()
+    {
+        m_func = reinterpret_cast<void*>(value);
+    }
+
+    void SetLazyValue(const uintptr_t value) override
+    {
+        m_func = reinterpret_cast<void*>(value);
     }
 };
 
 template <class T>
-class FunctionOffsetVarArgs final : public _Get_function_impl_varargs<T>::type, public BaseOffset
+class FunctionOffsetVarArgs final : public _Get_function_impl_varargs<T>::type, ILazyOffsetInitTarget
 {
 public:
-    using BaseOffset::m_offset;
     using _Get_function_impl_varargs<T>::type::m_func;
 
-    FunctionOffsetVarArgs(const std::initializer_list<uintptr_t> offsets)
-        : _Get_function_impl_varargs<T>::type(),
-          BaseOffset(offsets)
+    explicit FunctionOffsetVarArgs(const OffsetValue value)
+        : _Get_function_impl_varargs<T>::type()
     {
+        if (value.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)
+            m_func = reinterpret_cast<void*>(value.m_fixed_value);
+        else
+            OffsetManager::RegisterLazyInitialization(this, value.m_lazy_evaluation_index);
     }
 
-    void Init(const int offsetIndex) override
+    explicit FunctionOffsetVarArgs(void* value)
+        : _Get_function_impl_varargs<T>::type()
     {
-        BaseOffset::Init(offsetIndex);
-        m_func = m_offset;
+        m_func = value;
+    }
+
+    explicit FunctionOffsetVarArgs(const uintptr_t value)
+        : _Get_function_impl_varargs<T>::type()
+    {
+        m_func = reinterpret_cast<void*>(value);
+    }
+
+    void SetLazyValue(const uintptr_t value) override
+    {
+        m_func = reinterpret_cast<void*>(value);
     }
 };
 
-class FunctionOffsetUsercallBase : public BaseOffset
+class FunctionOffsetUsercallBase
 {
 protected:
     std::unique_ptr<IAsmWrapper> m_wrapper;
     std::unique_ptr<UsercallConfiguration> m_usercall_configuration;
-    std::function<void(UsercallConfiguration& usercall, int offsetIndex)> m_usercall_init;
+    std::function<void(UsercallConfiguration& usercall)> m_usercall_init;
 
-    FunctionOffsetUsercallBase(std::initializer_list<uintptr_t> offsets,
-                               std::function<void(UsercallConfiguration& usercall, int offsetIndex)>
-                               usercallInit);
-    void InitWrapper(int offsetIndex, const size_t* paramSizes, int paramCount, size_t returnParamSize);
+    FunctionOffsetUsercallBase(std::function<void(UsercallConfiguration& usercall)> usercallInit);
+    void InitWrapper(uintptr_t offset, const size_t* paramSizes, int paramCount, size_t returnParamSize);
 };
 
 template <class T>
-class FunctionOffsetUsercall final : public _Get_function_impl<T>::type, public _Get_function_impl_param_capture<T>::type, public FunctionOffsetUsercallBase
+class FunctionOffsetUsercall final : public _Get_function_impl<T>::type, public _Get_function_impl_param_capture<T>::type, public FunctionOffsetUsercallBase, ILazyOffsetInitTarget
 {
 public:
     using FunctionOffsetUsercallBase::m_wrapper;
@@ -147,37 +108,46 @@ public:
     using ParamCaptureFunc::m_return_size;
     using _Get_function_impl<T>::type::m_func;
 
-    FunctionOffsetUsercall(const std::initializer_list<uintptr_t> offsets,
-                           const std::function<void(UsercallConfiguration& usercall, int offsetIndex)>
-                           usercallInit)
+    FunctionOffsetUsercall(const OffsetValue value, const std::function<void(UsercallConfiguration& usercall)> usercallInit)
         : _Func_class_param_capture(),
-          FunctionOffsetUsercallBase(offsets, usercallInit)
+          FunctionOffsetUsercallBase(usercallInit)
     {
+        if (value.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)
+        {
+            InitWrapper(value.m_fixed_value, m_param_sizes, m_param_count, m_return_size);
+
+            if (m_wrapper != nullptr)
+                m_func = m_wrapper->GetPtr();
+            else
+                m_func = nullptr;
+        }
+        else
+            OffsetManager::RegisterLazyInitialization(this, value.m_lazy_evaluation_index);
     }
 
-    void Init(const int offsetIndex) override
+    void SetLazyValue(const uintptr_t value) override
     {
-        InitWrapper(offsetIndex, m_param_sizes, m_param_count, m_return_size);
+        InitWrapper(value, m_param_sizes, m_param_count, m_return_size);
 
         if (m_wrapper != nullptr)
             m_func = m_wrapper->GetPtr();
         else
-            m_func = m_offset;
+            m_func = nullptr;
     }
 };
 
-class FunctionOffsetThiscallBase : public BaseOffset
+class FunctionOffsetThiscallBase
 {
 protected:
     std::unique_ptr<IAsmWrapper> m_wrapper;
     std::unique_ptr<UsercallConfiguration> m_usercall_configuration;
 
-    FunctionOffsetThiscallBase(std::initializer_list<uintptr_t> offsets);
-    void InitWrapper(int offsetIndex, const size_t* paramSizes, int paramCount, size_t returnParamSize);
+    FunctionOffsetThiscallBase();
+    void InitWrapper(uintptr_t offset, const size_t* paramSizes, int paramCount, size_t returnParamSize);
 };
 
 template <class T>
-class FunctionOffsetThiscall final : public _Get_function_impl<T>::type, public _Get_function_impl_param_capture<T>::type, public FunctionOffsetThiscallBase
+class FunctionOffsetThiscall final : public _Get_function_impl<T>::type, public _Get_function_impl_param_capture<T>::type, public FunctionOffsetThiscallBase, ILazyOffsetInitTarget
 {
 public:
     using FunctionOffsetThiscallBase::m_wrapper;
@@ -186,19 +156,30 @@ public:
     using ParamCaptureFunc::m_return_size;
     using _Get_function_impl<T>::type::m_func;
 
-    FunctionOffsetThiscall(const std::initializer_list<uintptr_t> offsets)
+    explicit FunctionOffsetThiscall(const OffsetValue value)
         : _Func_class_param_capture(),
-          FunctionOffsetThiscallBase(offsets)
+          FunctionOffsetThiscallBase()
     {
+        if (value.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)
+        {
+            InitWrapper(value.m_fixed_value, m_param_sizes, m_param_count, m_return_size);
+
+            if (m_wrapper != nullptr)
+                m_func = m_wrapper->GetPtr();
+            else
+                m_func = nullptr;
+        }
+        else
+            OffsetManager::RegisterLazyInitialization(this, value.m_lazy_evaluation_index);
     }
 
-    void Init(const int offsetIndex) override
+    void SetLazyValue(const uintptr_t value) override
     {
-        InitWrapper(offsetIndex, m_param_sizes, m_param_count, m_return_size);
+        InitWrapper(value, m_param_sizes, m_param_count, m_return_size);
 
         if (m_wrapper != nullptr)
             m_func = m_wrapper->GetPtr();
         else
-            m_func = m_offset;
+            m_func = nullptr;
     }
 };
