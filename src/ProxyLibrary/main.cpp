@@ -10,12 +10,12 @@ FunctionOffsetThiscall<int(void*, DWORD*)> saveLoadingBaseFunc(Offset().Racers01
 
 DWORD* __cdecl PostLoadEngineLibrary(DWORD* a1)
 {
-    auto result = Patch::DoCall<DWORD*(DWORD*)>(0x4797E0)(a1);
+    auto result = Patch::DoCall<DWORD*(DWORD*)>(Offset().Racers01(0x4797E0))(a1);
 
     return result;
 }
 
-signed int GetSaveLoadingErrorCode(void* _THIS,  DWORD* a1)
+signed int GetSaveLoadingErrorCode(void* _THIS, DWORD* a1)
 {
     auto result = saveLoadingBaseFunc(_THIS, a1); // Returns 17 if save has been modified (0x11)
 
@@ -32,11 +32,11 @@ BOOL MainInit(const HMODULE hModule)
     Patch::Call(0x4898D9, Patch::GetP(PostLoadEngineLibrary)); // first function called after GoL loading
 
     static CallDetourThiscall<int(void*, DWORD*)> saveLoadingDetour;
-    saveLoadingDetour.Init(0x42AAAF, &GetSaveLoadingErrorCode);
-    
+    saveLoadingDetour.Init(Offset().Racers01(0x42AAAF), &GetSaveLoadingErrorCode);
+
 #ifdef _DEBUG
     // Patch DX Media check to skip the intro videos
-    Patch::Nop(0x48ACB6, 2);
+    Patch::Nop(Offset().Racers01(0x48ACB6), 2);
 #endif
 
 #ifdef _DEBUG
