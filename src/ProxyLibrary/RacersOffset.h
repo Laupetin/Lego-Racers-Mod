@@ -34,13 +34,4 @@ public:
     }*/
     OFFSET_ENV(0, Racers99)
     OFFSET_ENV(1, Racers01)
-
-    static void ApplyRacers99()
-    {
-        OffsetManagerStorage<OFFSET_COUNT_VALUE>::Instance().SetSelectedEnvironment(0);
-    }
-    static void ApplyRacers01()
-    {
-        OffsetManagerStorage<OFFSET_COUNT_VALUE>::Instance().SetSelectedEnvironment(1);
-    }
 };

@@ -25,8 +25,6 @@ signed int GetSaveLoadingErrorCode(void* _THIS,  DWORD* a1)
 
 BOOL MainInit(const HMODULE hModule)
 {
-    MessageBoxA(NULL, "OnStart222", "DEBUG", 0);
-
     TrampolineGlobals::Instance().SetTargetCompiler(TargetCompiler::MSVC);
     Offset::ApplyRacers01();
 

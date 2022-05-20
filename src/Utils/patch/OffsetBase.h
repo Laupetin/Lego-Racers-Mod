@@ -178,11 +178,11 @@ public:
     }
 };
 
-template <size_t OffsetEnvCount>
+template <size_t EnvCount>
 class OffsetBase
 {
 protected:
-    static constexpr auto OFFSET_COUNT_VALUE = OffsetEnvCount;
+    static constexpr auto ENV_COUNT = EnvCount;
 
     OffsetValue m_value;
 
@@ -197,7 +197,7 @@ public:
 #define OFFSET_ENV(_envIndex, _envName) \
     Offset& _envName(const uintptr_t value)                                                     \
     {                                                                                           \
-        auto& storage = OffsetManagerStorage<OFFSET_COUNT_VALUE>::Instance();                   \
+        auto& storage = OffsetManagerStorage<ENV_COUNT>::Instance();                            \
         if (!storage.IsAnyEnvironmentSelected())                                                \
         {                                                                                       \
             if (m_value.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)             \
@@ -210,4 +210,8 @@ public:
         }                                                                                       \
                                                                                                 \
         return *this;                                                                           \
+    }                                                                                           \
+    static void Apply##_envName()                                                               \
+    {                                                                                           \
+        OffsetManagerStorage<ENV_COUNT>::Instance().SetSelectedEnvironment(_envIndex); \
     }
