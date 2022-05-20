@@ -5,6 +5,7 @@
 #include "CallDetails.h"
 #include "IAsmWrapper.h"
 #include "FunctionLike.h"
+#include "OffsetBase.h"
 #include "UsercallConfiguration.h"
 
 class DetourBase
@@ -27,7 +28,9 @@ protected:
 
     DetourBase();
     explicit DetourBase(uintptr_t address);
+    explicit DetourBase(OffsetValue address);
     DetourBase(uintptr_t address, void* detourFuncPtr);
+    DetourBase(OffsetValue address, void* detourFuncPtr);
 
     void Install(DetourType type);
 
@@ -64,6 +67,7 @@ protected:
 
     DetourUsercallBase();
     explicit DetourUsercallBase(uintptr_t address);
+    explicit DetourUsercallBase(OffsetValue address);
 
     void InitWrapper(const void* userFunc, const size_t* paramSizes, int paramCount, size_t returnParamSize,
                      const UsercallConfiguration& usercallConfiguration, CallingConvention callingConvention);
@@ -337,6 +341,12 @@ public:
         Install(DetourType::CALL);
     }
 
+    CallDetour(const OffsetValue address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+        : DetourBase(address, reinterpret_cast<void*>(detourFunc))
+    {
+        Install(DetourType::CALL);
+    }
+
     ~CallDetour() = default;
     CallDetour(const CallDetour& other) = delete;
     CallDetour(CallDetour&& other) noexcept = default;
@@ -346,6 +356,17 @@ public:
     void Init(const uintptr_t address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
     {
         m_address = address;
+        m_detour_func_ptr = reinterpret_cast<void*>(detourFunc);
+        Install(DetourType::CALL);
+    }
+
+    void Init(const OffsetValue address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    {
+        assert(address.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
+        if (address.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
+            throw std::exception("Offset cannot be lazy");
+
+        m_address = address.m_fixed_value;
         m_detour_func_ptr = reinterpret_cast<void*>(detourFunc);
         Install(DetourType::CALL);
     }
@@ -373,6 +394,15 @@ public:
         Install(DetourType::CALL);
     }
 
+    CallDetourUsercall(const OffsetValue address, const UsercallConfiguration usercallConfiguration,
+                       typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+        : DetourUsercallBase(address)
+    {
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
+                    usercallConfiguration, CallingConvention::C_CDECL);
+        Install(DetourType::CALL);
+    }
+
     ~CallDetourUsercall() = default;
     CallDetourUsercall(const CallDetourUsercall& other) = delete;
     CallDetourUsercall(CallDetourUsercall&& other) noexcept = default;
@@ -383,6 +413,19 @@ public:
               typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
     {
         m_address = address;
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
+                    usercallConfiguration, CallingConvention::C_CDECL);
+        Install(DetourType::CALL);
+    }
+
+    void Init(const OffsetValue address, const UsercallConfiguration usercallConfiguration,
+              typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    {
+        assert(address.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
+        if (address.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
+            throw std::exception("Offset cannot be lazy");
+
+        m_address = address.m_fixed_value;
         InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
                     usercallConfiguration, CallingConvention::C_CDECL);
         Install(DetourType::CALL);
@@ -410,6 +453,14 @@ public:
         Install(DetourType::CALL);
     }
 
+    CallDetourThiscall(const OffsetValue address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+        : DetourUsercallBase(address)
+    {
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
+                    UsercallConfiguration().FirstParameter().InEcx(), CallingConvention::C_THISCALL);
+        Install(DetourType::CALL);
+    }
+
     ~CallDetourThiscall() = default;
     CallDetourThiscall(const CallDetourThiscall& other) = delete;
     CallDetourThiscall(CallDetourThiscall&& other) noexcept = default;
@@ -419,6 +470,18 @@ public:
     void Init(const uintptr_t address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
     {
         m_address = address;
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
+                    UsercallConfiguration().FirstParameter().InEcx(), CallingConvention::C_THISCALL);
+        Install(DetourType::CALL);
+    }
+
+    void Init(const OffsetValue address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    {
+        assert(address.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
+        if (address.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
+            throw std::exception("Offset cannot be lazy");
+
+        m_address = address.m_fixed_value;
         InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
                     UsercallConfiguration().FirstParameter().InEcx(), CallingConvention::C_THISCALL);
         Install(DetourType::CALL);

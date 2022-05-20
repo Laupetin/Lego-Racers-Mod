@@ -31,8 +31,7 @@ BOOL MainInit(const HMODULE hModule)
     const auto mod = GetModuleHandle(NULL);
     Patch::Call(0x4898D9, Patch::GetP(PostLoadEngineLibrary)); // first function called after GoL loading
 
-    static CallDetourThiscall<int(void*, DWORD*)> saveLoadingDetour;
-    saveLoadingDetour.Init(Offset().Racers01(0x42AAAF), &GetSaveLoadingErrorCode);
+    static CallDetourThiscall<int(void*, DWORD*)> saveLoadingDetour(Offset().Racers01(0x42AAAF), &GetSaveLoadingErrorCode);
 
 #ifdef _DEBUG
     // Patch DX Media check to skip the intro videos

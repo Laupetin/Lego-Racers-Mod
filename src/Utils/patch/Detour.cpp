@@ -108,6 +108,18 @@ DetourBase::DetourBase(const uintptr_t address)
 {
 }
 
+DetourBase::DetourBase(const OffsetValue address)
+    : m_installed(false),
+      m_original_data(nullptr),
+      m_original_data_size(0),
+      m_detour_func_ptr(nullptr)
+{
+    assert(address.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
+    if (address.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
+        throw std::exception("Offset cannot be lazy");
+    m_address = address.m_fixed_value;
+}
+
 DetourBase::DetourBase(const uintptr_t address, void* detourFuncPtr)
     : m_installed(false),
       m_original_data(nullptr),
@@ -115,6 +127,18 @@ DetourBase::DetourBase(const uintptr_t address, void* detourFuncPtr)
       m_address(address),
       m_detour_func_ptr(detourFuncPtr)
 {
+}
+
+DetourBase::DetourBase(const OffsetValue address, void* detourFuncPtr)
+    : m_installed(false),
+      m_original_data(nullptr),
+      m_original_data_size(0),
+      m_detour_func_ptr(detourFuncPtr)
+{
+    assert(address.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
+    if (address.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
+        throw std::exception("Offset cannot be lazy");
+    m_address = address.m_fixed_value;
 }
 
 DetourBase::DetourBase(DetourBase&& other) noexcept
@@ -197,6 +221,14 @@ DetourUsercallBase::DetourUsercallBase()
 DetourUsercallBase::DetourUsercallBase(const uintptr_t address)
     : DetourBase(address)
 {
+}
+
+DetourUsercallBase::DetourUsercallBase(const OffsetValue address)
+{
+    assert(address.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
+    if (address.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
+        throw std::exception("Offset cannot be lazy");
+    m_address = address.m_fixed_value;
 }
 
 void DetourUsercallBase::InitWrapper(const void* userFunc, const size_t* paramSizes, const int paramCount,
