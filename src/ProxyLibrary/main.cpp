@@ -3,21 +3,27 @@
 
 #include "Patch.h"
 
-void PostLoadEngineLibrary(void* arg)
+DWORD* __cdecl PostLoadEngineLibrary(DWORD* a1)
 {
-    Patch::DoCall<void(void*)>(0x450D80)(arg);
-
     MessageBoxA(NULL, "PostLoadEngine", "", 0);
+
+    auto result = Patch::DoCall<DWORD*(DWORD*)>(0x4797E0)(a1);
+
+    return result;
 }
+
+int __stdcall VideoGetDeviceCaps(HDC hdc, int index)
+{
+    return GetDeviceCaps(hdc, index);
+};
 
 BOOL MainInit(const HMODULE hModule)
 {
     const auto mod = GetModuleHandle(NULL);
-
-    Patch::Call(0x4169FA, Patch::GetP(PostLoadEngineLibrary));
+    Patch::Call(0x4898D9, Patch::GetP(PostLoadEngineLibrary)); // LoadLibraryA Call in Gol .dll seeking function
 
 #ifdef _DEBUG
-
+    Patch::Nop(0x48ACB6, 2); // Patch DX Media check to skip the intro videos
 #endif
 
 #ifdef _DEBUG
