@@ -9,6 +9,8 @@ function Utils:include(includes)
 end
 
 function Utils:link(links)
+	asmjit:link(links)
+	zydis:link(links)
 	links:add(self:name())
 end
 
@@ -42,4 +44,6 @@ function Utils:project()
 		}
 		
         self:include(includes)
+		asmjit:include(includes)
+		zydis:include(includes)
 end
