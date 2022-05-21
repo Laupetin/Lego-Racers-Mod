@@ -14,8 +14,17 @@ namespace windowed
         return CreateWindowExA(dwExStyle, lpClassName, lpWindowName, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 640, 480, hWndParent, hMenu, hInstance, lpParam);
     }
 
+    LONG __stdcall ChangeDisplaySettingsHk(DEVMODEA* lpDevMode, DWORD dwFlags)
+    {
+        // Do nothing
+        return DISP_CHANGE_SUCCESSFUL;
+    }
+
     void DoPatch()
     {
         Patch::Call(Offset().Racers01(0x489603), Patch::GetP(CreateWindowExHk), 6);
+
+        Patch::Call(Offset().Racers01(0x48AE60), Patch::GetP(ChangeDisplaySettingsHk), 6);
+        Patch::Call(Offset().Racers01(0x48AEB4), Patch::GetP(ChangeDisplaySettingsHk), 6);
     }
 }
