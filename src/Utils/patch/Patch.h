@@ -14,22 +14,30 @@ public:
     static void NopRange(uintptr_t start, uintptr_t end);
 
     template <typename T>
-    static void Call(const uintptr_t ptr, typename _Get_function_impl<T>::type::func_ptr_t func)
+    static void Call(const uintptr_t ptr, typename _Get_function_impl<T>::type::func_ptr_t func, const int size = -1)
     {
-        Call(ptr, reinterpret_cast<void*>(func));
+        Call(ptr, reinterpret_cast<void*>(func), size);
     }
 
     template <typename T>
-    static void Call(const OffsetValue ptr, typename _Get_function_impl<T>::type::func_ptr_t func)
+    static void Call(const OffsetValue ptr, typename _Get_function_impl<T>::type::func_ptr_t func, const int size = -1)
     {
         assert(ptr.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
         if (ptr.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
             throw std::exception("Offset cannot be lazy");
 
-        Call(ptr.m_fixed_value, reinterpret_cast<void*>(func));
+        Call(ptr.m_fixed_value, reinterpret_cast<void*>(func), size);
     }
 
-    static void Call(uintptr_t ptr, void* func);
+    static void Call(OffsetValue ptr, void* func, int size = -1)
+    {
+        assert(ptr.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
+        if (ptr.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
+            throw std::exception("Offset cannot be lazy");
+        Call(ptr.m_fixed_value, func, size);
+    }
+
+    static void Call(uintptr_t ptr, void* func, int size = -1);
 
     template <typename T>
     static void Jump(const uintptr_t ptr, typename _Get_function_impl<T>::type::func_ptr_t func)

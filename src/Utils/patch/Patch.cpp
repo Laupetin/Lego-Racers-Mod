@@ -47,16 +47,21 @@ void Patch::NopRange(const OffsetValue start, const OffsetValue end)
     NopRange(start.m_fixed_value, end.m_fixed_value);
 }
 
-void Patch::Call(const uintptr_t ptr, void* func)
+void Patch::Call(const uintptr_t ptr, void* func, const int size)
 {
+    const auto nopSize = static_cast<size_t>(std::max(size - 5, 0));
+
     DWORD oldProtect;
-    VirtualProtect(reinterpret_cast<void*>(ptr), sizeof uint8_t + sizeof uintptr_t, PAGE_EXECUTE_READWRITE,
+    VirtualProtect(reinterpret_cast<void*>(ptr), sizeof uint8_t + sizeof uintptr_t + nopSize, PAGE_EXECUTE_READWRITE,
                    &oldProtect);
 
     *reinterpret_cast<uint8_t*>(ptr) = OP_CALL_NEAR32;
     *reinterpret_cast<uintptr_t*>(ptr + 1) = reinterpret_cast<uintptr_t>(func) - ptr - 5;
 
-    VirtualProtect(reinterpret_cast<void*>(ptr), sizeof uint8_t + sizeof uintptr_t, oldProtect, &oldProtect);
+    if(nopSize > 0)
+        memset(reinterpret_cast<void*>(ptr + 5), OP_NOP, nopSize);
+
+    VirtualProtect(reinterpret_cast<void*>(ptr), sizeof uint8_t + sizeof uintptr_t + nopSize, oldProtect, &oldProtect);
 }
 
 void Patch::Jump(const uintptr_t ptr, void* func)

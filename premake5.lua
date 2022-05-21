@@ -53,7 +53,8 @@ workspace "LegoRacersMod"
     defines {
         "__STDC_LIB_EXT1__",
         "__STDC_WANT_LIB_EXT1__=1",
-        "_CRT_SECURE_NO_WARNINGS"
+        "_CRT_SECURE_NO_WARNINGS",
+        "NOMINMAX"
     }
 
 -- ========================
