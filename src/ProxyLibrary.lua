@@ -34,6 +34,7 @@ function ProxyLibrary:project()
 		
 		files {
 			path.join(folder, "ProxyLibrary/**.h"), 
+			path.join(folder, "ProxyLibrary/**.inc"), 
 			path.join(folder, "ProxyLibrary/**.cpp") 
 		}
 		
