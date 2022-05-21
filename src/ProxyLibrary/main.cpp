@@ -5,13 +5,18 @@
 #include "patch/Patch.h"
 #include "patch/Detour.h"
 #include "patch/Offset.h"
+#include "Patches/PatchWindowed.h"
 
 FunctionOffsetThiscall<int(void*, DWORD*)> saveLoadingBaseFunc(Offset().Racers01(0x429670));
 
 DWORD* __cdecl PostLoadEngineLibrary(DWORD* a1)
 {
-    auto result = Patch::DoCall<DWORD*(DWORD*)>(Offset().Racers01(0x4797E0))(a1);
+#ifdef _DEBUG
+    MessageBoxA(NULL, "PostLoadEngine", "DEBUG", 0);
+#endif
 
+    auto result = Patch::DoCall<DWORD*(DWORD*)>(Offset().Racers01(0x4797E0))(a1);
+    
     return result;
 }
 
@@ -37,6 +42,8 @@ BOOL MainInit(const HMODULE hModule)
     // Patch DX Media check to skip the intro videos
     Patch::Nop(Offset().Racers01(0x48ACB6), 2);
 #endif
+
+    windowed::DoPatch();
 
 #ifdef _DEBUG
     MessageBoxA(NULL, "OnStart", "DEBUG", 0);
