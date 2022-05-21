@@ -4,13 +4,64 @@
    the type library 'LEGORacers2001'
 */
 
+struct HWND__;
+
 /* 72 */
 enum WindowState_e
 {
-  UNKNOWN = 0x0,
-  FULLSCREEN = 0x1,
-  WINDOWED = 0x2,
-  MINIMIZED = 0x3,
+  WINDOW_STATE_UNKNOWN = 0x0,
+  WINDOW_STATE_FULLSCREEN = 0x1,
+  WINDOW_STATE_WINDOWED = 0x2,
+  WINDOW_STATE_MINIMIZED = 0x3,
+};
+
+/* 85 */
+struct WindowSettingsStructSubStruct0Parent
+{
+  void *vtable;
+  char buffer0[64];
+  char buffer1[64];
+  _DWORD unknown0;
+  _DWORD unknown1;
+  _DWORD unknown2;
+  _DWORD unknown3;
+  _DWORD unknown4;
+  _DWORD unknown5;
+  _DWORD unknown6;
+  _DWORD unknown7;
+  _BYTE buffer2[64];
+};
+
+/* 84 */
+struct __cppobj __declspec(align(4)) WindowSettingsStructSubStruct0 : WindowSettingsStructSubStruct0Parent
+{
+  _DWORD unknown8;
+  _BYTE gapE8[4];
+  _DWORD unknown9;
+};
+
+/* 22 */
+typedef HWND__ *HWND;
+
+/* 77 */
+struct __declspec(align(4)) WindowSettingsStruct
+{
+  void *vtable;
+  _DWORD unknownFlags0;
+  _BYTE gap1[2040];
+  _DWORD dword800;
+  void *unknownVTable0;
+  _BYTE gap804[40];
+  HMODULE engineModuleHandle;
+  WindowSettingsStructSubStruct0 unknown0;
+  HWND gameWindowHandle;
+  _DWORD dword928;
+  _DWORD dword92C;
+  _DWORD dword930;
+  _DWORD dword934;
+  _DWORD dword938;
+  _DWORD dword93C;
+  _DWORD dword940;
 };
 
 /* 76 */
@@ -19,28 +70,58 @@ struct __declspec(align(4)) GameConfigParentStruct0
   _DWORD vtable;
   _DWORD unknown0;
   _DWORD unknown1;
-  _DWORD unknown2;
+  void *unknown2;
   float unknown3;
   float unknown4;
+};
+
+/* 79 */
+struct GameConfigSubStruct3
+{
+  void *unknown0;
+  _DWORD unknown1;
+  void **unknown2;
+};
+
+/* 78 */
+struct GameConfigSubStruct1
+{
+  GameConfigParentStruct0 baseclass_0;
+  _DWORD dword18;
+  _DWORD dword1C;
+  _DWORD dword20;
+  _DWORD dword24;
+  _DWORD dword28;
+  _DWORD dword2C;
+  _DWORD dword30;
+  _BYTE byte34;
+  _BYTE byte35;
+  _BYTE gap36[2];
+  _DWORD dword38;
+  GameConfigSubStruct3 unknown0;
+  GameConfigSubStruct3 unknown1;
+  _DWORD dword54;
+  _DWORD dword58;
+  GameConfigSubStruct3 unknown2;
+  GameConfigSubStruct3 unknown3;
+  GameConfigSubStruct3 unknown4;
+  GameConfigSubStruct3 unknown5;
+  GameConfigSubStruct3 unknown6;
 };
 
 /* 75 */
 struct __declspec(align(4)) GameConfigSubStruct0
 {
   GameConfigParentStruct0 baseclass_0;
-  void *unknown0;
-  _DWORD unknown1;
-  void **unknown2;
-  void *unknown3;
-  _DWORD unknown4;
-  void **unknown5;
+  GameConfigSubStruct3 unknown0;
+  GameConfigSubStruct3 unknown1;
 };
 
 /* 74 */
 struct __declspec(align(4)) GameConfigRenderSettings
 {
   _DWORD unknown0;
-  void *windowSettings;
+  WindowSettingsStruct *windowSettings;
   GameConfigSubStruct0 *unknown1;
   float fov;
   float zNear;
@@ -68,17 +149,63 @@ struct __declspec(align(4)) GameConfigRenderSettings
 struct __declspec(align(4)) GameConfig
 {
   void *vtable;
-  void *windowSettings;
-  _DWORD unknownFlags;
-  _BYTE gap1[2516];
+  WindowSettingsStruct windowSettings;
+  GameConfigSubStruct1 subStruct1;
   GameConfigSubStruct0 subStruct0;
   GameConfigSubStruct0 *unknown0;
   _DWORD unknown1;
-  _DWORD noVideo;
+  _DWORD shouldPlayVideo;
   _DWORD unknown2;
   _BYTE gapA1C[148];
   _DWORD unknown3;
   _DWORD windowFlags;
   GameConfigRenderSettings renderSettings;
+};
+
+/* 80 */
+union __declspec(align(8)) __m64
+{
+  unsigned __int64 m64_u64;
+  float m64_f32[2];
+  __int8 m64_i8[8];
+  __int16 m64_i16[4];
+  __int32 m64_i32[2];
+  __int64 m64_i64;
+  unsigned __int8 m64_u8[8];
+  unsigned __int16 m64_u16[4];
+  unsigned __int32 m64_u32[2];
+};
+
+/* 81 */
+union __declspec(align(16)) __m128
+{
+  float m128_f32[4];
+  unsigned __int64 m128_u64[2];
+  __int8 m128_i8[16];
+  __int16 m128_i16[8];
+  __int32 m128_i32[4];
+  __int64 m128_i64[2];
+  unsigned __int8 m128_u8[16];
+  unsigned __int16 m128_u16[8];
+  unsigned __int32 m128_u32[4];
+};
+
+/* 82 */
+struct __m128d
+{
+  double m128d_f64[2];
+};
+
+/* 83 */
+union __declspec(align(16)) __m128i
+{
+  __int8 m128i_i8[16];
+  __int16 m128i_i16[8];
+  __int32 m128i_i32[4];
+  __int64 m128i_i64[2];
+  unsigned __int8 m128i_u8[16];
+  unsigned __int16 m128i_u16[8];
+  unsigned __int32 m128i_u32[4];
+  unsigned __int64 m128i_u64[2];
 };
 
