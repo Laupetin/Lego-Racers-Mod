@@ -5,20 +5,11 @@
 #include "patch/Patch.h"
 #include "patch/Detour.h"
 #include "patch/Offset.h"
+#include "Patches/PatchCore.h"
 #include "Patches/PatchWindowed.h"
 
 FunctionOffsetThiscall<int(void*, DWORD*)> saveLoadingBaseFunc(Offset().Racers01(0x429670));
 
-DWORD* __cdecl PostLoadEngineLibrary(DWORD* a1)
-{
-#ifdef _DEBUG
-    MessageBoxA(NULL, "PostLoadEngine", "DEBUG", 0);
-#endif
-
-    auto result = Patch::DoCall<DWORD*(DWORD*)>(Offset().Racers01(0x4797E0))(a1);
-    
-    return result;
-}
 
 signed int GetSaveLoadingErrorCode(void* _THIS, DWORD* a1)
 {
@@ -33,16 +24,14 @@ BOOL MainInit(const HMODULE hModule)
     TrampolineGlobals::Instance().SetTargetCompiler(TargetCompiler::MSVC);
     Offset::ApplyRacers01();
 
-    const auto mod = GetModuleHandle(NULL);
-    Patch::Call(0x4898D9, Patch::GetP(PostLoadEngineLibrary)); // first function called after GoL loading
-
     static CallDetourThiscall<int(void*, DWORD*)> saveLoadingDetour(Offset().Racers01(0x42AAAF), &GetSaveLoadingErrorCode);
 
 #ifdef _DEBUG
     // Patch DX Media check to skip the intro videos
-    Patch::Nop(Offset().Racers01(0x48ACB6), 2);
+    //Patch::Nop(Offset().Racers01(0x48ACB6), 2);
 #endif
 
+    core::DoPatch();
     windowed::DoPatch();
 
 #ifdef _DEBUG
