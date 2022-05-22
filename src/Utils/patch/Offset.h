@@ -199,9 +199,14 @@ public:
     FieldOffset(OffsetValue offset)
     {
         if (offset.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)
+        {
             m_ptr = reinterpret_cast<T*>(offset.m_fixed_value);
+        }
         else
+        {
+            m_ptr = nullptr;
             OffsetManager::RegisterLazyInitialization(this, offset.m_lazy_evaluation_index);
+        }
     }
 
     void SetLazyValue(uintptr_t value) override
@@ -216,16 +221,19 @@ public:
 
     T& operator()() const
     {
+        assert(m_ptr != nullptr);
         return *m_ptr;
     }
 
     T& operator*() const
     {
+        assert(m_ptr != nullptr);
         return *m_ptr;
     }
 
     T& operator[](const int index) const
     {
+        assert(m_ptr != nullptr);
         return m_ptr[index];
     }
 
