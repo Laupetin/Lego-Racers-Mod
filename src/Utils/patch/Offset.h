@@ -183,3 +183,52 @@ public:
             m_func = nullptr;
     }
 };
+
+template <typename T>
+// ReSharper disable once CppPolymorphicClassWithNonVirtualPublicDestructor
+class FieldOffset final : ILazyOffsetInitTarget
+{
+public:
+    // ReSharper disable once CppNonExplicitConvertingConstructor
+    FieldOffset(uintptr_t ptr)
+        : m_ptr(reinterpret_cast<T*>(ptr))
+    {
+    }
+
+    // ReSharper disable once CppNonExplicitConvertingConstructor
+    FieldOffset(OffsetValue offset)
+    {
+        if (offset.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)
+            m_ptr = reinterpret_cast<T*>(offset.m_fixed_value);
+        else
+            OffsetManager::RegisterLazyInitialization(this, offset.m_lazy_evaluation_index);
+    }
+
+    void SetLazyValue(uintptr_t value) override
+    {
+        m_ptr = reinterpret_cast<T*>(value);
+    }
+
+    T* Ptr() const
+    {
+        return m_ptr;
+    }
+
+    T& operator()() const
+    {
+        return *m_ptr;
+    }
+
+    T& operator*() const
+    {
+        return *m_ptr;
+    }
+
+    T& operator[](const int index) const
+    {
+        return m_ptr[index];
+    }
+
+private:
+    T* m_ptr;
+};

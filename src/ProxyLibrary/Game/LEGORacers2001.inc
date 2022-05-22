@@ -4,7 +4,13 @@
    the type library 'LEGORacers2001'
 */
 
+#define __int8 char
+#define __int16 short
+#define __int32 int
+#define __int64 long long
+
 struct HWND__;
+struct WindowSettings_Vtable;
 
 /* 72 */
 enum WindowState_e
@@ -46,16 +52,20 @@ typedef HWND__ *HWND;
 /* 77 */
 struct __declspec(align(4)) WindowSettingsStruct
 {
-  void *vtable;
+  WindowSettings_Vtable *vtable;
   _DWORD unknownFlags0;
   _BYTE gap1[2040];
-  _DWORD dword800;
+  void *engineApi;
   void *unknownVTable0;
-  _BYTE gap804[40];
+  _BYTE gap804[8];
+  _DWORD horzRes;
+  _DWORD vertRes;
+  _DWORD bitsPerPixel;
+  _BYTE gap818[20];
   HMODULE engineModuleHandle;
   WindowSettingsStructSubStruct0 unknown0;
   HWND gameWindowHandle;
-  _DWORD dword928;
+  _DWORD engineFlags;
   _DWORD dword92C;
   _DWORD dword930;
   _DWORD dword934;
@@ -84,11 +94,11 @@ struct GameConfigSubStruct3
 };
 
 /* 78 */
-struct GameConfigSubStruct1
+struct __declspec(align(4)) GameConfigSubStruct1
 {
   GameConfigParentStruct0 baseclass_0;
   _DWORD dword18;
-  _DWORD dword1C;
+  _DWORD windowHandle;
   _DWORD dword20;
   _DWORD dword24;
   _DWORD dword28;
@@ -120,7 +130,7 @@ struct __declspec(align(4)) GameConfigSubStruct0
 /* 74 */
 struct __declspec(align(4)) GameConfigRenderSettings
 {
-  _DWORD unknown0;
+  _DWORD shouldContinueToRun;
   WindowSettingsStruct *windowSettings;
   GameConfigSubStruct0 *unknown1;
   float fov;
@@ -157,55 +167,50 @@ struct __declspec(align(4)) GameConfig
   _DWORD shouldPlayVideo;
   _DWORD unknown2;
   _BYTE gapA1C[148];
-  _DWORD unknown3;
+  _DWORD bitsPerPixel;
   _DWORD windowFlags;
   GameConfigRenderSettings renderSettings;
 };
 
-/* 80 */
-union __declspec(align(8)) __m64
+/* 92 */
+struct __declspec(align(4)) WindowSettings_Vtable
 {
-  unsigned __int64 m64_u64;
-  float m64_f32[2];
-  __int8 m64_i8[8];
-  __int16 m64_i16[4];
-  __int32 m64_i32[2];
-  __int64 m64_i64;
-  unsigned __int8 m64_u8[8];
-  unsigned __int16 m64_u16[4];
-  unsigned __int32 m64_u32[2];
+  void *sub_48A860;
+  void *sub_489440;
+  void *sub_48B100;
+  int (__thiscall *CreateGameWindow)(WindowSettingsStruct *this, const char *lpWindowName, const char *jamFileToLoad);
+  void *DestroyGameWindow;
+  void *StartEngine;
+  void *ExitEngine;
+  void *sub_489970;
+  void *sub_489990;
+  int (__thiscall *SetupWindowForGame)(WindowSettingsStruct *, int, int, _DWORD, _DWORD);
+  void *sub_4899A0;
+  void *sub_489690;
+  void *sub_489BC0;
+  void *sub_489DE0;
+  void *sub_48A8E0;
+  void *nullsub_119;
+  void *nullsub_120;
 };
 
-/* 81 */
-union __declspec(align(16)) __m128
+/* 23 */
+struct HWND__
 {
-  float m128_f32[4];
-  unsigned __int64 m128_u64[2];
-  __int8 m128_i8[16];
-  __int16 m128_i16[8];
-  __int32 m128_i32[4];
-  __int64 m128_i64[2];
-  unsigned __int8 m128_u8[16];
-  unsigned __int16 m128_u16[8];
-  unsigned __int32 m128_u32[4];
+  int unused;
 };
 
-/* 82 */
-struct __m128d
+/* 91 */
+struct __declspec(align(4)) EngineInitStruct
 {
-  double m128d_f64[2];
-};
-
-/* 83 */
-union __declspec(align(16)) __m128i
-{
-  __int8 m128i_i8[16];
-  __int16 m128i_i16[8];
-  __int32 m128i_i32[4];
-  __int64 m128i_i64[2];
-  unsigned __int8 m128i_u8[16];
-  unsigned __int16 m128i_u16[8];
-  unsigned __int32 m128i_u32[4];
-  unsigned __int64 m128i_u64[2];
+  _DWORD someBasedOnCount0;
+  _DWORD someCount0;
+  int someBasedOnCount1;
+  _BYTE gapC[12];
+  _DWORD someCount1;
+  _DWORD dword1C;
+  _DWORD someMutex;
+  _DWORD unknown0;
+  void *fatalErrorFunc;
 };
 
