@@ -72,13 +72,22 @@ group "ThirdParty"
 group ""
 
 -- ========================
--- Projects
+-- Components
 -- ========================
 include "src/Utils.lua"
+
+-- Components group: All projects that are static libs for executables
+group "Components"
+    Utils:project()
+group ""
+
+
+-- ========================
+-- Executables
+-- ========================
 include "src/ProxyLibrary.lua"
 
 -- Main projects
-Utils:project()
 ProxyLibrary:project()
 
 -- ========================
