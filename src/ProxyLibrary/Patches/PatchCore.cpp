@@ -36,11 +36,20 @@ namespace core
 
         std::cout << "Launching LegoRacersMod\n";
     }
+}
 
-    void DoPatch()
-    {
-        SpawnDevConsole();
+using namespace core;
 
-        Patch::Call(0x4898D9, Patch::GetP(PostLoadEngineLibrary)); // first function called after GoL loading
-    }
+PatchCore::PatchCore()
+    : Component("Core")
+{
+}
+
+bool PatchCore::InstallInternal()
+{
+    SpawnDevConsole();
+
+    Patch::Call(0x4898D9, Patch::GetP(PostLoadEngineLibrary)); // first function called after GoL loading
+
+    return true;
 }

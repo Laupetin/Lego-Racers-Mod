@@ -19,16 +19,25 @@ namespace windowed
         // Do nothing
         return DISP_CHANGE_SUCCESSFUL;
     }
+}
 
-    void DoPatch()
-    {
-        Patch::Call(Offset().Racers01(0x489603), Patch::GetP(CreateWindowExHk), 6);
+using namespace windowed;
 
-        // Make the game not change display settings for videos
-        Patch::Call(Offset().Racers01(0x48AE60), Patch::GetP(ChangeDisplaySettingsHk), 6);
-        Patch::Call(Offset().Racers01(0x48AEB4), Patch::GetP(ChangeDisplaySettingsHk), 6);
+PatchWindowed::PatchWindowed()
+    : Component("Windowed")
+{
+}
 
-        // Make game target 32bit color
-        Patch::Field<uint32_t>(Offset().Racers01(0x411786), 32);
-    }
+bool PatchWindowed::InstallInternal()
+{
+    Patch::Call(Offset().Racers01(0x489603), Patch::GetP(CreateWindowExHk), 6);
+
+    // Make the game not change display settings for videos
+    Patch::Call(Offset().Racers01(0x48AE60), Patch::GetP(ChangeDisplaySettingsHk), 6);
+    Patch::Call(Offset().Racers01(0x48AEB4), Patch::GetP(ChangeDisplaySettingsHk), 6);
+
+    // Make game target 32bit color
+    Patch::Field<uint32_t>(Offset().Racers01(0x411786), 32);
+
+    return true;
 }

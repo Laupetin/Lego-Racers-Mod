@@ -1,6 +1,11 @@
 #pragma once
+#include "Component.h"
 
-namespace windowed
+class PatchWindowed final : public Component
 {
-    void DoPatch();
-}
+public:
+    PatchWindowed();
+
+protected:
+    bool InstallInternal() override;
+};

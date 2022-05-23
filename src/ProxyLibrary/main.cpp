@@ -10,7 +10,6 @@
 
 FunctionOffsetThiscall<int(void*, DWORD*)> saveLoadingBaseFunc(Offset().Racers01(0x429670));
 
-
 signed int GetSaveLoadingErrorCode(void* _THIS, DWORD* a1)
 {
     auto result = saveLoadingBaseFunc(_THIS, a1); // Returns 17 if save has been modified (0x11)
@@ -18,6 +17,12 @@ signed int GetSaveLoadingErrorCode(void* _THIS, DWORD* a1)
     // This crashes if the save has been tampered with, but later 
     return 0;
 }
+
+Component* components[]
+{
+    new PatchCore(),
+    new PatchWindowed()
+};
 
 BOOL MainInit(const HMODULE hModule)
 {
@@ -31,8 +36,11 @@ BOOL MainInit(const HMODULE hModule)
     //Patch::Nop(Offset().Racers01(0x48ACB6), 2);
 #endif
 
-    core::DoPatch();
-    windowed::DoPatch();
+    // Install all components
+    for (auto* component : components)
+    {
+        component->Install();
+    }
 
 #ifdef _DEBUG
     MessageBoxA(NULL, "OnStart", "DEBUG", 0);
