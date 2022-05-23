@@ -228,6 +228,19 @@ public:
         m_func = m_trampoline->GetPtr();
         Install(DetourType::JUMP);
     }
+
+    void Init(const OffsetValue address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    {
+        assert(address.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
+        if (address.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
+            throw std::exception("Offset cannot be lazy");
+
+        m_address = address.m_fixed_value;
+        m_detour_func_ptr = reinterpret_cast<void*>(detourFunc);
+        BuildTrampoline();
+        m_func = m_trampoline->GetPtr();
+        Install(DetourType::JUMP);
+    }
 };
 
 template <typename T>

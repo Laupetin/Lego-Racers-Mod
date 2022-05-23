@@ -1,5 +1,7 @@
 #include "PatchCore.h"
 
+#include <iostream>
+
 #include "RacersOffset.h"
 #include "Game/LEGORacers2001.h"
 #include "patch/Patch.h"
@@ -21,8 +23,24 @@ namespace core
         return result;
     }
 
+    void SpawnDevConsole()
+    {
+        if (AllocConsole())
+        {
+            freopen("CONOUT$", "w", stdout);
+            freopen("CONOUT$", "w", stderr);
+            freopen("CONIN$", "r", stdin);
+
+            SetConsoleTitleA("LegoRacersMod Console");
+        }
+
+        std::cout << "Launching LegoRacersMod\n";
+    }
+
     void DoPatch()
     {
+        SpawnDevConsole();
+
         Patch::Call(0x4898D9, Patch::GetP(PostLoadEngineLibrary)); // first function called after GoL loading
     }
 }
