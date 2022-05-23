@@ -231,6 +231,12 @@ public:
         return *m_ptr;
     }
 
+    T* operator->() const
+    {
+        assert(m_ptr != nullptr);
+        return m_ptr;
+    }
+
     T& operator[](const int index) const
     {
         assert(m_ptr != nullptr);
