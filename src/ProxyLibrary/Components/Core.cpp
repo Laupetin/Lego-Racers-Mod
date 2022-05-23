@@ -1,4 +1,4 @@
-#include "PatchCore.h"
+#include "Core.h"
 
 #include <iostream>
 
@@ -40,12 +40,12 @@ namespace core
 
 using namespace core;
 
-PatchCore::PatchCore()
+ComponentCore::ComponentCore()
     : Component("Core")
 {
 }
 
-bool PatchCore::InstallInternal()
+bool ComponentCore::InstallInternal()
 {
     SpawnDevConsole();
 

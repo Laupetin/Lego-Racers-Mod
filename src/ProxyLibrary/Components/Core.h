@@ -8,10 +8,10 @@ namespace core
     extern Event<> onEngineInitialized;
 }
 
-class PatchCore final : public Component
+class ComponentCore final : public Component
 {
 public:
-    PatchCore();
+    ComponentCore();
 
 protected:
     bool InstallInternal() override;

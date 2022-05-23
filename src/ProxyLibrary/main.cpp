@@ -5,8 +5,8 @@
 #include "patch/Patch.h"
 #include "patch/Detour.h"
 #include "patch/Offset.h"
-#include "Patches/PatchCore.h"
-#include "Patches/PatchWindowed.h"
+#include "Components/Core.h"
+#include "Components/Windowed.h"
 
 FunctionOffsetThiscall<int(void*, DWORD*)> saveLoadingBaseFunc(Offset().Racers01(0x429670));
 
@@ -20,8 +20,8 @@ signed int GetSaveLoadingErrorCode(void* _THIS, DWORD* a1)
 
 Component* components[]
 {
-    new PatchCore(),
-    new PatchWindowed()
+    new ComponentCore(),
+    new ComponentWindowed()
 };
 
 BOOL MainInit(const HMODULE hModule)

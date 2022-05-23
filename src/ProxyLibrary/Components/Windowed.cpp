@@ -1,4 +1,4 @@
-#include "PatchWindowed.h"
+#include "Windowed.h"
 
 #include <Windows.h>
 
@@ -23,12 +23,12 @@ namespace windowed
 
 using namespace windowed;
 
-PatchWindowed::PatchWindowed()
+ComponentWindowed::ComponentWindowed()
     : Component("Windowed")
 {
 }
 
-bool PatchWindowed::InstallInternal()
+bool ComponentWindowed::InstallInternal()
 {
     Patch::Call(Offset().Racers01(0x489603), Patch::GetP(CreateWindowExHk), 6);
 

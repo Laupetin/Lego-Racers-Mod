@@ -1,10 +1,10 @@
 #pragma once
 #include "Component.h"
 
-class PatchWindowed final : public Component
+class ComponentWindowed final : public Component
 {
 public:
-    PatchWindowed();
+    ComponentWindowed();
 
 protected:
     bool InstallInternal() override;
