@@ -4,13 +4,10 @@
    the type library 'LEGORacers2001'
 */
 
-#define __int8 char
-#define __int16 short
-#define __int32 int
-#define __int64 long long
-
 struct HWND__;
 struct WindowSettings_Vtable;
+struct EngineFile_Vtable;
+struct OtherJamFileData_Vtable;
 
 /* 72 */
 enum WindowState_e
@@ -19,6 +16,62 @@ enum WindowState_e
   WINDOW_STATE_FULLSCREEN = 0x1,
   WINDOW_STATE_WINDOWED = 0x2,
   WINDOW_STATE_MINIMIZED = 0x3,
+};
+
+/* 93 */
+struct __declspec(align(4)) EngineFile
+{
+  EngineFile_Vtable *vtable;
+  _DWORD fileModeFlags;
+  _DWORD isOpenFlags;
+  _DWORD filePosition;
+  _DWORD unknown3;
+  _DWORD fileLength;
+  _DWORD preloadBufferSize;
+  _DWORD unknown6;
+  _DWORD unknown7;
+  _DWORD preloadBuffer;
+  _DWORD unknown9;
+  _DWORD fileHandle;
+};
+
+/* 97 */
+struct OtherJamFileData_Sub
+{
+  char str0[12];
+  char str1[4];
+  _DWORD unknown0;
+  _DWORD unknown1;
+  _DWORD unknown2;
+  _DWORD unknown3;
+  _DWORD unknown4;
+};
+
+/* 94 */
+struct OtherJamFileData
+{
+  OtherJamFileData_Vtable *vtable;
+  _DWORD unknown0;
+  _DWORD unknown1;
+  OtherJamFileData_Sub sub0;
+  _DWORD unknown3;
+};
+
+/* 33 */
+typedef void *HANDLE;
+
+/* 98 */
+struct __declspec(align(4)) GameEnvironment
+{
+  void *vtable;
+  HANDLE mutex;
+  _DWORD unknown1;
+  _DWORD unknown2;
+  _DWORD unknown3;
+  _DWORD unknown4;
+  _BYTE gap18[4];
+  const char **unknown5;
+  _BYTE unknown6;
 };
 
 /* 85 */
@@ -54,23 +107,28 @@ struct __declspec(align(4)) WindowSettingsStruct
 {
   WindowSettings_Vtable *vtable;
   _DWORD unknownFlags0;
-  _BYTE gap1[2040];
+  EngineFile jamFiles[20];
+  OtherJamFileData otherJamFileData[20];
+  _DWORD currentJamFileCount;
+  GameEnvironment environment;
   void *engineApi;
-  void *unknownVTable0;
+  void *unknownVTable1;
   _BYTE gap804[8];
   _DWORD horzRes;
   _DWORD vertRes;
   _DWORD bitsPerPixel;
-  _BYTE gap818[20];
+  _BYTE gap818[4];
+  _DWORD windowStartupTime;
+  _BYTE gap820[12];
   HMODULE engineModuleHandle;
-  WindowSettingsStructSubStruct0 unknown0;
+  WindowSettingsStructSubStruct0 directInputManagerVTable;
   HWND gameWindowHandle;
   _DWORD engineFlags;
   _DWORD dword92C;
   _DWORD dword930;
   _DWORD dword934;
   _DWORD dword938;
-  _DWORD dword93C;
+  _DWORD windowStyleBits;
   _DWORD dword940;
 };
 
@@ -178,9 +236,9 @@ struct __declspec(align(4)) WindowSettings_Vtable
   void *sub_48A860;
   void *sub_489440;
   void *sub_48B100;
-  int (__thiscall *CreateGameWindow)(WindowSettingsStruct *this, const char *lpWindowName, const char *jamFileToLoad);
+  void (__thiscall *CreateGameWindow)(WindowSettingsStruct *this, const char *lpWindowName, const char *jamFilesToLoad);
   void *DestroyGameWindow;
-  void *StartEngine;
+  void (__thiscall *StartEngine)(WindowSettingsStruct *);
   void *ExitEngine;
   void *sub_489970;
   void *sub_489990;
@@ -194,6 +252,36 @@ struct __declspec(align(4)) WindowSettings_Vtable
   void *nullsub_120;
 };
 
+/* 95 */
+struct __declspec(align(4)) EngineFile_Vtable
+{
+  int (__thiscall *Open)(EngineFile *this, char *fileName);
+  int (__thiscall *Close)(EngineFile *this);
+  int (__thiscall *SetFileOffset)(EngineFile *this, int offset);
+  int (__thiscall *Read)(EngineFile *this, void *buffer, unsigned int byteToRead, int *outNumberOfBytesRead);
+  int (__thiscall *Write)(EngineFile *this, void *buffer, unsigned int bytesToWrite);
+  int (__thiscall *Flush)(EngineFile *this);
+  void *_destructor;
+  int (__thiscall *sub_477D20)(EngineFile *, const char *, int, unsigned int);
+  void *sub_477E80;
+  void *sub_477EF0;
+  void *sub_4781E0;
+  void *sub_478840;
+  void *sub_478970;
+  void *sub_478A50;
+};
+
+/* 96 */
+struct OtherJamFileData_Vtable
+{
+  void *sub_4B07E0;
+  void *sub_4B0940;
+  void *sub_4B0950;
+  void *sub_4B0A90;
+  void *sub_4B0720;
+  void *sub_4B08A0;
+};
+
 /* 23 */
 struct HWND__
 {
@@ -203,8 +291,8 @@ struct HWND__
 /* 91 */
 struct __declspec(align(4)) EngineInitStruct
 {
-  _DWORD someBasedOnCount0;
-  _DWORD someCount0;
+  OtherJamFileData *otherJamFileData;
+  _DWORD jamFileCount;
   int someBasedOnCount1;
   _BYTE gapC[12];
   _DWORD someCount1;
