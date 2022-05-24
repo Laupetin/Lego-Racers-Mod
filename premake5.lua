@@ -85,9 +85,11 @@ group ""
 -- ========================
 -- Executables
 -- ========================
+include "src/JamFileTool.lua"
 include "src/ProxyLibrary.lua"
 
 -- Main projects
+JamFileTool:project()
 ProxyLibrary:project()
 
 -- ========================

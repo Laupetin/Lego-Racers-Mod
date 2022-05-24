@@ -7,6 +7,7 @@
 
 #include "Components/Core.h"
 #include "Components/Debug.h"
+#include "Components/JamFiles.h"
 #include "Components/Windowed.h"
 
 Component* components[]
@@ -17,7 +18,8 @@ Component* components[]
     new ComponentDebug(),
 #endif
 
-    new ComponentWindowed()
+    new ComponentWindowed(),
+    new ComponentJamFiles()
 };
 
 void DetectGameEnvironment()
