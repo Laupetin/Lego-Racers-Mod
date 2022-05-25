@@ -140,7 +140,7 @@ private:
         const std::string fileName(file.fileName, strnlen(file.fileName, std::extent_v<decltype(file.fileName)>));
         const auto dumpFilePath = dumpPath / fileName;
 
-        auto fileExtension = fs::path(fileName).replace_extension().string();
+        auto fileExtension = fs::path(fileName).extension().string();
         for (auto& c : fileExtension)
             c = static_cast<char>(toupper(c));
 
@@ -156,7 +156,7 @@ private:
 
         for (const auto* fileDumper : availableFileTypeDumpers)
         {
-            if (fileDumper->SupportFileExtension(""))
+            if (fileDumper->SupportFileExtension(fileExtension))
             {
                 fileDumper->DumpFile(filePath, fileDataBuffer.get(), file.dataSize, streamOut);
                 break;
