@@ -5,9 +5,12 @@
 #include <exception>
 #include <filesystem>
 #include <sstream>
+#include <memory>
 
 #include "JamFileTypes.h"
 #include "Endianness.h"
+#include "IFileTypeDumper.h"
+#include "Dumpers/PassthroughDumper.h"
 
 using namespace dumping;
 namespace fs = std::filesystem;
@@ -29,10 +32,16 @@ private:
     const char* m_msg;
 };
 
+const IFileTypeDumper* availableFileTypeDumpers[]
+{
+    // Passthrough should be last due to it accepting any file and simply dumps its data unmodified
+    new PassthroughDumper()
+};
+
 class JamFileDumper
 {
 public:
-    explicit JamFileDumper(std::istream& stream, fs::path dumpFolder)
+    JamFileDumper(std::istream& stream, fs::path dumpFolder)
         : m_stream(stream),
           m_dump_folder(std::move(dumpFolder))
     {
@@ -114,24 +123,33 @@ private:
         return subDirectories;
     }
 
-    void DumpFile(const fs::path& dumpPath, const JamFileDiskFile& file)
+    void DumpFile(const fs::path& dumpPath, const JamFileDiskFile& file) const
     {
+        if (file.dataSize <= 0)
+            return;
+
         const std::string fileName(file.fileName, strnlen(file.fileName, std::extent_v<decltype(file.fileName)>));
-        m_stream.seekg(file.dataOffset, std::ios::beg);
         const auto dumpFilePath = dumpPath / fileName;
+
+        auto fileExtension = fs::path(fileName).replace_extension().string();
+        for (auto& c : fileExtension)
+            c = static_cast<char>(toupper(c));
 
         std::ofstream streamOut(dumpFilePath, std::ios::out | std::ios::binary);
         if (!streamOut.is_open())
             throw JamFileReadingException("Could not open file for output");
 
-        auto bytesLeft = file.dataSize;
-        while (bytesLeft > 0)
-        {
-            const auto bytesToRead = std::min(bytesLeft, std::extent_v<decltype(m_buffer)>);
-            Read(m_buffer, bytesToRead);
-            streamOut.write(m_buffer, bytesToRead);
+        const auto fileDataBuffer = std::make_unique<char[]>(file.dataSize);
+        m_stream.seekg(file.dataOffset, std::ios::beg);
+        m_stream.read(fileDataBuffer.get(), file.dataSize);
 
-            bytesLeft -= bytesToRead;
+        for (const auto* fileDumper : availableFileTypeDumpers)
+        {
+            if (fileDumper->SupportFileExtension(""))
+            {
+                fileDumper->DumpFile(fileDataBuffer.get(), file.dataSize, streamOut);
+                break;
+            }
         }
     }
 
@@ -160,7 +178,6 @@ private:
 
     std::istream& m_stream;
     fs::path m_dump_folder;
-    char m_buffer[2048];
 };
 
 void dumping::DumpJamFile(const std::string& filePath)
