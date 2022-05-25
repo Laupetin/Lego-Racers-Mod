@@ -10,7 +10,9 @@
 #include "JamFileTypes.h"
 #include "Endianness.h"
 #include "IFileTypeDumper.h"
+#include "StreamUtils.h"
 #include "Dumpers/PassthroughDumper.h"
+#include "Dumpers/SrfDumper.h"
 
 using namespace dumping;
 namespace fs = std::filesystem;
@@ -19,21 +21,15 @@ class JamFileReadingException final : public std::exception
 {
 public:
     explicit JamFileReadingException(const char* msg)
-        : m_msg(msg)
+        : exception(msg)
     {
     }
-
-    [[nodiscard]] char const* what() const override
-    {
-        return m_msg;
-    }
-
-private:
-    const char* m_msg;
 };
 
 const IFileTypeDumper* availableFileTypeDumpers[]
 {
+    new SrfDumper(),
+
     // Passthrough should be last due to it accepting any file and simply dumps its data unmodified
     new PassthroughDumper()
 };
@@ -52,7 +48,7 @@ public:
         uint32_t magicBuffer;
         m_stream.seekg(0, std::ios::beg);
 
-        Read(&magicBuffer, sizeof(magicBuffer));
+        utils::ReadOrThrow(m_stream, &magicBuffer, sizeof(magicBuffer));
         if (magicBuffer != JAM_FILE_MAGIC)
             throw JamFileReadingException("Not a JAM file");
 
@@ -64,13 +60,6 @@ public:
     }
 
 private:
-    void Read(void* dst, const size_t size) const
-    {
-        const auto readCount = m_stream.read(static_cast<char*>(dst), size).gcount();
-        if (readCount != size)
-            throw JamFileReadingException("Unexpected EOF");
-    }
-
     static std::string GetDiskDirectoryPath(const std::string& currentPath, const JamFileDiskDirectory& diskDirectory)
     {
         std::ostringstream ss;
@@ -96,7 +85,7 @@ private:
     {
         std::vector<JamFileDiskFile> files;
         uint32_t fileCount;
-        Read(&fileCount, sizeof(fileCount));
+        utils::ReadOrThrow(m_stream, &fileCount, sizeof(fileCount));
         fileCount = endianness::FromLittleEndian(fileCount);
 
         if (fileCount > 100000)
@@ -105,7 +94,7 @@ private:
         for (auto i = 0u; i < fileCount; i++)
         {
             JamFileDiskFile file{};
-            Read(&file, sizeof(file));
+            utils::ReadOrThrow(m_stream, &file, sizeof(file));
             files.emplace_back(file);
         }
 
@@ -116,7 +105,7 @@ private:
     {
         std::vector<JamFileDiskDirectory> subDirectories;
         uint32_t subDirectoryCount;
-        Read(&subDirectoryCount, sizeof(subDirectoryCount));
+        utils::ReadOrThrow(m_stream, &subDirectoryCount, sizeof(subDirectoryCount));
         subDirectoryCount = endianness::FromLittleEndian(subDirectoryCount);
 
         if (subDirectoryCount > 100000)
@@ -125,7 +114,7 @@ private:
         for (auto i = 0u; i < subDirectoryCount; i++)
         {
             JamFileDiskDirectory subDirectory{};
-            Read(&subDirectory, sizeof(subDirectory));
+            utils::ReadOrThrow(m_stream, &subDirectory, sizeof(subDirectory));
             subDirectories.emplace_back(subDirectory);
         }
 
@@ -158,7 +147,14 @@ private:
         {
             if (fileDumper->SupportFileExtension(fileExtension))
             {
-                fileDumper->DumpFile(filePath, fileDataBuffer.get(), file.dataSize, streamOut);
+                try
+                {
+                    fileDumper->DumpFile(filePath, fileDataBuffer.get(), file.dataSize, streamOut);
+                }
+                catch (std::exception& e)
+                {
+                    std::cerr << "Failed to dump JAM file \"" << filePath << "\": " << e.what() << "\n";
+                }
                 break;
             }
         }
@@ -211,7 +207,7 @@ void dumping::DumpJamFile(const std::string& filePath)
         JamFileDumper dumper(stream, dumpFolder);
         dumper.Dump();
     }
-    catch (const JamFileReadingException& e)
+    catch (const std::exception& e)
     {
         std::cerr << "Failed to dump JAM file: " << e.what() << "\n";
     }
