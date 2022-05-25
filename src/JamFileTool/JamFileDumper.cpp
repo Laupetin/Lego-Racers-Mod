@@ -83,6 +83,15 @@ private:
         return ss.str();
     }
 
+    static std::string GetDiskFilePath(const std::string& currentPath, const std::string& fileName)
+    {
+        std::ostringstream filePathStream;
+        filePathStream << currentPath << "\\" << fileName;
+        auto filePath = filePathStream.str();
+        std::replace(filePath.begin(), filePath.end(), '/', '\\');
+        return filePath;
+    }
+
     [[nodiscard]] std::vector<JamFileDiskFile> ReadDirectoryFiles() const
     {
         std::vector<JamFileDiskFile> files;
@@ -123,7 +132,7 @@ private:
         return subDirectories;
     }
 
-    void DumpFile(const fs::path& dumpPath, const JamFileDiskFile& file) const
+    void DumpFile(const std::string& currentPath, const fs::path& dumpPath, const JamFileDiskFile& file) const
     {
         if (file.dataSize <= 0)
             return;
@@ -134,6 +143,8 @@ private:
         auto fileExtension = fs::path(fileName).replace_extension().string();
         for (auto& c : fileExtension)
             c = static_cast<char>(toupper(c));
+
+        const auto filePath = GetDiskFilePath(currentPath, fileName);
 
         std::ofstream streamOut(dumpFilePath, std::ios::out | std::ios::binary);
         if (!streamOut.is_open())
@@ -147,7 +158,7 @@ private:
         {
             if (fileDumper->SupportFileExtension(""))
             {
-                fileDumper->DumpFile(fileDataBuffer.get(), file.dataSize, streamOut);
+                fileDumper->DumpFile(filePath, fileDataBuffer.get(), file.dataSize, streamOut);
                 break;
             }
         }
@@ -165,7 +176,7 @@ private:
         const auto subDirectories = ReadDirectorySubDirectories();
 
         for (const auto& file : files)
-            DumpFile(dumpPath, file);
+            DumpFile(diskDirectoryPath, dumpPath, file);
 
         for (const auto& subDirectory : subDirectories)
         {
