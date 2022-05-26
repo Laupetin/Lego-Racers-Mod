@@ -6,7 +6,7 @@
 #include "FunctionLike.h"
 #include "CallDetails.h"
 #include "OffsetBase.h"
-#include "Singleton.h"
+#include "Utils/Singleton.h"
 #include "StackToRegisterWrapperBuilder.h"
 #include "UsercallConfiguration.h"
 

@@ -2,8 +2,8 @@
 
 #include <asmjit.h>
 
-#include "patch/Register.h"
-#include "patch/UsercallConfiguration.h"
+#include "Patch/Register.h"
+#include "Patch/UsercallConfiguration.h"
 
 class WrapperBuilderBase
 {

@@ -4,8 +4,8 @@
 #include <sstream>
 #include <vector>
 
-#include "Endianness.h"
-#include "StringUtils.h"
+#include "Utils/Endianness.h"
+#include "Utils/StringUtils.h"
 
 class SrfCreationException final : public std::exception
 {

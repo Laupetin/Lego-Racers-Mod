@@ -8,9 +8,9 @@
 #include <memory>
 
 #include "JamFileTypes.h"
-#include "Endianness.h"
+#include "Utils/Endianness.h"
 #include "IFileTypeProcessor.h"
-#include "StreamUtils.h"
+#include "Utils/StreamUtils.h"
 #include "Dumpers/PassthroughDumper.h"
 #include "Dumpers/SrfDumper.h"
 

@@ -2,7 +2,7 @@
 
 #include "LEGORacers2001.h"
 #include "RacersOffset.h"
-#include "patch/Offset.h"
+#include "Patch/Offset.h"
 
 namespace game
 {

@@ -2,8 +2,8 @@
 #include <string>
 
 #include "RacersOffset.h"
-#include "patch/Patch.h"
-#include "patch/Offset.h"
+#include "Patch/Patch.h"
+#include "Patch/Offset.h"
 
 #include "Components/Core.h"
 #include "Components/Debug.h"

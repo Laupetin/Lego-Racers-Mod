@@ -3,7 +3,7 @@
 #include <Windows.h>
 
 #include "RacersOffset.h"
-#include "patch/Patch.h"
+#include "Patch/Patch.h"
 
 namespace windowed
 {

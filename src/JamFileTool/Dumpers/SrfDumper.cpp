@@ -5,9 +5,9 @@
 #include <exception>
 #include <sstream>
 
-#include "StreamUtils.h"
-#include "StringUtils.h"
-#include "Endianness.h"
+#include "Utils/StreamUtils.h"
+#include "Utils/StringUtils.h"
+#include "Utils/Endianness.h"
 
 class SrfDumpingException final : public std::exception
 {

@@ -8,7 +8,7 @@
 #include <array>
 #include <vector>
 
-#include "Singleton.h"
+#include "Utils/Singleton.h"
 
 // ReSharper disable once CppPolymorphicClassWithNonVirtualPublicDestructor
 class ILazyOffsetInitTarget // NOLINT(clang-diagnostic-non-virtual-dtor)

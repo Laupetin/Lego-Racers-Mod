@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.h"
-#include "Event.h"
+#include "Utils/Event.h"
 
 namespace core
 {

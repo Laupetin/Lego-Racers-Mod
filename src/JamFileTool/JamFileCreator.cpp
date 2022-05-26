@@ -9,9 +9,9 @@
 #include <memory>
 
 #include "JamFileTypes.h"
-#include "Endianness.h"
+#include "Utils/Endianness.h"
 #include "IFileTypeProcessor.h"
-#include "StreamUtils.h"
+#include "Utils/StreamUtils.h"
 #include "Creators/PassthroughCreator.h"
 #include "Creators/SrfCreator.h"
 

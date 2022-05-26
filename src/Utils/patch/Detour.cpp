@@ -4,9 +4,8 @@
 #include <asmjit.h>
 #include <Zydis/Zydis.h>
 
-
 #include "RegisterToStackWrapperBuilder.h"
-#include "internal/AsmJitWrapper.h"
+#include "Internal/AsmJitWrapper.h"
 #include "StackToRegisterWrapperBuilder.h"
 
 class TrampolineBuilder

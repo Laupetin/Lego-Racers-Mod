@@ -2,8 +2,8 @@
 
 #include <asmjit.h>
 
-#include "internal/AsmJitWrapper.h"
-#include "internal/WrapperBuilderBase.h"
+#include "Internal/AsmJitWrapper.h"
+#include "Internal/WrapperBuilderBase.h"
 #include "Offset.h"
 
 class StackToRegisterWrapperBuilderInternal : public WrapperBuilderBase

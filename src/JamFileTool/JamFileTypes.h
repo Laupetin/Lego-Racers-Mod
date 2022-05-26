@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-#include "FileUtils.h"
+#include "Utils/FileUtils.h"
 
 static constexpr uint32_t JAM_FILE_MAGIC = utils::MakeMagic32('L', 'J', 'A', 'M');
 

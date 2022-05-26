@@ -1,12 +1,12 @@
 #pragma once
-#include "patch/IAsmWrapper.h"
-#include "patch/Register.h"
+#include "Patch/IAsmWrapper.h"
+#include "Patch/Register.h"
 
 #include <asmjit.h>
 #include <mutex>
 #include <memory>
 
-#include "Singleton.h"
+#include "Utils/Singleton.h"
 
 class AsmJitContext : public Singleton<AsmJitContext>
 {
