@@ -21,6 +21,8 @@ ComponentJamFiles::ComponentJamFiles()
 
 bool ComponentJamFiles::InstallInternal()
 {
+    Patch::Field<const char*>(0x4E7198, "mod.jam\nlego.jam");
+
     static FieldOffset<const char> absolutePathBuffer1(Offset().Racers01(0x4F90F8));
     static FieldOffset<const char> absolutePathBuffer2(Offset().Racers01(0x4F8FDC));
     static FunctionDetourTrampoline<void(const char*, const char*)> absolutePathTrampoline;
