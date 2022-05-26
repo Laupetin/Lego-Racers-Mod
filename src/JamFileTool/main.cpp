@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <iostream>
 
+#include "JamFileCreator.h"
 #include "JamFileDumper.h"
 
 namespace fs = std::filesystem;
@@ -19,11 +20,11 @@ void main(const int argc, const char** argv)
 
         if (fs::is_directory(targetPath))
         {
-            std::cout << "Creating JAM file from " << targetPath << "\n";
+            creating::CreateJamFile(targetPath.string());
         }
         else if (fs::is_regular_file(targetPath))
         {
-            dumping::DumpJamFile(targetPath.generic_string());
+            dumping::DumpJamFile(targetPath.string());
         }
         else
         {
