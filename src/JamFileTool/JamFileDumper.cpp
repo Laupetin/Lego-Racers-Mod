@@ -9,7 +9,7 @@
 
 #include "JamFileTypes.h"
 #include "Endianness.h"
-#include "IFileTypeDumper.h"
+#include "IFileTypeProcessor.h"
 #include "StreamUtils.h"
 #include "Dumpers/PassthroughDumper.h"
 #include "Dumpers/SrfDumper.h"
@@ -26,7 +26,7 @@ public:
     }
 };
 
-const IFileTypeDumper* availableFileTypeDumpers[]
+const IFileTypeProcessor* availableFileTypeDumpers[]
 {
     new SrfDumper(),
 
@@ -149,7 +149,7 @@ private:
             {
                 try
                 {
-                    fileDumper->DumpFile(filePath, fileDataBuffer.get(), file.dataSize, streamOut);
+                    fileDumper->ProcessFile(filePath, fileDataBuffer.get(), file.dataSize, streamOut);
                 }
                 catch (std::exception& e)
                 {

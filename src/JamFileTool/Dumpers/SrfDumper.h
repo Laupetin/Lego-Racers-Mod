@@ -1,11 +1,11 @@
 #pragma once
-#include "IFileTypeDumper.h"
+#include "IFileTypeProcessor.h"
 
-class SrfDumper final : public AbstractStreamingFileTypeDumper
+class SrfDumper final : public AbstractStreamingFileTypeProcessor
 {
 public:
     [[nodiscard]] bool SupportFileExtension(const std::string& extension) const override;
 
 protected:
-    void DumpFile(const std::string& filePath, std::istream& input, std::ostream& output) const override;
+    void ProcessFile(const std::string& filePath, std::istream& input, std::ostream& output) const override;
 };
