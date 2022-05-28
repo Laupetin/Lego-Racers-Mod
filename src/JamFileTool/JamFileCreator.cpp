@@ -187,9 +187,12 @@ private:
             while (currentFileIndex < fileEndIndex)
             {
                 const auto& file = m_files[currentFileIndex];
-                const auto fileName = file.m_path.filename().string();
+                auto fileName = file.m_path.filename().string();
                 if (fileName.size() > std::extent_v<decltype(JamFileDiskFile::fileName)>)
                     throw JamFileWritingException("File name too long");
+
+                for (auto& c : fileName)
+                    c = static_cast<char>(toupper(c));
 
                 JamFileDiskFile diskFile{};
                 strncpy(diskFile.fileName, fileName.c_str(), std::extent_v<decltype(JamFileDiskFile::fileName)>);
