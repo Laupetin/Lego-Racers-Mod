@@ -161,11 +161,13 @@ private:
     void WriteData()
     {
         const auto scanLineDataLen = utils::Align(m_width * m_bits_per_pixel, 8u) / 8u;
-        const auto scanLinePadding = m_out_stride_in_bytes - scanLineDataLen;
 
+        const auto scanLineBuffer = std::make_unique<char[]>(scanLineDataLen * m_height);
         for (auto scanLineIndex = 0u; scanLineIndex < m_height; scanLineIndex++)
         {
             auto remainingScanLineLen = scanLineDataLen;
+            char* scanLineInBuffer = &scanLineBuffer[scanLineDataLen * (m_height - scanLineIndex - 1)];
+
             while (remainingScanLineLen > 0)
             {
                 if (m_decompress_pos >= m_decompress_size)
@@ -174,11 +176,18 @@ private:
                 const auto lenFromCurrentDecompressBuffer = std::min(remainingScanLineLen, m_decompress_size - m_decompress_pos);
                 if (lenFromCurrentDecompressBuffer > 0)
                 {
-                    m_out.write(&m_decompress_buffer[m_decompress_pos], lenFromCurrentDecompressBuffer);
+                    memcpy(&scanLineInBuffer[scanLineDataLen - remainingScanLineLen], &m_decompress_buffer[m_decompress_pos], lenFromCurrentDecompressBuffer);
                     m_decompress_pos += lenFromCurrentDecompressBuffer;
                     remainingScanLineLen -= lenFromCurrentDecompressBuffer;
                 }
             }
+        }
+
+        const auto scanLinePadding = m_out_stride_in_bytes - scanLineDataLen;
+        for (auto scanLineIndex = 0u; scanLineIndex < m_height; scanLineIndex++)
+        {
+            const char* scanLineInBuffer = &scanLineBuffer[scanLineDataLen * scanLineIndex];
+            m_out.write(scanLineInBuffer, scanLineDataLen);
 
             if (scanLinePadding > 0)
                 m_out.seekp(scanLinePadding, std::ios::cur);
