@@ -120,12 +120,6 @@ private:
         dir.m_file_count = m_files.size() - fileStartIndex;
         dir.m_sub_directory_start_index = subDirectoryStartIndex;
         dir.m_sub_directory_count = m_directories.size() - subDirectoryStartIndex;
-
-        //const auto subDirectoryEndIndex = m_directories.size();
-        //for (auto subDirectoryIndex = dir.m_sub_directory_start_index; subDirectoryIndex < subDirectoryEndIndex; subDirectoryIndex++)
-        //{
-        //    PrepareFromDirectory(subDirectoryIndex, fileDataOffset);
-        //}
     }
 
     void PrepareFromDirectory(const fs::path& path)
@@ -139,106 +133,6 @@ private:
             PrepareFromDirectory(currentDirectoryIndex, fileDataOffset);
         }
     }
-
-    //static std::string GetDiskDirectoryPath(const std::string& currentPath, const JamFileDiskDirectory& diskDirectory)
-    //{
-    //    std::ostringstream ss;
-    //    ss << currentPath;
-    //    if (!currentPath.empty())
-    //        ss << "/";
-
-    //    const std::string diskDirectoryName(diskDirectory.directoryName, strnlen(diskDirectory.directoryName, std::extent_v<decltype(diskDirectory.directoryName)>));
-    //    ss << diskDirectoryName;
-    //    return ss.str();
-    //}
-
-    //static std::string GetDiskFilePath(const std::string& currentPath, const std::string& fileName)
-    //{
-    //    std::ostringstream filePathStream;
-    //    filePathStream << currentPath << "\\" << fileName;
-    //    auto filePath = filePathStream.str();
-    //    std::replace(filePath.begin(), filePath.end(), '/', '\\');
-    //    return filePath;
-    //}
-
-    //[[nodiscard]] std::vector<JamFileDiskFile> ReadDirectoryFiles() const
-    //{
-    //    std::vector<JamFileDiskFile> files;
-    //    uint32_t fileCount;
-    //    utils::ReadOrThrow(m_stream, &fileCount, sizeof(fileCount));
-    //    fileCount = endianness::FromLittleEndian(fileCount);
-
-    //    if (fileCount > 100000)
-    //        throw JamFileReadingException("Too many files");
-
-    //    for (auto i = 0u; i < fileCount; i++)
-    //    {
-    //        JamFileDiskFile file{};
-    //        utils::ReadOrThrow(m_stream, &file, sizeof(file));
-    //        files.emplace_back(file);
-    //    }
-
-    //    return files;
-    //}
-
-    //[[nodiscard]] std::vector<JamFileDiskDirectory> ReadDirectorySubDirectories() const
-    //{
-    //    std::vector<JamFileDiskDirectory> subDirectories;
-    //    uint32_t subDirectoryCount;
-    //    utils::ReadOrThrow(m_stream, &subDirectoryCount, sizeof(subDirectoryCount));
-    //    subDirectoryCount = endianness::FromLittleEndian(subDirectoryCount);
-
-    //    if (subDirectoryCount > 100000)
-    //        throw JamFileReadingException("Too many subdirectories");
-
-    //    for (auto i = 0u; i < subDirectoryCount; i++)
-    //    {
-    //        JamFileDiskDirectory subDirectory{};
-    //        utils::ReadOrThrow(m_stream, &subDirectory, sizeof(subDirectory));
-    //        subDirectories.emplace_back(subDirectory);
-    //    }
-
-    //    return subDirectories;
-    //}
-
-    //void DumpFile(const std::string& currentPath, const fs::path& dumpPath, const JamFileDiskFile& file) const
-    //{
-    //    if (file.dataSize <= 0)
-    //        return;
-
-    //    const std::string fileName(file.fileName, strnlen(file.fileName, std::extent_v<decltype(file.fileName)>));
-    //    const auto dumpFilePath = dumpPath / fileName;
-
-    //    auto fileExtension = fs::path(fileName).extension().string();
-    //    for (auto& c : fileExtension)
-    //        c = static_cast<char>(toupper(c));
-
-    //    const auto filePath = GetDiskFilePath(currentPath, fileName);
-
-    //    std::ofstream streamOut(dumpFilePath, std::ios::out | std::ios::binary);
-    //    if (!streamOut.is_open())
-    //        throw JamFileReadingException("Could not open file for output");
-
-    //    const auto fileDataBuffer = std::make_unique<char[]>(file.dataSize);
-    //    m_stream.seekg(file.dataOffset, std::ios::beg);
-    //    m_stream.read(fileDataBuffer.get(), file.dataSize);
-
-    //    for (const auto* fileDumper : availableFileTypeDumpers)
-    //    {
-    //        if (fileDumper->SupportFileExtension(fileExtension))
-    //        {
-    //            try
-    //            {
-    //                fileDumper->DumpFile(filePath, fileDataBuffer.get(), file.dataSize, streamOut);
-    //            }
-    //            catch (std::exception& e)
-    //            {
-    //                std::cerr << "Failed to dump JAM file \"" << filePath << "\": " << e.what() << "\n";
-    //            }
-    //            break;
-    //        }
-    //    }
-    //}
 
     void WriteFileData()
     {
@@ -332,10 +226,6 @@ private:
             }
 
             currentDirectoryIndex++;
-        }
-
-        for (const auto& file : m_files)
-        {
         }
     }
 
