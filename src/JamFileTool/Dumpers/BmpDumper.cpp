@@ -97,7 +97,11 @@ public:
 
     void Write()
     {
-        const auto outDataOffset = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD) * m_palette_size;
+        auto paletteMaxSize = 0u;
+        if (m_palette_size > 0)
+            paletteMaxSize = m_bits_per_pixel == 4 ? 16 : 256;
+
+        const auto outDataOffset = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD) * paletteMaxSize;
         const auto imageByteSize = m_out_image_size_in_byte;
         const BITMAPFILEHEADER outFileHeader{
             utils::MakeMagic16('B', 'M'),
@@ -116,10 +120,10 @@ public:
             static_cast<WORD>(m_bits_per_pixel),
             BI_RGB,
             imageByteSize,
-            1,
-            1,
-            m_palette_size,
-            m_palette_size
+            0,
+            0,
+            paletteMaxSize,
+            paletteMaxSize
         };
         m_out.write(reinterpret_cast<const char*>(&outInfoHeader), sizeof(outInfoHeader));
 
@@ -130,6 +134,16 @@ public:
                 m_palette[paletteIndex].g,
                 m_palette[paletteIndex].r,
                 m_palette[paletteIndex].a
+            };
+            m_out.write(reinterpret_cast<const char*>(&data), sizeof(data));
+        }
+        for (auto paletteIndex = m_palette_size; paletteIndex < paletteMaxSize; paletteIndex++)
+        {
+            RGBQUAD data{
+                0,
+                0,
+                0,
+                0
             };
             m_out.write(reinterpret_cast<const char*>(&data), sizeof(data));
         }
@@ -154,7 +168,7 @@ private:
             m_palette[paletteIndex].b = in.b;
             m_palette[paletteIndex].g = in.g;
             m_palette[paletteIndex].r = in.r;
-            m_palette[paletteIndex].a = std::numeric_limits<uint8_t>::max();
+            m_palette[paletteIndex].a = 0;
         }
     }
 
@@ -189,8 +203,8 @@ private:
             const char* scanLineInBuffer = &scanLineBuffer[scanLineDataLen * scanLineIndex];
             m_out.write(scanLineInBuffer, scanLineDataLen);
 
-            if (scanLinePadding > 0)
-                m_out.seekp(scanLinePadding, std::ios::cur);
+            for (auto padIndex = 0u; padIndex < scanLinePadding; padIndex++)
+                m_out.put('\0');
         }
 
         assert(m_decompress_pos == m_decompress_size);
