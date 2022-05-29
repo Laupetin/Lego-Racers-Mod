@@ -39,5 +39,8 @@ bool ComponentWindowed::InstallInternal()
     // Make game target 32bit color
     Patch::Field<uint32_t>(Offset().Racers01(0x411786), 32);
 
+    // Nop setting window flag 0x2 -> Does not minimize the game on tabbing out
+    Patch::Nop(Offset().Racers01(0x489BA5), 3);
+
     return true;
 }
