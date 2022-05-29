@@ -44,6 +44,46 @@ public:
 };
 
 template <class _Ret, class... _Types>
+class _Func_class_stdcall
+{
+protected:
+    void* m_func;
+
+public:
+    using func_ptr_t = _Ret(__stdcall*)(_Types ...);
+    using ret_t = _Ret;
+
+    _Func_class_stdcall()
+        : m_func(nullptr)
+    {
+    }
+
+    _Ret operator()(_Types ... args) const
+    {
+        if (m_func == nullptr)
+            throw std::exception("Tried accessing uninitialized function offset.");
+
+        return static_cast<func_ptr_t>(m_func)(args...);
+    }
+
+    func_ptr_t Ptr() const
+    {
+        if (m_func == nullptr)
+            throw std::exception("Tried accessing uninitialized function offset.");
+
+        return m_func;
+    }
+
+    [[nodiscard]] uintptr_t Addr() const
+    {
+        if (m_func == nullptr)
+            throw std::exception("Tried accessing uninitialized function offset.");
+
+        return reinterpret_cast<uintptr_t>(m_func);
+    }
+};
+
+template <class _Ret, class... _Types>
 class _Func_class_varargs
 {
 protected:
@@ -161,6 +201,21 @@ struct _Get_function_impl_param_capture;
     struct _Get_function_impl_param_capture<_Ret CALL_OPT(_Types...)> /* determine type from argument list */    \
     {                                                                                                   \
         using type = _Func_class_param_capture<_Ret, _Types...>;                                                 \
+    };
+
+_NON_MEMBER_CALL(_GET_FUNCTION_IMPL, X1, X2, X3)
+#undef _GET_FUNCTION_IMPL
+
+
+// STRUCT TEMPLATE _Get_function_impl_stdcall
+template <class T>
+struct _Get_function_impl_stdcall;
+
+#define _GET_FUNCTION_IMPL(CALL_OPT, X1, X2, X3)                                                            \
+    template <class _Ret, class... _Types>                                                                  \
+    struct _Get_function_impl_stdcall<_Ret CALL_OPT(_Types...)> /* determine type from argument list */     \
+    {                                                                                                       \
+        using type = _Func_class_stdcall<_Ret, _Types...>;                                                  \
     };
 
 _NON_MEMBER_CALL(_GET_FUNCTION_IMPL, X1, X2, X3)

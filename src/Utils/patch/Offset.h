@@ -55,6 +55,39 @@ public:
 };
 
 template <class T>
+class FunctionOffsetStdcall final : public _Get_function_impl_stdcall<T>::type, ILazyOffsetInitTarget
+{
+public:
+    using _Get_function_impl_stdcall<T>::type::m_func;
+
+    explicit FunctionOffsetStdcall(const OffsetValue value)
+        : _Get_function_impl_stdcall<T>::type()
+    {
+        if (value.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)
+            m_func = reinterpret_cast<void*>(value.m_fixed_value);
+        else
+            OffsetManager::RegisterLazyInitialization(this, value.m_lazy_evaluation_index);
+    }
+
+    explicit FunctionOffsetStdcall(void* value)
+        : _Get_function_impl_stdcall<T>::type()
+    {
+        m_func = value;
+    }
+
+    explicit FunctionOffsetStdcall(const uintptr_t value)
+        : _Get_function_impl_stdcall<T>::type()
+    {
+        m_func = reinterpret_cast<void*>(value);
+    }
+
+    void SetLazyValue(const uintptr_t value) override
+    {
+        m_func = reinterpret_cast<void*>(value);
+    }
+};
+
+template <class T>
 class FunctionOffsetVarArgs final : public _Get_function_impl_varargs<T>::type, ILazyOffsetInitTarget
 {
 public:
