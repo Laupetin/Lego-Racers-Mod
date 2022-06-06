@@ -39,6 +39,7 @@ function JamFileTool:project()
 		
 		self:include(includes)
 		Utils:include(includes)
+		pegtl:include(includes)
 
 		Utils:link(links)
 		links:linkall()
