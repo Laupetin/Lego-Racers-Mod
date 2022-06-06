@@ -79,6 +79,22 @@ uint64_t BinaryReaderStream::ReadUInt64()
     return value;
 }
 
+float BinaryReaderStream::ReadFp32()
+{
+    float value;
+    if (m_stream.read(reinterpret_cast<char*>(&value), sizeof(value)).gcount() != sizeof(value))
+        throw ReadingException("Unexpected EOF");
+    return value;
+}
+
+double BinaryReaderStream::ReadFp64()
+{
+    double value;
+    if (m_stream.read(reinterpret_cast<char*>(&value), sizeof(value)).gcount() != sizeof(value))
+        throw ReadingException("Unexpected EOF");
+    return value;
+}
+
 std::string BinaryReaderStream::ReadString(const size_t length)
 {
     std::string value(length, '\0');
@@ -144,6 +160,16 @@ bool BinaryReaderStream::TryReadInt64(int64_t& value)
 }
 
 bool BinaryReaderStream::TryReadUInt64(uint64_t& value)
+{
+    return m_stream.read(reinterpret_cast<char*>(&value), sizeof(value)).gcount() == sizeof(value);
+}
+
+bool BinaryReaderStream::TryReadFp32(float& value)
+{
+    return m_stream.read(reinterpret_cast<char*>(&value), sizeof(value)).gcount() == sizeof(value);
+}
+
+bool BinaryReaderStream::TryReadFp64(double& value)
 {
     return m_stream.read(reinterpret_cast<char*>(&value), sizeof(value)).gcount() == sizeof(value);
 }
@@ -260,6 +286,24 @@ uint64_t BinaryReaderBuffer::ReadUInt64()
     return value;
 }
 
+float BinaryReaderBuffer::ReadFp32()
+{
+    if (m_current_offset + sizeof(float) > m_buffer_size)
+        throw ReadingException("Unexpected EOF");
+    const auto value = *reinterpret_cast<const float*>(&m_buffer[m_current_offset]);
+    m_current_offset += sizeof(float);
+    return value;
+}
+
+double BinaryReaderBuffer::ReadFp64()
+{
+    if (m_current_offset + sizeof(double) > m_buffer_size)
+        throw ReadingException("Unexpected EOF");
+    const auto value = *reinterpret_cast<const double*>(&m_buffer[m_current_offset]);
+    m_current_offset += sizeof(double);
+    return value;
+}
+
 std::string BinaryReaderBuffer::ReadString(const size_t length)
 {
     if (m_current_offset + length > m_buffer_size)
@@ -359,6 +403,24 @@ bool BinaryReaderBuffer::TryReadUInt64(uint64_t& value)
         return false;
     value = *reinterpret_cast<const uint64_t*>(&m_buffer[m_current_offset]);
     m_current_offset += sizeof(uint64_t);
+    return true;
+}
+
+bool BinaryReaderBuffer::TryReadFp32(float& value)
+{
+    if (m_current_offset + sizeof(float) >= m_buffer_size)
+        return false;
+    value = *reinterpret_cast<const float*>(&m_buffer[m_current_offset]);
+    m_current_offset += sizeof(float);
+    return true;
+}
+
+bool BinaryReaderBuffer::TryReadFp64(double& value)
+{
+    if (m_current_offset + sizeof(double) >= m_buffer_size)
+        return false;
+    value = *reinterpret_cast<const double*>(&m_buffer[m_current_offset]);
+    m_current_offset += sizeof(double);
     return true;
 }
 

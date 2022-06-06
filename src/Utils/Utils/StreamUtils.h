@@ -40,6 +40,8 @@ namespace utils
         virtual uint32_t ReadUInt32() = 0;
         virtual int64_t ReadInt64() = 0;
         virtual uint64_t ReadUInt64() = 0;
+        virtual float ReadFp32() = 0;
+        virtual double ReadFp64() = 0;
         virtual std::string ReadString(size_t length) = 0;
         virtual std::string ReadStringZeroTerminated() = 0;
 
@@ -52,6 +54,8 @@ namespace utils
         virtual bool TryReadUInt32(uint32_t& value) = 0;
         virtual bool TryReadInt64(int64_t& value) = 0;
         virtual bool TryReadUInt64(uint64_t& value) = 0;
+        virtual bool TryReadFp32(float& value) = 0;
+        virtual bool TryReadFp64(double& value) = 0;
         virtual std::string TryReadString(size_t length) = 0;
 
         virtual void SkipBytes(size_t count) = 0;
@@ -71,6 +75,8 @@ namespace utils
         uint32_t ReadUInt32() override;
         int64_t ReadInt64() override;
         uint64_t ReadUInt64() override;
+        float ReadFp32() override;
+        double ReadFp64() override;
         std::string ReadString(size_t length) override;
         std::string ReadStringZeroTerminated() override;
 
@@ -83,6 +89,8 @@ namespace utils
         bool TryReadUInt32(uint32_t& value) override;
         bool TryReadInt64(int64_t& value) override;
         bool TryReadUInt64(uint64_t& value) override;
+        bool TryReadFp32(float& value) override;
+        bool TryReadFp64(double& value) override;
         std::string TryReadString(size_t length) override;
 
         void SkipBytes(size_t count) override;
@@ -105,6 +113,8 @@ namespace utils
         uint32_t ReadUInt32() override;
         int64_t ReadInt64() override;
         uint64_t ReadUInt64() override;
+        float ReadFp32() override;
+        double ReadFp64() override;
         std::string ReadString(size_t length) override;
         std::string ReadStringZeroTerminated() override;
 
@@ -117,6 +127,8 @@ namespace utils
         bool TryReadUInt32(uint32_t& value) override;
         bool TryReadInt64(int64_t& value) override;
         bool TryReadUInt64(uint64_t& value) override;
+        bool TryReadFp32(float& value) override;
+        bool TryReadFp64(double& value) override;
         std::string TryReadString(size_t length) override;
 
         void SkipBytes(size_t count) override;
