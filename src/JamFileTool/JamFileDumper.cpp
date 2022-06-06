@@ -11,6 +11,7 @@
 #include "Utils/Endianness.h"
 #include "IFileTypeProcessor.h"
 #include "Dumpers/BmpDumper.h"
+#include "Dumpers/MdbDumper.h"
 #include "Utils/StreamUtils.h"
 #include "Dumpers/PassthroughDumper.h"
 #include "Dumpers/SrfDumper.h"
@@ -30,6 +31,7 @@ public:
 const IFileTypeProcessor* availableFileTypeDumpers[]
 {
     new BmpDumper(),
+    new MdbDumper(),
     new SrfDumper(),
 
     // Passthrough should be last due to it accepting any file and simply dumps its data unmodified
