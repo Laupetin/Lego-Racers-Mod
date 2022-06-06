@@ -7,6 +7,15 @@
 
 namespace mdb
 {
+    class MdbDumpingException final : public std::exception
+    {
+    public:
+        explicit MdbDumpingException(char const* msg)
+            : exception(msg)
+        {
+        }
+    };
+
     enum MaterialToken
     {
         TOKEN_MATERIAL_DB = 0x27,
@@ -16,7 +25,7 @@ namespace mdb
         TOKEN_KEYWORD_COLOR_0 = 0x29,
         TOKEN_KEYWORD_2A = 0x2A,
         TOKEN_KEYWORD_2B = 0x2B,
-        TOKEN_KEYWORD_2C = 0x2C,
+        TOKEN_KEYWORD_TEXTURE = 0x2C,
         TOKEN_KEYWORD_2D = 0x2D,
         TOKEN_KEYWORD_2E = 0x2E,
         TOKEN_KEYWORD_2F = 0x2F,
@@ -80,15 +89,12 @@ public:
             m_tokens->ExpectToken(TOKEN_LEFT_CURLY);
             BeginMaterial(materialIndex, materialName);
 
-            Token token;
-            do
+            while (ProcessMaterialToken())
             {
-                token = m_tokens->NextValue();
+                // Next token
             }
-            while (token.m_type != TOKEN_RIGHT_CURLY && token.m_type != TOKEN_EOF);
 
             EndMaterial();
-            std::cout << "    Material: " << materialName << "\n";
         }
 
         m_tokens->ExpectToken(TOKEN_RIGHT_CURLY);
@@ -103,6 +109,253 @@ private:
         m_tokens->ExpectToken(TOKEN_RIGHT_BRACKET);
         m_tokens->ExpectToken(TOKEN_LEFT_CURLY);
         return materialCount;
+    }
+
+    void ProcessKeyword2F() const
+    {
+        Indent();
+        m_stream << "keyword2F";
+
+        const auto token = m_tokens->NextValue();
+
+        switch (token.m_type)
+        {
+        case TOKEN_KEYWORD_2F_SUB_30:
+            m_stream << " keyword30";
+            break;
+
+        case TOKEN_KEYWORD_2F_SUB_31:
+            m_stream << " keyword31 " << m_tokens->NextIntegerValue();
+            break;
+
+        case TOKEN_KEYWORD_2F_SUB_32:
+            m_stream << " keyword32 " << m_tokens->NextIntegerValue();
+            break;
+
+        case TOKEN_KEYWORD_2F_SUB_33:
+            m_stream << " keyword33 " << m_tokens->NextIntegerValue();
+            break;
+
+        case TOKEN_KEYWORD_2F_SUB_34:
+            m_stream << " keyword34 " << m_tokens->NextIntegerValue();
+            break;
+
+        case TOKEN_KEYWORD_2F_SUB_35:
+            m_stream << " keyword35 " << m_tokens->NextIntegerValue();
+            break;
+
+        case TOKEN_KEYWORD_2F_SUB_36:
+            m_stream << " keyword36";
+            break;
+
+        case TOKEN_KEYWORD_2F_SUB_37:
+            m_stream << " keyword37 " << m_tokens->NextIntegerValue();
+            break;
+
+        default:
+            break;
+        }
+
+        m_stream << "\n";
+    }
+
+    void ProcessKeyword38() const
+    {
+        Indent();
+        m_stream << "keyword38";
+
+        for (auto i = 0u; i < 2u; i++)
+        {
+            const auto token = m_tokens->NextValue();
+
+            switch (token.m_type)
+            {
+            case TOKEN_KEYWORD_38_SUB_39:
+                m_stream << " keyword39";
+                break;
+
+            case TOKEN_KEYWORD_38_SUB_3A:
+                m_stream << " keyword3A";
+                break;
+
+            case TOKEN_KEYWORD_38_SUB_3B:
+                m_stream << " keyword3B";
+                break;
+
+            case TOKEN_KEYWORD_38_SUB_3C:
+                m_stream << " keyword3C";
+                break;
+
+            case TOKEN_KEYWORD_38_SUB_3D:
+                m_stream << " keyword3D";
+                break;
+
+            case TOKEN_KEYWORD_38_SUB_3E:
+                m_stream << " keyword3E";
+                break;
+
+            case TOKEN_KEYWORD_38_SUB_3F:
+                m_stream << " keyword3F";
+                break;
+
+            case TOKEN_KEYWORD_38_SUB_40:
+                m_stream << " keyword40";
+                break;
+
+            case TOKEN_KEYWORD_38_SUB_41:
+                m_stream << " keyword41";
+                break;
+
+            case TOKEN_KEYWORD_38_SUB_42:
+                m_stream << " keyword42";
+                break;
+
+            case TOKEN_KEYWORD_38_SUB_43:
+                m_stream << " keyword43";
+                break;
+
+            default:
+                throw MdbDumpingException("Unknown keyword for keyword38");
+            }
+        }
+
+        m_stream << "\n";
+    }
+
+    bool ProcessMaterialToken() const
+    {
+        const auto token = m_tokens->NextValue();
+        if (token.m_type == TOKEN_EOF || token.m_type == TOKEN_RIGHT_CURLY)
+            return false;
+
+        switch (token.m_type)
+        {
+        case TOKEN_KEYWORD_COLOR_1:
+            {
+                const auto value0 = m_tokens->NextIntegerValue();
+                const auto value1 = m_tokens->NextIntegerValue();
+                const auto value2 = m_tokens->NextIntegerValue();
+                const auto value3 = m_tokens->NextIntegerValue();
+                WriteColorValue("color1", value0, value1, value2, value3);
+                break;
+            }
+
+        case TOKEN_KEYWORD_COLOR_0:
+            {
+                const auto value0 = m_tokens->NextIntegerValue();
+                const auto value1 = m_tokens->NextIntegerValue();
+                const auto value2 = m_tokens->NextIntegerValue();
+                const auto value3 = m_tokens->NextIntegerValue();
+                WriteColorValue("color0", value0, value1, value2, value3);
+                break;
+            }
+
+        case TOKEN_KEYWORD_TEXTURE:
+            WriteStringValue("texture", m_tokens->NextStringValue());
+            break;
+
+        case TOKEN_KEYWORD_46:
+            WriteIntegerValue("keyword46", m_tokens->NextIntegerValue());
+            break;
+
+        case TOKEN_KEYWORD_4E:
+            WriteIntegerValue("keyword4E", m_tokens->NextIntegerValue());
+            break;
+
+        case TOKEN_KEYWORD_4F:
+            WriteIntegerValue("keyword4F", m_tokens->NextIntegerValue());
+            break;
+
+        case TOKEN_KEYWORD_4D:
+        case TOKEN_KEYWORD_50:
+            WriteIntegerValue("keyword4D", m_tokens->NextIntegerValue());
+            break;
+
+        case TOKEN_KEYWORD_2A:
+            WriteKeyword("keyword2A");
+            break;
+
+        case TOKEN_KEYWORD_2B:
+            WriteKeyword("keyword2B");
+            break;
+
+        case TOKEN_KEYWORD_2D:
+            WriteKeyword("keyword2D");
+            break;
+
+        case TOKEN_KEYWORD_2E:
+            WriteKeyword("keyword2E");
+            break;
+
+        case TOKEN_KEYWORD_44:
+            WriteKeyword("keyword44");
+            break;
+
+        case TOKEN_KEYWORD_45:
+            WriteKeyword("keyword45");
+            break;
+
+        case TOKEN_KEYWORD_47:
+            WriteKeyword("keyword47");
+            break;
+
+        case TOKEN_KEYWORD_48:
+            WriteKeyword("keyword48");
+            break;
+
+        case TOKEN_KEYWORD_49:
+            WriteKeyword("keyword49");
+            break;
+
+        case TOKEN_KEYWORD_4A:
+            WriteKeyword("keyword4A");
+            break;
+
+        case TOKEN_KEYWORD_4B:
+            WriteKeyword("keyword4B");
+            break;
+
+        case TOKEN_KEYWORD_4C:
+            WriteKeyword("keyword4C");
+            break;
+
+        case TOKEN_KEYWORD_2F:
+            ProcessKeyword2F();
+            break;
+
+        case TOKEN_KEYWORD_38:
+            ProcessKeyword38();
+            break;
+
+        default:
+            throw MdbDumpingException("Unexpected token");
+        }
+
+        return true;
+    }
+
+    void WriteColorValue(const std::string& keyword, const int value0, const int value1, const int value2, const int value3) const
+    {
+        Indent();
+        m_stream << keyword << " " << value0 << " " << value1 << " " << value2 << " " << value3 << "\n";
+    }
+
+    void WriteStringValue(const std::string& keyword, const std::string& value) const
+    {
+        Indent();
+        m_stream << keyword << " " << value << "\n";
+    }
+
+    void WriteIntegerValue(const std::string& keyword, const int value) const
+    {
+        Indent();
+        m_stream << keyword << " " << value << "\n";
+    }
+
+    void WriteKeyword(const std::string& keyword) const
+    {
+        Indent();
+        m_stream << keyword << "\n";
     }
 
     void BeginMaterials()
