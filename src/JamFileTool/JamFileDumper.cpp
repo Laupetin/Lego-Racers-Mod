@@ -11,7 +11,7 @@
 #include "Utils/Endianness.h"
 #include "IFileTypeProcessor.h"
 #include "Dumpers/BmpDumper.h"
-#include "Dumpers/MdbDumper.h"
+#include "Asset/Mdb/MdbDumper.h"
 #include "Utils/StreamUtils.h"
 #include "Dumpers/PassthroughDumper.h"
 #include "Dumpers/SrfDumper.h"
