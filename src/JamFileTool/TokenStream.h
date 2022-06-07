@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include <string>
 #include <memory>
 
@@ -78,4 +79,39 @@ public:
     virtual int NextIntegerValue() = 0;
     virtual std::string NextStringValue() = 0;
     virtual void ExpectToken(token_type_t tokenType) = 0;
+};
+
+class ITokenOutputStream
+{
+protected:
+    ITokenOutputStream() = default;
+
+public:
+    virtual ~ITokenOutputStream() = default;
+    ITokenOutputStream(const ITokenOutputStream& other) = default;
+    ITokenOutputStream(ITokenOutputStream&& other) noexcept = default;
+    ITokenOutputStream& operator=(const ITokenOutputStream& other) = default;
+    ITokenOutputStream& operator=(ITokenOutputStream&& other) noexcept = default;
+
+    static std::unique_ptr<ITokenOutputStream> Create(std::ostream& stream);
+
+    virtual void WriteString(const std::string& value) = 0;
+    virtual void WriteFloat(float value) = 0;
+    virtual void WriteInteger(int value) = 0;
+    virtual void WriteLeftCurly() = 0;
+    virtual void WriteRightCurly() = 0;
+    virtual void WriteLeftBracket() = 0;
+    virtual void WriteRightBracket() = 0;
+    virtual void WriteComma() = 0;
+    virtual void WriteSemicolon() = 0;
+    virtual void WriteInt8(int8_t value) = 0;
+    virtual void WriteUInt8(uint8_t value) = 0;
+    virtual void WriteInt16(int16_t value) = 0;
+    virtual void WriteUInt16(uint16_t value) = 0;
+    virtual void WriteFp16Man12(float value) = 0;
+    virtual void WriteFp16Man9(float value) = 0;
+    virtual void WriteFp16Man0(float value) = 0;
+    virtual void WriteFp8(float value) = 0;
+    virtual void WriteWChar(wchar_t value) = 0;
+    virtual void WriteCustom(token_type_t value) = 0;
 };

@@ -11,6 +11,7 @@
 #include "JamFileTypes.h"
 #include "Utils/Endianness.h"
 #include "IFileTypeProcessor.h"
+#include "Asset/Mdb/MdbCreator.h"
 #include "Utils/StreamUtils.h"
 #include "Creators/PassthroughCreator.h"
 #include "Creators/SrfCreator.h"
@@ -28,6 +29,7 @@ public:
 
 const IFileTypeProcessor* availableFileTypeCreators[]
 {
+    new MdbCreator(),
     new SrfCreator(),
 
     // Passthrough should be last due to it accepting any file and simply creates its data unmodified

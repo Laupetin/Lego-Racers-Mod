@@ -4,6 +4,7 @@
 #include <deque>
 #include <vector>
 
+#include "Utils/Endianness.h"
 #include "Utils/StreamUtils.h"
 
 Token::Token()
@@ -338,4 +339,138 @@ private:
 std::unique_ptr<ITokenInputStream> ITokenInputStream::Create(std::istream& stream)
 {
     return std::make_unique<TokenInputStream>(stream);
+}
+
+class TokenOutputStream final : public ITokenOutputStream
+{
+public:
+    explicit TokenOutputStream(std::ostream& stream)
+        : m_stream(stream)
+    {
+    }
+
+    void WriteString(const std::string& value) override
+    {
+        m_stream.put(TOKEN_STRING);
+        m_stream.write(value.c_str(), value.size());
+        m_stream.put('\0');
+    }
+
+    void WriteFloat(const float value) override
+    {
+        m_stream.put(TOKEN_FLOAT);
+        m_stream.write(reinterpret_cast<const char*>(&value), sizeof(value));
+    }
+
+    void WriteInteger(const int value) override
+    {
+        const auto leValue = endianness::ToLittleEndian(value);
+        m_stream.put(TOKEN_INT);
+        m_stream.write(reinterpret_cast<const char*>(&leValue), sizeof(leValue));
+    }
+
+    void WriteLeftCurly() override
+    {
+        m_stream.put(TOKEN_LEFT_CURLY);
+    }
+
+    void WriteRightCurly() override
+    {
+        m_stream.put(TOKEN_RIGHT_CURLY);
+    }
+
+    void WriteLeftBracket() override
+    {
+        m_stream.put(TOKEN_LEFT_BRACKET);
+    }
+
+    void WriteRightBracket() override
+    {
+        m_stream.put(TOKEN_RIGHT_BRACKET);
+    }
+
+    void WriteComma() override
+    {
+        m_stream.put(TOKEN_COMMA);
+    }
+
+    void WriteSemicolon() override
+    {
+        m_stream.put(TOKEN_SEMICOLON);
+    }
+
+    void WriteInt8(const int8_t value) override
+    {
+        m_stream.put(TOKEN_INT8);
+        m_stream.write(reinterpret_cast<const char*>(&value), sizeof(value));
+    }
+
+    void WriteUInt8(const uint8_t value) override
+    {
+        m_stream.put(TOKEN_UINT8);
+        m_stream.write(reinterpret_cast<const char*>(&value), sizeof(value));
+    }
+
+    void WriteInt16(const int16_t value) override
+    {
+        const auto leValue = endianness::ToLittleEndian(value);
+        m_stream.put(TOKEN_INT16);
+        m_stream.write(reinterpret_cast<const char*>(&leValue), sizeof(leValue));
+    }
+
+    void WriteUInt16(const uint16_t value) override
+    {
+        const auto leValue = endianness::ToLittleEndian(value);
+        m_stream.put(TOKEN_UINT16);
+        m_stream.write(reinterpret_cast<const char*>(&leValue), sizeof(leValue));
+    }
+
+    void WriteFp16Man12(const float value) override
+    {
+        const auto leValue = endianness::ToLittleEndian(static_cast<int16_t>(value * 4096.0f));
+        m_stream.put(TOKEN_FP16_MAN_12);
+        m_stream.write(reinterpret_cast<const char*>(&leValue), sizeof(leValue));
+    }
+
+    void WriteFp16Man9(const float value) override
+    {
+        const auto leValue = endianness::ToLittleEndian(static_cast<int16_t>(value * 32.0f));
+        m_stream.put(TOKEN_FP16_MAN_9);
+        m_stream.write(reinterpret_cast<const char*>(&leValue), sizeof(leValue));
+    }
+
+    void WriteFp16Man0(const float value) override
+    {
+        const auto leValue = endianness::ToLittleEndian(static_cast<int16_t>(value));
+        m_stream.put(TOKEN_FP16_MAN_0);
+        m_stream.write(reinterpret_cast<const char*>(&leValue), sizeof(leValue));
+    }
+
+    void WriteFp8(const float value) override
+    {
+        const auto byteValue = static_cast<int8_t>(value * 127.0f);
+        m_stream.put(TOKEN_FP8);
+        m_stream.write(reinterpret_cast<const char*>(&byteValue), sizeof(byteValue));
+    }
+
+    void WriteWChar(const wchar_t value) override
+    {
+        const auto leValue = endianness::ToLittleEndian(static_cast<uint16_t>(value));
+        m_stream.put(TOKEN_WCHAR);
+        m_stream.write(reinterpret_cast<const char*>(&leValue), sizeof(leValue));
+    }
+
+    void WriteCustom(const token_type_t value) override
+    {
+        const auto tokenValue = static_cast<uint8_t>(value);
+        m_stream.write(reinterpret_cast<const char*>(&tokenValue), sizeof(tokenValue));
+    }
+
+private:
+    std::ostream& m_stream;
+};
+
+std::unique_ptr<ITokenOutputStream> ITokenOutputStream::Create(std::ostream& stream)
+{
+    return std::make_unique<TokenOutputStream>(stream);
 }

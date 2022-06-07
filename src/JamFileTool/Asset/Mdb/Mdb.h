@@ -37,7 +37,7 @@ namespace mdb
         TOKEN_KEYWORD_38_SUB_43 = 0x43,
         TOKEN_KEYWORD_44 = 0x44,
         TOKEN_KEYWORD_45 = 0x45,
-        TOKEN_KEYWORD_46 = 0x46,
+        TOKEN_KEYWORD_OPACITY = 0x46,
         TOKEN_KEYWORD_47 = 0x47,
         TOKEN_KEYWORD_48 = 0x48,
         TOKEN_KEYWORD_49 = 0x49,

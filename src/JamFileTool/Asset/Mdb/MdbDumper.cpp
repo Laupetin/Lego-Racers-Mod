@@ -231,8 +231,8 @@ private:
             WriteStringValue("texture", m_tokens->NextStringValue());
             break;
 
-        case TOKEN_KEYWORD_46:
-            WriteIntegerValue("keyword46", m_tokens->NextIntegerValue());
+        case TOKEN_KEYWORD_OPACITY:
+            WriteIntegerValue("opacity", m_tokens->NextIntegerValue());
             break;
 
         case TOKEN_KEYWORD_4E:
@@ -249,7 +249,7 @@ private:
             break;
 
         case TOKEN_KEYWORD_2A:
-            WriteKeyword("keyword2A");
+            WriteKeyword("keyword2A"); // DISABLE_SMOOTH_SHADING
             break;
 
         case TOKEN_KEYWORD_2B:
