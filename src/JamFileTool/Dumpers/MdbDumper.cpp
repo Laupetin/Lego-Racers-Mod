@@ -111,6 +111,30 @@ private:
         return materialCount;
     }
 
+    void WriteEscapedInQuotationMarks(const std::string& value) const
+    {
+        m_stream << "\"";
+        for (const auto& c : value)
+        {
+            switch (c)
+            {
+            case '\r':
+                m_stream << "\\r";
+                break;
+            case '\n':
+                m_stream << "\\n";
+                break;
+            case '\\':
+            case '\"':
+                m_stream << "\\" << c;
+                break;
+            default:
+                m_stream << c;
+            }
+        }
+        m_stream << "\"";
+    }
+
     void ProcessKeyword2F() const
     {
         Indent();
@@ -222,7 +246,7 @@ private:
         m_stream << "\n";
     }
 
-    bool ProcessMaterialToken() const
+    [[nodiscard]] bool ProcessMaterialToken() const
     {
         const auto token = m_tokens->NextValue();
         if (token.m_type == TOKEN_EOF || token.m_type == TOKEN_RIGHT_CURLY)
@@ -343,7 +367,9 @@ private:
     void WriteStringValue(const std::string& keyword, const std::string& value) const
     {
         Indent();
-        m_stream << keyword << " " << value << "\n";
+        m_stream << keyword << " ";
+        WriteEscapedInQuotationMarks(value);
+        m_stream << "\n";
     }
 
     void WriteIntegerValue(const std::string& keyword, const int value) const
@@ -381,7 +407,9 @@ private:
             m_stream << "\n";
 
         Indent();
-        m_stream << "material \"" << materialName << "\"\n";
+        m_stream << "material ";
+        WriteEscapedInQuotationMarks(materialName);
+        m_stream << "\n";
 
         Indent();
         m_stream << "{\n";
