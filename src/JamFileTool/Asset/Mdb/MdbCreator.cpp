@@ -151,7 +151,7 @@ namespace mdb
         key_keyword36,
         material_keyword37
     > {};
-    struct material_keyword2F : pegtl::seq<key_keyword2F, int_value> {};
+    struct material_keyword2F : pegtl::seq<key_keyword2F, material_keyword2F_subtoken> {};
 
     struct material_keyword38_subtoken : pegtl::sor<
         key_keyword39,
@@ -173,22 +173,24 @@ namespace mdb
         material_color1,
         material_texture,
         material_opacity,
-        material_keyword4E,
-        material_keyword4F,
-        material_keyword4D,
-        material_keyword50,
-        key_keyword2A,
-        key_keyword2B,
-        key_keyword2D,
-        key_keyword2E,
-        key_keyword44,
-        key_keyword45,
-        key_keyword47,
-        key_keyword48,
-        key_keyword49,
-        key_keyword4A,
-        key_keyword4B,
-        key_keyword4C
+        material_keyword2F,
+        material_keyword38,
+        material_keyword4E,     // Opacity again?
+        material_keyword4F,     // Opacity again?
+        material_keyword4D,     // Opacity again?
+        material_keyword50,     // Opacity again?
+        key_keyword2A,          // Flat shading?
+        key_keyword2B,          // ?
+        key_keyword2D,          // ?
+        key_keyword2E,          // ?
+        key_keyword44,          // ?
+        key_keyword45,          // ?
+        key_keyword47,          // Flip normals / cull outside not inside
+        key_keyword48,          // ?
+        key_keyword49,          // ?
+        key_keyword4A,          // ?
+        key_keyword4B,          // ?
+        key_keyword4C           // ?
     > {};
     struct material_property_list : pegtl::until<pegtl::at<block_close>, pegtl::must<material_property>> {};
 
