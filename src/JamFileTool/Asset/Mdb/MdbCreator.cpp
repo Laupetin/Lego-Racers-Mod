@@ -11,6 +11,7 @@
 #include "Utils/Endianness.h"
 #include "Utils/StringUtils.h"
 #include "TokenStream.h"
+#include "Utils/CommentRemover.h"
 
 namespace pegtl = TAO_PEGTL_NAMESPACE;
 
@@ -324,7 +325,14 @@ void MdbCreator::ProcessFile(const std::string& filePath, const void* inputData,
 {
     std::cout << "Mdb creating \"" << filePath << "\"\n";
 
-    pegtl::memory_input<pegtl::tracking_mode::lazy> in(static_cast<const char*>(inputData), &static_cast<const char*>(inputData)[inputDataSize], filePath);
+    const auto commentRemovedBuffer = std::make_unique<char[]>(inputDataSize);
+    memcpy(commentRemovedBuffer.get(), inputData, inputDataSize);
+
+    CommentRemover commentRemover(commentRemovedBuffer.get(), inputDataSize);
+    commentRemover.ConfigureDefaults();
+    commentRemover.RemoveComments();
+
+    pegtl::memory_input<pegtl::tracking_mode::lazy> in(commentRemovedBuffer.get(), &commentRemovedBuffer[inputDataSize], filePath);
 
     std::ostringstream materialData;
     const auto materialDataTokens = ITokenOutputStream::Create(materialData);
