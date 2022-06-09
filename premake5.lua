@@ -60,6 +60,7 @@ workspace "LegoRacersMod"
 -- ========================
 -- ThirdParty
 -- ========================
+include "thirdparty/antlr4.lua"
 include "thirdparty/asmjit.lua"
 include "thirdparty/pegtl.lua"
 include "thirdparty/zycore.lua"
@@ -67,6 +68,7 @@ include "thirdparty/zydis.lua"
 
 -- ThirdParty group: All projects that are external dependencies
 group "ThirdParty"
+    antlr4:project()
     asmjit:project()
     pegtl:project()
     zycore:project()
