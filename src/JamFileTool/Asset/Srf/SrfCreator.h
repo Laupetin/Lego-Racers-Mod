@@ -1,5 +1,5 @@
 #pragma once
-#include "IFileTypeProcessor.h"
+#include "Asset/IFileTypeProcessor.h"
 
 class SrfCreator final : public IFileTypeProcessor
 {

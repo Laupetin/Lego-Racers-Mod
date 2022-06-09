@@ -1,5 +1,5 @@
 #pragma once
-#include "IFileTypeProcessor.h"
+#include "Asset/IFileTypeProcessor.h"
 
 class MdbCreator final : public IFileTypeProcessor
 {

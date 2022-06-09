@@ -9,12 +9,12 @@
 
 #include "JamFileTypes.h"
 #include "Utils/Endianness.h"
-#include "IFileTypeProcessor.h"
-#include "Dumpers/BmpDumper.h"
+#include "Asset/IFileTypeProcessor.h"
+#include "Asset/Bmp/BmpDumper.h"
 #include "Asset/Mdb/MdbDumper.h"
 #include "Utils/StreamUtils.h"
-#include "Dumpers/PassthroughDumper.h"
-#include "Dumpers/SrfDumper.h"
+#include "Asset/PassthroughDumper.h"
+#include "Asset/Srf/SrfDumper.h"
 
 using namespace dumping;
 namespace fs = std::filesystem;

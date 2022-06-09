@@ -10,11 +10,11 @@
 
 #include "JamFileTypes.h"
 #include "Utils/Endianness.h"
-#include "IFileTypeProcessor.h"
+#include "Asset/IFileTypeProcessor.h"
 #include "Asset/Mdb/MdbCreator.h"
 #include "Utils/StreamUtils.h"
-#include "Creators/PassthroughCreator.h"
-#include "Creators/SrfCreator.h"
+#include "Asset/PassthroughCreator.h"
+#include "Asset/Srf/SrfCreator.h"
 
 namespace fs = std::filesystem;
 
