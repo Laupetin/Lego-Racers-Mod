@@ -321,33 +321,23 @@ namespace mdb
 class CustomMdbListener final : public MdbBaseListener
 {
 public:
-    void exitR(MdbParser::RContext* context) override
+    void exitMaterials(MdbParser::MaterialsContext* context) override
     {
-        std::cout << "Hello back Mr. " << context->ID()->getSymbol()->getText() << "\n";
+        std::cout << "Materials end\n";
+    }
+
+    void exitMaterial(MdbParser::MaterialContext* context) override
+    {
+        std::cout << "Material: " << context->StringLiteral()->getText() << "\n";
     }
 };
 
 class CustomMdbErrorListener final : public antlr4::BaseErrorListener
 {
-public:
-    CustomMdbErrorListener()
-        : m_successful(true)
-    {
-    }
-
-    [[nodiscard]] bool WasSuccessful() const
-    {
-        return m_successful;
-    }
-
-protected:
     void syntaxError(antlr4::Recognizer* recognizer, antlr4::Token* offendingSymbol, size_t line, size_t charPositionInLine, const std::string& msg, std::exception_ptr e) override
     {
-        m_successful = false;
+        throw MdbCreationException("Parsing MDB failed");
     }
-
-private:
-    bool m_successful;
 };
 
 bool MdbCreator::SupportFileExtension(const std::string& extension) const
@@ -371,11 +361,9 @@ void MdbCreator::ProcessFile(const std::string& filePath, const void* inputData,
     CustomMdbListener listener;
     CustomMdbErrorListener errors;
     parser.addParseListener(&listener);
+    lexer.addErrorListener(&errors);
     parser.addErrorListener(&errors);
-    auto* r = parser.r();
-
-    if(!errors.WasSuccessful())
-        throw MdbCreationException("Parsing MDB failed");
+    auto* r = parser.root();
 
     const auto tokenOut = ITokenOutputStream::Create(output);
     tokenOut->WriteCustom(TOKEN_MATERIAL_DB);
