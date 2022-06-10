@@ -8,7 +8,6 @@
 #include "Utils/Endianness.h"
 #include "Utils/StringUtils.h"
 #include "TokenStream.h"
-#include "Utils/CommentRemover.h"
 
 #pragma warning(push, 0)
 #include "Asset/Mdb/Parser/MdbLexer.h"

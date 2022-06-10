@@ -74,7 +74,6 @@ function JamFileTool:project()
 		self:include(includes)
 		Utils:include(includes)
 		antlr4:include(includes)
-		pegtl:include(includes)
 
 		Utils:link(links)
 		antlr4:link(links)

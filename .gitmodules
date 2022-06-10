@@ -4,9 +4,6 @@
 [submodule "thirdparty/asmjit"]
 	path = thirdparty/asmjit
 	url = https://github.com/asmjit/asmjit.git
-[submodule "thirdparty/pegtl"]
-	path = thirdparty/pegtl
-	url = https://github.com/taocpp/PEGTL.git
 [submodule "thirdparty/antlr4"]
 	path = thirdparty/antlr4
 	url = https://github.com/antlr/antlr4.git
