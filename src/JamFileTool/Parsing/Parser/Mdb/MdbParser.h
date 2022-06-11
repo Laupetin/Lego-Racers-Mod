@@ -28,7 +28,7 @@ public:
 
   enum {
     RuleRoot = 0, RuleMaterials = 1, RuleMaterial = 2, RuleMaterialName = 3, 
-    RuleMaterial_property = 4, RuleColorMaterialProperty = 5, RuleColorMaterialPropertyKeyword = 6, 
+    RuleMaterialProperty = 4, RuleColorMaterialProperty = 5, RuleColorMaterialPropertyKeyword = 6, 
     RuleTextMaterialProperty = 7, RuleTextMaterialPropertyKeyword = 8, RuleUint8MaterialProperty = 9, 
     RuleUint8MaterialPropertyKeyword = 10, RuleIntMaterialProperty = 11, 
     RuleIntMaterialPropertyKeyword = 12, RuleSingleValueKeywords = 13, RuleKeyword2F = 14, 
@@ -56,7 +56,7 @@ public:
   class MaterialsContext;
   class MaterialContext;
   class MaterialNameContext;
-  class Material_propertyContext;
+  class MaterialPropertyContext;
   class ColorMaterialPropertyContext;
   class ColorMaterialPropertyKeywordContext;
   class TextMaterialPropertyContext;
@@ -105,8 +105,8 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *Material();
     MaterialNameContext *materialName();
-    std::vector<Material_propertyContext *> material_property();
-    Material_propertyContext* material_property(size_t i);
+    std::vector<MaterialPropertyContext *> materialProperty();
+    MaterialPropertyContext* materialProperty(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -128,9 +128,9 @@ public:
 
   MaterialNameContext* materialName();
 
-  class  Material_propertyContext : public antlr4::ParserRuleContext {
+  class  MaterialPropertyContext : public antlr4::ParserRuleContext {
   public:
-    Material_propertyContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    MaterialPropertyContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     ColorMaterialPropertyContext *colorMaterialProperty();
     TextMaterialPropertyContext *textMaterialProperty();
@@ -145,7 +145,7 @@ public:
    
   };
 
-  Material_propertyContext* material_property();
+  MaterialPropertyContext* materialProperty();
 
   class  ColorMaterialPropertyContext : public antlr4::ParserRuleContext {
   public:

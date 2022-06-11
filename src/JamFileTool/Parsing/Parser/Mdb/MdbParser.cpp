@@ -44,7 +44,7 @@ void mdbParserInitialize() {
   assert(mdbParserStaticData == nullptr);
   auto staticData = std::make_unique<MdbParserStaticData>(
     std::vector<std::string>{
-      "root", "materials", "material", "materialName", "material_property", 
+      "root", "materials", "material", "materialName", "materialProperty", 
       "colorMaterialProperty", "colorMaterialPropertyKeyword", "textMaterialProperty", 
       "textMaterialPropertyKeyword", "uint8MaterialProperty", "uint8MaterialPropertyKeyword", 
       "intMaterialProperty", "intMaterialPropertyKeyword", "singleValueKeywords", 
@@ -300,12 +300,12 @@ MdbParser::MaterialNameContext* MdbParser::MaterialContext::materialName() {
   return getRuleContext<MdbParser::MaterialNameContext>(0);
 }
 
-std::vector<MdbParser::Material_propertyContext *> MdbParser::MaterialContext::material_property() {
-  return getRuleContexts<MdbParser::Material_propertyContext>();
+std::vector<MdbParser::MaterialPropertyContext *> MdbParser::MaterialContext::materialProperty() {
+  return getRuleContexts<MdbParser::MaterialPropertyContext>();
 }
 
-MdbParser::Material_propertyContext* MdbParser::MaterialContext::material_property(size_t i) {
-  return getRuleContext<MdbParser::Material_propertyContext>(i);
+MdbParser::MaterialPropertyContext* MdbParser::MaterialContext::materialProperty(size_t i) {
+  return getRuleContext<MdbParser::MaterialPropertyContext>(i);
 }
 
 
@@ -372,7 +372,7 @@ MdbParser::MaterialContext* MdbParser::material() {
       | (1ULL << MdbParser::Keyword4F)
       | (1ULL << MdbParser::Keyword50))) != 0)) {
       setState(51);
-      material_property();
+      materialProperty();
       setState(56);
       _errHandler->sync(this);
       _la = _input->LA(1);
@@ -443,60 +443,60 @@ MdbParser::MaterialNameContext* MdbParser::materialName() {
   return _localctx;
 }
 
-//----------------- Material_propertyContext ------------------------------------------------------------------
+//----------------- MaterialPropertyContext ------------------------------------------------------------------
 
-MdbParser::Material_propertyContext::Material_propertyContext(ParserRuleContext *parent, size_t invokingState)
+MdbParser::MaterialPropertyContext::MaterialPropertyContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-MdbParser::ColorMaterialPropertyContext* MdbParser::Material_propertyContext::colorMaterialProperty() {
+MdbParser::ColorMaterialPropertyContext* MdbParser::MaterialPropertyContext::colorMaterialProperty() {
   return getRuleContext<MdbParser::ColorMaterialPropertyContext>(0);
 }
 
-MdbParser::TextMaterialPropertyContext* MdbParser::Material_propertyContext::textMaterialProperty() {
+MdbParser::TextMaterialPropertyContext* MdbParser::MaterialPropertyContext::textMaterialProperty() {
   return getRuleContext<MdbParser::TextMaterialPropertyContext>(0);
 }
 
-MdbParser::Uint8MaterialPropertyContext* MdbParser::Material_propertyContext::uint8MaterialProperty() {
+MdbParser::Uint8MaterialPropertyContext* MdbParser::MaterialPropertyContext::uint8MaterialProperty() {
   return getRuleContext<MdbParser::Uint8MaterialPropertyContext>(0);
 }
 
-MdbParser::IntMaterialPropertyContext* MdbParser::Material_propertyContext::intMaterialProperty() {
+MdbParser::IntMaterialPropertyContext* MdbParser::MaterialPropertyContext::intMaterialProperty() {
   return getRuleContext<MdbParser::IntMaterialPropertyContext>(0);
 }
 
-MdbParser::SingleValueKeywordsContext* MdbParser::Material_propertyContext::singleValueKeywords() {
+MdbParser::SingleValueKeywordsContext* MdbParser::MaterialPropertyContext::singleValueKeywords() {
   return getRuleContext<MdbParser::SingleValueKeywordsContext>(0);
 }
 
-MdbParser::Keyword2FContext* MdbParser::Material_propertyContext::keyword2F() {
+MdbParser::Keyword2FContext* MdbParser::MaterialPropertyContext::keyword2F() {
   return getRuleContext<MdbParser::Keyword2FContext>(0);
 }
 
-MdbParser::Keyword38Context* MdbParser::Material_propertyContext::keyword38() {
+MdbParser::Keyword38Context* MdbParser::MaterialPropertyContext::keyword38() {
   return getRuleContext<MdbParser::Keyword38Context>(0);
 }
 
 
-size_t MdbParser::Material_propertyContext::getRuleIndex() const {
-  return MdbParser::RuleMaterial_property;
+size_t MdbParser::MaterialPropertyContext::getRuleIndex() const {
+  return MdbParser::RuleMaterialProperty;
 }
 
-void MdbParser::Material_propertyContext::enterRule(tree::ParseTreeListener *listener) {
+void MdbParser::MaterialPropertyContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<MdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterMaterial_property(this);
+    parserListener->enterMaterialProperty(this);
 }
 
-void MdbParser::Material_propertyContext::exitRule(tree::ParseTreeListener *listener) {
+void MdbParser::MaterialPropertyContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<MdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitMaterial_property(this);
+    parserListener->exitMaterialProperty(this);
 }
 
-MdbParser::Material_propertyContext* MdbParser::material_property() {
-  Material_propertyContext *_localctx = _tracker.createInstance<Material_propertyContext>(_ctx, getState());
-  enterRule(_localctx, 8, MdbParser::RuleMaterial_property);
+MdbParser::MaterialPropertyContext* MdbParser::materialProperty() {
+  MaterialPropertyContext *_localctx = _tracker.createInstance<MaterialPropertyContext>(_ctx, getState());
+  enterRule(_localctx, 8, MdbParser::RuleMaterialProperty);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {

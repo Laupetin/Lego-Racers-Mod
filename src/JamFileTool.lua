@@ -60,6 +60,9 @@ function JamFileTool:project()
 					"%{file.directory}/%{file.basename}Parser.h",
 					"%{file.directory}/%{file.basename}Parser.cpp",
 				}
+				buildinputs {
+					path.join(folder, "JamFileTool/Parsing/Common/Common.g4") 
+				}
 			filter {}
 		end
 

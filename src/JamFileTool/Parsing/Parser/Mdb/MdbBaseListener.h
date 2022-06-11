@@ -30,8 +30,8 @@ public:
   virtual void enterMaterialName(MdbParser::MaterialNameContext * /*ctx*/) override { }
   virtual void exitMaterialName(MdbParser::MaterialNameContext * /*ctx*/) override { }
 
-  virtual void enterMaterial_property(MdbParser::Material_propertyContext * /*ctx*/) override { }
-  virtual void exitMaterial_property(MdbParser::Material_propertyContext * /*ctx*/) override { }
+  virtual void enterMaterialProperty(MdbParser::MaterialPropertyContext * /*ctx*/) override { }
+  virtual void exitMaterialProperty(MdbParser::MaterialPropertyContext * /*ctx*/) override { }
 
   virtual void enterColorMaterialProperty(MdbParser::ColorMaterialPropertyContext * /*ctx*/) override { }
   virtual void exitColorMaterialProperty(MdbParser::ColorMaterialPropertyContext * /*ctx*/) override { }

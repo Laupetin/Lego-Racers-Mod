@@ -111,7 +111,7 @@ root
 materials
 material
 materialName
-material_property
+materialProperty
 colorMaterialProperty
 colorMaterialPropertyKeyword
 textMaterialProperty

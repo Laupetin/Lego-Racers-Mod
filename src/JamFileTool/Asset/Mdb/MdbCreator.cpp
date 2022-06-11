@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <vector>
 
 #include "Mdb.h"
 #include "Utils/Endianness.h"
@@ -10,355 +9,309 @@
 #include "TokenStream.h"
 
 #pragma warning(push, 0)
+#include "Parsing/Common/CommonGrammarHelper.h"
 #include "Parsing/Parser/Mdb/MdbLexer.h"
 #include "Parsing/Parser/Mdb/MdbParser.h"
 #include "Parsing/Parser/Mdb/MdbBaseListener.h"
 #pragma warning(pop)
 
-using namespace mdb;
-
-class MdbCreationException final : public std::exception
-{
-public:
-    explicit MdbCreationException(char const* msg)
-        : exception(msg)
-    {
-    }
-};
-
 namespace mdb
 {
-    //struct ws : pegtl::one<' ', '\t', '\n', '\r'> {};
+    class MdbCreationException final : public std::exception
+    {
+    public:
+        explicit MdbCreationException(char const* msg)
+            : exception(msg)
+        {
+        }
+    };
 
-    //template<typename R, typename P = ws>
-    //struct padr : pegtl::seq<R, pegtl::star<P>> {};
+    class MdbParserState
+    {
+    public:
+        explicit MdbParserState(ITokenOutputStream* out)
+            : m_material_count(0u),
+            m_out(out)
+        {
+        }
 
-    //struct xdigit : pegtl::xdigit {};
-    //struct unicode : pegtl::list<pegtl::seq<pegtl::one<'u'>, pegtl::rep<4, xdigit>>, pegtl::one<'\\'>> {};
-    //struct escaped_char : pegtl::one<'"', '\\', '/', 'b', 'f', 'n', 'r', 't'> {};
-    //struct escaped : pegtl::sor<escaped_char, unicode> {};
-    //struct unescaped : pegtl::utf8::range<0x20, 0x10FFFF> {};
-    //struct char_ : pegtl::if_then_else<pegtl::one<'\\'>, escaped, unescaped> {};
-    //struct string_content : pegtl::until<pegtl::at<pegtl::one<'"'>>, char_ > {};
-    //struct str : pegtl::seq<pegtl::one<'"'>, string_content, pegtl::any>
-    //{
-    //    using content = string_content;
-    //};
+        void BeginMaterial(const std::string& materialName)
+        {
+            m_material_count++;
+            m_out->WriteCustom(TOKEN_MATERIAL);
+            m_out->WriteString(materialName);
+            m_out->WriteLeftCurly();
+        }
 
-    //struct key_materials : padr<TAO_PEGTL_KEYWORD("materials")> {};
-    //struct key_material : padr<TAO_PEGTL_KEYWORD("material")> {};
+        void EndMaterial() const
+        {
+            m_out->WriteRightCurly();
+        }
 
-    //struct key_color0 : padr<TAO_PEGTL_KEYWORD("color0")> {};
-    //struct key_color1 : padr<TAO_PEGTL_KEYWORD("color1")> {};
-    //struct key_texture : padr<TAO_PEGTL_KEYWORD("texture")> {};
-    //struct key_keyword2A : padr<TAO_PEGTL_KEYWORD("keyword2A")> {};
-    //struct key_keyword2B : padr<TAO_PEGTL_KEYWORD("keyword2B")> {};
-    //struct key_keyword2D : padr<TAO_PEGTL_KEYWORD("keyword2D")> {};
-    //struct key_keyword2E : padr<TAO_PEGTL_KEYWORD("keyword2E")> {};
-    //struct key_keyword2F : padr<TAO_PEGTL_KEYWORD("keyword2F")> {};
-    //struct key_keyword30 : padr<TAO_PEGTL_KEYWORD("keyword30")> {};
-    //struct key_keyword31 : padr<TAO_PEGTL_KEYWORD("keyword31")> {};
-    //struct key_keyword32 : padr<TAO_PEGTL_KEYWORD("keyword32")> {};
-    //struct key_keyword33 : padr<TAO_PEGTL_KEYWORD("keyword33")> {};
-    //struct key_keyword34 : padr<TAO_PEGTL_KEYWORD("keyword34")> {};
-    //struct key_keyword35 : padr<TAO_PEGTL_KEYWORD("keyword35")> {};
-    //struct key_keyword36 : padr<TAO_PEGTL_KEYWORD("keyword36")> {};
-    //struct key_keyword37 : padr<TAO_PEGTL_KEYWORD("keyword37")> {};
-    //struct key_keyword38 : padr<TAO_PEGTL_KEYWORD("keyword38")> {};
-    //struct key_keyword39 : padr<TAO_PEGTL_KEYWORD("keyword39")> {};
-    //struct key_keyword3A : padr<TAO_PEGTL_KEYWORD("keyword3A")> {};
-    //struct key_keyword3B : padr<TAO_PEGTL_KEYWORD("keyword3B")> {};
-    //struct key_keyword3C : padr<TAO_PEGTL_KEYWORD("keyword3C")> {};
-    //struct key_keyword3D : padr<TAO_PEGTL_KEYWORD("keyword3D")> {};
-    //struct key_keyword3E : padr<TAO_PEGTL_KEYWORD("keyword3E")> {};
-    //struct key_keyword3F : padr<TAO_PEGTL_KEYWORD("keyword3F")> {};
-    //struct key_keyword40 : padr<TAO_PEGTL_KEYWORD("keyword40")> {};
-    //struct key_keyword41 : padr<TAO_PEGTL_KEYWORD("keyword41")> {};
-    //struct key_keyword42 : padr<TAO_PEGTL_KEYWORD("keyword42")> {};
-    //struct key_keyword43 : padr<TAO_PEGTL_KEYWORD("keyword43")> {};
-    //struct key_keyword44 : padr<TAO_PEGTL_KEYWORD("keyword44")> {};
-    //struct key_keyword45 : padr<TAO_PEGTL_KEYWORD("keyword45")> {};
-    //struct key_opacity : padr<TAO_PEGTL_KEYWORD("opacity")> {};
-    //struct key_keyword47 : padr<TAO_PEGTL_KEYWORD("keyword47")> {};
-    //struct key_keyword48 : padr<TAO_PEGTL_KEYWORD("keyword48")> {};
-    //struct key_keyword49 : padr<TAO_PEGTL_KEYWORD("keyword49")> {};
-    //struct key_keyword4A : padr<TAO_PEGTL_KEYWORD("keyword4A")> {};
-    //struct key_keyword4B : padr<TAO_PEGTL_KEYWORD("keyword4B")> {};
-    //struct key_keyword4C : padr<TAO_PEGTL_KEYWORD("keyword4C")> {};
-    //struct key_keyword4D : padr<TAO_PEGTL_KEYWORD("keyword4D")> {};
-    //struct key_keyword4E : padr<TAO_PEGTL_KEYWORD("keyword4E")> {};
-    //struct key_keyword4F : padr<TAO_PEGTL_KEYWORD("keyword4F")> {};
-    //struct key_keyword50 : padr<TAO_PEGTL_KEYWORD("keyword50")> {};
+        size_t m_material_count;
+        ITokenOutputStream* m_out;
+    };
 
-    //struct block_open : padr<pegtl::one<'{'>> {};
-    //struct block_close : padr<pegtl::one<'}'>> {};
+    class CustomMdbListener final : public MdbBaseListener
+    {
+    public:
+        explicit CustomMdbListener(MdbParser& parser, MdbParserState& state)
+            : m_parser(parser),
+            m_state(state)
+        {
+        }
 
-    //struct int_ : pegtl::sor<pegtl::one<'0'>, pegtl::plus<pegtl::digit>> {};
+        void exitMaterialName(MdbParser::MaterialNameContext* context) override
+        {
+            const auto materialName = common_grammar::StringValue(context->StringLiteral());
+            m_state.BeginMaterial(materialName);
+        }
 
-    //struct uint8_value : padr<int_> {};
-    //struct int_value : padr<int_> {};
-    //struct str_value : str {};
-    //struct padr_str_value : padr<str_value> {};
+        void exitMaterial(MdbParser::MaterialContext* context) override
+        {
+            m_state.EndMaterial();
+        }
 
-    //struct material_color0 : pegtl::seq<key_color0, uint8_value, uint8_value, uint8_value, uint8_value> {};
-    //struct material_color1 : pegtl::seq<key_color1, uint8_value, uint8_value, uint8_value, uint8_value> {};
-    //struct material_texture : pegtl::seq<key_texture, padr_str_value> {};
-    //struct material_keyword31 : pegtl::seq<key_keyword31, int_value> {};
-    //struct material_keyword32 : pegtl::seq<key_keyword32, int_value> {};
-    //struct material_keyword33 : pegtl::seq<key_keyword33, int_value> {};
-    //struct material_keyword34 : pegtl::seq<key_keyword34, int_value> {};
-    //struct material_keyword35 : pegtl::seq<key_keyword35, int_value> {};
-    //struct material_keyword37 : pegtl::seq<key_keyword37, int_value> {};
-    //struct material_opacity : pegtl::seq<key_opacity, uint8_value> {};
-    //struct material_keyword4E : pegtl::seq<key_keyword4E, int_value> {};
-    //struct material_keyword4F : pegtl::seq<key_keyword4F, int_value> {};
-    //struct material_keyword4D : pegtl::seq<key_keyword4D, int_value> {};
-    //struct material_keyword50 : pegtl::seq<key_keyword50, int_value> {};
+        void exitColorMaterialProperty(MdbParser::ColorMaterialPropertyContext* context) override
+        {
+            const auto keywordType = context->colorMaterialPropertyKeyword()->getStart()->getType();
 
-    //struct material_keyword2F_subtoken : pegtl::sor<
-    //    key_keyword30,
-    //    material_keyword31,
-    //    material_keyword32,
-    //    material_keyword33,
-    //    material_keyword34,
-    //    material_keyword35,
-    //    key_keyword36,
-    //    material_keyword37
-    //> {};
-    //struct material_keyword2F : pegtl::seq<key_keyword2F, material_keyword2F_subtoken> {};
+            if (keywordType == MdbLexer::Color0)
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_COLOR_0);
+            else if (keywordType == MdbLexer::Color1)
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_COLOR_1);
+            else
+                assert(false);
 
-    //struct material_keyword38_subtoken : pegtl::sor<
-    //    key_keyword39,
-    //    key_keyword3A,
-    //    key_keyword3B,
-    //    key_keyword3C,
-    //    key_keyword3D,
-    //    key_keyword3E,
-    //    key_keyword3F,
-    //    key_keyword40,
-    //    key_keyword41,
-    //    key_keyword42,
-    //    key_keyword43
-    //> {};
-    //struct material_keyword38 : pegtl::seq<key_keyword38, material_keyword38_subtoken, material_keyword38_subtoken> {};
+            for (auto i = 0u; i < 4; i++)
+            {
+                auto* node = context->IntegerConstant(i);
+                uint8_t value;
+                if (!common_grammar::UInt8Value(node, value))
+                    return m_parser.notifyErrorListeners(node->getSymbol(), "Invalid uint8 value", nullptr);
 
-    //struct material_property : pegtl::sor<
-    //    material_color0,
-    //    material_color1,
-    //    material_texture,
-    //    material_opacity,
-    //    material_keyword2F,
-    //    material_keyword38,
-    //    material_keyword4E,     // Opacity again?
-    //    material_keyword4F,     // Opacity again?
-    //    material_keyword4D,     // Opacity again?
-    //    material_keyword50,     // Opacity again?
-    //    key_keyword2A,          // Flat shading?
-    //    key_keyword2B,          // ?
-    //    key_keyword2D,          // ?
-    //    key_keyword2E,          // ?
-    //    key_keyword44,          // ?
-    //    key_keyword45,          // ?
-    //    key_keyword47,          // Flip normals / cull outside not inside
-    //    key_keyword48,          // ?
-    //    key_keyword49,          // ?
-    //    key_keyword4A,          // ?
-    //    key_keyword4B,          // ?
-    //    key_keyword4C           // ?
-    //> {};
-    //struct material_property_list : pegtl::until<pegtl::at<block_close>, pegtl::must<material_property>> {};
+                m_state.m_out->WriteUInt8(value);
+            }
+        }
 
-    //struct material_name : str {};
-    //struct material : pegtl::seq<key_material, padr<material_name>, block_open, material_property_list, block_close> {};
-    //struct material_list : pegtl::until<pegtl::at<block_close>, pegtl::must<material>> {};
-    //struct materials : pegtl::must<key_materials, block_open, material_list, block_close> {};
+        void exitTextMaterialProperty(MdbParser::TextMaterialPropertyContext* context) override
+        {
+            assert(context->textMaterialPropertyKeyword()->getStart()->getType() == MdbLexer::Texture);
+            m_state.m_out->WriteCustom(TOKEN_KEYWORD_TEXTURE);
 
-    //struct grammar : pegtl::must<materials> {};
+            const auto stringValue = common_grammar::StringValue(context->StringLiteral());
+            m_state.m_out->WriteString(stringValue);
+        }
 
-    //// Actions
-    //
-    //template<typename Rule> struct mdb_unescape_action {};
+        void exitUint8MaterialProperty(MdbParser::Uint8MaterialPropertyContext* context) override
+        {
+            assert(context->uint8MaterialPropertyKeyword()->getStart()->getType() == MdbLexer::Opacity);
+            m_state.m_out->WriteCustom(TOKEN_KEYWORD_OPACITY);
 
-    //template<> struct mdb_unescape_action<unicode> : pegtl::unescape::unescape_j {};
-    //template<> struct mdb_unescape_action<escaped_char > : pegtl::unescape::unescape_c<escaped_char, '"', '\\', '/', '\b', '\f', '\n', '\r', '\t' > {};
-    //template<> struct mdb_unescape_action<unescaped > : pegtl::unescape::append_all {};
-    //using mdb_unescape = pegtl::change_action_and_states<mdb_unescape_action, std::string>;
+            auto* node = context->IntegerConstant();
+            uint8_t value;
+            if (!common_grammar::UInt8Value(node, value))
+                return m_parser.notifyErrorListeners(node->getSymbol(), "Invalid uint8 value", nullptr);
 
-    //template<typename Rule>
-    //struct action : pegtl::nothing<Rule> {};
+            m_state.m_out->WriteUInt8(value);
+        }
 
-    //template<>
-    //struct action<material_name> : mdb_unescape
-    //{
-    //    template< typename ParseInput >
-    //    static void success([[maybe_unused]] const ParseInput& in, std::string& s, MdbParserState& state)
-    //    {
-    //        state.BeginMaterial(s);
-    //    }
-    //};
+        void exitIntMaterialProperty(MdbParser::IntMaterialPropertyContext* context) override
+        {
+            const auto keywordType = context->intMaterialPropertyKeyword()->getStart()->getType();
+            switch (keywordType)
+            {
+            case MdbLexer::Keyword4D:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_4D);
+                break;
+            case MdbLexer::Keyword4E:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_4E);
+                break;
+            case MdbLexer::Keyword4F:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_4F);
+                break;
+            case MdbLexer::Keyword50:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_50);
+                break;
+            default:
+                assert(false);
+                break;
+            }
 
-    //template<>
-    //struct action<material>
-    //{
-    //    template<typename ActionInput>
-    //    static void apply(const ActionInput& in, MdbParserState& state)
-    //    {
-    //        state.EndMaterial();
-    //    }
-    //};
+            auto* node = context->IntegerConstant();
+            int value;
+            if (!common_grammar::IntValue(node, value))
+                return m_parser.notifyErrorListeners(node->getSymbol(), "Invalid int value", nullptr);
 
-    //template<>
-    //struct action<uint8_value>
-    //{
-    //    template<typename ActionInput>
-    //    static void apply(const ActionInput& in, MdbParserState& state)
-    //    {
-    //        const auto value = std::stoul(in.string());
-    //        state.m_out->WriteUInt8(static_cast<uint8_t>(value));
-    //    }
-    //};
+            m_state.m_out->WriteInteger(value);
+        }
 
-    //template<>
-    //struct action<int_value>
-    //{
-    //    template<typename ActionInput>
-    //    static void apply(const ActionInput& in, MdbParserState& state)
-    //    {
-    //        const auto value = std::stol(in.string());
-    //        state.m_out->WriteInteger(static_cast<int>(value));
-    //    }
-    //};
+        void exitSingleValueKeywords(MdbParser::SingleValueKeywordsContext* context) override
+        {
+            const auto keywordType = context->getStart()->getType();
+            switch (keywordType)
+            {
+            case MdbLexer::Keyword2A:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2A);
+                break;
+            case MdbLexer::Keyword2B:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2B);
+                break;
+            case MdbLexer::Keyword2D:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2D);
+                break;
+            case MdbLexer::Keyword2E:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2E);
+                break;
+            case MdbLexer::Keyword44:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_44);
+                break;
+            case MdbLexer::Keyword45:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_45);
+                break;
+            case MdbLexer::Keyword47:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_47);
+                break;
+            case MdbLexer::Keyword48:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_48);
+                break;
+            case MdbLexer::Keyword49:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_49);
+                break;
+            case MdbLexer::Keyword4A:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_4A);
+                break;
+            case MdbLexer::Keyword4B:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_4B);
+                break;
+            case MdbLexer::Keyword4C:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_4C);
+                break;
+            default:
+                assert(false);
+                break;
+            }
+        }
 
-    //template<>
-    //struct action<str_value> : mdb_unescape
-    //{
-    //    template< typename ParseInput >
-    //    static void success([[maybe_unused]] const ParseInput& in, std::string& s, MdbParserState& state)
-    //    {
-    //        state.m_out->WriteString(s);
-    //    }
-    //};
+        void enterKeyword2F(MdbParser::Keyword2FContext*) override
+        {
+            m_state.m_out->WriteCustom(TOKEN_KEYWORD_2F);
+        }
 
-    //template<token_type_t TokenType>
-    //struct action_write_keyword
-    //{
-    //    template<typename ActionInput>
-    //    static void apply(const ActionInput& in, MdbParserState& state)
-    //    {
-    //        state.m_out->WriteCustom(TokenType);
-    //    }
-    //};
+        void exitKeyword2FSubtoken(MdbParser::Keyword2FSubtokenContext* context) override
+        {
+            auto hasIntegerValue = false;
+            switch (context->getStart()->getType())
+            {
+            case MdbLexer::Keyword30:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2F_SUB_30);
+                break;
+            case MdbLexer::Keyword31:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2F_SUB_31);
+                hasIntegerValue = true;
+                break;
+            case MdbLexer::Keyword32:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2F_SUB_32);
+                hasIntegerValue = true;
+                break;
+            case MdbLexer::Keyword33:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2F_SUB_33);
+                hasIntegerValue = true;
+                break;
+            case MdbLexer::Keyword34:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2F_SUB_34);
+                hasIntegerValue = true;
+                break;
+            case MdbLexer::Keyword35:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2F_SUB_35);
+                hasIntegerValue = true;
+                break;
+            case MdbLexer::Keyword36:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2F_SUB_36);
+                break;
+            case MdbLexer::Keyword37:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_2F_SUB_37);
+                hasIntegerValue = true;
+                break;
+            default:
+                assert(false);
+                break;
+            }
 
-    //template<> struct action<key_color0> : action_write_keyword<TOKEN_KEYWORD_COLOR_0> {};
-    //template<> struct action<key_color1> : action_write_keyword<TOKEN_KEYWORD_COLOR_1> {};
-    //template<> struct action<key_texture> : action_write_keyword<TOKEN_KEYWORD_TEXTURE> {};
-    //template<> struct action<key_keyword2A> : action_write_keyword<TOKEN_KEYWORD_2A> {};
-    //template<> struct action<key_keyword2B> : action_write_keyword<TOKEN_KEYWORD_2B> {};
-    //template<> struct action<key_keyword2D> : action_write_keyword<TOKEN_KEYWORD_2D> {};
-    //template<> struct action<key_keyword2E> : action_write_keyword<TOKEN_KEYWORD_2E> {};
-    //template<> struct action<key_keyword2F> : action_write_keyword<TOKEN_KEYWORD_2F> {};
-    //template<> struct action<key_keyword30> : action_write_keyword<TOKEN_KEYWORD_2F_SUB_30> {};
-    //template<> struct action<key_keyword31> : action_write_keyword<TOKEN_KEYWORD_2F_SUB_31> {};
-    //template<> struct action<key_keyword32> : action_write_keyword<TOKEN_KEYWORD_2F_SUB_32> {};
-    //template<> struct action<key_keyword33> : action_write_keyword<TOKEN_KEYWORD_2F_SUB_33> {};
-    //template<> struct action<key_keyword34> : action_write_keyword<TOKEN_KEYWORD_2F_SUB_34> {};
-    //template<> struct action<key_keyword35> : action_write_keyword<TOKEN_KEYWORD_2F_SUB_35> {};
-    //template<> struct action<key_keyword36> : action_write_keyword<TOKEN_KEYWORD_2F_SUB_36> {};
-    //template<> struct action<key_keyword37> : action_write_keyword<TOKEN_KEYWORD_2F_SUB_37> {};
-    //template<> struct action<key_keyword38> : action_write_keyword<TOKEN_KEYWORD_38> {};
-    //template<> struct action<key_keyword39> : action_write_keyword<TOKEN_KEYWORD_38_SUB_39> {};
-    //template<> struct action<key_keyword3A> : action_write_keyword<TOKEN_KEYWORD_38_SUB_3A> {};
-    //template<> struct action<key_keyword3B> : action_write_keyword<TOKEN_KEYWORD_38_SUB_3B> {};
-    //template<> struct action<key_keyword3C> : action_write_keyword<TOKEN_KEYWORD_38_SUB_3C> {};
-    //template<> struct action<key_keyword3D> : action_write_keyword<TOKEN_KEYWORD_38_SUB_3D> {};
-    //template<> struct action<key_keyword3E> : action_write_keyword<TOKEN_KEYWORD_38_SUB_3E> {};
-    //template<> struct action<key_keyword3F> : action_write_keyword<TOKEN_KEYWORD_38_SUB_3F> {};
-    //template<> struct action<key_keyword40> : action_write_keyword<TOKEN_KEYWORD_38_SUB_40> {};
-    //template<> struct action<key_keyword41> : action_write_keyword<TOKEN_KEYWORD_38_SUB_41> {};
-    //template<> struct action<key_keyword42> : action_write_keyword<TOKEN_KEYWORD_38_SUB_42> {};
-    //template<> struct action<key_keyword43> : action_write_keyword<TOKEN_KEYWORD_38_SUB_43> {};
-    //template<> struct action<key_keyword44> : action_write_keyword<TOKEN_KEYWORD_44> {};
-    //template<> struct action<key_keyword45> : action_write_keyword<TOKEN_KEYWORD_45> {};
-    //template<> struct action<key_opacity> : action_write_keyword<TOKEN_KEYWORD_OPACITY> {};
-    //template<> struct action<key_keyword47> : action_write_keyword<TOKEN_KEYWORD_47> {};
-    //template<> struct action<key_keyword48> : action_write_keyword<TOKEN_KEYWORD_48> {};
-    //template<> struct action<key_keyword49> : action_write_keyword<TOKEN_KEYWORD_49> {};
-    //template<> struct action<key_keyword4A> : action_write_keyword<TOKEN_KEYWORD_4A> {};
-    //template<> struct action<key_keyword4B> : action_write_keyword<TOKEN_KEYWORD_4B> {};
-    //template<> struct action<key_keyword4C> : action_write_keyword<TOKEN_KEYWORD_4C> {};
-    //template<> struct action<key_keyword4D> : action_write_keyword<TOKEN_KEYWORD_4D> {};
-    //template<> struct action<key_keyword4E> : action_write_keyword<TOKEN_KEYWORD_4E> {};
-    //template<> struct action<key_keyword4F> : action_write_keyword<TOKEN_KEYWORD_4F> {};
-    //template<> struct action<key_keyword50> : action_write_keyword<TOKEN_KEYWORD_50> {};
+            if (hasIntegerValue)
+            {
+                auto* node = context->IntegerConstant();
+                int value;
+                if (!common_grammar::IntValue(node, value))
+                    return m_parser.notifyErrorListeners(node->getSymbol(), "Invalid int value", nullptr);
+                m_state.m_out->WriteInteger(value);
+            }
+        }
+
+        void enterKeyword38(MdbParser::Keyword38Context*) override
+        {
+            m_state.m_out->WriteCustom(TOKEN_KEYWORD_38);
+        }
+
+        void exitKeyword38Subtoken(MdbParser::Keyword38SubtokenContext* context) override
+        {
+            switch (context->getStart()->getType())
+            {
+            case MdbLexer::Keyword39:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_38_SUB_39);
+                break;
+            case MdbLexer::Keyword3A:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_38_SUB_3A);
+                break;
+            case MdbLexer::Keyword3B:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_38_SUB_3B);
+                break;
+            case MdbLexer::Keyword3C:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_38_SUB_3C);
+                break;
+            case MdbLexer::Keyword3D:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_38_SUB_3D);
+                break;
+            case MdbLexer::Keyword3E:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_38_SUB_3E);
+                break;
+            case MdbLexer::Keyword3F:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_38_SUB_3F);
+                break;
+            case MdbLexer::Keyword40:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_38_SUB_40);
+                break;
+            case MdbLexer::Keyword41:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_38_SUB_41);
+                break;
+            case MdbLexer::Keyword42:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_38_SUB_42);
+                break;
+            case MdbLexer::Keyword43:
+                m_state.m_out->WriteCustom(TOKEN_KEYWORD_38_SUB_43);
+                break;
+            default:
+                assert(false);
+                break;
+            }
+        }
+
+    private:
+        MdbParser& m_parser;
+        MdbParserState& m_state;
+    };
+
+    class CustomMdbErrorListener final : public antlr4::BaseErrorListener
+    {
+        void syntaxError(antlr4::Recognizer* recognizer, antlr4::Token* offendingSymbol, size_t line, size_t charPositionInLine, const std::string& msg, std::exception_ptr e) override
+        {
+            throw MdbCreationException("Parsing MDB failed");
+        }
+    };
 }
 
-class MdbParserState
-{
-public:
-    explicit MdbParserState(ITokenOutputStream* out)
-        : m_material_count(0u),
-          m_out(out)
-    {
-    }
+using namespace mdb;
 
-    void BeginMaterial(const std::string& materialName)
-    {
-        m_material_count++;
-        m_out->WriteCustom(TOKEN_MATERIAL);
-        m_out->WriteString(materialName);
-        m_out->WriteLeftCurly();
-    }
-
-    void EndMaterial()
-    {
-        m_out->WriteRightCurly();
-    }
-
-    size_t m_material_count;
-    ITokenOutputStream* m_out;
-};
-
-class CustomMdbListener final : public MdbBaseListener
-{
-public:
-    explicit CustomMdbListener(MdbParserState& state)
-        : m_state(state)
-    {
-    }
-
-    void exitMaterials(MdbParser::MaterialsContext* context) override
-    {
-        std::cout << "Materials end\n";
-    }
-
-    void enterMaterial(MdbParser::MaterialContext* context) override
-    {
-        std::cout << "Start Material" << "\n";
-    }
-
-    void exitMaterialName(MdbParser::MaterialNameContext* context) override
-    {
-        auto materialName = context->StringLiteral()->toString();
-        //m_state.BeginMaterial(materialName);
-        std::cout << "ASDFG";
-    }
-
-    void exitMaterial(MdbParser::MaterialContext* context) override
-    {
-        std::cout << "End Material" << "\n";
-    }
-
-private:
-    MdbParserState& m_state;
-};
-
-class CustomMdbErrorListener final : public antlr4::BaseErrorListener
-{
-    void syntaxError(antlr4::Recognizer* recognizer, antlr4::Token* offendingSymbol, size_t line, size_t charPositionInLine, const std::string& msg, std::exception_ptr e) override
-    {
-        throw MdbCreationException("Parsing MDB failed");
-    }
-};
 
 bool MdbCreator::SupportFileExtension(const std::string& extension) const
 {
@@ -369,21 +322,24 @@ void MdbCreator::ProcessFile(const std::string& filePath, const void* inputData,
 {
     std::cout << "Mdb creating \"" << filePath << "\"\n";
 
+    CustomMdbErrorListener errors;
     antlr4::ANTLRInputStream inputStream(static_cast<const char*>(inputData), inputDataSize);
+
     MdbLexer lexer(&inputStream);
+    lexer.addErrorListener(&errors);
+
     antlr4::CommonTokenStream tokenStream(&lexer);
     MdbParser parser(&tokenStream);
+    parser.addErrorListener(&errors);
+    parser.setErrorHandler(std::make_shared<antlr4::BailErrorStrategy>());
+
+    auto* parseTree = parser.root();
 
     std::ostringstream materialData;
     const auto materialDataTokens = ITokenOutputStream::Create(materialData);
     MdbParserState parserState(materialDataTokens.get());
-
-    CustomMdbListener listener(parserState);
-    CustomMdbErrorListener errors;
-    parser.addParseListener(&listener);
-    lexer.addErrorListener(&errors);
-    parser.addErrorListener(&errors);
-    auto* r = parser.root();
+    CustomMdbListener listener(parser, parserState);
+    antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, parseTree);
 
     const auto tokenOut = ITokenOutputStream::Create(output);
     tokenOut->WriteCustom(TOKEN_MATERIAL_DB);

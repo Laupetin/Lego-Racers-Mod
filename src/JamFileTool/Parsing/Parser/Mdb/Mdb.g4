@@ -1,5 +1,4 @@
 grammar Mdb;
-
 import Common;
 
 root 
@@ -11,14 +10,14 @@ materials
     ;
 
 material 
-    :   Material materialName '{' material_property* '}'
+    :   Material materialName '{' materialProperty* '}'
     ;
 
 materialName
     :   StringLiteral
     ;
 
-material_property
+materialProperty
     :   colorMaterialProperty
     |   textMaterialProperty
     |   uint8MaterialProperty

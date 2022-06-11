@@ -3,17 +3,17 @@ grammar Common;
 IntegerConstant
     :   DecimalConstant
     |   HexadecimalConstant
-    |   '0'
+    |   Zero
     ;
 
 fragment
 DecimalConstant
-    :   NonzeroDigit Digit*
+    :   IntegerSign? NonzeroDigit Digit*
     ;
 
 fragment
 HexadecimalConstant
-    :   HexadecimalPrefix HexadecimalDigit+
+    :   IntegerSign? HexadecimalPrefix HexadecimalDigit+
     ;
 
 fragment
@@ -34,6 +34,17 @@ Digit
 fragment
 HexadecimalDigit
     :   [0-9a-fA-F]
+    ;
+
+fragment
+Zero
+    :   IntegerSign? '0'
+    ;
+
+fragment
+IntegerSign
+    :   '+'
+    |   '-'
     ;
 
 StringLiteral

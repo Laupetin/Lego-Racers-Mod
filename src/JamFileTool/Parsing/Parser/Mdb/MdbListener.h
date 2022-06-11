@@ -28,8 +28,8 @@ public:
   virtual void enterMaterialName(MdbParser::MaterialNameContext *ctx) = 0;
   virtual void exitMaterialName(MdbParser::MaterialNameContext *ctx) = 0;
 
-  virtual void enterMaterial_property(MdbParser::Material_propertyContext *ctx) = 0;
-  virtual void exitMaterial_property(MdbParser::Material_propertyContext *ctx) = 0;
+  virtual void enterMaterialProperty(MdbParser::MaterialPropertyContext *ctx) = 0;
+  virtual void exitMaterialProperty(MdbParser::MaterialPropertyContext *ctx) = 0;
 
   virtual void enterColorMaterialProperty(MdbParser::ColorMaterialPropertyContext *ctx) = 0;
   virtual void exitColorMaterialProperty(MdbParser::ColorMaterialPropertyContext *ctx) = 0;
