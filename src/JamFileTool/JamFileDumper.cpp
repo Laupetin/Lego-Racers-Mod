@@ -16,6 +16,7 @@
 #include "Asset/PassthroughDumper.h"
 #include "Asset/Idb/IdbDumper.h"
 #include "Asset/Srf/SrfDumper.h"
+#include "Asset/Tdb/TdbDumper.h"
 
 using namespace dumping;
 namespace fs = std::filesystem;
@@ -35,6 +36,7 @@ const IFileTypeProcessor* availableFileTypeDumpers[]
     new IdbDumper(),
     new MdbDumper(),
     new SrfDumper(),
+    new TdbDumper(),
 
     // Passthrough should be last due to it accepting any file and simply dumps its data unmodified
     new PassthroughDumper()

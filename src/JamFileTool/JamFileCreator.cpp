@@ -16,6 +16,7 @@
 #include "Asset/PassthroughCreator.h"
 #include "Asset/Idb/IdbCreator.h"
 #include "Asset/Srf/SrfCreator.h"
+#include "Asset/Tdb/TdbCreator.h"
 
 namespace fs = std::filesystem;
 
@@ -33,6 +34,7 @@ const IFileTypeProcessor* availableFileTypeCreators[]
     new IdbCreator(),
     new MdbCreator(),
     new SrfCreator(),
+    new TdbCreator(),
 
     // Passthrough should be last due to it accepting any file and simply creates its data unmodified
     new PassthroughCreator()
