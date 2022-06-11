@@ -4,7 +4,6 @@
 #include <sstream>
 
 #include "Mdb.h"
-#include "Utils/Endianness.h"
 #include "Utils/StringUtils.h"
 #include "TokenStream.h"
 

@@ -72,29 +72,29 @@ private:
 
         switch (token.m_type)
         {
-        case TOKEN_KEYWORD_28:
-            WriteKeyword("keyword28");
+        case TOKEN_KEYWORD_FLIP_VERTICAL:
+            WriteKeyword("flipVertical");
             break;
-        case TOKEN_KEYWORD_29:
-            WriteKeyword("keyword29");
+        case TOKEN_KEYWORD_BMP:
+            WriteKeyword("bmp");
             break;
-        case TOKEN_KEYWORD_2A:
-            WriteKeyword("keyword2A");
+        case TOKEN_KEYWORD_TGA:
+            WriteKeyword("tga");
             break;
-        case TOKEN_KEYWORD_2B:
+        case TOKEN_KEYWORD_CHROMA_KEY:
         {
             const auto value0 = m_tokens->NextIntegerValue();
             const auto value1 = m_tokens->NextIntegerValue();
             const auto value2 = m_tokens->NextIntegerValue();
-            WriteTripletValue("keyword2B", value0, value1, value2);
+            WriteTripletValue("chromaKey", value0, value1, value2);
             break;
         }
-        case TOKEN_KEYWORD_2C:
+        case TOKEN_KEYWORD_TINT:
         {
             const auto value0 = m_tokens->NextIntegerValue();
             const auto value1 = m_tokens->NextIntegerValue();
             const auto value2 = m_tokens->NextIntegerValue();
-            WriteTripletValue("keyword2C", value0, value1, value2);
+            WriteTripletValue("tint", value0, value1, value2);
             break;
         }
         default:

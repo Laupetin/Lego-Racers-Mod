@@ -14,6 +14,7 @@
 #include "Asset/Mdb/MdbCreator.h"
 #include "Utils/StreamUtils.h"
 #include "Asset/PassthroughCreator.h"
+#include "Asset/Idb/IdbCreator.h"
 #include "Asset/Srf/SrfCreator.h"
 
 namespace fs = std::filesystem;
@@ -29,6 +30,7 @@ public:
 
 const IFileTypeProcessor* availableFileTypeCreators[]
 {
+    new IdbCreator(),
     new MdbCreator(),
     new SrfCreator(),
 
