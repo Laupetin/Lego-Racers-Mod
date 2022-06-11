@@ -14,6 +14,7 @@
 #include "Asset/Mdb/MdbDumper.h"
 #include "Utils/StreamUtils.h"
 #include "Asset/PassthroughDumper.h"
+#include "Asset/Idb/IdbDumper.h"
 #include "Asset/Srf/SrfDumper.h"
 
 using namespace dumping;
@@ -31,6 +32,7 @@ public:
 const IFileTypeProcessor* availableFileTypeDumpers[]
 {
     new BmpDumper(),
+    new IdbDumper(),
     new MdbDumper(),
     new SrfDumper(),
 

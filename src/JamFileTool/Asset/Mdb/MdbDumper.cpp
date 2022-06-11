@@ -20,11 +20,11 @@ namespace mdb
 
 using namespace mdb;
 
-class MdbTextOutputStream final : public AbstractTextDumper
+class MdbTextOutputStream final : public AbstractTokenTextDumper
 {
 public:
     explicit MdbTextOutputStream(std::istream& in, std::ostream& out)
-        : AbstractTextDumper(out),
+        : AbstractTokenTextDumper(out),
           m_tokens(ITokenInputStream::Create(in))
     {
     }
@@ -62,30 +62,6 @@ private:
         m_tokens->ExpectToken(TOKEN_RIGHT_BRACKET);
         m_tokens->ExpectToken(TOKEN_LEFT_CURLY);
         return materialCount;
-    }
-
-    void WriteEscapedInQuotationMarks(const std::string& value) const
-    {
-        m_stream << "\"";
-        for (const auto& c : value)
-        {
-            switch (c)
-            {
-            case '\r':
-                m_stream << "\\r";
-                break;
-            case '\n':
-                m_stream << "\\n";
-                break;
-            case '\\':
-            case '\"':
-                m_stream << "\\" << c;
-                break;
-            default:
-                m_stream << c;
-            }
-        }
-        m_stream << "\"";
     }
 
     void ProcessKeyword2F() const
@@ -315,26 +291,6 @@ private:
     {
         Indent();
         m_stream << keyword << " " << value0 << " " << value1 << " " << value2 << " " << value3 << "\n";
-    }
-
-    void WriteStringValue(const std::string& keyword, const std::string& value) const
-    {
-        Indent();
-        m_stream << keyword << " ";
-        WriteEscapedInQuotationMarks(value);
-        m_stream << "\n";
-    }
-
-    void WriteIntegerValue(const std::string& keyword, const int value) const
-    {
-        Indent();
-        m_stream << keyword << " " << value << "\n";
-    }
-
-    void WriteKeyword(const std::string& keyword) const
-    {
-        Indent();
-        m_stream << keyword << "\n";
     }
 
     void BeginMaterials()
