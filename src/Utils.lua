@@ -1,21 +1,21 @@
 Utils = {}
 
 function Utils:include(includes)
-	if includes:handle(self:name()) then
-		includedirs {
-			path.join(ProjectFolder(), "Utils")
-		}
-	end
+    if includes:handle(self:name()) then
+        includedirs {
+            path.join(ProjectFolder(), "Utils")
+        }
+    end
 end
 
 function Utils:link(links)
-	asmjit:link(links)
-	zydis:link(links)
-	links:add(self:name())
+    asmjit:link(links)
+    zydis:link(links)
+    links:add(self:name())
 end
 
 function Utils:use()
-	
+    
 end
 
 function Utils:name()
@@ -23,27 +23,27 @@ function Utils:name()
 end
 
 function Utils:project()
-	local folder = ProjectFolder()
-	local includes = Includes:create()
+    local folder = ProjectFolder()
+    local includes = Includes:create()
 
-	project(self:name())
-		targetdir(TargetDirectoryLib)
-		location "%{wks.location}/src/%{prj.name}"
-		kind "StaticLib"
-		language "C++"
-		
-		files {
-			path.join(folder, "Utils/**.h"), 
-			path.join(folder, "Utils/**.cpp") 
-		}
-		
+    project(self:name())
+        targetdir(TargetDirectoryLib)
+        location "%{wks.location}/src/%{prj.name}"
+        kind "StaticLib"
+        language "C++"
+        
+        files {
+            path.join(folder, "Utils/**.h"), 
+            path.join(folder, "Utils/**.cpp") 
+        }
+        
         vpaths {
-			["*"] = {
-				path.join(folder, "Utils")
-			}
-		}
-		
+            ["*"] = {
+                path.join(folder, "Utils")
+            }
+        }
+        
         self:include(includes)
-		asmjit:include(includes)
-		zydis:include(includes)
+        asmjit:include(includes)
+        zydis:include(includes)
 end

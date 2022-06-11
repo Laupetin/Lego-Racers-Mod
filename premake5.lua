@@ -14,9 +14,9 @@ workspace "LegoRacersMod"
     systemversion "latest"
     cppdialect "C++17"
 
-	flags {
-		"MultiProcessorCompile"
-	}
+    flags {
+        "MultiProcessorCompile"
+    }
 
     configurations { 
         "Debug",
