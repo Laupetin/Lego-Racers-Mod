@@ -10,9 +10,9 @@
 #include "TokenStream.h"
 
 #pragma warning(push, 0)
-#include "Asset/Mdb/Parser/MdbLexer.h"
-#include "Asset/Mdb/Parser/MdbParser.h"
-#include "Parser/MdbBaseListener.h"
+#include "Parsing/Parser/Mdb/MdbLexer.h"
+#include "Parsing/Parser/Mdb/MdbParser.h"
+#include "Parsing/Parser/Mdb/MdbBaseListener.h"
 #pragma warning(pop)
 
 using namespace mdb;
@@ -24,32 +24,6 @@ public:
         : exception(msg)
     {
     }
-};
-
-class MdbParserState
-{
-public:
-    explicit MdbParserState(ITokenOutputStream* out)
-        : m_material_count(0u),
-          m_out(out)
-    {
-    }
-
-    void BeginMaterial(const std::string& materialName)
-    {
-        m_material_count++;
-        m_out->WriteCustom(TOKEN_MATERIAL);
-        m_out->WriteString(materialName);
-        m_out->WriteLeftCurly();
-    }
-
-    void EndMaterial()
-    {
-        m_out->WriteRightCurly();
-    }
-
-    size_t m_material_count;
-    ITokenOutputStream* m_out;
 };
 
 namespace mdb
@@ -318,18 +292,64 @@ namespace mdb
     //template<> struct action<key_keyword50> : action_write_keyword<TOKEN_KEYWORD_50> {};
 }
 
+class MdbParserState
+{
+public:
+    explicit MdbParserState(ITokenOutputStream* out)
+        : m_material_count(0u),
+          m_out(out)
+    {
+    }
+
+    void BeginMaterial(const std::string& materialName)
+    {
+        m_material_count++;
+        m_out->WriteCustom(TOKEN_MATERIAL);
+        m_out->WriteString(materialName);
+        m_out->WriteLeftCurly();
+    }
+
+    void EndMaterial()
+    {
+        m_out->WriteRightCurly();
+    }
+
+    size_t m_material_count;
+    ITokenOutputStream* m_out;
+};
+
 class CustomMdbListener final : public MdbBaseListener
 {
 public:
+    explicit CustomMdbListener(MdbParserState& state)
+        : m_state(state)
+    {
+    }
+
     void exitMaterials(MdbParser::MaterialsContext* context) override
     {
         std::cout << "Materials end\n";
     }
 
+    void enterMaterial(MdbParser::MaterialContext* context) override
+    {
+        std::cout << "Start Material" << "\n";
+    }
+
+    void exitMaterialName(MdbParser::MaterialNameContext* context) override
+    {
+        auto materialName = context->StringLiteral()->toString();
+        //m_state.BeginMaterial(materialName);
+        std::cout << "ASDFG";
+    }
+
     void exitMaterial(MdbParser::MaterialContext* context) override
     {
-        std::cout << "Material: " << context->StringLiteral()->getText() << "\n";
+        std::cout << "End Material" << "\n";
     }
+
+private:
+    MdbParserState& m_state;
 };
 
 class CustomMdbErrorListener final : public antlr4::BaseErrorListener
@@ -358,7 +378,7 @@ void MdbCreator::ProcessFile(const std::string& filePath, const void* inputData,
     const auto materialDataTokens = ITokenOutputStream::Create(materialData);
     MdbParserState parserState(materialDataTokens.get());
 
-    CustomMdbListener listener;
+    CustomMdbListener listener(parserState);
     CustomMdbErrorListener errors;
     parser.addParseListener(&listener);
     lexer.addErrorListener(&errors);

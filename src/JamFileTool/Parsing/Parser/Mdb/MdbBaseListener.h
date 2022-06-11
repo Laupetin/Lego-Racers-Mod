@@ -1,5 +1,5 @@
 
-// Generated from ..\..\..\src\JamFileTool\Asset\Mdb\Mdb.g4 by ANTLR 4.10.1
+// Generated from ..\..\..\src\JamFileTool\Parsing\Parser\Mdb\Mdb.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -26,6 +26,9 @@ public:
 
   virtual void enterMaterial(MdbParser::MaterialContext * /*ctx*/) override { }
   virtual void exitMaterial(MdbParser::MaterialContext * /*ctx*/) override { }
+
+  virtual void enterMaterialName(MdbParser::MaterialNameContext * /*ctx*/) override { }
+  virtual void exitMaterialName(MdbParser::MaterialNameContext * /*ctx*/) override { }
 
   virtual void enterMaterial_property(MdbParser::Material_propertyContext * /*ctx*/) override { }
   virtual void exitMaterial_property(MdbParser::Material_propertyContext * /*ctx*/) override { }

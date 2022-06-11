@@ -1,5 +1,5 @@
 
-// Generated from ..\..\..\src\JamFileTool\Asset\Mdb\Mdb.g4 by ANTLR 4.10.1
+// Generated from ..\..\..\src\JamFileTool\Parsing\Parser\Mdb\Mdb.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -27,12 +27,12 @@ public:
   };
 
   enum {
-    RuleRoot = 0, RuleMaterials = 1, RuleMaterial = 2, RuleMaterial_property = 3, 
-    RuleColorMaterialProperty = 4, RuleColorMaterialPropertyKeyword = 5, 
-    RuleTextMaterialProperty = 6, RuleTextMaterialPropertyKeyword = 7, RuleUint8MaterialProperty = 8, 
-    RuleUint8MaterialPropertyKeyword = 9, RuleIntMaterialProperty = 10, 
-    RuleIntMaterialPropertyKeyword = 11, RuleSingleValueKeywords = 12, RuleKeyword2F = 13, 
-    RuleKeyword2FSubtoken = 14, RuleKeyword38 = 15, RuleKeyword38Subtoken = 16
+    RuleRoot = 0, RuleMaterials = 1, RuleMaterial = 2, RuleMaterialName = 3, 
+    RuleMaterial_property = 4, RuleColorMaterialProperty = 5, RuleColorMaterialPropertyKeyword = 6, 
+    RuleTextMaterialProperty = 7, RuleTextMaterialPropertyKeyword = 8, RuleUint8MaterialProperty = 9, 
+    RuleUint8MaterialPropertyKeyword = 10, RuleIntMaterialProperty = 11, 
+    RuleIntMaterialPropertyKeyword = 12, RuleSingleValueKeywords = 13, RuleKeyword2F = 14, 
+    RuleKeyword2FSubtoken = 15, RuleKeyword38 = 16, RuleKeyword38Subtoken = 17
   };
 
   explicit MdbParser(antlr4::TokenStream *input);
@@ -55,6 +55,7 @@ public:
   class RootContext;
   class MaterialsContext;
   class MaterialContext;
+  class MaterialNameContext;
   class Material_propertyContext;
   class ColorMaterialPropertyContext;
   class ColorMaterialPropertyKeywordContext;
@@ -103,7 +104,7 @@ public:
     MaterialContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *Material();
-    antlr4::tree::TerminalNode *StringLiteral();
+    MaterialNameContext *materialName();
     std::vector<Material_propertyContext *> material_property();
     Material_propertyContext* material_property(size_t i);
 
@@ -113,6 +114,19 @@ public:
   };
 
   MaterialContext* material();
+
+  class  MaterialNameContext : public antlr4::ParserRuleContext {
+  public:
+    MaterialNameContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *StringLiteral();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  MaterialNameContext* materialName();
 
   class  Material_propertyContext : public antlr4::ParserRuleContext {
   public:

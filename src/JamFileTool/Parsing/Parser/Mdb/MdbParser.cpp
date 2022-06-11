@@ -1,5 +1,5 @@
 
-// Generated from ..\..\..\src\JamFileTool\Asset\Mdb\Mdb.g4 by ANTLR 4.10.1
+// Generated from ..\..\..\src\JamFileTool\Parsing\Parser\Mdb\Mdb.g4 by ANTLR 4.10.1
 
 
 #include "MdbListener.h"
@@ -44,11 +44,11 @@ void mdbParserInitialize() {
   assert(mdbParserStaticData == nullptr);
   auto staticData = std::make_unique<MdbParserStaticData>(
     std::vector<std::string>{
-      "root", "materials", "material", "material_property", "colorMaterialProperty", 
-      "colorMaterialPropertyKeyword", "textMaterialProperty", "textMaterialPropertyKeyword", 
-      "uint8MaterialProperty", "uint8MaterialPropertyKeyword", "intMaterialProperty", 
-      "intMaterialPropertyKeyword", "singleValueKeywords", "keyword2F", 
-      "keyword2FSubtoken", "keyword38", "keyword38Subtoken"
+      "root", "materials", "material", "materialName", "material_property", 
+      "colorMaterialProperty", "colorMaterialPropertyKeyword", "textMaterialProperty", 
+      "textMaterialPropertyKeyword", "uint8MaterialProperty", "uint8MaterialPropertyKeyword", 
+      "intMaterialProperty", "intMaterialPropertyKeyword", "singleValueKeywords", 
+      "keyword2F", "keyword2FSubtoken", "keyword38", "keyword38Subtoken"
     },
     std::vector<std::string>{
       "", "'{'", "'}'", "'materials'", "'material'", "'color1'", "'color0'", 
@@ -74,40 +74,41 @@ void mdbParserInitialize() {
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,51,117,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	4,1,51,121,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
   	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
-  	14,2,15,7,15,2,16,7,16,1,0,1,0,1,1,1,1,1,1,5,1,40,8,1,10,1,12,1,43,9,
-  	1,1,1,1,1,1,2,1,2,1,2,1,2,5,2,51,8,2,10,2,12,2,54,9,2,1,2,1,2,1,3,1,3,
-  	1,3,1,3,1,3,1,3,1,3,3,3,65,8,3,1,4,1,4,1,4,1,4,1,4,1,4,1,5,1,5,1,6,1,
-  	6,1,6,1,7,1,7,1,8,1,8,1,8,1,9,1,9,1,10,1,10,1,10,1,11,1,11,1,12,1,12,
-  	1,13,1,13,1,13,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,
-  	1,14,1,14,1,14,3,14,109,8,14,1,15,1,15,1,15,1,15,1,16,1,16,1,16,0,0,17,
-  	0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,0,4,1,0,5,6,1,0,42,45,4,
-  	0,7,8,10,11,33,34,36,41,1,0,22,32,114,0,34,1,0,0,0,2,36,1,0,0,0,4,46,
-  	1,0,0,0,6,64,1,0,0,0,8,66,1,0,0,0,10,72,1,0,0,0,12,74,1,0,0,0,14,77,1,
-  	0,0,0,16,79,1,0,0,0,18,82,1,0,0,0,20,84,1,0,0,0,22,87,1,0,0,0,24,89,1,
-  	0,0,0,26,91,1,0,0,0,28,108,1,0,0,0,30,110,1,0,0,0,32,114,1,0,0,0,34,35,
-  	3,2,1,0,35,1,1,0,0,0,36,37,5,3,0,0,37,41,5,1,0,0,38,40,3,4,2,0,39,38,
-  	1,0,0,0,40,43,1,0,0,0,41,39,1,0,0,0,41,42,1,0,0,0,42,44,1,0,0,0,43,41,
-  	1,0,0,0,44,45,5,2,0,0,45,3,1,0,0,0,46,47,5,4,0,0,47,48,5,47,0,0,48,52,
-  	5,1,0,0,49,51,3,6,3,0,50,49,1,0,0,0,51,54,1,0,0,0,52,50,1,0,0,0,52,53,
-  	1,0,0,0,53,55,1,0,0,0,54,52,1,0,0,0,55,56,5,2,0,0,56,5,1,0,0,0,57,65,
-  	3,8,4,0,58,65,3,12,6,0,59,65,3,16,8,0,60,65,3,20,10,0,61,65,3,24,12,0,
-  	62,65,3,26,13,0,63,65,3,30,15,0,64,57,1,0,0,0,64,58,1,0,0,0,64,59,1,0,
-  	0,0,64,60,1,0,0,0,64,61,1,0,0,0,64,62,1,0,0,0,64,63,1,0,0,0,65,7,1,0,
-  	0,0,66,67,3,10,5,0,67,68,5,46,0,0,68,69,5,46,0,0,69,70,5,46,0,0,70,71,
-  	5,46,0,0,71,9,1,0,0,0,72,73,7,0,0,0,73,11,1,0,0,0,74,75,3,14,7,0,75,76,
-  	5,47,0,0,76,13,1,0,0,0,77,78,5,9,0,0,78,15,1,0,0,0,79,80,3,18,9,0,80,
-  	81,5,46,0,0,81,17,1,0,0,0,82,83,5,35,0,0,83,19,1,0,0,0,84,85,3,22,11,
-  	0,85,86,5,46,0,0,86,21,1,0,0,0,87,88,7,1,0,0,88,23,1,0,0,0,89,90,7,2,
-  	0,0,90,25,1,0,0,0,91,92,5,12,0,0,92,93,3,28,14,0,93,27,1,0,0,0,94,109,
-  	5,13,0,0,95,96,5,14,0,0,96,109,5,46,0,0,97,98,5,15,0,0,98,109,5,46,0,
-  	0,99,100,5,16,0,0,100,109,5,46,0,0,101,102,5,17,0,0,102,109,5,46,0,0,
-  	103,104,5,18,0,0,104,109,5,46,0,0,105,109,5,19,0,0,106,107,5,20,0,0,107,
-  	109,5,46,0,0,108,94,1,0,0,0,108,95,1,0,0,0,108,97,1,0,0,0,108,99,1,0,
-  	0,0,108,101,1,0,0,0,108,103,1,0,0,0,108,105,1,0,0,0,108,106,1,0,0,0,109,
-  	29,1,0,0,0,110,111,5,21,0,0,111,112,3,32,16,0,112,113,3,32,16,0,113,31,
-  	1,0,0,0,114,115,7,3,0,0,115,33,1,0,0,0,4,41,52,64,108
+  	14,2,15,7,15,2,16,7,16,2,17,7,17,1,0,1,0,1,1,1,1,1,1,5,1,42,8,1,10,1,
+  	12,1,45,9,1,1,1,1,1,1,2,1,2,1,2,1,2,5,2,53,8,2,10,2,12,2,56,9,2,1,2,1,
+  	2,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,3,4,69,8,4,1,5,1,5,1,5,1,5,1,5,
+  	1,5,1,6,1,6,1,7,1,7,1,7,1,8,1,8,1,9,1,9,1,9,1,10,1,10,1,11,1,11,1,11,
+  	1,12,1,12,1,13,1,13,1,14,1,14,1,14,1,15,1,15,1,15,1,15,1,15,1,15,1,15,
+  	1,15,1,15,1,15,1,15,1,15,1,15,1,15,3,15,113,8,15,1,16,1,16,1,16,1,16,
+  	1,17,1,17,1,17,0,0,18,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,
+  	0,4,1,0,5,6,1,0,42,45,4,0,7,8,10,11,33,34,36,41,1,0,22,32,117,0,36,1,
+  	0,0,0,2,38,1,0,0,0,4,48,1,0,0,0,6,59,1,0,0,0,8,68,1,0,0,0,10,70,1,0,0,
+  	0,12,76,1,0,0,0,14,78,1,0,0,0,16,81,1,0,0,0,18,83,1,0,0,0,20,86,1,0,0,
+  	0,22,88,1,0,0,0,24,91,1,0,0,0,26,93,1,0,0,0,28,95,1,0,0,0,30,112,1,0,
+  	0,0,32,114,1,0,0,0,34,118,1,0,0,0,36,37,3,2,1,0,37,1,1,0,0,0,38,39,5,
+  	3,0,0,39,43,5,1,0,0,40,42,3,4,2,0,41,40,1,0,0,0,42,45,1,0,0,0,43,41,1,
+  	0,0,0,43,44,1,0,0,0,44,46,1,0,0,0,45,43,1,0,0,0,46,47,5,2,0,0,47,3,1,
+  	0,0,0,48,49,5,4,0,0,49,50,3,6,3,0,50,54,5,1,0,0,51,53,3,8,4,0,52,51,1,
+  	0,0,0,53,56,1,0,0,0,54,52,1,0,0,0,54,55,1,0,0,0,55,57,1,0,0,0,56,54,1,
+  	0,0,0,57,58,5,2,0,0,58,5,1,0,0,0,59,60,5,47,0,0,60,7,1,0,0,0,61,69,3,
+  	10,5,0,62,69,3,14,7,0,63,69,3,18,9,0,64,69,3,22,11,0,65,69,3,26,13,0,
+  	66,69,3,28,14,0,67,69,3,32,16,0,68,61,1,0,0,0,68,62,1,0,0,0,68,63,1,0,
+  	0,0,68,64,1,0,0,0,68,65,1,0,0,0,68,66,1,0,0,0,68,67,1,0,0,0,69,9,1,0,
+  	0,0,70,71,3,12,6,0,71,72,5,46,0,0,72,73,5,46,0,0,73,74,5,46,0,0,74,75,
+  	5,46,0,0,75,11,1,0,0,0,76,77,7,0,0,0,77,13,1,0,0,0,78,79,3,16,8,0,79,
+  	80,5,47,0,0,80,15,1,0,0,0,81,82,5,9,0,0,82,17,1,0,0,0,83,84,3,20,10,0,
+  	84,85,5,46,0,0,85,19,1,0,0,0,86,87,5,35,0,0,87,21,1,0,0,0,88,89,3,24,
+  	12,0,89,90,5,46,0,0,90,23,1,0,0,0,91,92,7,1,0,0,92,25,1,0,0,0,93,94,7,
+  	2,0,0,94,27,1,0,0,0,95,96,5,12,0,0,96,97,3,30,15,0,97,29,1,0,0,0,98,113,
+  	5,13,0,0,99,100,5,14,0,0,100,113,5,46,0,0,101,102,5,15,0,0,102,113,5,
+  	46,0,0,103,104,5,16,0,0,104,113,5,46,0,0,105,106,5,17,0,0,106,113,5,46,
+  	0,0,107,108,5,18,0,0,108,113,5,46,0,0,109,113,5,19,0,0,110,111,5,20,0,
+  	0,111,113,5,46,0,0,112,98,1,0,0,0,112,99,1,0,0,0,112,101,1,0,0,0,112,
+  	103,1,0,0,0,112,105,1,0,0,0,112,107,1,0,0,0,112,109,1,0,0,0,112,110,1,
+  	0,0,0,113,31,1,0,0,0,114,115,5,21,0,0,115,116,3,34,17,0,116,117,3,34,
+  	17,0,117,33,1,0,0,0,118,119,7,3,0,0,119,35,1,0,0,0,4,43,54,68,112
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -196,7 +197,7 @@ MdbParser::RootContext* MdbParser::root() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(34);
+    setState(36);
     materials();
    
   }
@@ -258,21 +259,21 @@ MdbParser::MaterialsContext* MdbParser::materials() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(36);
+    setState(38);
     match(MdbParser::Materials);
-    setState(37);
+    setState(39);
     match(MdbParser::T__0);
-    setState(41);
+    setState(43);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == MdbParser::Material) {
-      setState(38);
+      setState(40);
       material();
-      setState(43);
+      setState(45);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(44);
+    setState(46);
     match(MdbParser::T__1);
    
   }
@@ -295,8 +296,8 @@ tree::TerminalNode* MdbParser::MaterialContext::Material() {
   return getToken(MdbParser::Material, 0);
 }
 
-tree::TerminalNode* MdbParser::MaterialContext::StringLiteral() {
-  return getToken(MdbParser::StringLiteral, 0);
+MdbParser::MaterialNameContext* MdbParser::MaterialContext::materialName() {
+  return getRuleContext<MdbParser::MaterialNameContext>(0);
 }
 
 std::vector<MdbParser::Material_propertyContext *> MdbParser::MaterialContext::material_property() {
@@ -338,13 +339,13 @@ MdbParser::MaterialContext* MdbParser::material() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(46);
-    match(MdbParser::Material);
-    setState(47);
-    match(MdbParser::StringLiteral);
     setState(48);
+    match(MdbParser::Material);
+    setState(49);
+    materialName();
+    setState(50);
     match(MdbParser::T__0);
-    setState(52);
+    setState(54);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
@@ -370,14 +371,67 @@ MdbParser::MaterialContext* MdbParser::material() {
       | (1ULL << MdbParser::Keyword4E)
       | (1ULL << MdbParser::Keyword4F)
       | (1ULL << MdbParser::Keyword50))) != 0)) {
-      setState(49);
+      setState(51);
       material_property();
-      setState(54);
+      setState(56);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(55);
+    setState(57);
     match(MdbParser::T__1);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- MaterialNameContext ------------------------------------------------------------------
+
+MdbParser::MaterialNameContext::MaterialNameContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* MdbParser::MaterialNameContext::StringLiteral() {
+  return getToken(MdbParser::StringLiteral, 0);
+}
+
+
+size_t MdbParser::MaterialNameContext::getRuleIndex() const {
+  return MdbParser::RuleMaterialName;
+}
+
+void MdbParser::MaterialNameContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<MdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterMaterialName(this);
+}
+
+void MdbParser::MaterialNameContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<MdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitMaterialName(this);
+}
+
+MdbParser::MaterialNameContext* MdbParser::materialName() {
+  MaterialNameContext *_localctx = _tracker.createInstance<MaterialNameContext>(_ctx, getState());
+  enterRule(_localctx, 6, MdbParser::RuleMaterialName);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(59);
+    match(MdbParser::StringLiteral);
    
   }
   catch (RecognitionException &e) {
@@ -442,7 +496,7 @@ void MdbParser::Material_propertyContext::exitRule(tree::ParseTreeListener *list
 
 MdbParser::Material_propertyContext* MdbParser::material_property() {
   Material_propertyContext *_localctx = _tracker.createInstance<Material_propertyContext>(_ctx, getState());
-  enterRule(_localctx, 6, MdbParser::RuleMaterial_property);
+  enterRule(_localctx, 8, MdbParser::RuleMaterial_property);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -452,27 +506,27 @@ MdbParser::Material_propertyContext* MdbParser::material_property() {
     exitRule();
   });
   try {
-    setState(64);
+    setState(68);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case MdbParser::Color1:
       case MdbParser::Color0: {
         enterOuterAlt(_localctx, 1);
-        setState(57);
+        setState(61);
         colorMaterialProperty();
         break;
       }
 
       case MdbParser::Texture: {
         enterOuterAlt(_localctx, 2);
-        setState(58);
+        setState(62);
         textMaterialProperty();
         break;
       }
 
       case MdbParser::Opacity: {
         enterOuterAlt(_localctx, 3);
-        setState(59);
+        setState(63);
         uint8MaterialProperty();
         break;
       }
@@ -482,7 +536,7 @@ MdbParser::Material_propertyContext* MdbParser::material_property() {
       case MdbParser::Keyword4F:
       case MdbParser::Keyword50: {
         enterOuterAlt(_localctx, 4);
-        setState(60);
+        setState(64);
         intMaterialProperty();
         break;
       }
@@ -500,21 +554,21 @@ MdbParser::Material_propertyContext* MdbParser::material_property() {
       case MdbParser::Keyword4B:
       case MdbParser::Keyword4C: {
         enterOuterAlt(_localctx, 5);
-        setState(61);
+        setState(65);
         singleValueKeywords();
         break;
       }
 
       case MdbParser::Keyword2F: {
         enterOuterAlt(_localctx, 6);
-        setState(62);
+        setState(66);
         keyword2F();
         break;
       }
 
       case MdbParser::Keyword38: {
         enterOuterAlt(_localctx, 7);
-        setState(63);
+        setState(67);
         keyword38();
         break;
       }
@@ -570,7 +624,7 @@ void MdbParser::ColorMaterialPropertyContext::exitRule(tree::ParseTreeListener *
 
 MdbParser::ColorMaterialPropertyContext* MdbParser::colorMaterialProperty() {
   ColorMaterialPropertyContext *_localctx = _tracker.createInstance<ColorMaterialPropertyContext>(_ctx, getState());
-  enterRule(_localctx, 8, MdbParser::RuleColorMaterialProperty);
+  enterRule(_localctx, 10, MdbParser::RuleColorMaterialProperty);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -581,15 +635,15 @@ MdbParser::ColorMaterialPropertyContext* MdbParser::colorMaterialProperty() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(66);
-    colorMaterialPropertyKeyword();
-    setState(67);
-    match(MdbParser::IntegerConstant);
-    setState(68);
-    match(MdbParser::IntegerConstant);
-    setState(69);
-    match(MdbParser::IntegerConstant);
     setState(70);
+    colorMaterialPropertyKeyword();
+    setState(71);
+    match(MdbParser::IntegerConstant);
+    setState(72);
+    match(MdbParser::IntegerConstant);
+    setState(73);
+    match(MdbParser::IntegerConstant);
+    setState(74);
     match(MdbParser::IntegerConstant);
    
   }
@@ -635,7 +689,7 @@ void MdbParser::ColorMaterialPropertyKeywordContext::exitRule(tree::ParseTreeLis
 
 MdbParser::ColorMaterialPropertyKeywordContext* MdbParser::colorMaterialPropertyKeyword() {
   ColorMaterialPropertyKeywordContext *_localctx = _tracker.createInstance<ColorMaterialPropertyKeywordContext>(_ctx, getState());
-  enterRule(_localctx, 10, MdbParser::RuleColorMaterialPropertyKeyword);
+  enterRule(_localctx, 12, MdbParser::RuleColorMaterialPropertyKeyword);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -647,7 +701,7 @@ MdbParser::ColorMaterialPropertyKeywordContext* MdbParser::colorMaterialProperty
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(72);
+    setState(76);
     _la = _input->LA(1);
     if (!(_la == MdbParser::Color1
 
@@ -702,7 +756,7 @@ void MdbParser::TextMaterialPropertyContext::exitRule(tree::ParseTreeListener *l
 
 MdbParser::TextMaterialPropertyContext* MdbParser::textMaterialProperty() {
   TextMaterialPropertyContext *_localctx = _tracker.createInstance<TextMaterialPropertyContext>(_ctx, getState());
-  enterRule(_localctx, 12, MdbParser::RuleTextMaterialProperty);
+  enterRule(_localctx, 14, MdbParser::RuleTextMaterialProperty);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -713,9 +767,9 @@ MdbParser::TextMaterialPropertyContext* MdbParser::textMaterialProperty() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(74);
+    setState(78);
     textMaterialPropertyKeyword();
-    setState(75);
+    setState(79);
     match(MdbParser::StringLiteral);
    
   }
@@ -757,7 +811,7 @@ void MdbParser::TextMaterialPropertyKeywordContext::exitRule(tree::ParseTreeList
 
 MdbParser::TextMaterialPropertyKeywordContext* MdbParser::textMaterialPropertyKeyword() {
   TextMaterialPropertyKeywordContext *_localctx = _tracker.createInstance<TextMaterialPropertyKeywordContext>(_ctx, getState());
-  enterRule(_localctx, 14, MdbParser::RuleTextMaterialPropertyKeyword);
+  enterRule(_localctx, 16, MdbParser::RuleTextMaterialPropertyKeyword);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -768,7 +822,7 @@ MdbParser::TextMaterialPropertyKeywordContext* MdbParser::textMaterialPropertyKe
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(77);
+    setState(81);
     match(MdbParser::Texture);
    
   }
@@ -814,7 +868,7 @@ void MdbParser::Uint8MaterialPropertyContext::exitRule(tree::ParseTreeListener *
 
 MdbParser::Uint8MaterialPropertyContext* MdbParser::uint8MaterialProperty() {
   Uint8MaterialPropertyContext *_localctx = _tracker.createInstance<Uint8MaterialPropertyContext>(_ctx, getState());
-  enterRule(_localctx, 16, MdbParser::RuleUint8MaterialProperty);
+  enterRule(_localctx, 18, MdbParser::RuleUint8MaterialProperty);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -825,9 +879,9 @@ MdbParser::Uint8MaterialPropertyContext* MdbParser::uint8MaterialProperty() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(79);
+    setState(83);
     uint8MaterialPropertyKeyword();
-    setState(80);
+    setState(84);
     match(MdbParser::IntegerConstant);
    
   }
@@ -869,7 +923,7 @@ void MdbParser::Uint8MaterialPropertyKeywordContext::exitRule(tree::ParseTreeLis
 
 MdbParser::Uint8MaterialPropertyKeywordContext* MdbParser::uint8MaterialPropertyKeyword() {
   Uint8MaterialPropertyKeywordContext *_localctx = _tracker.createInstance<Uint8MaterialPropertyKeywordContext>(_ctx, getState());
-  enterRule(_localctx, 18, MdbParser::RuleUint8MaterialPropertyKeyword);
+  enterRule(_localctx, 20, MdbParser::RuleUint8MaterialPropertyKeyword);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -880,7 +934,7 @@ MdbParser::Uint8MaterialPropertyKeywordContext* MdbParser::uint8MaterialProperty
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(82);
+    setState(86);
     match(MdbParser::Opacity);
    
   }
@@ -926,7 +980,7 @@ void MdbParser::IntMaterialPropertyContext::exitRule(tree::ParseTreeListener *li
 
 MdbParser::IntMaterialPropertyContext* MdbParser::intMaterialProperty() {
   IntMaterialPropertyContext *_localctx = _tracker.createInstance<IntMaterialPropertyContext>(_ctx, getState());
-  enterRule(_localctx, 20, MdbParser::RuleIntMaterialProperty);
+  enterRule(_localctx, 22, MdbParser::RuleIntMaterialProperty);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -937,9 +991,9 @@ MdbParser::IntMaterialPropertyContext* MdbParser::intMaterialProperty() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(84);
+    setState(88);
     intMaterialPropertyKeyword();
-    setState(85);
+    setState(89);
     match(MdbParser::IntegerConstant);
    
   }
@@ -993,7 +1047,7 @@ void MdbParser::IntMaterialPropertyKeywordContext::exitRule(tree::ParseTreeListe
 
 MdbParser::IntMaterialPropertyKeywordContext* MdbParser::intMaterialPropertyKeyword() {
   IntMaterialPropertyKeywordContext *_localctx = _tracker.createInstance<IntMaterialPropertyKeywordContext>(_ctx, getState());
-  enterRule(_localctx, 22, MdbParser::RuleIntMaterialPropertyKeyword);
+  enterRule(_localctx, 24, MdbParser::RuleIntMaterialPropertyKeyword);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1005,7 +1059,7 @@ MdbParser::IntMaterialPropertyKeywordContext* MdbParser::intMaterialPropertyKeyw
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(87);
+    setState(91);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & ((1ULL << MdbParser::Keyword4D)
@@ -1102,7 +1156,7 @@ void MdbParser::SingleValueKeywordsContext::exitRule(tree::ParseTreeListener *li
 
 MdbParser::SingleValueKeywordsContext* MdbParser::singleValueKeywords() {
   SingleValueKeywordsContext *_localctx = _tracker.createInstance<SingleValueKeywordsContext>(_ctx, getState());
-  enterRule(_localctx, 24, MdbParser::RuleSingleValueKeywords);
+  enterRule(_localctx, 26, MdbParser::RuleSingleValueKeywords);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1114,7 +1168,7 @@ MdbParser::SingleValueKeywordsContext* MdbParser::singleValueKeywords() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(89);
+    setState(93);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & ((1ULL << MdbParser::Keyword2A)
@@ -1179,7 +1233,7 @@ void MdbParser::Keyword2FContext::exitRule(tree::ParseTreeListener *listener) {
 
 MdbParser::Keyword2FContext* MdbParser::keyword2F() {
   Keyword2FContext *_localctx = _tracker.createInstance<Keyword2FContext>(_ctx, getState());
-  enterRule(_localctx, 26, MdbParser::RuleKeyword2F);
+  enterRule(_localctx, 28, MdbParser::RuleKeyword2F);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1190,9 +1244,9 @@ MdbParser::Keyword2FContext* MdbParser::keyword2F() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(91);
+    setState(95);
     match(MdbParser::Keyword2F);
-    setState(92);
+    setState(96);
     keyword2FSubtoken();
    
   }
@@ -1266,7 +1320,7 @@ void MdbParser::Keyword2FSubtokenContext::exitRule(tree::ParseTreeListener *list
 
 MdbParser::Keyword2FSubtokenContext* MdbParser::keyword2FSubtoken() {
   Keyword2FSubtokenContext *_localctx = _tracker.createInstance<Keyword2FSubtokenContext>(_ctx, getState());
-  enterRule(_localctx, 28, MdbParser::RuleKeyword2FSubtoken);
+  enterRule(_localctx, 30, MdbParser::RuleKeyword2FSubtoken);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1276,73 +1330,73 @@ MdbParser::Keyword2FSubtokenContext* MdbParser::keyword2FSubtoken() {
     exitRule();
   });
   try {
-    setState(108);
+    setState(112);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case MdbParser::Keyword30: {
         enterOuterAlt(_localctx, 1);
-        setState(94);
+        setState(98);
         match(MdbParser::Keyword30);
         break;
       }
 
       case MdbParser::Keyword31: {
         enterOuterAlt(_localctx, 2);
-        setState(95);
+        setState(99);
         match(MdbParser::Keyword31);
-        setState(96);
+        setState(100);
         match(MdbParser::IntegerConstant);
         break;
       }
 
       case MdbParser::Keyword32: {
         enterOuterAlt(_localctx, 3);
-        setState(97);
+        setState(101);
         match(MdbParser::Keyword32);
-        setState(98);
+        setState(102);
         match(MdbParser::IntegerConstant);
         break;
       }
 
       case MdbParser::Keyword33: {
         enterOuterAlt(_localctx, 4);
-        setState(99);
+        setState(103);
         match(MdbParser::Keyword33);
-        setState(100);
+        setState(104);
         match(MdbParser::IntegerConstant);
         break;
       }
 
       case MdbParser::Keyword34: {
         enterOuterAlt(_localctx, 5);
-        setState(101);
+        setState(105);
         match(MdbParser::Keyword34);
-        setState(102);
+        setState(106);
         match(MdbParser::IntegerConstant);
         break;
       }
 
       case MdbParser::Keyword35: {
         enterOuterAlt(_localctx, 6);
-        setState(103);
+        setState(107);
         match(MdbParser::Keyword35);
-        setState(104);
+        setState(108);
         match(MdbParser::IntegerConstant);
         break;
       }
 
       case MdbParser::Keyword36: {
         enterOuterAlt(_localctx, 7);
-        setState(105);
+        setState(109);
         match(MdbParser::Keyword36);
         break;
       }
 
       case MdbParser::Keyword37: {
         enterOuterAlt(_localctx, 8);
-        setState(106);
+        setState(110);
         match(MdbParser::Keyword37);
-        setState(107);
+        setState(111);
         match(MdbParser::IntegerConstant);
         break;
       }
@@ -1398,7 +1452,7 @@ void MdbParser::Keyword38Context::exitRule(tree::ParseTreeListener *listener) {
 
 MdbParser::Keyword38Context* MdbParser::keyword38() {
   Keyword38Context *_localctx = _tracker.createInstance<Keyword38Context>(_ctx, getState());
-  enterRule(_localctx, 30, MdbParser::RuleKeyword38);
+  enterRule(_localctx, 32, MdbParser::RuleKeyword38);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1409,11 +1463,11 @@ MdbParser::Keyword38Context* MdbParser::keyword38() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(110);
+    setState(114);
     match(MdbParser::Keyword38);
-    setState(111);
+    setState(115);
     keyword38Subtoken();
-    setState(112);
+    setState(116);
     keyword38Subtoken();
    
   }
@@ -1495,7 +1549,7 @@ void MdbParser::Keyword38SubtokenContext::exitRule(tree::ParseTreeListener *list
 
 MdbParser::Keyword38SubtokenContext* MdbParser::keyword38Subtoken() {
   Keyword38SubtokenContext *_localctx = _tracker.createInstance<Keyword38SubtokenContext>(_ctx, getState());
-  enterRule(_localctx, 32, MdbParser::RuleKeyword38Subtoken);
+  enterRule(_localctx, 34, MdbParser::RuleKeyword38Subtoken);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1507,7 +1561,7 @@ MdbParser::Keyword38SubtokenContext* MdbParser::keyword38Subtoken() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(114);
+    setState(118);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & ((1ULL << MdbParser::Keyword39)
