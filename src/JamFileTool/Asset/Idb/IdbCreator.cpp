@@ -42,7 +42,7 @@ namespace idb
             m_out->WriteLeftCurly();
         }
 
-        void EndMaterial() const
+        void EndImage() const
         {
             m_out->WriteRightCurly();
         }
@@ -62,13 +62,13 @@ namespace idb
 
         void exitImageName(IdbParser::ImageNameContext* context) override
         {
-            const auto materialName = common_grammar::StringValue(context->StringLiteral());
-            m_state.BeginImage(materialName);
+            const auto imageName = common_grammar::StringValue(context->StringLiteral());
+            m_state.BeginImage(imageName);
         }
 
         void exitImage(IdbParser::ImageContext* context) override
         {
-            m_state.EndMaterial();
+            m_state.EndImage();
         }
 
         void exitColorImageProperty(IdbParser::ColorImagePropertyContext* context) override
@@ -152,9 +152,9 @@ void IdbCreator::ProcessFile(const std::string& filePath, const void* inputData,
 
     auto* parseTree = parser.root();
 
-    std::ostringstream materialData;
-    const auto materialDataTokens = ITokenOutputStream::Create(materialData);
-    IdbParserState parserState(materialDataTokens.get());
+    std::ostringstream imageData;
+    const auto imageDataTokens = ITokenOutputStream::Create(imageData);
+    IdbParserState parserState(imageDataTokens.get());
     CustomIdbListener listener(parser, parserState);
     antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, parseTree);
 
@@ -165,7 +165,7 @@ void IdbCreator::ProcessFile(const std::string& filePath, const void* inputData,
     tokenOut->WriteRightBracket();
     tokenOut->WriteLeftCurly();
 
-    output << materialData.str();
+    output << imageData.str();
 
     tokenOut->WriteRightCurly();
 
