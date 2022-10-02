@@ -8,6 +8,7 @@
 #include "Components/Core.h"
 #include "Components/Debug.h"
 #include "Components/JamFiles.h"
+#include "Components/Menus.h"
 #include "Components/Windowed.h"
 
 Component* components[]
@@ -18,6 +19,7 @@ Component* components[]
     new ComponentDebug(),
 #endif
 
+    new ComponentMenus(),
     new ComponentWindowed(),
     new ComponentJamFiles()
 };

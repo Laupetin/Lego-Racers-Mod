@@ -78,6 +78,7 @@ public:
     virtual const Token& PeekValue() = 0;
     virtual int NextIntegerValue() = 0;
     virtual std::string NextStringValue() = 0;
+    virtual float NextFloatValue() = 0;
     virtual void ExpectToken(token_type_t tokenType) = 0;
 };
 

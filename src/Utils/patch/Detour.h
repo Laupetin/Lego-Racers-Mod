@@ -271,6 +271,17 @@ public:
         Install(DetourType::JUMP);
     }
 
+    FunctionDetourTrampolineUsercall(const OffsetValue address, const UsercallConfiguration usercallConfiguration,
+                                     typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+        : DetourUsercallBase(address)
+    {
+        BuildTrampoline(m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
+        m_func = m_trampoline_wrapper->GetPtr();
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
+                    usercallConfiguration, CallingConvention::C_CDECL);
+        Install(DetourType::JUMP);
+    }
+
     ~FunctionDetourTrampolineUsercall() = default;
     FunctionDetourTrampolineUsercall(const FunctionDetourTrampolineUsercall& other) = delete;
     FunctionDetourTrampolineUsercall(FunctionDetourTrampolineUsercall&& other) noexcept = default;
@@ -281,6 +292,21 @@ public:
               typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
     {
         m_address = address;
+        BuildTrampoline(m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
+        m_func = m_trampoline_wrapper->GetPtr();
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
+                    usercallConfiguration, CallingConvention::C_CDECL);
+        Install(DetourType::JUMP);
+    }
+
+    void Init(const OffsetValue address, const UsercallConfiguration usercallConfiguration,
+              typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    {
+        assert(address.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
+        if (address.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
+            throw std::exception("Offset cannot be lazy");
+
+        m_address = address.m_fixed_value;
         BuildTrampoline(m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         m_func = m_trampoline_wrapper->GetPtr();
         InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
@@ -332,6 +358,23 @@ public:
         configuration.FirstParameter().InEcx();
 
         m_address = address;
+        BuildTrampoline(m_param_sizes, m_param_count, m_return_size, configuration, CallingConvention::C_THISCALL);
+        m_func = m_trampoline_wrapper->GetPtr();
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, configuration,
+                    CallingConvention::C_THISCALL);
+        Install(DetourType::JUMP);
+    }
+
+    void Init(const OffsetValue address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    {
+        UsercallConfiguration configuration;
+        configuration.FirstParameter().InEcx();
+
+        assert(address.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
+        if (address.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
+            throw std::exception("Offset cannot be lazy");
+
+        m_address = address.m_fixed_value;
         BuildTrampoline(m_param_sizes, m_param_count, m_return_size, configuration, CallingConvention::C_THISCALL);
         m_func = m_trampoline_wrapper->GetPtr();
         InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, configuration,

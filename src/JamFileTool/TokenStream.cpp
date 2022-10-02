@@ -96,6 +96,15 @@ public:
         return std::move(token.m_string_value);
     }
 
+    float NextFloatValue() override
+    {
+        const auto token = NextValue();
+        if (token.m_type != TOKEN_FLOAT)
+            throw TokenStreamException("Expected token float value");
+
+        return token.m_float_value;
+    }
+
     void ExpectToken(const token_type_t tokenType) override
     {
         const auto token = NextValue();
