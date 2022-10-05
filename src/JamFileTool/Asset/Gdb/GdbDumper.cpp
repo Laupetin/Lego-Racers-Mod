@@ -88,35 +88,35 @@ public:
         {
             switch (nextSectionToken.m_type)
             {
-            case TOKEN_MATERIAL:
+            case TOKEN_SECTION_MATERIAL:
                 HandleMaterialList();
                 break;
 
-            case TOKEN_SECTION28:
+            case TOKEN_SECTION_VERTEX_WITH_POSITION_UV:
                 LoadVerticesWithPositionAndUv();
                 break;
 
-            case TOKEN_SECTION29:
+            case TOKEN_SECTION_VERTEX_WITH_POSITION_UV_COLOR:
                 LoadVerticesWithPositionAndUvAndColor();
                 break;
 
-            case TOKEN_SECTION2A:
+            case TOKEN_SECTION_VERTEX_WITH_POSITION_UV_UNKNOWN:
                 LoadVerticesWithPositionAndUvAndUnknown();
                 break;
 
-            case TOKEN_INDICES:
+            case TOKEN_SECTION_INDICES:
                 LoadIndices();
                 break;
 
-            case TOKEN_SECTION2E:
+            case TOKEN_SECTION_VERTEX_META:
                 LoadVertexMeta();
                 break;
 
-            case TOKEN_SECTION33:
+            case TOKEN_SCALE:
                 LoadScale();
                 break;
 
-            case TOKEN_SECTION34:
+            case TOKEN_SECTION_VERTEX_WITH_POSITION:
                 LoadVerticesWithPosition();
                 break;
 
@@ -250,7 +250,7 @@ private:
         {
             switch (m_tokens->NextValue().m_type)
             {
-            case TOKEN_31:
+            case TOKEN_META_31:
                 {
                     const auto value0 = m_tokens->NextIntegerValue();
                     const auto value1 = m_tokens->NextIntegerValue();
@@ -258,31 +258,31 @@ private:
                     std::cout << "Token31: " << value0 << " " << value1 << " " << value2 << "\n";
                 }
                 break;
-            case TOKEN_INDICES:
+            case TOKEN_META_2D:
                 {
                     const auto value0 = m_tokens->NextIntegerValue();
                     const auto value1 = m_tokens->NextIntegerValue();
                     std::cout << "Token2D: " << value0 << " " << value1 << "\n";
                 }
                 break;
-            case TOKEN_2F:
+            case TOKEN_META_2F:
                 {
                     const auto value0 = m_tokens->NextIntegerValue();
                     std::cout << "Token2F: " << value0 << "\n";
                 }
                 break;
-            case TOKEN_30:
+            case TOKEN_META_30:
                 {
                     std::cout << "Token30: " << "\n";
                 }
                 break;
-            case TOKEN_32:
+            case TOKEN_META_32:
                 {
                     const auto value0 = m_tokens->NextIntegerValue();
                     std::cout << "Token32: " << value0 << "\n";
                 }
                 break;
-            case TOKEN_MATERIAL:
+            case TOKEN_META_27:
                 {
                     const auto value0 = m_tokens->NextIntegerValue();
                     assert(value0 >= 0 && value0 < m_materials.size());
