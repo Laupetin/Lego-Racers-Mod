@@ -15,8 +15,8 @@ public:
   enum {
     T__0 = 1, T__1 = 2, Textures = 3, Texture = 4, FlipVertically = 5, Keyword29 = 6, 
     Bmp = 7, Tga = 8, ChromaKey = 9, Keyword2D = 10, Keyword2E = 11, IntegerConstant = 12, 
-    StringLiteral = 13, Whitespace = 14, Newline = 15, BlockComment = 16, 
-    LineComment = 17
+    FloatingConstant = 13, DigitSequence = 14, StringLiteral = 15, Whitespace = 16, 
+    Newline = 17, BlockComment = 18, LineComment = 19
   };
 
   enum {

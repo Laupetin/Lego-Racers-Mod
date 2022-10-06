@@ -21,6 +21,15 @@ HexadecimalPrefix
     :   '0' [xX]
     ;
 
+FloatingConstant
+    :   DigitSequence? '.' DigitSequence
+    |   DigitSequence '.'
+    ;
+
+DigitSequence
+    :   Digit+
+    ;
+
 fragment
 NonzeroDigit
     :   [1-9]

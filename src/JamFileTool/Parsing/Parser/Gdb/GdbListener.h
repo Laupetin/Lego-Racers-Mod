@@ -1,0 +1,103 @@
+
+// Generated from ..\..\..\src\JamFileTool\Parsing\Parser\Gdb\Gdb.g4 by ANTLR 4.10.1
+
+#pragma once
+
+
+#include "antlr4-runtime.h"
+#include "GdbParser.h"
+
+
+namespace gdb {
+
+/**
+ * This interface defines an abstract listener for a parse tree produced by GdbParser.
+ */
+class  GdbListener : public antlr4::tree::ParseTreeListener {
+public:
+
+  virtual void enterRoot(GdbParser::RootContext *ctx) = 0;
+  virtual void exitRoot(GdbParser::RootContext *ctx) = 0;
+
+  virtual void enterSections(GdbParser::SectionsContext *ctx) = 0;
+  virtual void exitSections(GdbParser::SectionsContext *ctx) = 0;
+
+  virtual void enterMaterialSection(GdbParser::MaterialSectionContext *ctx) = 0;
+  virtual void exitMaterialSection(GdbParser::MaterialSectionContext *ctx) = 0;
+
+  virtual void enterMaterialNameList(GdbParser::MaterialNameListContext *ctx) = 0;
+  virtual void exitMaterialNameList(GdbParser::MaterialNameListContext *ctx) = 0;
+
+  virtual void enterMaterialName(GdbParser::MaterialNameContext *ctx) = 0;
+  virtual void exitMaterialName(GdbParser::MaterialNameContext *ctx) = 0;
+
+  virtual void enterScaleSection(GdbParser::ScaleSectionContext *ctx) = 0;
+  virtual void exitScaleSection(GdbParser::ScaleSectionContext *ctx) = 0;
+
+  virtual void enterVertexSection(GdbParser::VertexSectionContext *ctx) = 0;
+  virtual void exitVertexSection(GdbParser::VertexSectionContext *ctx) = 0;
+
+  virtual void enterVertexList(GdbParser::VertexListContext *ctx) = 0;
+  virtual void exitVertexList(GdbParser::VertexListContext *ctx) = 0;
+
+  virtual void enterVertexPositionUv(GdbParser::VertexPositionUvContext *ctx) = 0;
+  virtual void exitVertexPositionUv(GdbParser::VertexPositionUvContext *ctx) = 0;
+
+  virtual void enterVertexPositionUvColor(GdbParser::VertexPositionUvColorContext *ctx) = 0;
+  virtual void exitVertexPositionUvColor(GdbParser::VertexPositionUvColorContext *ctx) = 0;
+
+  virtual void enterVertexPositionUvNormal(GdbParser::VertexPositionUvNormalContext *ctx) = 0;
+  virtual void exitVertexPositionUvNormal(GdbParser::VertexPositionUvNormalContext *ctx) = 0;
+
+  virtual void enterVertexPosition(GdbParser::VertexPositionContext *ctx) = 0;
+  virtual void exitVertexPosition(GdbParser::VertexPositionContext *ctx) = 0;
+
+  virtual void enterVertexUv(GdbParser::VertexUvContext *ctx) = 0;
+  virtual void exitVertexUv(GdbParser::VertexUvContext *ctx) = 0;
+
+  virtual void enterVertexColor(GdbParser::VertexColorContext *ctx) = 0;
+  virtual void exitVertexColor(GdbParser::VertexColorContext *ctx) = 0;
+
+  virtual void enterVertexNormal(GdbParser::VertexNormalContext *ctx) = 0;
+  virtual void exitVertexNormal(GdbParser::VertexNormalContext *ctx) = 0;
+
+  virtual void enterFaceSection(GdbParser::FaceSectionContext *ctx) = 0;
+  virtual void exitFaceSection(GdbParser::FaceSectionContext *ctx) = 0;
+
+  virtual void enterFaceList(GdbParser::FaceListContext *ctx) = 0;
+  virtual void exitFaceList(GdbParser::FaceListContext *ctx) = 0;
+
+  virtual void enterFace(GdbParser::FaceContext *ctx) = 0;
+  virtual void exitFace(GdbParser::FaceContext *ctx) = 0;
+
+  virtual void enterMetaSection(GdbParser::MetaSectionContext *ctx) = 0;
+  virtual void exitMetaSection(GdbParser::MetaSectionContext *ctx) = 0;
+
+  virtual void enterMetaList(GdbParser::MetaListContext *ctx) = 0;
+  virtual void exitMetaList(GdbParser::MetaListContext *ctx) = 0;
+
+  virtual void enterMeta(GdbParser::MetaContext *ctx) = 0;
+  virtual void exitMeta(GdbParser::MetaContext *ctx) = 0;
+
+  virtual void enterKeyword31(GdbParser::Keyword31Context *ctx) = 0;
+  virtual void exitKeyword31(GdbParser::Keyword31Context *ctx) = 0;
+
+  virtual void enterKeyword2D(GdbParser::Keyword2DContext *ctx) = 0;
+  virtual void exitKeyword2D(GdbParser::Keyword2DContext *ctx) = 0;
+
+  virtual void enterKeyword2F(GdbParser::Keyword2FContext *ctx) = 0;
+  virtual void exitKeyword2F(GdbParser::Keyword2FContext *ctx) = 0;
+
+  virtual void enterKeyword30(GdbParser::Keyword30Context *ctx) = 0;
+  virtual void exitKeyword30(GdbParser::Keyword30Context *ctx) = 0;
+
+  virtual void enterKeyword32(GdbParser::Keyword32Context *ctx) = 0;
+  virtual void exitKeyword32(GdbParser::Keyword32Context *ctx) = 0;
+
+  virtual void enterKeyword27(GdbParser::Keyword27Context *ctx) = 0;
+  virtual void exitKeyword27(GdbParser::Keyword27Context *ctx) = 0;
+
+
+};
+
+}  // namespace gdb

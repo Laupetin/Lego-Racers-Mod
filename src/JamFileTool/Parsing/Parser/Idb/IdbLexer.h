@@ -14,8 +14,9 @@ class  IdbLexer : public antlr4::Lexer {
 public:
   enum {
     T__0 = 1, T__1 = 2, Images = 3, Image = 4, FlipVertical = 5, Bmp = 6, 
-    Tga = 7, ChromaKey = 8, Tint = 9, IntegerConstant = 10, StringLiteral = 11, 
-    Whitespace = 12, Newline = 13, BlockComment = 14, LineComment = 15
+    Tga = 7, ChromaKey = 8, Tint = 9, IntegerConstant = 10, FloatingConstant = 11, 
+    DigitSequence = 12, StringLiteral = 13, Whitespace = 14, Newline = 15, 
+    BlockComment = 16, LineComment = 17
   };
 
   explicit IdbLexer(antlr4::CharStream *input);

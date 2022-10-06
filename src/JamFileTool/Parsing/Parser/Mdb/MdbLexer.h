@@ -22,8 +22,8 @@ public:
     Keyword43 = 32, Keyword44 = 33, Keyword45 = 34, Opacity = 35, Keyword47 = 36, 
     Keyword48 = 37, Keyword49 = 38, Keyword4A = 39, Keyword4B = 40, Keyword4C = 41, 
     Keyword4D = 42, Keyword4E = 43, Keyword4F = 44, Keyword50 = 45, IntegerConstant = 46, 
-    StringLiteral = 47, Whitespace = 48, Newline = 49, BlockComment = 50, 
-    LineComment = 51
+    FloatingConstant = 47, DigitSequence = 48, StringLiteral = 49, Whitespace = 50, 
+    Newline = 51, BlockComment = 52, LineComment = 53
   };
 
   explicit MdbLexer(antlr4::CharStream *input);

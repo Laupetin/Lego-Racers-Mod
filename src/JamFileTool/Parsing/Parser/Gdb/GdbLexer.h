@@ -1,5 +1,5 @@
 
-// Generated from ..\..\..\src\JamFileTool\Parsing\Parser\Tdb\Tdb.g4 by ANTLR 4.10.1
+// Generated from ..\..\..\src\JamFileTool\Parsing\Parser\Gdb\Gdb.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -7,21 +7,23 @@
 #include "antlr4-runtime.h"
 
 
-namespace tdb {
+namespace gdb {
 
 
-class  TdbLexer : public antlr4::Lexer {
+class  GdbLexer : public antlr4::Lexer {
 public:
   enum {
-    T__0 = 1, T__1 = 2, Textures = 3, Texture = 4, FlipVertically = 5, Keyword29 = 6, 
-    Bmp = 7, Tga = 8, ChromaKey = 9, Keyword2D = 10, Keyword2E = 11, IntegerConstant = 12, 
-    FloatingConstant = 13, DigitSequence = 14, StringLiteral = 15, Whitespace = 16, 
-    Newline = 17, BlockComment = 18, LineComment = 19
+    T__0 = 1, T__1 = 2, Materials = 3, Scale = 4, Vertices = 5, Faces = 6, 
+    Meta = 7, Vertex = 8, Uv = 9, Color = 10, Normal = 11, Texture = 12, 
+    Face = 13, Keyword27 = 14, Keyword2D = 15, Keyword2F = 16, Keyword30 = 17, 
+    Keyword31 = 18, Keyword32 = 19, IntegerConstant = 20, FloatingConstant = 21, 
+    DigitSequence = 22, StringLiteral = 23, Whitespace = 24, Newline = 25, 
+    BlockComment = 26, LineComment = 27
   };
 
-  explicit TdbLexer(antlr4::CharStream *input);
+  explicit GdbLexer(antlr4::CharStream *input);
 
-  ~TdbLexer() override;
+  ~GdbLexer() override;
 
 
   std::string getGrammarFileName() const override;
@@ -51,4 +53,4 @@ private:
 
 };
 
-}  // namespace tdb
+}  // namespace gdb
