@@ -79,6 +79,19 @@ namespace gdb
 		Vec3 m_normal;
 		Color4 m_color;
 	};
+
+	struct Model
+	{
+		std::vector<std::string> m_materials;
+		std::vector<ModelFace> m_faces;
+		std::vector<Vertex> m_vertices;
+		float m_scale_value;
+
+		Model()
+			: m_scale_value(1.0f)
+		{
+		}
+	};
 }
 
 using namespace gdb;
@@ -88,8 +101,7 @@ class GdbTextOutputStream final : public AbstractTokenTextDumper
 public:
 	GdbTextOutputStream(std::istream& in, std::ostream& out)
 		: AbstractTokenTextDumper(out),
-		m_tokens(ITokenInputStream::Create(in)),
-		m_scale_value(0.0f)
+		m_tokens(ITokenInputStream::Create(in))
 	{
 	}
 
@@ -156,7 +168,7 @@ private:
 				m_stream << ',';
 			m_stream << '\n';
 
-			m_materials.emplace_back(std::move(materialName));
+			m_model.m_materials.emplace_back(std::move(materialName));
 		}
 
 		m_tokens->ExpectToken(TOKEN_RIGHT_CURLY);
@@ -173,13 +185,13 @@ private:
 		m_stream << "{\n";
 		IncIndent();
 
-		assert(m_vertices.empty());
+		assert(m_model.m_vertices.empty());
 		const auto vertexCount = ReadCountInCurlyBraces();
 
-		m_vertices.resize(vertexCount);
+		m_model.m_vertices.resize(vertexCount);
 		for (auto index = 0; index < vertexCount; index++)
 		{
-			Vertex& v = m_vertices[index];
+			Vertex& v = m_model.m_vertices[index];
 			v.m_position.x = m_tokens->NextFloatValue();
 			v.m_position.y = m_tokens->NextFloatValue();
 			v.m_position.z = m_tokens->NextFloatValue();
@@ -211,13 +223,13 @@ private:
 		m_stream << "{\n";
 		IncIndent();
 
-		assert(m_vertices.empty());
+		assert(m_model.m_vertices.empty());
 		const auto vertexCount = ReadCountInCurlyBraces();
 
-		m_vertices.resize(vertexCount);
+		m_model.m_vertices.resize(vertexCount);
 		for (auto index = 0; index < vertexCount; index++)
 		{
-			Vertex& v = m_vertices[index];
+			Vertex& v = m_model.m_vertices[index];
 			v.m_position.x = m_tokens->NextFloatValue();
 			v.m_position.y = m_tokens->NextFloatValue();
 			v.m_position.z = m_tokens->NextFloatValue();
@@ -256,13 +268,13 @@ private:
 		m_stream << "{\n";
 		IncIndent();
 
-		assert(m_vertices.empty());
+		assert(m_model.m_vertices.empty());
 		const auto vertexCount = ReadCountInCurlyBraces();
 
-		m_vertices.resize(vertexCount);
+		m_model.m_vertices.resize(vertexCount);
 		for (auto index = 0; index < vertexCount; index++)
 		{
-			Vertex& v = m_vertices[index];
+			Vertex& v = m_model.m_vertices[index];
 			v.m_position.x = m_tokens->NextFloatValue();
 			v.m_position.y = m_tokens->NextFloatValue();
 			v.m_position.z = m_tokens->NextFloatValue();
@@ -303,12 +315,13 @@ private:
 		m_stream << "{\n";
 		IncIndent();
 
+		assert(m_model.m_vertices.empty());
 		const auto vertexCount = ReadCountInCurlyBraces();
 
-		m_vertices.resize(vertexCount);
+		m_model.m_vertices.resize(vertexCount);
 		for (auto index = 0; index < vertexCount; index++)
 		{
-			Vertex& v = m_vertices[index];
+			Vertex& v = m_model.m_vertices[index];
 			v.m_position.x = m_tokens->NextFloatValue();
 			v.m_position.y = m_tokens->NextFloatValue();
 			v.m_position.z = m_tokens->NextFloatValue();
@@ -335,11 +348,11 @@ private:
 		IncIndent();
 
 		const auto indexCount = ReadCountInCurlyBraces();
-		m_faces.resize(indexCount);
+		m_model.m_faces.resize(indexCount);
 
 		for (auto index = 0; index < indexCount; index++)
 		{
-			auto& f = m_faces[index];
+			auto& f = m_model.m_faces[index];
 			f.indices[0] = static_cast<unsigned char>(m_tokens->NextIntegerValue());
 			f.indices[1] = static_cast<unsigned char>(m_tokens->NextIntegerValue());
 			f.indices[2] = static_cast<unsigned char>(m_tokens->NextIntegerValue());
@@ -413,7 +426,6 @@ private:
 			case TOKEN_META_27:
 			{
 				const auto value0 = m_tokens->NextIntegerValue();
-				assert(value0 >= 0 && static_cast<unsigned>(value0) < m_materials.size());
 
 				Indent();
 				m_stream << "token27 " << value0 << "\n";
@@ -433,10 +445,10 @@ private:
 
 	void LoadScale()
 	{
-		m_scale_value = m_tokens->NextFloatValue();
+		m_model.m_scale_value = m_tokens->NextFloatValue();
 
 		Indent();
-		m_stream << "scale " << m_scale_value << "\n";
+		m_stream << "scale " << m_model.m_scale_value << "\n";
 	}
 
 	[[nodiscard]] int ReadCountInCurlyBraces() const
@@ -449,10 +461,7 @@ private:
 	}
 
 	std::unique_ptr<ITokenInputStream> m_tokens;
-	std::vector<std::string> m_materials;
-	std::vector<ModelFace> m_faces;
-	std::vector<Vertex> m_vertices;
-	float m_scale_value;
+	Model m_model;
 };
 
 bool GdbDumper::SupportFileExtension(const std::string& extension) const
