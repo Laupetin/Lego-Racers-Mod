@@ -1,4 +1,5 @@
 #include "GdbTextWriter.h"
+#include <iomanip>
 
 namespace gdb
 {
@@ -9,6 +10,7 @@ namespace gdb
 			: AbstractTokenTextDumper(out),
 			  m_first_vertex_element(true)
 		{
+			m_stream << std::fixed << std::showpoint;
 		}
 
 		void StartMaterials() override
