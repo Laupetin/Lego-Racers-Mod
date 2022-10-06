@@ -20,66 +20,6 @@ namespace gdb
 		}
 	};
 
-	struct Vec2
-	{
-		float x;
-		float y;
-
-		Vec2()
-		{
-			x = 0.0f;
-			y = 0.0f;
-		}
-	};
-
-	struct Vec3
-	{
-		float x;
-		float y;
-		float z;
-
-		Vec3()
-		{
-			x = 0.0f;
-			y = 0.0f;
-			z = 0.0f;
-		}
-	};
-
-	struct Color4
-	{
-		unsigned char r;
-		unsigned char g;
-		unsigned char b;
-		unsigned char a;
-
-		Color4()
-		{
-			r = 0;
-			g = 0;
-			b = 0;
-			a = 0;
-		}
-	};
-
-	struct ModelFace
-	{
-		unsigned char indices[4];
-
-		ModelFace()
-			: indices{}
-		{
-		}
-	};
-
-	struct Vertex
-	{
-		Vec3 m_position;
-		Vec2 m_uv;
-		Vec3 m_normal;
-		Color4 m_color;
-	};
-
 	struct Model
 	{
 		std::vector<std::string> m_materials;
@@ -162,11 +102,7 @@ private:
 		{
 			auto materialName = m_tokens->NextStringValue();
 			Indent();
-			m_stream << "\"" << materialName << "\"";
-
-			if (materialIndex + 1 < materialCount)
-				m_stream << ',';
-			m_stream << '\n';
+			m_stream << "\"" << materialName << "\"\n";
 
 			m_model.m_materials.emplace_back(std::move(materialName));
 		}
@@ -342,7 +278,7 @@ private:
 
 	void LoadIndices()
 	{
-		m_stream << "indices\n";
+		m_stream << "faces\n";
 		Indent();
 		m_stream << "{\n";
 		IncIndent();
@@ -389,7 +325,7 @@ private:
 				const auto value2 = m_tokens->NextIntegerValue();
 
 				Indent();
-				m_stream << "token31 " << value0 << " " << value1 << " " << value2 << "\n";
+				m_stream << "keyword31 " << value0 << " " << value1 << " " << value2 << "\n";
 			}
 			break;
 			case TOKEN_META_2D:
@@ -398,7 +334,7 @@ private:
 				const auto value1 = m_tokens->NextIntegerValue();
 
 				Indent();
-				m_stream << "token2D " << value0 << " " << value1 << "\n";
+				m_stream << "keyword2D " << value0 << " " << value1 << "\n";
 			}
 			break;
 			case TOKEN_META_2F:
@@ -406,13 +342,13 @@ private:
 				const auto value0 = m_tokens->NextIntegerValue();
 
 				Indent();
-				m_stream << "token2F " << value0 << "\n";
+				m_stream << "keyword2F " << value0 << "\n";
 			}
 			break;
 			case TOKEN_META_30:
 			{
 				Indent();
-				m_stream << "token30 " << "\n";
+				m_stream << "keyword30 " << "\n";
 			}
 			break;
 			case TOKEN_META_32:
@@ -420,7 +356,7 @@ private:
 				const auto value0 = m_tokens->NextIntegerValue();
 
 				Indent();
-				m_stream << "token32 " << value0 << "\n";
+				m_stream << "keyword32 " << value0 << "\n";
 			}
 			break;
 			case TOKEN_META_27:
@@ -428,7 +364,7 @@ private:
 				const auto value0 = m_tokens->NextIntegerValue();
 
 				Indent();
-				m_stream << "token27 " << value0 << "\n";
+				m_stream << "keyword27 " << value0 << "\n";
 			}
 			break;
 			default:
