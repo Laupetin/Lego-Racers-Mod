@@ -49,9 +49,9 @@ namespace gdb
 			if (m_current_count <= 0)
 				PrepareElementsInTempBuffer(TOKEN_SECTION_VERTEX_WITH_POSITION);
 
-			m_tokens->WriteFloat(position.x);
-			m_tokens->WriteFloat(position.y);
-			m_tokens->WriteFloat(position.z);
+			m_temp_tokens->WriteFloat(position.x);
+			m_temp_tokens->WriteFloat(position.y);
+			m_temp_tokens->WriteFloat(position.z);
 			m_current_count++;
 		}
 
@@ -60,12 +60,12 @@ namespace gdb
 			if (m_current_count <= 0)
 				PrepareElementsInTempBuffer(TOKEN_SECTION_VERTEX_WITH_POSITION_UV);
 
-			m_tokens->WriteFloat(position.x);
-			m_tokens->WriteFloat(position.y);
-			m_tokens->WriteFloat(position.z);
+			m_temp_tokens->WriteFloat(position.x);
+			m_temp_tokens->WriteFloat(position.y);
+			m_temp_tokens->WriteFloat(position.z);
 
-			m_tokens->WriteFloat(uv.x);
-			m_tokens->WriteFloat(uv.y);
+			m_temp_tokens->WriteFloat(uv.x);
+			m_temp_tokens->WriteFloat(uv.y);
 
 			m_current_count++;
 		}
@@ -75,17 +75,17 @@ namespace gdb
 			if (m_current_count <= 0)
 				PrepareElementsInTempBuffer(TOKEN_SECTION_VERTEX_WITH_POSITION_UV_COLOR);
 
-			m_tokens->WriteFloat(position.x);
-			m_tokens->WriteFloat(position.y);
-			m_tokens->WriteFloat(position.z);
+			m_temp_tokens->WriteFloat(position.x);
+			m_temp_tokens->WriteFloat(position.y);
+			m_temp_tokens->WriteFloat(position.z);
 
-			m_tokens->WriteFloat(uv.x);
-			m_tokens->WriteFloat(uv.y);
+			m_temp_tokens->WriteFloat(uv.x);
+			m_temp_tokens->WriteFloat(uv.y);
 
-			m_tokens->WriteUInt8(color.r);
-			m_tokens->WriteUInt8(color.g);
-			m_tokens->WriteUInt8(color.b);
-			m_tokens->WriteUInt8(color.a);
+			m_temp_tokens->WriteUInt8(color.r);
+			m_temp_tokens->WriteUInt8(color.g);
+			m_temp_tokens->WriteUInt8(color.b);
+			m_temp_tokens->WriteUInt8(color.a);
 
 			m_current_count++;
 		}
@@ -95,16 +95,16 @@ namespace gdb
 			if (m_current_count <= 0)
 				PrepareElementsInTempBuffer(TOKEN_SECTION_VERTEX_WITH_POSITION_UV_NORMAL);
 
-			m_tokens->WriteFloat(position.x);
-			m_tokens->WriteFloat(position.y);
-			m_tokens->WriteFloat(position.z);
+			m_temp_tokens->WriteFloat(position.x);
+			m_temp_tokens->WriteFloat(position.y);
+			m_temp_tokens->WriteFloat(position.z);
 
-			m_tokens->WriteFloat(uv.x);
-			m_tokens->WriteFloat(uv.y);
+			m_temp_tokens->WriteFloat(uv.x);
+			m_temp_tokens->WriteFloat(uv.y);
 
-			m_tokens->WriteFloat(normal.x);
-			m_tokens->WriteFloat(normal.y);
-			m_tokens->WriteFloat(normal.z);
+			m_temp_tokens->WriteFloat(normal.x);
+			m_temp_tokens->WriteFloat(normal.y);
+			m_temp_tokens->WriteFloat(normal.z);
 
 			m_current_count++;
 		}
@@ -121,9 +121,9 @@ namespace gdb
 
 		void EmitFace(unsigned vertex0, unsigned vertex1, unsigned vertex2) override
 		{
-			m_tokens->WriteUInt8(vertex0);
-			m_tokens->WriteUInt8(vertex1);
-			m_tokens->WriteUInt8(vertex2);
+			m_temp_tokens->WriteUInt8(vertex0);
+			m_temp_tokens->WriteUInt8(vertex1);
+			m_temp_tokens->WriteUInt8(vertex2);
 
 			m_current_count++;
 		}
@@ -140,50 +140,50 @@ namespace gdb
 
 		void EmitMetaKeyword31(int value0, int value1, int value2) override
 		{
-			m_tokens->WriteCustom(TOKEN_META_31);
-			m_tokens->WriteInteger(value0);
-			m_tokens->WriteInteger(value1);
-			m_tokens->WriteInteger(value2);
+			m_temp_tokens->WriteCustom(TOKEN_META_31);
+			m_temp_tokens->WriteInteger(value0);
+			m_temp_tokens->WriteInteger(value1);
+			m_temp_tokens->WriteInteger(value2);
 
 			m_current_count++;
 		}
 
 		void EmitMetaKeyword2D(int value0, int value1) override
 		{
-			m_tokens->WriteCustom(TOKEN_META_2D);
-			m_tokens->WriteInteger(value0);
-			m_tokens->WriteInteger(value1);
+			m_temp_tokens->WriteCustom(TOKEN_META_2D);
+			m_temp_tokens->WriteInteger(value0);
+			m_temp_tokens->WriteInteger(value1);
 
 			m_current_count++;
 		}
 
 		void EmitMetaKeyword2F(int value0) override
 		{
-			m_tokens->WriteCustom(TOKEN_META_2F);
-			m_tokens->WriteInteger(value0);
+			m_temp_tokens->WriteCustom(TOKEN_META_2F);
+			m_temp_tokens->WriteInteger(value0);
 
 			m_current_count++;
 		}
 
 		void EmitMetaKeyword30() override
 		{
-			m_tokens->WriteCustom(TOKEN_META_30);
+			m_temp_tokens->WriteCustom(TOKEN_META_30);
 
 			m_current_count++;
 		}
 
 		void EmitMetaKeyword32(int value0) override
 		{
-			m_tokens->WriteCustom(TOKEN_META_32);
-			m_tokens->WriteInteger(value0);
+			m_temp_tokens->WriteCustom(TOKEN_META_32);
+			m_temp_tokens->WriteInteger(value0);
 
 			m_current_count++;
 		}
 
 		void EmitMetaKeyword27(int value0) override
 		{
-			m_tokens->WriteCustom(TOKEN_META_27);
-			m_tokens->WriteInteger(value0);
+			m_temp_tokens->WriteCustom(TOKEN_META_27);
+			m_temp_tokens->WriteInteger(value0);
 
 			m_current_count++;
 		}
