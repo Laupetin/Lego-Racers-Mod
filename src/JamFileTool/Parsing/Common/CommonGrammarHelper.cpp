@@ -108,4 +108,45 @@ namespace common_grammar
         value = static_cast<int>(readVal);
         return true;
     }
+
+    bool UnsignedIntValue(antlr4::tree::TerminalNode* node, unsigned int& value)
+    {
+        if (!node)
+            return false;
+
+        const auto text = node->getText();
+        assert(!text.empty());
+
+        char* endPos;
+        const auto readVal = strtoul(text.c_str(), &endPos, 0);
+
+        if (endPos != &text[text.size()])
+            return false;
+
+        value = static_cast<unsigned int>(readVal);
+        return true;
+    }
+
+    bool FloatingValue(antlr4::tree::TerminalNode* node, float& value)
+    {
+        if (!node)
+            return false;
+
+        const auto text = node->getText();
+        assert(!text.empty());
+
+        char* endPos;
+        const auto readVal = strtof(text.c_str(), &endPos);
+
+        if (endPos != &text[text.size()])
+            return false;
+
+        value = readVal;
+        return true;
+    }
+
+    bool FloatingOrIntValue(antlr4::ParserRuleContext* ctx, float& value)
+    {
+        return FloatingValue(ctx->getToken(ctx->getStart()->getType(), 0), value);
+    }
 }

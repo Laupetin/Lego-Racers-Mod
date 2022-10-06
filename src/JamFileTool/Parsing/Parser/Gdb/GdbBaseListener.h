@@ -42,14 +42,17 @@ public:
   virtual void enterVertexList(GdbParser::VertexListContext * /*ctx*/) override { }
   virtual void exitVertexList(GdbParser::VertexListContext * /*ctx*/) override { }
 
-  virtual void enterVertexPositionUv(GdbParser::VertexPositionUvContext * /*ctx*/) override { }
-  virtual void exitVertexPositionUv(GdbParser::VertexPositionUvContext * /*ctx*/) override { }
+  virtual void enterVertexDefPosition(GdbParser::VertexDefPositionContext * /*ctx*/) override { }
+  virtual void exitVertexDefPosition(GdbParser::VertexDefPositionContext * /*ctx*/) override { }
 
-  virtual void enterVertexPositionUvColor(GdbParser::VertexPositionUvColorContext * /*ctx*/) override { }
-  virtual void exitVertexPositionUvColor(GdbParser::VertexPositionUvColorContext * /*ctx*/) override { }
+  virtual void enterVertexDefPositionUv(GdbParser::VertexDefPositionUvContext * /*ctx*/) override { }
+  virtual void exitVertexDefPositionUv(GdbParser::VertexDefPositionUvContext * /*ctx*/) override { }
 
-  virtual void enterVertexPositionUvNormal(GdbParser::VertexPositionUvNormalContext * /*ctx*/) override { }
-  virtual void exitVertexPositionUvNormal(GdbParser::VertexPositionUvNormalContext * /*ctx*/) override { }
+  virtual void enterVertexDefPositionUvColor(GdbParser::VertexDefPositionUvColorContext * /*ctx*/) override { }
+  virtual void exitVertexDefPositionUvColor(GdbParser::VertexDefPositionUvColorContext * /*ctx*/) override { }
+
+  virtual void enterVertexDefPositionUvNormal(GdbParser::VertexDefPositionUvNormalContext * /*ctx*/) override { }
+  virtual void exitVertexDefPositionUvNormal(GdbParser::VertexDefPositionUvNormalContext * /*ctx*/) override { }
 
   virtual void enterVertexPosition(GdbParser::VertexPositionContext * /*ctx*/) override { }
   virtual void exitVertexPosition(GdbParser::VertexPositionContext * /*ctx*/) override { }
@@ -98,6 +101,9 @@ public:
 
   virtual void enterKeyword27(GdbParser::Keyword27Context * /*ctx*/) override { }
   virtual void exitKeyword27(GdbParser::Keyword27Context * /*ctx*/) override { }
+
+  virtual void enterFloatOrIntConstant(GdbParser::FloatOrIntConstantContext * /*ctx*/) override { }
+  virtual void exitFloatOrIntConstant(GdbParser::FloatOrIntConstantContext * /*ctx*/) override { }
 
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

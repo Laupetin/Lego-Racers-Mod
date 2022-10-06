@@ -40,6 +40,9 @@ public:
   virtual void enterSingleValueKeywords(IdbParser::SingleValueKeywordsContext *ctx) = 0;
   virtual void exitSingleValueKeywords(IdbParser::SingleValueKeywordsContext *ctx) = 0;
 
+  virtual void enterFloatOrIntConstant(IdbParser::FloatOrIntConstantContext *ctx) = 0;
+  virtual void exitFloatOrIntConstant(IdbParser::FloatOrIntConstantContext *ctx) = 0;
+
 
 };
 

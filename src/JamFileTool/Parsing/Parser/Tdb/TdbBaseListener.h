@@ -48,6 +48,9 @@ public:
   virtual void enterSingleValueKeywords(TdbParser::SingleValueKeywordsContext * /*ctx*/) override { }
   virtual void exitSingleValueKeywords(TdbParser::SingleValueKeywordsContext * /*ctx*/) override { }
 
+  virtual void enterFloatOrIntConstant(TdbParser::FloatOrIntConstantContext * /*ctx*/) override { }
+  virtual void exitFloatOrIntConstant(TdbParser::FloatOrIntConstantContext * /*ctx*/) override { }
+
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }
   virtual void exitEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

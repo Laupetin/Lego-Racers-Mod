@@ -22,7 +22,8 @@ public:
   enum {
     RuleRoot = 0, RuleTextures = 1, RuleTexture = 2, RuleTextureName = 3, 
     RuleTextureProperty = 4, RuleColorTextureProperty = 5, RuleColorTexturePropertyKeyword = 6, 
-    RuleIntTextureProperty = 7, RuleIntTexturePropertyKeyword = 8, RuleSingleValueKeywords = 9
+    RuleIntTextureProperty = 7, RuleIntTexturePropertyKeyword = 8, RuleSingleValueKeywords = 9, 
+    RuleFloatOrIntConstant = 10
   };
 
   explicit TdbParser(antlr4::TokenStream *input);
@@ -51,7 +52,8 @@ public:
   class ColorTexturePropertyKeywordContext;
   class IntTexturePropertyContext;
   class IntTexturePropertyKeywordContext;
-  class SingleValueKeywordsContext; 
+  class SingleValueKeywordsContext;
+  class FloatOrIntConstantContext; 
 
   class  RootContext : public antlr4::ParserRuleContext {
   public:
@@ -196,6 +198,20 @@ public:
   };
 
   SingleValueKeywordsContext* singleValueKeywords();
+
+  class  FloatOrIntConstantContext : public antlr4::ParserRuleContext {
+  public:
+    FloatOrIntConstantContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *FloatingConstant();
+    antlr4::tree::TerminalNode *IntegerConstant();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  FloatOrIntConstantContext* floatOrIntConstant();
 
 
   // By default the static state used to implement the parser is lazily initialized during the first

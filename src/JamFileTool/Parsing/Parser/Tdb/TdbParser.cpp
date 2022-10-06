@@ -46,7 +46,7 @@ void tdbParserInitialize() {
     std::vector<std::string>{
       "root", "textures", "texture", "textureName", "textureProperty", "colorTextureProperty", 
       "colorTexturePropertyKeyword", "intTextureProperty", "intTexturePropertyKeyword", 
-      "singleValueKeywords"
+      "singleValueKeywords", "floatOrIntConstant"
     },
     std::vector<std::string>{
       "", "'{'", "'}'", "'textures'", "'texture'", "'flipVertically'", "'keyword29'", 
@@ -60,23 +60,24 @@ void tdbParserInitialize() {
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,19,65,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
-  	7,7,2,8,7,8,2,9,7,9,1,0,1,0,1,1,1,1,1,1,5,1,26,8,1,10,1,12,1,29,9,1,1,
-  	1,1,1,1,2,1,2,1,2,1,2,5,2,37,8,2,10,2,12,2,40,9,2,1,2,1,2,1,3,1,3,1,4,
-  	1,4,1,4,3,4,49,8,4,1,5,1,5,1,5,1,5,1,5,1,6,1,6,1,7,1,7,1,7,1,8,1,8,1,
-  	9,1,9,1,9,0,0,10,0,2,4,6,8,10,12,14,16,18,0,1,3,0,5,5,7,8,10,11,58,0,
-  	20,1,0,0,0,2,22,1,0,0,0,4,32,1,0,0,0,6,43,1,0,0,0,8,48,1,0,0,0,10,50,
-  	1,0,0,0,12,55,1,0,0,0,14,57,1,0,0,0,16,60,1,0,0,0,18,62,1,0,0,0,20,21,
-  	3,2,1,0,21,1,1,0,0,0,22,23,5,3,0,0,23,27,5,1,0,0,24,26,3,4,2,0,25,24,
-  	1,0,0,0,26,29,1,0,0,0,27,25,1,0,0,0,27,28,1,0,0,0,28,30,1,0,0,0,29,27,
-  	1,0,0,0,30,31,5,2,0,0,31,3,1,0,0,0,32,33,5,4,0,0,33,34,3,6,3,0,34,38,
-  	5,1,0,0,35,37,3,8,4,0,36,35,1,0,0,0,37,40,1,0,0,0,38,36,1,0,0,0,38,39,
-  	1,0,0,0,39,41,1,0,0,0,40,38,1,0,0,0,41,42,5,2,0,0,42,5,1,0,0,0,43,44,
-  	5,15,0,0,44,7,1,0,0,0,45,49,3,10,5,0,46,49,3,14,7,0,47,49,3,18,9,0,48,
-  	45,1,0,0,0,48,46,1,0,0,0,48,47,1,0,0,0,49,9,1,0,0,0,50,51,3,12,6,0,51,
-  	52,5,12,0,0,52,53,5,12,0,0,53,54,5,12,0,0,54,11,1,0,0,0,55,56,5,9,0,0,
-  	56,13,1,0,0,0,57,58,3,16,8,0,58,59,5,12,0,0,59,15,1,0,0,0,60,61,5,6,0,
-  	0,61,17,1,0,0,0,62,63,7,0,0,0,63,19,1,0,0,0,3,27,38,48
+  	4,1,19,69,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+  	7,7,2,8,7,8,2,9,7,9,2,10,7,10,1,0,1,0,1,1,1,1,1,1,5,1,28,8,1,10,1,12,
+  	1,31,9,1,1,1,1,1,1,2,1,2,1,2,1,2,5,2,39,8,2,10,2,12,2,42,9,2,1,2,1,2,
+  	1,3,1,3,1,4,1,4,1,4,3,4,51,8,4,1,5,1,5,1,5,1,5,1,5,1,6,1,6,1,7,1,7,1,
+  	7,1,8,1,8,1,9,1,9,1,10,1,10,1,10,0,0,11,0,2,4,6,8,10,12,14,16,18,20,0,
+  	2,3,0,5,5,7,8,10,11,1,0,12,13,61,0,22,1,0,0,0,2,24,1,0,0,0,4,34,1,0,0,
+  	0,6,45,1,0,0,0,8,50,1,0,0,0,10,52,1,0,0,0,12,57,1,0,0,0,14,59,1,0,0,0,
+  	16,62,1,0,0,0,18,64,1,0,0,0,20,66,1,0,0,0,22,23,3,2,1,0,23,1,1,0,0,0,
+  	24,25,5,3,0,0,25,29,5,1,0,0,26,28,3,4,2,0,27,26,1,0,0,0,28,31,1,0,0,0,
+  	29,27,1,0,0,0,29,30,1,0,0,0,30,32,1,0,0,0,31,29,1,0,0,0,32,33,5,2,0,0,
+  	33,3,1,0,0,0,34,35,5,4,0,0,35,36,3,6,3,0,36,40,5,1,0,0,37,39,3,8,4,0,
+  	38,37,1,0,0,0,39,42,1,0,0,0,40,38,1,0,0,0,40,41,1,0,0,0,41,43,1,0,0,0,
+  	42,40,1,0,0,0,43,44,5,2,0,0,44,5,1,0,0,0,45,46,5,15,0,0,46,7,1,0,0,0,
+  	47,51,3,10,5,0,48,51,3,14,7,0,49,51,3,18,9,0,50,47,1,0,0,0,50,48,1,0,
+  	0,0,50,49,1,0,0,0,51,9,1,0,0,0,52,53,3,12,6,0,53,54,5,12,0,0,54,55,5,
+  	12,0,0,55,56,5,12,0,0,56,11,1,0,0,0,57,58,5,9,0,0,58,13,1,0,0,0,59,60,
+  	3,16,8,0,60,61,5,12,0,0,61,15,1,0,0,0,62,63,5,6,0,0,63,17,1,0,0,0,64,
+  	65,7,0,0,0,65,19,1,0,0,0,66,67,7,1,0,0,67,21,1,0,0,0,3,29,40,50
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -165,7 +166,7 @@ TdbParser::RootContext* TdbParser::root() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(20);
+    setState(22);
     textures();
    
   }
@@ -227,21 +228,21 @@ TdbParser::TexturesContext* TdbParser::textures() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(22);
+    setState(24);
     match(TdbParser::Textures);
-    setState(23);
+    setState(25);
     match(TdbParser::T__0);
-    setState(27);
+    setState(29);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == TdbParser::Texture) {
-      setState(24);
+      setState(26);
       texture();
-      setState(29);
+      setState(31);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(30);
+    setState(32);
     match(TdbParser::T__1);
    
   }
@@ -307,13 +308,13 @@ TdbParser::TextureContext* TdbParser::texture() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(32);
-    match(TdbParser::Texture);
-    setState(33);
-    textureName();
     setState(34);
+    match(TdbParser::Texture);
+    setState(35);
+    textureName();
+    setState(36);
     match(TdbParser::T__0);
-    setState(38);
+    setState(40);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
@@ -324,13 +325,13 @@ TdbParser::TextureContext* TdbParser::texture() {
       | (1ULL << TdbParser::ChromaKey)
       | (1ULL << TdbParser::Keyword2D)
       | (1ULL << TdbParser::Keyword2E))) != 0)) {
-      setState(35);
+      setState(37);
       textureProperty();
-      setState(40);
+      setState(42);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(41);
+    setState(43);
     match(TdbParser::T__1);
    
   }
@@ -383,7 +384,7 @@ TdbParser::TextureNameContext* TdbParser::textureName() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(43);
+    setState(45);
     match(TdbParser::StringLiteral);
    
   }
@@ -443,19 +444,19 @@ TdbParser::TexturePropertyContext* TdbParser::textureProperty() {
     exitRule();
   });
   try {
-    setState(48);
+    setState(50);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case TdbParser::ChromaKey: {
         enterOuterAlt(_localctx, 1);
-        setState(45);
+        setState(47);
         colorTextureProperty();
         break;
       }
 
       case TdbParser::Keyword29: {
         enterOuterAlt(_localctx, 2);
-        setState(46);
+        setState(48);
         intTextureProperty();
         break;
       }
@@ -466,7 +467,7 @@ TdbParser::TexturePropertyContext* TdbParser::textureProperty() {
       case TdbParser::Keyword2D:
       case TdbParser::Keyword2E: {
         enterOuterAlt(_localctx, 3);
-        setState(47);
+        setState(49);
         singleValueKeywords();
         break;
       }
@@ -533,13 +534,13 @@ TdbParser::ColorTexturePropertyContext* TdbParser::colorTextureProperty() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(50);
-    colorTexturePropertyKeyword();
-    setState(51);
-    match(TdbParser::IntegerConstant);
     setState(52);
-    match(TdbParser::IntegerConstant);
+    colorTexturePropertyKeyword();
     setState(53);
+    match(TdbParser::IntegerConstant);
+    setState(54);
+    match(TdbParser::IntegerConstant);
+    setState(55);
     match(TdbParser::IntegerConstant);
    
   }
@@ -592,7 +593,7 @@ TdbParser::ColorTexturePropertyKeywordContext* TdbParser::colorTexturePropertyKe
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(55);
+    setState(57);
     match(TdbParser::ChromaKey);
    
   }
@@ -649,9 +650,9 @@ TdbParser::IntTexturePropertyContext* TdbParser::intTextureProperty() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(57);
+    setState(59);
     intTexturePropertyKeyword();
-    setState(58);
+    setState(60);
     match(TdbParser::IntegerConstant);
    
   }
@@ -704,7 +705,7 @@ TdbParser::IntTexturePropertyKeywordContext* TdbParser::intTexturePropertyKeywor
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(60);
+    setState(62);
     match(TdbParser::Keyword29);
    
   }
@@ -774,7 +775,7 @@ TdbParser::SingleValueKeywordsContext* TdbParser::singleValueKeywords() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(62);
+    setState(64);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & ((1ULL << TdbParser::FlipVertically)
@@ -782,6 +783,73 @@ TdbParser::SingleValueKeywordsContext* TdbParser::singleValueKeywords() {
       | (1ULL << TdbParser::Tga)
       | (1ULL << TdbParser::Keyword2D)
       | (1ULL << TdbParser::Keyword2E))) != 0))) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- FloatOrIntConstantContext ------------------------------------------------------------------
+
+TdbParser::FloatOrIntConstantContext::FloatOrIntConstantContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* TdbParser::FloatOrIntConstantContext::FloatingConstant() {
+  return getToken(TdbParser::FloatingConstant, 0);
+}
+
+tree::TerminalNode* TdbParser::FloatOrIntConstantContext::IntegerConstant() {
+  return getToken(TdbParser::IntegerConstant, 0);
+}
+
+
+size_t TdbParser::FloatOrIntConstantContext::getRuleIndex() const {
+  return TdbParser::RuleFloatOrIntConstant;
+}
+
+void TdbParser::FloatOrIntConstantContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<TdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterFloatOrIntConstant(this);
+}
+
+void TdbParser::FloatOrIntConstantContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<TdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitFloatOrIntConstant(this);
+}
+
+TdbParser::FloatOrIntConstantContext* TdbParser::floatOrIntConstant() {
+  FloatOrIntConstantContext *_localctx = _tracker.createInstance<FloatOrIntConstantContext>(_ctx, getState());
+  enterRule(_localctx, 20, TdbParser::RuleFloatOrIntConstant);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(66);
+    _la = _input->LA(1);
+    if (!(_la == TdbParser::IntegerConstant
+
+    || _la == TdbParser::FloatingConstant)) {
     _errHandler->recoverInline(this);
     }
     else {

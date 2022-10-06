@@ -22,8 +22,13 @@ HexadecimalPrefix
     ;
 
 FloatingConstant
-    :   DigitSequence? '.' DigitSequence
-    |   DigitSequence '.'
+    :   (IntegerSign? DigitSequence)? '.' DigitSequence
+    |   IntegerSign? DigitSequence '.'
+    ;
+
+floatOrIntConstant
+    :   FloatingConstant
+    |   IntegerConstant
     ;
 
 DigitSequence

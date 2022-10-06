@@ -46,6 +46,9 @@ public:
   virtual void enterSingleValueKeywords(TdbParser::SingleValueKeywordsContext *ctx) = 0;
   virtual void exitSingleValueKeywords(TdbParser::SingleValueKeywordsContext *ctx) = 0;
 
+  virtual void enterFloatOrIntConstant(TdbParser::FloatOrIntConstantContext *ctx) = 0;
+  virtual void exitFloatOrIntConstant(TdbParser::FloatOrIntConstantContext *ctx) = 0;
+
 
 };
 

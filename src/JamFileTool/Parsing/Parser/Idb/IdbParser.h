@@ -21,7 +21,8 @@ public:
 
   enum {
     RuleRoot = 0, RuleImages = 1, RuleImage = 2, RuleImageName = 3, RuleImageProperty = 4, 
-    RuleColorImageProperty = 5, RuleColorImagePropertyKeyword = 6, RuleSingleValueKeywords = 7
+    RuleColorImageProperty = 5, RuleColorImagePropertyKeyword = 6, RuleSingleValueKeywords = 7, 
+    RuleFloatOrIntConstant = 8
   };
 
   explicit IdbParser(antlr4::TokenStream *input);
@@ -48,7 +49,8 @@ public:
   class ImagePropertyContext;
   class ColorImagePropertyContext;
   class ColorImagePropertyKeywordContext;
-  class SingleValueKeywordsContext; 
+  class SingleValueKeywordsContext;
+  class FloatOrIntConstantContext; 
 
   class  RootContext : public antlr4::ParserRuleContext {
   public:
@@ -164,6 +166,20 @@ public:
   };
 
   SingleValueKeywordsContext* singleValueKeywords();
+
+  class  FloatOrIntConstantContext : public antlr4::ParserRuleContext {
+  public:
+    FloatOrIntConstantContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *FloatingConstant();
+    antlr4::tree::TerminalNode *IntegerConstant();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  FloatOrIntConstantContext* floatOrIntConstant();
 
 
   // By default the static state used to implement the parser is lazily initialized during the first

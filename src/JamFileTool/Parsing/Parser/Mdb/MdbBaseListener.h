@@ -72,6 +72,9 @@ public:
   virtual void enterKeyword38Subtoken(MdbParser::Keyword38SubtokenContext * /*ctx*/) override { }
   virtual void exitKeyword38Subtoken(MdbParser::Keyword38SubtokenContext * /*ctx*/) override { }
 
+  virtual void enterFloatOrIntConstant(MdbParser::FloatOrIntConstantContext * /*ctx*/) override { }
+  virtual void exitFloatOrIntConstant(MdbParser::FloatOrIntConstantContext * /*ctx*/) override { }
+
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }
   virtual void exitEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

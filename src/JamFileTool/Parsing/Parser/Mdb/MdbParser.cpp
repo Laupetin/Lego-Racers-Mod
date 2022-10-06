@@ -48,7 +48,8 @@ void mdbParserInitialize() {
       "colorMaterialProperty", "colorMaterialPropertyKeyword", "textMaterialProperty", 
       "textMaterialPropertyKeyword", "uint8MaterialProperty", "uint8MaterialPropertyKeyword", 
       "intMaterialProperty", "intMaterialPropertyKeyword", "singleValueKeywords", 
-      "keyword2F", "keyword2FSubtoken", "keyword38", "keyword38Subtoken"
+      "keyword2F", "keyword2FSubtoken", "keyword38", "keyword38Subtoken", 
+      "floatOrIntConstant"
     },
     std::vector<std::string>{
       "", "'{'", "'}'", "'materials'", "'material'", "'color1'", "'color0'", 
@@ -74,41 +75,43 @@ void mdbParserInitialize() {
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,53,121,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	4,1,53,125,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
   	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
-  	14,2,15,7,15,2,16,7,16,2,17,7,17,1,0,1,0,1,1,1,1,1,1,5,1,42,8,1,10,1,
-  	12,1,45,9,1,1,1,1,1,1,2,1,2,1,2,1,2,5,2,53,8,2,10,2,12,2,56,9,2,1,2,1,
-  	2,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,3,4,69,8,4,1,5,1,5,1,5,1,5,1,5,
-  	1,5,1,6,1,6,1,7,1,7,1,7,1,8,1,8,1,9,1,9,1,9,1,10,1,10,1,11,1,11,1,11,
-  	1,12,1,12,1,13,1,13,1,14,1,14,1,14,1,15,1,15,1,15,1,15,1,15,1,15,1,15,
-  	1,15,1,15,1,15,1,15,1,15,1,15,1,15,3,15,113,8,15,1,16,1,16,1,16,1,16,
-  	1,17,1,17,1,17,0,0,18,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,
-  	0,4,1,0,5,6,1,0,42,45,4,0,7,8,10,11,33,34,36,41,1,0,22,32,117,0,36,1,
-  	0,0,0,2,38,1,0,0,0,4,48,1,0,0,0,6,59,1,0,0,0,8,68,1,0,0,0,10,70,1,0,0,
-  	0,12,76,1,0,0,0,14,78,1,0,0,0,16,81,1,0,0,0,18,83,1,0,0,0,20,86,1,0,0,
-  	0,22,88,1,0,0,0,24,91,1,0,0,0,26,93,1,0,0,0,28,95,1,0,0,0,30,112,1,0,
-  	0,0,32,114,1,0,0,0,34,118,1,0,0,0,36,37,3,2,1,0,37,1,1,0,0,0,38,39,5,
-  	3,0,0,39,43,5,1,0,0,40,42,3,4,2,0,41,40,1,0,0,0,42,45,1,0,0,0,43,41,1,
-  	0,0,0,43,44,1,0,0,0,44,46,1,0,0,0,45,43,1,0,0,0,46,47,5,2,0,0,47,3,1,
-  	0,0,0,48,49,5,4,0,0,49,50,3,6,3,0,50,54,5,1,0,0,51,53,3,8,4,0,52,51,1,
-  	0,0,0,53,56,1,0,0,0,54,52,1,0,0,0,54,55,1,0,0,0,55,57,1,0,0,0,56,54,1,
-  	0,0,0,57,58,5,2,0,0,58,5,1,0,0,0,59,60,5,49,0,0,60,7,1,0,0,0,61,69,3,
-  	10,5,0,62,69,3,14,7,0,63,69,3,18,9,0,64,69,3,22,11,0,65,69,3,26,13,0,
-  	66,69,3,28,14,0,67,69,3,32,16,0,68,61,1,0,0,0,68,62,1,0,0,0,68,63,1,0,
-  	0,0,68,64,1,0,0,0,68,65,1,0,0,0,68,66,1,0,0,0,68,67,1,0,0,0,69,9,1,0,
-  	0,0,70,71,3,12,6,0,71,72,5,46,0,0,72,73,5,46,0,0,73,74,5,46,0,0,74,75,
-  	5,46,0,0,75,11,1,0,0,0,76,77,7,0,0,0,77,13,1,0,0,0,78,79,3,16,8,0,79,
-  	80,5,49,0,0,80,15,1,0,0,0,81,82,5,9,0,0,82,17,1,0,0,0,83,84,3,20,10,0,
-  	84,85,5,46,0,0,85,19,1,0,0,0,86,87,5,35,0,0,87,21,1,0,0,0,88,89,3,24,
-  	12,0,89,90,5,46,0,0,90,23,1,0,0,0,91,92,7,1,0,0,92,25,1,0,0,0,93,94,7,
-  	2,0,0,94,27,1,0,0,0,95,96,5,12,0,0,96,97,3,30,15,0,97,29,1,0,0,0,98,113,
-  	5,13,0,0,99,100,5,14,0,0,100,113,5,46,0,0,101,102,5,15,0,0,102,113,5,
-  	46,0,0,103,104,5,16,0,0,104,113,5,46,0,0,105,106,5,17,0,0,106,113,5,46,
-  	0,0,107,108,5,18,0,0,108,113,5,46,0,0,109,113,5,19,0,0,110,111,5,20,0,
-  	0,111,113,5,46,0,0,112,98,1,0,0,0,112,99,1,0,0,0,112,101,1,0,0,0,112,
-  	103,1,0,0,0,112,105,1,0,0,0,112,107,1,0,0,0,112,109,1,0,0,0,112,110,1,
-  	0,0,0,113,31,1,0,0,0,114,115,5,21,0,0,115,116,3,34,17,0,116,117,3,34,
-  	17,0,117,33,1,0,0,0,118,119,7,3,0,0,119,35,1,0,0,0,4,43,54,68,112
+  	14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,1,0,1,0,1,1,1,1,1,1,5,1,44,
+  	8,1,10,1,12,1,47,9,1,1,1,1,1,1,2,1,2,1,2,1,2,5,2,55,8,2,10,2,12,2,58,
+  	9,2,1,2,1,2,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,3,4,71,8,4,1,5,1,5,1,
+  	5,1,5,1,5,1,5,1,6,1,6,1,7,1,7,1,7,1,8,1,8,1,9,1,9,1,9,1,10,1,10,1,11,
+  	1,11,1,11,1,12,1,12,1,13,1,13,1,14,1,14,1,14,1,15,1,15,1,15,1,15,1,15,
+  	1,15,1,15,1,15,1,15,1,15,1,15,1,15,1,15,1,15,3,15,115,8,15,1,16,1,16,
+  	1,16,1,16,1,17,1,17,1,18,1,18,1,18,0,0,19,0,2,4,6,8,10,12,14,16,18,20,
+  	22,24,26,28,30,32,34,36,0,5,1,0,5,6,1,0,42,45,4,0,7,8,10,11,33,34,36,
+  	41,1,0,22,32,1,0,46,47,120,0,38,1,0,0,0,2,40,1,0,0,0,4,50,1,0,0,0,6,61,
+  	1,0,0,0,8,70,1,0,0,0,10,72,1,0,0,0,12,78,1,0,0,0,14,80,1,0,0,0,16,83,
+  	1,0,0,0,18,85,1,0,0,0,20,88,1,0,0,0,22,90,1,0,0,0,24,93,1,0,0,0,26,95,
+  	1,0,0,0,28,97,1,0,0,0,30,114,1,0,0,0,32,116,1,0,0,0,34,120,1,0,0,0,36,
+  	122,1,0,0,0,38,39,3,2,1,0,39,1,1,0,0,0,40,41,5,3,0,0,41,45,5,1,0,0,42,
+  	44,3,4,2,0,43,42,1,0,0,0,44,47,1,0,0,0,45,43,1,0,0,0,45,46,1,0,0,0,46,
+  	48,1,0,0,0,47,45,1,0,0,0,48,49,5,2,0,0,49,3,1,0,0,0,50,51,5,4,0,0,51,
+  	52,3,6,3,0,52,56,5,1,0,0,53,55,3,8,4,0,54,53,1,0,0,0,55,58,1,0,0,0,56,
+  	54,1,0,0,0,56,57,1,0,0,0,57,59,1,0,0,0,58,56,1,0,0,0,59,60,5,2,0,0,60,
+  	5,1,0,0,0,61,62,5,49,0,0,62,7,1,0,0,0,63,71,3,10,5,0,64,71,3,14,7,0,65,
+  	71,3,18,9,0,66,71,3,22,11,0,67,71,3,26,13,0,68,71,3,28,14,0,69,71,3,32,
+  	16,0,70,63,1,0,0,0,70,64,1,0,0,0,70,65,1,0,0,0,70,66,1,0,0,0,70,67,1,
+  	0,0,0,70,68,1,0,0,0,70,69,1,0,0,0,71,9,1,0,0,0,72,73,3,12,6,0,73,74,5,
+  	46,0,0,74,75,5,46,0,0,75,76,5,46,0,0,76,77,5,46,0,0,77,11,1,0,0,0,78,
+  	79,7,0,0,0,79,13,1,0,0,0,80,81,3,16,8,0,81,82,5,49,0,0,82,15,1,0,0,0,
+  	83,84,5,9,0,0,84,17,1,0,0,0,85,86,3,20,10,0,86,87,5,46,0,0,87,19,1,0,
+  	0,0,88,89,5,35,0,0,89,21,1,0,0,0,90,91,3,24,12,0,91,92,5,46,0,0,92,23,
+  	1,0,0,0,93,94,7,1,0,0,94,25,1,0,0,0,95,96,7,2,0,0,96,27,1,0,0,0,97,98,
+  	5,12,0,0,98,99,3,30,15,0,99,29,1,0,0,0,100,115,5,13,0,0,101,102,5,14,
+  	0,0,102,115,5,46,0,0,103,104,5,15,0,0,104,115,5,46,0,0,105,106,5,16,0,
+  	0,106,115,5,46,0,0,107,108,5,17,0,0,108,115,5,46,0,0,109,110,5,18,0,0,
+  	110,115,5,46,0,0,111,115,5,19,0,0,112,113,5,20,0,0,113,115,5,46,0,0,114,
+  	100,1,0,0,0,114,101,1,0,0,0,114,103,1,0,0,0,114,105,1,0,0,0,114,107,1,
+  	0,0,0,114,109,1,0,0,0,114,111,1,0,0,0,114,112,1,0,0,0,115,31,1,0,0,0,
+  	116,117,5,21,0,0,117,118,3,34,17,0,118,119,3,34,17,0,119,33,1,0,0,0,120,
+  	121,7,3,0,0,121,35,1,0,0,0,122,123,7,4,0,0,123,37,1,0,0,0,4,45,56,70,
+  	114
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -197,7 +200,7 @@ MdbParser::RootContext* MdbParser::root() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(36);
+    setState(38);
     materials();
    
   }
@@ -259,21 +262,21 @@ MdbParser::MaterialsContext* MdbParser::materials() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(38);
+    setState(40);
     match(MdbParser::Materials);
-    setState(39);
+    setState(41);
     match(MdbParser::T__0);
-    setState(43);
+    setState(45);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == MdbParser::Material) {
-      setState(40);
+      setState(42);
       material();
-      setState(45);
+      setState(47);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(46);
+    setState(48);
     match(MdbParser::T__1);
    
   }
@@ -339,13 +342,13 @@ MdbParser::MaterialContext* MdbParser::material() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(48);
-    match(MdbParser::Material);
-    setState(49);
-    materialName();
     setState(50);
+    match(MdbParser::Material);
+    setState(51);
+    materialName();
+    setState(52);
     match(MdbParser::T__0);
-    setState(54);
+    setState(56);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
@@ -371,13 +374,13 @@ MdbParser::MaterialContext* MdbParser::material() {
       | (1ULL << MdbParser::Keyword4E)
       | (1ULL << MdbParser::Keyword4F)
       | (1ULL << MdbParser::Keyword50))) != 0)) {
-      setState(51);
+      setState(53);
       materialProperty();
-      setState(56);
+      setState(58);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(57);
+    setState(59);
     match(MdbParser::T__1);
    
   }
@@ -430,7 +433,7 @@ MdbParser::MaterialNameContext* MdbParser::materialName() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(59);
+    setState(61);
     match(MdbParser::StringLiteral);
    
   }
@@ -506,27 +509,27 @@ MdbParser::MaterialPropertyContext* MdbParser::materialProperty() {
     exitRule();
   });
   try {
-    setState(68);
+    setState(70);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case MdbParser::Color1:
       case MdbParser::Color0: {
         enterOuterAlt(_localctx, 1);
-        setState(61);
+        setState(63);
         colorMaterialProperty();
         break;
       }
 
       case MdbParser::Texture: {
         enterOuterAlt(_localctx, 2);
-        setState(62);
+        setState(64);
         textMaterialProperty();
         break;
       }
 
       case MdbParser::Opacity: {
         enterOuterAlt(_localctx, 3);
-        setState(63);
+        setState(65);
         uint8MaterialProperty();
         break;
       }
@@ -536,7 +539,7 @@ MdbParser::MaterialPropertyContext* MdbParser::materialProperty() {
       case MdbParser::Keyword4F:
       case MdbParser::Keyword50: {
         enterOuterAlt(_localctx, 4);
-        setState(64);
+        setState(66);
         intMaterialProperty();
         break;
       }
@@ -554,21 +557,21 @@ MdbParser::MaterialPropertyContext* MdbParser::materialProperty() {
       case MdbParser::Keyword4B:
       case MdbParser::Keyword4C: {
         enterOuterAlt(_localctx, 5);
-        setState(65);
+        setState(67);
         singleValueKeywords();
         break;
       }
 
       case MdbParser::Keyword2F: {
         enterOuterAlt(_localctx, 6);
-        setState(66);
+        setState(68);
         keyword2F();
         break;
       }
 
       case MdbParser::Keyword38: {
         enterOuterAlt(_localctx, 7);
-        setState(67);
+        setState(69);
         keyword38();
         break;
       }
@@ -635,15 +638,15 @@ MdbParser::ColorMaterialPropertyContext* MdbParser::colorMaterialProperty() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(70);
-    colorMaterialPropertyKeyword();
-    setState(71);
-    match(MdbParser::IntegerConstant);
     setState(72);
-    match(MdbParser::IntegerConstant);
+    colorMaterialPropertyKeyword();
     setState(73);
     match(MdbParser::IntegerConstant);
     setState(74);
+    match(MdbParser::IntegerConstant);
+    setState(75);
+    match(MdbParser::IntegerConstant);
+    setState(76);
     match(MdbParser::IntegerConstant);
    
   }
@@ -701,7 +704,7 @@ MdbParser::ColorMaterialPropertyKeywordContext* MdbParser::colorMaterialProperty
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(76);
+    setState(78);
     _la = _input->LA(1);
     if (!(_la == MdbParser::Color1
 
@@ -767,9 +770,9 @@ MdbParser::TextMaterialPropertyContext* MdbParser::textMaterialProperty() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(78);
+    setState(80);
     textMaterialPropertyKeyword();
-    setState(79);
+    setState(81);
     match(MdbParser::StringLiteral);
    
   }
@@ -822,7 +825,7 @@ MdbParser::TextMaterialPropertyKeywordContext* MdbParser::textMaterialPropertyKe
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(81);
+    setState(83);
     match(MdbParser::Texture);
    
   }
@@ -879,9 +882,9 @@ MdbParser::Uint8MaterialPropertyContext* MdbParser::uint8MaterialProperty() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(83);
+    setState(85);
     uint8MaterialPropertyKeyword();
-    setState(84);
+    setState(86);
     match(MdbParser::IntegerConstant);
    
   }
@@ -934,7 +937,7 @@ MdbParser::Uint8MaterialPropertyKeywordContext* MdbParser::uint8MaterialProperty
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(86);
+    setState(88);
     match(MdbParser::Opacity);
    
   }
@@ -991,9 +994,9 @@ MdbParser::IntMaterialPropertyContext* MdbParser::intMaterialProperty() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(88);
+    setState(90);
     intMaterialPropertyKeyword();
-    setState(89);
+    setState(91);
     match(MdbParser::IntegerConstant);
    
   }
@@ -1059,7 +1062,7 @@ MdbParser::IntMaterialPropertyKeywordContext* MdbParser::intMaterialPropertyKeyw
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(91);
+    setState(93);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & ((1ULL << MdbParser::Keyword4D)
@@ -1168,7 +1171,7 @@ MdbParser::SingleValueKeywordsContext* MdbParser::singleValueKeywords() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(93);
+    setState(95);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & ((1ULL << MdbParser::Keyword2A)
@@ -1244,9 +1247,9 @@ MdbParser::Keyword2FContext* MdbParser::keyword2F() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(95);
+    setState(97);
     match(MdbParser::Keyword2F);
-    setState(96);
+    setState(98);
     keyword2FSubtoken();
    
   }
@@ -1330,73 +1333,73 @@ MdbParser::Keyword2FSubtokenContext* MdbParser::keyword2FSubtoken() {
     exitRule();
   });
   try {
-    setState(112);
+    setState(114);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case MdbParser::Keyword30: {
         enterOuterAlt(_localctx, 1);
-        setState(98);
+        setState(100);
         match(MdbParser::Keyword30);
         break;
       }
 
       case MdbParser::Keyword31: {
         enterOuterAlt(_localctx, 2);
-        setState(99);
+        setState(101);
         match(MdbParser::Keyword31);
-        setState(100);
+        setState(102);
         match(MdbParser::IntegerConstant);
         break;
       }
 
       case MdbParser::Keyword32: {
         enterOuterAlt(_localctx, 3);
-        setState(101);
+        setState(103);
         match(MdbParser::Keyword32);
-        setState(102);
+        setState(104);
         match(MdbParser::IntegerConstant);
         break;
       }
 
       case MdbParser::Keyword33: {
         enterOuterAlt(_localctx, 4);
-        setState(103);
+        setState(105);
         match(MdbParser::Keyword33);
-        setState(104);
+        setState(106);
         match(MdbParser::IntegerConstant);
         break;
       }
 
       case MdbParser::Keyword34: {
         enterOuterAlt(_localctx, 5);
-        setState(105);
+        setState(107);
         match(MdbParser::Keyword34);
-        setState(106);
+        setState(108);
         match(MdbParser::IntegerConstant);
         break;
       }
 
       case MdbParser::Keyword35: {
         enterOuterAlt(_localctx, 6);
-        setState(107);
+        setState(109);
         match(MdbParser::Keyword35);
-        setState(108);
+        setState(110);
         match(MdbParser::IntegerConstant);
         break;
       }
 
       case MdbParser::Keyword36: {
         enterOuterAlt(_localctx, 7);
-        setState(109);
+        setState(111);
         match(MdbParser::Keyword36);
         break;
       }
 
       case MdbParser::Keyword37: {
         enterOuterAlt(_localctx, 8);
-        setState(110);
+        setState(112);
         match(MdbParser::Keyword37);
-        setState(111);
+        setState(113);
         match(MdbParser::IntegerConstant);
         break;
       }
@@ -1463,11 +1466,11 @@ MdbParser::Keyword38Context* MdbParser::keyword38() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(114);
-    match(MdbParser::Keyword38);
-    setState(115);
-    keyword38Subtoken();
     setState(116);
+    match(MdbParser::Keyword38);
+    setState(117);
+    keyword38Subtoken();
+    setState(118);
     keyword38Subtoken();
    
   }
@@ -1561,7 +1564,7 @@ MdbParser::Keyword38SubtokenContext* MdbParser::keyword38Subtoken() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(118);
+    setState(120);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & ((1ULL << MdbParser::Keyword39)
@@ -1575,6 +1578,73 @@ MdbParser::Keyword38SubtokenContext* MdbParser::keyword38Subtoken() {
       | (1ULL << MdbParser::Keyword41)
       | (1ULL << MdbParser::Keyword42)
       | (1ULL << MdbParser::Keyword43))) != 0))) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- FloatOrIntConstantContext ------------------------------------------------------------------
+
+MdbParser::FloatOrIntConstantContext::FloatOrIntConstantContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* MdbParser::FloatOrIntConstantContext::FloatingConstant() {
+  return getToken(MdbParser::FloatingConstant, 0);
+}
+
+tree::TerminalNode* MdbParser::FloatOrIntConstantContext::IntegerConstant() {
+  return getToken(MdbParser::IntegerConstant, 0);
+}
+
+
+size_t MdbParser::FloatOrIntConstantContext::getRuleIndex() const {
+  return MdbParser::RuleFloatOrIntConstant;
+}
+
+void MdbParser::FloatOrIntConstantContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<MdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterFloatOrIntConstant(this);
+}
+
+void MdbParser::FloatOrIntConstantContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<MdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitFloatOrIntConstant(this);
+}
+
+MdbParser::FloatOrIntConstantContext* MdbParser::floatOrIntConstant() {
+  FloatOrIntConstantContext *_localctx = _tracker.createInstance<FloatOrIntConstantContext>(_ctx, getState());
+  enterRule(_localctx, 36, MdbParser::RuleFloatOrIntConstant);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(122);
+    _la = _input->LA(1);
+    if (!(_la == MdbParser::IntegerConstant
+
+    || _la == MdbParser::FloatingConstant)) {
     _errHandler->recoverInline(this);
     }
     else {

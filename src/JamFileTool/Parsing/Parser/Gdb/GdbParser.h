@@ -24,11 +24,12 @@ public:
   enum {
     RuleRoot = 0, RuleSections = 1, RuleMaterialSection = 2, RuleMaterialNameList = 3, 
     RuleMaterialName = 4, RuleScaleSection = 5, RuleVertexSection = 6, RuleVertexList = 7, 
-    RuleVertexPositionUv = 8, RuleVertexPositionUvColor = 9, RuleVertexPositionUvNormal = 10, 
-    RuleVertexPosition = 11, RuleVertexUv = 12, RuleVertexColor = 13, RuleVertexNormal = 14, 
-    RuleFaceSection = 15, RuleFaceList = 16, RuleFace = 17, RuleMetaSection = 18, 
-    RuleMetaList = 19, RuleMeta = 20, RuleKeyword31 = 21, RuleKeyword2D = 22, 
-    RuleKeyword2F = 23, RuleKeyword30 = 24, RuleKeyword32 = 25, RuleKeyword27 = 26
+    RuleVertexDefPosition = 8, RuleVertexDefPositionUv = 9, RuleVertexDefPositionUvColor = 10, 
+    RuleVertexDefPositionUvNormal = 11, RuleVertexPosition = 12, RuleVertexUv = 13, 
+    RuleVertexColor = 14, RuleVertexNormal = 15, RuleFaceSection = 16, RuleFaceList = 17, 
+    RuleFace = 18, RuleMetaSection = 19, RuleMetaList = 20, RuleMeta = 21, 
+    RuleKeyword31 = 22, RuleKeyword2D = 23, RuleKeyword2F = 24, RuleKeyword30 = 25, 
+    RuleKeyword32 = 26, RuleKeyword27 = 27, RuleFloatOrIntConstant = 28
   };
 
   explicit GdbParser(antlr4::TokenStream *input);
@@ -56,9 +57,10 @@ public:
   class ScaleSectionContext;
   class VertexSectionContext;
   class VertexListContext;
-  class VertexPositionUvContext;
-  class VertexPositionUvColorContext;
-  class VertexPositionUvNormalContext;
+  class VertexDefPositionContext;
+  class VertexDefPositionUvContext;
+  class VertexDefPositionUvColorContext;
+  class VertexDefPositionUvNormalContext;
   class VertexPositionContext;
   class VertexUvContext;
   class VertexColorContext;
@@ -74,7 +76,8 @@ public:
   class Keyword2FContext;
   class Keyword30Context;
   class Keyword32Context;
-  class Keyword27Context; 
+  class Keyword27Context;
+  class FloatOrIntConstantContext; 
 
   class  RootContext : public antlr4::ParserRuleContext {
   public:
@@ -152,7 +155,7 @@ public:
     ScaleSectionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *Scale();
-    antlr4::tree::TerminalNode *FloatingConstant();
+    FloatOrIntConstantContext *floatOrIntConstant();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -179,14 +182,14 @@ public:
   public:
     VertexListContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<VertexPositionContext *> vertexPosition();
-    VertexPositionContext* vertexPosition(size_t i);
-    std::vector<VertexPositionUvContext *> vertexPositionUv();
-    VertexPositionUvContext* vertexPositionUv(size_t i);
-    std::vector<VertexPositionUvColorContext *> vertexPositionUvColor();
-    VertexPositionUvColorContext* vertexPositionUvColor(size_t i);
-    std::vector<VertexPositionUvNormalContext *> vertexPositionUvNormal();
-    VertexPositionUvNormalContext* vertexPositionUvNormal(size_t i);
+    std::vector<VertexDefPositionUvColorContext *> vertexDefPositionUvColor();
+    VertexDefPositionUvColorContext* vertexDefPositionUvColor(size_t i);
+    std::vector<VertexDefPositionUvNormalContext *> vertexDefPositionUvNormal();
+    VertexDefPositionUvNormalContext* vertexDefPositionUvNormal(size_t i);
+    std::vector<VertexDefPositionUvContext *> vertexDefPositionUv();
+    VertexDefPositionUvContext* vertexDefPositionUv(size_t i);
+    std::vector<VertexDefPositionContext *> vertexDefPosition();
+    VertexDefPositionContext* vertexDefPosition(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -195,9 +198,22 @@ public:
 
   VertexListContext* vertexList();
 
-  class  VertexPositionUvContext : public antlr4::ParserRuleContext {
+  class  VertexDefPositionContext : public antlr4::ParserRuleContext {
   public:
-    VertexPositionUvContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    VertexDefPositionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    VertexPositionContext *vertexPosition();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  VertexDefPositionContext* vertexDefPosition();
+
+  class  VertexDefPositionUvContext : public antlr4::ParserRuleContext {
+  public:
+    VertexDefPositionUvContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     VertexPositionContext *vertexPosition();
     VertexUvContext *vertexUv();
@@ -207,11 +223,11 @@ public:
    
   };
 
-  VertexPositionUvContext* vertexPositionUv();
+  VertexDefPositionUvContext* vertexDefPositionUv();
 
-  class  VertexPositionUvColorContext : public antlr4::ParserRuleContext {
+  class  VertexDefPositionUvColorContext : public antlr4::ParserRuleContext {
   public:
-    VertexPositionUvColorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    VertexDefPositionUvColorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     VertexPositionContext *vertexPosition();
     VertexUvContext *vertexUv();
@@ -222,11 +238,11 @@ public:
    
   };
 
-  VertexPositionUvColorContext* vertexPositionUvColor();
+  VertexDefPositionUvColorContext* vertexDefPositionUvColor();
 
-  class  VertexPositionUvNormalContext : public antlr4::ParserRuleContext {
+  class  VertexDefPositionUvNormalContext : public antlr4::ParserRuleContext {
   public:
-    VertexPositionUvNormalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    VertexDefPositionUvNormalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     VertexPositionContext *vertexPosition();
     VertexUvContext *vertexUv();
@@ -237,15 +253,15 @@ public:
    
   };
 
-  VertexPositionUvNormalContext* vertexPositionUvNormal();
+  VertexDefPositionUvNormalContext* vertexDefPositionUvNormal();
 
   class  VertexPositionContext : public antlr4::ParserRuleContext {
   public:
     VertexPositionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *Vertex();
-    std::vector<antlr4::tree::TerminalNode *> FloatingConstant();
-    antlr4::tree::TerminalNode* FloatingConstant(size_t i);
+    std::vector<FloatOrIntConstantContext *> floatOrIntConstant();
+    FloatOrIntConstantContext* floatOrIntConstant(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -259,8 +275,8 @@ public:
     VertexUvContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *Uv();
-    std::vector<antlr4::tree::TerminalNode *> FloatingConstant();
-    antlr4::tree::TerminalNode* FloatingConstant(size_t i);
+    std::vector<FloatOrIntConstantContext *> floatOrIntConstant();
+    FloatOrIntConstantContext* floatOrIntConstant(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -274,8 +290,8 @@ public:
     VertexColorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *Color();
-    std::vector<antlr4::tree::TerminalNode *> FloatingConstant();
-    antlr4::tree::TerminalNode* FloatingConstant(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> IntegerConstant();
+    antlr4::tree::TerminalNode* IntegerConstant(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -289,8 +305,8 @@ public:
     VertexNormalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *Normal();
-    std::vector<antlr4::tree::TerminalNode *> FloatingConstant();
-    antlr4::tree::TerminalNode* FloatingConstant(size_t i);
+    std::vector<FloatOrIntConstantContext *> floatOrIntConstant();
+    FloatOrIntConstantContext* floatOrIntConstant(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -472,6 +488,20 @@ public:
   };
 
   Keyword27Context* keyword27();
+
+  class  FloatOrIntConstantContext : public antlr4::ParserRuleContext {
+  public:
+    FloatOrIntConstantContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *FloatingConstant();
+    antlr4::tree::TerminalNode *IntegerConstant();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  FloatOrIntConstantContext* floatOrIntConstant();
 
 
   // By default the static state used to implement the parser is lazily initialized during the first

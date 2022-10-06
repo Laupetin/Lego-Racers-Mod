@@ -42,6 +42,9 @@ public:
   virtual void enterSingleValueKeywords(IdbParser::SingleValueKeywordsContext * /*ctx*/) override { }
   virtual void exitSingleValueKeywords(IdbParser::SingleValueKeywordsContext * /*ctx*/) override { }
 
+  virtual void enterFloatOrIntConstant(IdbParser::FloatOrIntConstantContext * /*ctx*/) override { }
+  virtual void exitFloatOrIntConstant(IdbParser::FloatOrIntConstantContext * /*ctx*/) override { }
+
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }
   virtual void exitEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

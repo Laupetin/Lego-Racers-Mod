@@ -70,6 +70,9 @@ public:
   virtual void enterKeyword38Subtoken(MdbParser::Keyword38SubtokenContext *ctx) = 0;
   virtual void exitKeyword38Subtoken(MdbParser::Keyword38SubtokenContext *ctx) = 0;
 
+  virtual void enterFloatOrIntConstant(MdbParser::FloatOrIntConstantContext *ctx) = 0;
+  virtual void exitFloatOrIntConstant(MdbParser::FloatOrIntConstantContext *ctx) = 0;
+
 
 };
 

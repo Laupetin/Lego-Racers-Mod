@@ -14,6 +14,7 @@
 #include "Asset/Mdb/MdbCreator.h"
 #include "Utils/StreamUtils.h"
 #include "Asset/PassthroughCreator.h"
+#include "Asset/Gdb/GdbCreator.h"
 #include "Asset/Idb/IdbCreator.h"
 #include "Asset/Srf/SrfCreator.h"
 #include "Asset/Tdb/TdbCreator.h"
@@ -31,6 +32,7 @@ public:
 
 const IFileTypeProcessor* availableFileTypeCreators[]
 {
+    new GdbCreator(),
     new IdbCreator(),
     new MdbCreator(),
     new SrfCreator(),

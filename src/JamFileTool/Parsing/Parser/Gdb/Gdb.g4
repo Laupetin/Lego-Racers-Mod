@@ -22,7 +22,7 @@ materialName
     ;
 
 scaleSection
-    :   Scale FloatingConstant
+    :   Scale floatOrIntConstant
     ;
 
 vertexSection
@@ -30,43 +30,47 @@ vertexSection
     ;
 
 vertexList
-    :   vertexPosition+
-    |   vertexPositionUv+
-    |   vertexPositionUvColor+
-    |   vertexPositionUvNormal+
+    :   vertexDefPositionUvColor+
+    |   vertexDefPositionUvNormal+
+    |   vertexDefPositionUv+
+    |   vertexDefPosition+
     ;
 
-vertexPositionUv
+vertexDefPosition
+    : vertexPosition
+    ;
+
+vertexDefPositionUv
     :   vertexPosition
         vertexUv
     ;
 
-vertexPositionUvColor
+vertexDefPositionUvColor
     :   vertexPosition
         vertexUv
         vertexColor
     ;
 
-vertexPositionUvNormal
+vertexDefPositionUvNormal
     :   vertexPosition
         vertexUv
         vertexNormal
     ;
 
 vertexPosition
-    :   Vertex FloatingConstant FloatingConstant FloatingConstant
+    :   Vertex floatOrIntConstant floatOrIntConstant floatOrIntConstant
     ;
 
 vertexUv
-    :   Uv FloatingConstant FloatingConstant
+    :   Uv floatOrIntConstant floatOrIntConstant
     ;
 
 vertexColor
-    :   Color FloatingConstant FloatingConstant FloatingConstant
+    :   Color IntegerConstant IntegerConstant IntegerConstant IntegerConstant
     ;
 
 vertexNormal
-    :   Normal FloatingConstant FloatingConstant FloatingConstant
+    :   Normal floatOrIntConstant floatOrIntConstant floatOrIntConstant
     ;
 
 faceSection

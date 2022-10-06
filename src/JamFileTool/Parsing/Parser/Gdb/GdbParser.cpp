@@ -45,11 +45,11 @@ void gdbParserInitialize() {
   auto staticData = std::make_unique<GdbParserStaticData>(
     std::vector<std::string>{
       "root", "sections", "materialSection", "materialNameList", "materialName", 
-      "scaleSection", "vertexSection", "vertexList", "vertexPositionUv", 
-      "vertexPositionUvColor", "vertexPositionUvNormal", "vertexPosition", 
-      "vertexUv", "vertexColor", "vertexNormal", "faceSection", "faceList", 
-      "face", "metaSection", "metaList", "meta", "keyword31", "keyword2D", 
-      "keyword2F", "keyword30", "keyword32", "keyword27"
+      "scaleSection", "vertexSection", "vertexList", "vertexDefPosition", 
+      "vertexDefPositionUv", "vertexDefPositionUvColor", "vertexDefPositionUvNormal", 
+      "vertexPosition", "vertexUv", "vertexColor", "vertexNormal", "faceSection", 
+      "faceList", "face", "metaSection", "metaList", "meta", "keyword31", 
+      "keyword2D", "keyword2F", "keyword30", "keyword32", "keyword27", "floatOrIntConstant"
     },
     std::vector<std::string>{
       "", "'{'", "'}'", "'materials'", "'scale'", "'vertices'", "'faces'", 
@@ -65,66 +65,69 @@ void gdbParserInitialize() {
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,27,199,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	4,1,27,208,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
   	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
   	14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,
-  	21,2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,1,0,1,0,1,1,1,1,
-  	3,1,59,8,1,1,1,1,1,1,1,3,1,64,8,1,1,2,1,2,1,2,3,2,69,8,2,1,2,1,2,1,3,
-  	4,3,74,8,3,11,3,12,3,75,1,4,1,4,1,5,1,5,1,5,1,6,1,6,1,6,3,6,86,8,6,1,
-  	6,1,6,1,7,4,7,91,8,7,11,7,12,7,92,1,7,4,7,96,8,7,11,7,12,7,97,1,7,4,7,
-  	101,8,7,11,7,12,7,102,1,7,4,7,106,8,7,11,7,12,7,107,3,7,110,8,7,1,8,1,
-  	8,1,8,1,9,1,9,1,9,1,9,1,10,1,10,1,10,1,10,1,11,1,11,1,11,1,11,1,11,1,
-  	12,1,12,1,12,1,12,1,13,1,13,1,13,1,13,1,13,1,14,1,14,1,14,1,14,1,14,1,
-  	15,1,15,1,15,3,15,145,8,15,1,15,1,15,1,16,4,16,150,8,16,11,16,12,16,151,
-  	1,17,1,17,1,17,1,17,1,17,1,18,1,18,1,18,3,18,162,8,18,1,18,1,18,1,19,
-  	4,19,167,8,19,11,19,12,19,168,1,20,1,20,1,20,1,20,1,20,1,20,3,20,177,
-  	8,20,1,21,1,21,1,21,1,21,1,21,1,22,1,22,1,22,1,22,1,23,1,23,1,23,1,24,
-  	1,24,1,25,1,25,1,25,1,26,1,26,1,26,1,26,0,0,27,0,2,4,6,8,10,12,14,16,
-  	18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,0,0,192,0,54,1,
-  	0,0,0,2,56,1,0,0,0,4,65,1,0,0,0,6,73,1,0,0,0,8,77,1,0,0,0,10,79,1,0,0,
-  	0,12,82,1,0,0,0,14,109,1,0,0,0,16,111,1,0,0,0,18,114,1,0,0,0,20,118,1,
-  	0,0,0,22,122,1,0,0,0,24,127,1,0,0,0,26,131,1,0,0,0,28,136,1,0,0,0,30,
-  	141,1,0,0,0,32,149,1,0,0,0,34,153,1,0,0,0,36,158,1,0,0,0,38,166,1,0,0,
-  	0,40,176,1,0,0,0,42,178,1,0,0,0,44,183,1,0,0,0,46,187,1,0,0,0,48,190,
-  	1,0,0,0,50,192,1,0,0,0,52,195,1,0,0,0,54,55,3,2,1,0,55,1,1,0,0,0,56,58,
-  	3,4,2,0,57,59,3,10,5,0,58,57,1,0,0,0,58,59,1,0,0,0,59,60,1,0,0,0,60,61,
-  	3,12,6,0,61,63,3,30,15,0,62,64,3,36,18,0,63,62,1,0,0,0,63,64,1,0,0,0,
-  	64,3,1,0,0,0,65,66,5,3,0,0,66,68,5,1,0,0,67,69,3,6,3,0,68,67,1,0,0,0,
-  	68,69,1,0,0,0,69,70,1,0,0,0,70,71,5,2,0,0,71,5,1,0,0,0,72,74,3,8,4,0,
-  	73,72,1,0,0,0,74,75,1,0,0,0,75,73,1,0,0,0,75,76,1,0,0,0,76,7,1,0,0,0,
-  	77,78,5,23,0,0,78,9,1,0,0,0,79,80,5,4,0,0,80,81,5,21,0,0,81,11,1,0,0,
-  	0,82,83,5,5,0,0,83,85,5,1,0,0,84,86,3,14,7,0,85,84,1,0,0,0,85,86,1,0,
-  	0,0,86,87,1,0,0,0,87,88,5,2,0,0,88,13,1,0,0,0,89,91,3,22,11,0,90,89,1,
-  	0,0,0,91,92,1,0,0,0,92,90,1,0,0,0,92,93,1,0,0,0,93,110,1,0,0,0,94,96,
-  	3,16,8,0,95,94,1,0,0,0,96,97,1,0,0,0,97,95,1,0,0,0,97,98,1,0,0,0,98,110,
-  	1,0,0,0,99,101,3,18,9,0,100,99,1,0,0,0,101,102,1,0,0,0,102,100,1,0,0,
-  	0,102,103,1,0,0,0,103,110,1,0,0,0,104,106,3,20,10,0,105,104,1,0,0,0,106,
-  	107,1,0,0,0,107,105,1,0,0,0,107,108,1,0,0,0,108,110,1,0,0,0,109,90,1,
-  	0,0,0,109,95,1,0,0,0,109,100,1,0,0,0,109,105,1,0,0,0,110,15,1,0,0,0,111,
-  	112,3,22,11,0,112,113,3,24,12,0,113,17,1,0,0,0,114,115,3,22,11,0,115,
-  	116,3,24,12,0,116,117,3,26,13,0,117,19,1,0,0,0,118,119,3,22,11,0,119,
-  	120,3,24,12,0,120,121,3,28,14,0,121,21,1,0,0,0,122,123,5,8,0,0,123,124,
-  	5,21,0,0,124,125,5,21,0,0,125,126,5,21,0,0,126,23,1,0,0,0,127,128,5,9,
-  	0,0,128,129,5,21,0,0,129,130,5,21,0,0,130,25,1,0,0,0,131,132,5,10,0,0,
-  	132,133,5,21,0,0,133,134,5,21,0,0,134,135,5,21,0,0,135,27,1,0,0,0,136,
-  	137,5,11,0,0,137,138,5,21,0,0,138,139,5,21,0,0,139,140,5,21,0,0,140,29,
-  	1,0,0,0,141,142,5,6,0,0,142,144,5,1,0,0,143,145,3,32,16,0,144,143,1,0,
-  	0,0,144,145,1,0,0,0,145,146,1,0,0,0,146,147,5,2,0,0,147,31,1,0,0,0,148,
-  	150,3,34,17,0,149,148,1,0,0,0,150,151,1,0,0,0,151,149,1,0,0,0,151,152,
-  	1,0,0,0,152,33,1,0,0,0,153,154,5,13,0,0,154,155,5,20,0,0,155,156,5,20,
-  	0,0,156,157,5,20,0,0,157,35,1,0,0,0,158,159,5,7,0,0,159,161,5,1,0,0,160,
-  	162,3,38,19,0,161,160,1,0,0,0,161,162,1,0,0,0,162,163,1,0,0,0,163,164,
-  	5,2,0,0,164,37,1,0,0,0,165,167,3,40,20,0,166,165,1,0,0,0,167,168,1,0,
-  	0,0,168,166,1,0,0,0,168,169,1,0,0,0,169,39,1,0,0,0,170,177,3,42,21,0,
-  	171,177,3,44,22,0,172,177,3,46,23,0,173,177,3,48,24,0,174,177,3,50,25,
-  	0,175,177,3,52,26,0,176,170,1,0,0,0,176,171,1,0,0,0,176,172,1,0,0,0,176,
-  	173,1,0,0,0,176,174,1,0,0,0,176,175,1,0,0,0,177,41,1,0,0,0,178,179,5,
-  	18,0,0,179,180,5,20,0,0,180,181,5,20,0,0,181,182,5,20,0,0,182,43,1,0,
-  	0,0,183,184,5,15,0,0,184,185,5,20,0,0,185,186,5,20,0,0,186,45,1,0,0,0,
-  	187,188,5,16,0,0,188,189,5,20,0,0,189,47,1,0,0,0,190,191,5,17,0,0,191,
-  	49,1,0,0,0,192,193,5,19,0,0,193,194,5,20,0,0,194,51,1,0,0,0,195,196,5,
-  	14,0,0,196,197,5,20,0,0,197,53,1,0,0,0,15,58,63,68,75,85,92,97,102,107,
-  	109,144,151,161,168,176
+  	21,2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,2,27,7,27,2,28,7,
+  	28,1,0,1,0,1,1,1,1,3,1,63,8,1,1,1,1,1,1,1,3,1,68,8,1,1,2,1,2,1,2,3,2,
+  	73,8,2,1,2,1,2,1,3,4,3,78,8,3,11,3,12,3,79,1,4,1,4,1,5,1,5,1,5,1,6,1,
+  	6,1,6,3,6,90,8,6,1,6,1,6,1,7,4,7,95,8,7,11,7,12,7,96,1,7,4,7,100,8,7,
+  	11,7,12,7,101,1,7,4,7,105,8,7,11,7,12,7,106,1,7,4,7,110,8,7,11,7,12,7,
+  	111,3,7,114,8,7,1,8,1,8,1,9,1,9,1,9,1,10,1,10,1,10,1,10,1,11,1,11,1,11,
+  	1,11,1,12,1,12,1,12,1,12,1,12,1,13,1,13,1,13,1,13,1,14,1,14,1,14,1,14,
+  	1,14,1,14,1,15,1,15,1,15,1,15,1,15,1,16,1,16,1,16,3,16,152,8,16,1,16,
+  	1,16,1,17,4,17,157,8,17,11,17,12,17,158,1,18,1,18,1,18,1,18,1,18,1,19,
+  	1,19,1,19,3,19,169,8,19,1,19,1,19,1,20,4,20,174,8,20,11,20,12,20,175,
+  	1,21,1,21,1,21,1,21,1,21,1,21,3,21,184,8,21,1,22,1,22,1,22,1,22,1,22,
+  	1,23,1,23,1,23,1,23,1,24,1,24,1,24,1,25,1,25,1,26,1,26,1,26,1,27,1,27,
+  	1,27,1,28,1,28,1,28,0,0,29,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,
+  	32,34,36,38,40,42,44,46,48,50,52,54,56,0,1,1,0,20,21,199,0,58,1,0,0,0,
+  	2,60,1,0,0,0,4,69,1,0,0,0,6,77,1,0,0,0,8,81,1,0,0,0,10,83,1,0,0,0,12,
+  	86,1,0,0,0,14,113,1,0,0,0,16,115,1,0,0,0,18,117,1,0,0,0,20,120,1,0,0,
+  	0,22,124,1,0,0,0,24,128,1,0,0,0,26,133,1,0,0,0,28,137,1,0,0,0,30,143,
+  	1,0,0,0,32,148,1,0,0,0,34,156,1,0,0,0,36,160,1,0,0,0,38,165,1,0,0,0,40,
+  	173,1,0,0,0,42,183,1,0,0,0,44,185,1,0,0,0,46,190,1,0,0,0,48,194,1,0,0,
+  	0,50,197,1,0,0,0,52,199,1,0,0,0,54,202,1,0,0,0,56,205,1,0,0,0,58,59,3,
+  	2,1,0,59,1,1,0,0,0,60,62,3,4,2,0,61,63,3,10,5,0,62,61,1,0,0,0,62,63,1,
+  	0,0,0,63,64,1,0,0,0,64,65,3,12,6,0,65,67,3,32,16,0,66,68,3,38,19,0,67,
+  	66,1,0,0,0,67,68,1,0,0,0,68,3,1,0,0,0,69,70,5,3,0,0,70,72,5,1,0,0,71,
+  	73,3,6,3,0,72,71,1,0,0,0,72,73,1,0,0,0,73,74,1,0,0,0,74,75,5,2,0,0,75,
+  	5,1,0,0,0,76,78,3,8,4,0,77,76,1,0,0,0,78,79,1,0,0,0,79,77,1,0,0,0,79,
+  	80,1,0,0,0,80,7,1,0,0,0,81,82,5,23,0,0,82,9,1,0,0,0,83,84,5,4,0,0,84,
+  	85,3,56,28,0,85,11,1,0,0,0,86,87,5,5,0,0,87,89,5,1,0,0,88,90,3,14,7,0,
+  	89,88,1,0,0,0,89,90,1,0,0,0,90,91,1,0,0,0,91,92,5,2,0,0,92,13,1,0,0,0,
+  	93,95,3,20,10,0,94,93,1,0,0,0,95,96,1,0,0,0,96,94,1,0,0,0,96,97,1,0,0,
+  	0,97,114,1,0,0,0,98,100,3,22,11,0,99,98,1,0,0,0,100,101,1,0,0,0,101,99,
+  	1,0,0,0,101,102,1,0,0,0,102,114,1,0,0,0,103,105,3,18,9,0,104,103,1,0,
+  	0,0,105,106,1,0,0,0,106,104,1,0,0,0,106,107,1,0,0,0,107,114,1,0,0,0,108,
+  	110,3,16,8,0,109,108,1,0,0,0,110,111,1,0,0,0,111,109,1,0,0,0,111,112,
+  	1,0,0,0,112,114,1,0,0,0,113,94,1,0,0,0,113,99,1,0,0,0,113,104,1,0,0,0,
+  	113,109,1,0,0,0,114,15,1,0,0,0,115,116,3,24,12,0,116,17,1,0,0,0,117,118,
+  	3,24,12,0,118,119,3,26,13,0,119,19,1,0,0,0,120,121,3,24,12,0,121,122,
+  	3,26,13,0,122,123,3,28,14,0,123,21,1,0,0,0,124,125,3,24,12,0,125,126,
+  	3,26,13,0,126,127,3,30,15,0,127,23,1,0,0,0,128,129,5,8,0,0,129,130,3,
+  	56,28,0,130,131,3,56,28,0,131,132,3,56,28,0,132,25,1,0,0,0,133,134,5,
+  	9,0,0,134,135,3,56,28,0,135,136,3,56,28,0,136,27,1,0,0,0,137,138,5,10,
+  	0,0,138,139,5,20,0,0,139,140,5,20,0,0,140,141,5,20,0,0,141,142,5,20,0,
+  	0,142,29,1,0,0,0,143,144,5,11,0,0,144,145,3,56,28,0,145,146,3,56,28,0,
+  	146,147,3,56,28,0,147,31,1,0,0,0,148,149,5,6,0,0,149,151,5,1,0,0,150,
+  	152,3,34,17,0,151,150,1,0,0,0,151,152,1,0,0,0,152,153,1,0,0,0,153,154,
+  	5,2,0,0,154,33,1,0,0,0,155,157,3,36,18,0,156,155,1,0,0,0,157,158,1,0,
+  	0,0,158,156,1,0,0,0,158,159,1,0,0,0,159,35,1,0,0,0,160,161,5,13,0,0,161,
+  	162,5,20,0,0,162,163,5,20,0,0,163,164,5,20,0,0,164,37,1,0,0,0,165,166,
+  	5,7,0,0,166,168,5,1,0,0,167,169,3,40,20,0,168,167,1,0,0,0,168,169,1,0,
+  	0,0,169,170,1,0,0,0,170,171,5,2,0,0,171,39,1,0,0,0,172,174,3,42,21,0,
+  	173,172,1,0,0,0,174,175,1,0,0,0,175,173,1,0,0,0,175,176,1,0,0,0,176,41,
+  	1,0,0,0,177,184,3,44,22,0,178,184,3,46,23,0,179,184,3,48,24,0,180,184,
+  	3,50,25,0,181,184,3,52,26,0,182,184,3,54,27,0,183,177,1,0,0,0,183,178,
+  	1,0,0,0,183,179,1,0,0,0,183,180,1,0,0,0,183,181,1,0,0,0,183,182,1,0,0,
+  	0,184,43,1,0,0,0,185,186,5,18,0,0,186,187,5,20,0,0,187,188,5,20,0,0,188,
+  	189,5,20,0,0,189,45,1,0,0,0,190,191,5,15,0,0,191,192,5,20,0,0,192,193,
+  	5,20,0,0,193,47,1,0,0,0,194,195,5,16,0,0,195,196,5,20,0,0,196,49,1,0,
+  	0,0,197,198,5,17,0,0,198,51,1,0,0,0,199,200,5,19,0,0,200,201,5,20,0,0,
+  	201,53,1,0,0,0,202,203,5,14,0,0,203,204,5,20,0,0,204,55,1,0,0,0,205,206,
+  	7,0,0,0,206,57,1,0,0,0,15,62,67,72,79,89,96,101,106,111,113,151,158,168,
+  	175,183
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -213,7 +216,7 @@ GdbParser::RootContext* GdbParser::root() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(54);
+    setState(58);
     sections();
    
   }
@@ -283,26 +286,26 @@ GdbParser::SectionsContext* GdbParser::sections() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(56);
+    setState(60);
     materialSection();
-    setState(58);
+    setState(62);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == GdbParser::Scale) {
-      setState(57);
+      setState(61);
       scaleSection();
     }
-    setState(60);
+    setState(64);
     vertexSection();
-    setState(61);
+    setState(65);
     faceSection();
-    setState(63);
+    setState(67);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == GdbParser::Meta) {
-      setState(62);
+      setState(66);
       metaSection();
     }
    
@@ -361,19 +364,19 @@ GdbParser::MaterialSectionContext* GdbParser::materialSection() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(65);
+    setState(69);
     match(GdbParser::Materials);
-    setState(66);
+    setState(70);
     match(GdbParser::T__0);
-    setState(68);
+    setState(72);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == GdbParser::StringLiteral) {
-      setState(67);
+      setState(71);
       materialNameList();
     }
-    setState(70);
+    setState(74);
     match(GdbParser::T__1);
    
   }
@@ -431,13 +434,13 @@ GdbParser::MaterialNameListContext* GdbParser::materialNameList() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(73); 
+    setState(77); 
     _errHandler->sync(this);
     _la = _input->LA(1);
     do {
-      setState(72);
+      setState(76);
       materialName();
-      setState(75); 
+      setState(79); 
       _errHandler->sync(this);
       _la = _input->LA(1);
     } while (_la == GdbParser::StringLiteral);
@@ -492,7 +495,7 @@ GdbParser::MaterialNameContext* GdbParser::materialName() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(77);
+    setState(81);
     match(GdbParser::StringLiteral);
    
   }
@@ -515,8 +518,8 @@ tree::TerminalNode* GdbParser::ScaleSectionContext::Scale() {
   return getToken(GdbParser::Scale, 0);
 }
 
-tree::TerminalNode* GdbParser::ScaleSectionContext::FloatingConstant() {
-  return getToken(GdbParser::FloatingConstant, 0);
+GdbParser::FloatOrIntConstantContext* GdbParser::ScaleSectionContext::floatOrIntConstant() {
+  return getRuleContext<GdbParser::FloatOrIntConstantContext>(0);
 }
 
 
@@ -549,10 +552,10 @@ GdbParser::ScaleSectionContext* GdbParser::scaleSection() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(79);
+    setState(83);
     match(GdbParser::Scale);
-    setState(80);
-    match(GdbParser::FloatingConstant);
+    setState(84);
+    floatOrIntConstant();
    
   }
   catch (RecognitionException &e) {
@@ -609,19 +612,19 @@ GdbParser::VertexSectionContext* GdbParser::vertexSection() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(82);
+    setState(86);
     match(GdbParser::Vertices);
-    setState(83);
+    setState(87);
     match(GdbParser::T__0);
-    setState(85);
+    setState(89);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == GdbParser::Vertex) {
-      setState(84);
+      setState(88);
       vertexList();
     }
-    setState(87);
+    setState(91);
     match(GdbParser::T__1);
    
   }
@@ -640,36 +643,36 @@ GdbParser::VertexListContext::VertexListContext(ParserRuleContext *parent, size_
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<GdbParser::VertexPositionContext *> GdbParser::VertexListContext::vertexPosition() {
-  return getRuleContexts<GdbParser::VertexPositionContext>();
+std::vector<GdbParser::VertexDefPositionUvColorContext *> GdbParser::VertexListContext::vertexDefPositionUvColor() {
+  return getRuleContexts<GdbParser::VertexDefPositionUvColorContext>();
 }
 
-GdbParser::VertexPositionContext* GdbParser::VertexListContext::vertexPosition(size_t i) {
-  return getRuleContext<GdbParser::VertexPositionContext>(i);
+GdbParser::VertexDefPositionUvColorContext* GdbParser::VertexListContext::vertexDefPositionUvColor(size_t i) {
+  return getRuleContext<GdbParser::VertexDefPositionUvColorContext>(i);
 }
 
-std::vector<GdbParser::VertexPositionUvContext *> GdbParser::VertexListContext::vertexPositionUv() {
-  return getRuleContexts<GdbParser::VertexPositionUvContext>();
+std::vector<GdbParser::VertexDefPositionUvNormalContext *> GdbParser::VertexListContext::vertexDefPositionUvNormal() {
+  return getRuleContexts<GdbParser::VertexDefPositionUvNormalContext>();
 }
 
-GdbParser::VertexPositionUvContext* GdbParser::VertexListContext::vertexPositionUv(size_t i) {
-  return getRuleContext<GdbParser::VertexPositionUvContext>(i);
+GdbParser::VertexDefPositionUvNormalContext* GdbParser::VertexListContext::vertexDefPositionUvNormal(size_t i) {
+  return getRuleContext<GdbParser::VertexDefPositionUvNormalContext>(i);
 }
 
-std::vector<GdbParser::VertexPositionUvColorContext *> GdbParser::VertexListContext::vertexPositionUvColor() {
-  return getRuleContexts<GdbParser::VertexPositionUvColorContext>();
+std::vector<GdbParser::VertexDefPositionUvContext *> GdbParser::VertexListContext::vertexDefPositionUv() {
+  return getRuleContexts<GdbParser::VertexDefPositionUvContext>();
 }
 
-GdbParser::VertexPositionUvColorContext* GdbParser::VertexListContext::vertexPositionUvColor(size_t i) {
-  return getRuleContext<GdbParser::VertexPositionUvColorContext>(i);
+GdbParser::VertexDefPositionUvContext* GdbParser::VertexListContext::vertexDefPositionUv(size_t i) {
+  return getRuleContext<GdbParser::VertexDefPositionUvContext>(i);
 }
 
-std::vector<GdbParser::VertexPositionUvNormalContext *> GdbParser::VertexListContext::vertexPositionUvNormal() {
-  return getRuleContexts<GdbParser::VertexPositionUvNormalContext>();
+std::vector<GdbParser::VertexDefPositionContext *> GdbParser::VertexListContext::vertexDefPosition() {
+  return getRuleContexts<GdbParser::VertexDefPositionContext>();
 }
 
-GdbParser::VertexPositionUvNormalContext* GdbParser::VertexListContext::vertexPositionUvNormal(size_t i) {
-  return getRuleContext<GdbParser::VertexPositionUvNormalContext>(i);
+GdbParser::VertexDefPositionContext* GdbParser::VertexListContext::vertexDefPosition(size_t i) {
+  return getRuleContext<GdbParser::VertexDefPositionContext>(i);
 }
 
 
@@ -702,18 +705,18 @@ GdbParser::VertexListContext* GdbParser::vertexList() {
     exitRule();
   });
   try {
-    setState(109);
+    setState(113);
     _errHandler->sync(this);
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx)) {
     case 1: {
       enterOuterAlt(_localctx, 1);
-      setState(90); 
+      setState(94); 
       _errHandler->sync(this);
       _la = _input->LA(1);
       do {
-        setState(89);
-        vertexPosition();
-        setState(92); 
+        setState(93);
+        vertexDefPositionUvColor();
+        setState(96); 
         _errHandler->sync(this);
         _la = _input->LA(1);
       } while (_la == GdbParser::Vertex);
@@ -722,13 +725,13 @@ GdbParser::VertexListContext* GdbParser::vertexList() {
 
     case 2: {
       enterOuterAlt(_localctx, 2);
-      setState(95); 
+      setState(99); 
       _errHandler->sync(this);
       _la = _input->LA(1);
       do {
-        setState(94);
-        vertexPositionUv();
-        setState(97); 
+        setState(98);
+        vertexDefPositionUvNormal();
+        setState(101); 
         _errHandler->sync(this);
         _la = _input->LA(1);
       } while (_la == GdbParser::Vertex);
@@ -737,13 +740,13 @@ GdbParser::VertexListContext* GdbParser::vertexList() {
 
     case 3: {
       enterOuterAlt(_localctx, 3);
-      setState(100); 
+      setState(104); 
       _errHandler->sync(this);
       _la = _input->LA(1);
       do {
-        setState(99);
-        vertexPositionUvColor();
-        setState(102); 
+        setState(103);
+        vertexDefPositionUv();
+        setState(106); 
         _errHandler->sync(this);
         _la = _input->LA(1);
       } while (_la == GdbParser::Vertex);
@@ -752,13 +755,13 @@ GdbParser::VertexListContext* GdbParser::vertexList() {
 
     case 4: {
       enterOuterAlt(_localctx, 4);
-      setState(105); 
+      setState(109); 
       _errHandler->sync(this);
       _la = _input->LA(1);
       do {
-        setState(104);
-        vertexPositionUvNormal();
-        setState(107); 
+        setState(108);
+        vertexDefPosition();
+        setState(111); 
         _errHandler->sync(this);
         _la = _input->LA(1);
       } while (_la == GdbParser::Vertex);
@@ -779,40 +782,36 @@ GdbParser::VertexListContext* GdbParser::vertexList() {
   return _localctx;
 }
 
-//----------------- VertexPositionUvContext ------------------------------------------------------------------
+//----------------- VertexDefPositionContext ------------------------------------------------------------------
 
-GdbParser::VertexPositionUvContext::VertexPositionUvContext(ParserRuleContext *parent, size_t invokingState)
+GdbParser::VertexDefPositionContext::VertexDefPositionContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-GdbParser::VertexPositionContext* GdbParser::VertexPositionUvContext::vertexPosition() {
+GdbParser::VertexPositionContext* GdbParser::VertexDefPositionContext::vertexPosition() {
   return getRuleContext<GdbParser::VertexPositionContext>(0);
 }
 
-GdbParser::VertexUvContext* GdbParser::VertexPositionUvContext::vertexUv() {
-  return getRuleContext<GdbParser::VertexUvContext>(0);
+
+size_t GdbParser::VertexDefPositionContext::getRuleIndex() const {
+  return GdbParser::RuleVertexDefPosition;
 }
 
-
-size_t GdbParser::VertexPositionUvContext::getRuleIndex() const {
-  return GdbParser::RuleVertexPositionUv;
-}
-
-void GdbParser::VertexPositionUvContext::enterRule(tree::ParseTreeListener *listener) {
+void GdbParser::VertexDefPositionContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterVertexPositionUv(this);
+    parserListener->enterVertexDefPosition(this);
 }
 
-void GdbParser::VertexPositionUvContext::exitRule(tree::ParseTreeListener *listener) {
+void GdbParser::VertexDefPositionContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitVertexPositionUv(this);
+    parserListener->exitVertexDefPosition(this);
 }
 
-GdbParser::VertexPositionUvContext* GdbParser::vertexPositionUv() {
-  VertexPositionUvContext *_localctx = _tracker.createInstance<VertexPositionUvContext>(_ctx, getState());
-  enterRule(_localctx, 16, GdbParser::RuleVertexPositionUv);
+GdbParser::VertexDefPositionContext* GdbParser::vertexDefPosition() {
+  VertexDefPositionContext *_localctx = _tracker.createInstance<VertexDefPositionContext>(_ctx, getState());
+  enterRule(_localctx, 16, GdbParser::RuleVertexDefPosition);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -823,9 +822,66 @@ GdbParser::VertexPositionUvContext* GdbParser::vertexPositionUv() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(111);
+    setState(115);
     vertexPosition();
-    setState(112);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- VertexDefPositionUvContext ------------------------------------------------------------------
+
+GdbParser::VertexDefPositionUvContext::VertexDefPositionUvContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+GdbParser::VertexPositionContext* GdbParser::VertexDefPositionUvContext::vertexPosition() {
+  return getRuleContext<GdbParser::VertexPositionContext>(0);
+}
+
+GdbParser::VertexUvContext* GdbParser::VertexDefPositionUvContext::vertexUv() {
+  return getRuleContext<GdbParser::VertexUvContext>(0);
+}
+
+
+size_t GdbParser::VertexDefPositionUvContext::getRuleIndex() const {
+  return GdbParser::RuleVertexDefPositionUv;
+}
+
+void GdbParser::VertexDefPositionUvContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<GdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterVertexDefPositionUv(this);
+}
+
+void GdbParser::VertexDefPositionUvContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<GdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitVertexDefPositionUv(this);
+}
+
+GdbParser::VertexDefPositionUvContext* GdbParser::vertexDefPositionUv() {
+  VertexDefPositionUvContext *_localctx = _tracker.createInstance<VertexDefPositionUvContext>(_ctx, getState());
+  enterRule(_localctx, 18, GdbParser::RuleVertexDefPositionUv);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(117);
+    vertexPosition();
+    setState(118);
     vertexUv();
    
   }
@@ -838,44 +894,44 @@ GdbParser::VertexPositionUvContext* GdbParser::vertexPositionUv() {
   return _localctx;
 }
 
-//----------------- VertexPositionUvColorContext ------------------------------------------------------------------
+//----------------- VertexDefPositionUvColorContext ------------------------------------------------------------------
 
-GdbParser::VertexPositionUvColorContext::VertexPositionUvColorContext(ParserRuleContext *parent, size_t invokingState)
+GdbParser::VertexDefPositionUvColorContext::VertexDefPositionUvColorContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-GdbParser::VertexPositionContext* GdbParser::VertexPositionUvColorContext::vertexPosition() {
+GdbParser::VertexPositionContext* GdbParser::VertexDefPositionUvColorContext::vertexPosition() {
   return getRuleContext<GdbParser::VertexPositionContext>(0);
 }
 
-GdbParser::VertexUvContext* GdbParser::VertexPositionUvColorContext::vertexUv() {
+GdbParser::VertexUvContext* GdbParser::VertexDefPositionUvColorContext::vertexUv() {
   return getRuleContext<GdbParser::VertexUvContext>(0);
 }
 
-GdbParser::VertexColorContext* GdbParser::VertexPositionUvColorContext::vertexColor() {
+GdbParser::VertexColorContext* GdbParser::VertexDefPositionUvColorContext::vertexColor() {
   return getRuleContext<GdbParser::VertexColorContext>(0);
 }
 
 
-size_t GdbParser::VertexPositionUvColorContext::getRuleIndex() const {
-  return GdbParser::RuleVertexPositionUvColor;
+size_t GdbParser::VertexDefPositionUvColorContext::getRuleIndex() const {
+  return GdbParser::RuleVertexDefPositionUvColor;
 }
 
-void GdbParser::VertexPositionUvColorContext::enterRule(tree::ParseTreeListener *listener) {
+void GdbParser::VertexDefPositionUvColorContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterVertexPositionUvColor(this);
+    parserListener->enterVertexDefPositionUvColor(this);
 }
 
-void GdbParser::VertexPositionUvColorContext::exitRule(tree::ParseTreeListener *listener) {
+void GdbParser::VertexDefPositionUvColorContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitVertexPositionUvColor(this);
+    parserListener->exitVertexDefPositionUvColor(this);
 }
 
-GdbParser::VertexPositionUvColorContext* GdbParser::vertexPositionUvColor() {
-  VertexPositionUvColorContext *_localctx = _tracker.createInstance<VertexPositionUvColorContext>(_ctx, getState());
-  enterRule(_localctx, 18, GdbParser::RuleVertexPositionUvColor);
+GdbParser::VertexDefPositionUvColorContext* GdbParser::vertexDefPositionUvColor() {
+  VertexDefPositionUvColorContext *_localctx = _tracker.createInstance<VertexDefPositionUvColorContext>(_ctx, getState());
+  enterRule(_localctx, 20, GdbParser::RuleVertexDefPositionUvColor);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -886,11 +942,11 @@ GdbParser::VertexPositionUvColorContext* GdbParser::vertexPositionUvColor() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(114);
+    setState(120);
     vertexPosition();
-    setState(115);
+    setState(121);
     vertexUv();
-    setState(116);
+    setState(122);
     vertexColor();
    
   }
@@ -903,44 +959,44 @@ GdbParser::VertexPositionUvColorContext* GdbParser::vertexPositionUvColor() {
   return _localctx;
 }
 
-//----------------- VertexPositionUvNormalContext ------------------------------------------------------------------
+//----------------- VertexDefPositionUvNormalContext ------------------------------------------------------------------
 
-GdbParser::VertexPositionUvNormalContext::VertexPositionUvNormalContext(ParserRuleContext *parent, size_t invokingState)
+GdbParser::VertexDefPositionUvNormalContext::VertexDefPositionUvNormalContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-GdbParser::VertexPositionContext* GdbParser::VertexPositionUvNormalContext::vertexPosition() {
+GdbParser::VertexPositionContext* GdbParser::VertexDefPositionUvNormalContext::vertexPosition() {
   return getRuleContext<GdbParser::VertexPositionContext>(0);
 }
 
-GdbParser::VertexUvContext* GdbParser::VertexPositionUvNormalContext::vertexUv() {
+GdbParser::VertexUvContext* GdbParser::VertexDefPositionUvNormalContext::vertexUv() {
   return getRuleContext<GdbParser::VertexUvContext>(0);
 }
 
-GdbParser::VertexNormalContext* GdbParser::VertexPositionUvNormalContext::vertexNormal() {
+GdbParser::VertexNormalContext* GdbParser::VertexDefPositionUvNormalContext::vertexNormal() {
   return getRuleContext<GdbParser::VertexNormalContext>(0);
 }
 
 
-size_t GdbParser::VertexPositionUvNormalContext::getRuleIndex() const {
-  return GdbParser::RuleVertexPositionUvNormal;
+size_t GdbParser::VertexDefPositionUvNormalContext::getRuleIndex() const {
+  return GdbParser::RuleVertexDefPositionUvNormal;
 }
 
-void GdbParser::VertexPositionUvNormalContext::enterRule(tree::ParseTreeListener *listener) {
+void GdbParser::VertexDefPositionUvNormalContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterVertexPositionUvNormal(this);
+    parserListener->enterVertexDefPositionUvNormal(this);
 }
 
-void GdbParser::VertexPositionUvNormalContext::exitRule(tree::ParseTreeListener *listener) {
+void GdbParser::VertexDefPositionUvNormalContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitVertexPositionUvNormal(this);
+    parserListener->exitVertexDefPositionUvNormal(this);
 }
 
-GdbParser::VertexPositionUvNormalContext* GdbParser::vertexPositionUvNormal() {
-  VertexPositionUvNormalContext *_localctx = _tracker.createInstance<VertexPositionUvNormalContext>(_ctx, getState());
-  enterRule(_localctx, 20, GdbParser::RuleVertexPositionUvNormal);
+GdbParser::VertexDefPositionUvNormalContext* GdbParser::vertexDefPositionUvNormal() {
+  VertexDefPositionUvNormalContext *_localctx = _tracker.createInstance<VertexDefPositionUvNormalContext>(_ctx, getState());
+  enterRule(_localctx, 22, GdbParser::RuleVertexDefPositionUvNormal);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -951,11 +1007,11 @@ GdbParser::VertexPositionUvNormalContext* GdbParser::vertexPositionUvNormal() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(118);
+    setState(124);
     vertexPosition();
-    setState(119);
+    setState(125);
     vertexUv();
-    setState(120);
+    setState(126);
     vertexNormal();
    
   }
@@ -978,12 +1034,12 @@ tree::TerminalNode* GdbParser::VertexPositionContext::Vertex() {
   return getToken(GdbParser::Vertex, 0);
 }
 
-std::vector<tree::TerminalNode *> GdbParser::VertexPositionContext::FloatingConstant() {
-  return getTokens(GdbParser::FloatingConstant);
+std::vector<GdbParser::FloatOrIntConstantContext *> GdbParser::VertexPositionContext::floatOrIntConstant() {
+  return getRuleContexts<GdbParser::FloatOrIntConstantContext>();
 }
 
-tree::TerminalNode* GdbParser::VertexPositionContext::FloatingConstant(size_t i) {
-  return getToken(GdbParser::FloatingConstant, i);
+GdbParser::FloatOrIntConstantContext* GdbParser::VertexPositionContext::floatOrIntConstant(size_t i) {
+  return getRuleContext<GdbParser::FloatOrIntConstantContext>(i);
 }
 
 
@@ -1005,7 +1061,7 @@ void GdbParser::VertexPositionContext::exitRule(tree::ParseTreeListener *listene
 
 GdbParser::VertexPositionContext* GdbParser::vertexPosition() {
   VertexPositionContext *_localctx = _tracker.createInstance<VertexPositionContext>(_ctx, getState());
-  enterRule(_localctx, 22, GdbParser::RuleVertexPosition);
+  enterRule(_localctx, 24, GdbParser::RuleVertexPosition);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1016,14 +1072,14 @@ GdbParser::VertexPositionContext* GdbParser::vertexPosition() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(122);
+    setState(128);
     match(GdbParser::Vertex);
-    setState(123);
-    match(GdbParser::FloatingConstant);
-    setState(124);
-    match(GdbParser::FloatingConstant);
-    setState(125);
-    match(GdbParser::FloatingConstant);
+    setState(129);
+    floatOrIntConstant();
+    setState(130);
+    floatOrIntConstant();
+    setState(131);
+    floatOrIntConstant();
    
   }
   catch (RecognitionException &e) {
@@ -1045,12 +1101,12 @@ tree::TerminalNode* GdbParser::VertexUvContext::Uv() {
   return getToken(GdbParser::Uv, 0);
 }
 
-std::vector<tree::TerminalNode *> GdbParser::VertexUvContext::FloatingConstant() {
-  return getTokens(GdbParser::FloatingConstant);
+std::vector<GdbParser::FloatOrIntConstantContext *> GdbParser::VertexUvContext::floatOrIntConstant() {
+  return getRuleContexts<GdbParser::FloatOrIntConstantContext>();
 }
 
-tree::TerminalNode* GdbParser::VertexUvContext::FloatingConstant(size_t i) {
-  return getToken(GdbParser::FloatingConstant, i);
+GdbParser::FloatOrIntConstantContext* GdbParser::VertexUvContext::floatOrIntConstant(size_t i) {
+  return getRuleContext<GdbParser::FloatOrIntConstantContext>(i);
 }
 
 
@@ -1072,7 +1128,7 @@ void GdbParser::VertexUvContext::exitRule(tree::ParseTreeListener *listener) {
 
 GdbParser::VertexUvContext* GdbParser::vertexUv() {
   VertexUvContext *_localctx = _tracker.createInstance<VertexUvContext>(_ctx, getState());
-  enterRule(_localctx, 24, GdbParser::RuleVertexUv);
+  enterRule(_localctx, 26, GdbParser::RuleVertexUv);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1083,12 +1139,12 @@ GdbParser::VertexUvContext* GdbParser::vertexUv() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(127);
+    setState(133);
     match(GdbParser::Uv);
-    setState(128);
-    match(GdbParser::FloatingConstant);
-    setState(129);
-    match(GdbParser::FloatingConstant);
+    setState(134);
+    floatOrIntConstant();
+    setState(135);
+    floatOrIntConstant();
    
   }
   catch (RecognitionException &e) {
@@ -1110,12 +1166,12 @@ tree::TerminalNode* GdbParser::VertexColorContext::Color() {
   return getToken(GdbParser::Color, 0);
 }
 
-std::vector<tree::TerminalNode *> GdbParser::VertexColorContext::FloatingConstant() {
-  return getTokens(GdbParser::FloatingConstant);
+std::vector<tree::TerminalNode *> GdbParser::VertexColorContext::IntegerConstant() {
+  return getTokens(GdbParser::IntegerConstant);
 }
 
-tree::TerminalNode* GdbParser::VertexColorContext::FloatingConstant(size_t i) {
-  return getToken(GdbParser::FloatingConstant, i);
+tree::TerminalNode* GdbParser::VertexColorContext::IntegerConstant(size_t i) {
+  return getToken(GdbParser::IntegerConstant, i);
 }
 
 
@@ -1137,7 +1193,7 @@ void GdbParser::VertexColorContext::exitRule(tree::ParseTreeListener *listener) 
 
 GdbParser::VertexColorContext* GdbParser::vertexColor() {
   VertexColorContext *_localctx = _tracker.createInstance<VertexColorContext>(_ctx, getState());
-  enterRule(_localctx, 26, GdbParser::RuleVertexColor);
+  enterRule(_localctx, 28, GdbParser::RuleVertexColor);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1148,14 +1204,16 @@ GdbParser::VertexColorContext* GdbParser::vertexColor() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(131);
+    setState(137);
     match(GdbParser::Color);
-    setState(132);
-    match(GdbParser::FloatingConstant);
-    setState(133);
-    match(GdbParser::FloatingConstant);
-    setState(134);
-    match(GdbParser::FloatingConstant);
+    setState(138);
+    match(GdbParser::IntegerConstant);
+    setState(139);
+    match(GdbParser::IntegerConstant);
+    setState(140);
+    match(GdbParser::IntegerConstant);
+    setState(141);
+    match(GdbParser::IntegerConstant);
    
   }
   catch (RecognitionException &e) {
@@ -1177,12 +1235,12 @@ tree::TerminalNode* GdbParser::VertexNormalContext::Normal() {
   return getToken(GdbParser::Normal, 0);
 }
 
-std::vector<tree::TerminalNode *> GdbParser::VertexNormalContext::FloatingConstant() {
-  return getTokens(GdbParser::FloatingConstant);
+std::vector<GdbParser::FloatOrIntConstantContext *> GdbParser::VertexNormalContext::floatOrIntConstant() {
+  return getRuleContexts<GdbParser::FloatOrIntConstantContext>();
 }
 
-tree::TerminalNode* GdbParser::VertexNormalContext::FloatingConstant(size_t i) {
-  return getToken(GdbParser::FloatingConstant, i);
+GdbParser::FloatOrIntConstantContext* GdbParser::VertexNormalContext::floatOrIntConstant(size_t i) {
+  return getRuleContext<GdbParser::FloatOrIntConstantContext>(i);
 }
 
 
@@ -1204,7 +1262,7 @@ void GdbParser::VertexNormalContext::exitRule(tree::ParseTreeListener *listener)
 
 GdbParser::VertexNormalContext* GdbParser::vertexNormal() {
   VertexNormalContext *_localctx = _tracker.createInstance<VertexNormalContext>(_ctx, getState());
-  enterRule(_localctx, 28, GdbParser::RuleVertexNormal);
+  enterRule(_localctx, 30, GdbParser::RuleVertexNormal);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1215,14 +1273,14 @@ GdbParser::VertexNormalContext* GdbParser::vertexNormal() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(136);
+    setState(143);
     match(GdbParser::Normal);
-    setState(137);
-    match(GdbParser::FloatingConstant);
-    setState(138);
-    match(GdbParser::FloatingConstant);
-    setState(139);
-    match(GdbParser::FloatingConstant);
+    setState(144);
+    floatOrIntConstant();
+    setState(145);
+    floatOrIntConstant();
+    setState(146);
+    floatOrIntConstant();
    
   }
   catch (RecognitionException &e) {
@@ -1267,7 +1325,7 @@ void GdbParser::FaceSectionContext::exitRule(tree::ParseTreeListener *listener) 
 
 GdbParser::FaceSectionContext* GdbParser::faceSection() {
   FaceSectionContext *_localctx = _tracker.createInstance<FaceSectionContext>(_ctx, getState());
-  enterRule(_localctx, 30, GdbParser::RuleFaceSection);
+  enterRule(_localctx, 32, GdbParser::RuleFaceSection);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1279,19 +1337,19 @@ GdbParser::FaceSectionContext* GdbParser::faceSection() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(141);
+    setState(148);
     match(GdbParser::Faces);
-    setState(142);
+    setState(149);
     match(GdbParser::T__0);
-    setState(144);
+    setState(151);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == GdbParser::Face) {
-      setState(143);
+      setState(150);
       faceList();
     }
-    setState(146);
+    setState(153);
     match(GdbParser::T__1);
    
   }
@@ -1337,7 +1395,7 @@ void GdbParser::FaceListContext::exitRule(tree::ParseTreeListener *listener) {
 
 GdbParser::FaceListContext* GdbParser::faceList() {
   FaceListContext *_localctx = _tracker.createInstance<FaceListContext>(_ctx, getState());
-  enterRule(_localctx, 32, GdbParser::RuleFaceList);
+  enterRule(_localctx, 34, GdbParser::RuleFaceList);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1349,13 +1407,13 @@ GdbParser::FaceListContext* GdbParser::faceList() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(149); 
+    setState(156); 
     _errHandler->sync(this);
     _la = _input->LA(1);
     do {
-      setState(148);
+      setState(155);
       face();
-      setState(151); 
+      setState(158); 
       _errHandler->sync(this);
       _la = _input->LA(1);
     } while (_la == GdbParser::Face);
@@ -1407,7 +1465,7 @@ void GdbParser::FaceContext::exitRule(tree::ParseTreeListener *listener) {
 
 GdbParser::FaceContext* GdbParser::face() {
   FaceContext *_localctx = _tracker.createInstance<FaceContext>(_ctx, getState());
-  enterRule(_localctx, 34, GdbParser::RuleFace);
+  enterRule(_localctx, 36, GdbParser::RuleFace);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1418,13 +1476,13 @@ GdbParser::FaceContext* GdbParser::face() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(153);
+    setState(160);
     match(GdbParser::Face);
-    setState(154);
+    setState(161);
     match(GdbParser::IntegerConstant);
-    setState(155);
+    setState(162);
     match(GdbParser::IntegerConstant);
-    setState(156);
+    setState(163);
     match(GdbParser::IntegerConstant);
    
   }
@@ -1470,7 +1528,7 @@ void GdbParser::MetaSectionContext::exitRule(tree::ParseTreeListener *listener) 
 
 GdbParser::MetaSectionContext* GdbParser::metaSection() {
   MetaSectionContext *_localctx = _tracker.createInstance<MetaSectionContext>(_ctx, getState());
-  enterRule(_localctx, 36, GdbParser::RuleMetaSection);
+  enterRule(_localctx, 38, GdbParser::RuleMetaSection);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1482,11 +1540,11 @@ GdbParser::MetaSectionContext* GdbParser::metaSection() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(158);
+    setState(165);
     match(GdbParser::Meta);
-    setState(159);
+    setState(166);
     match(GdbParser::T__0);
-    setState(161);
+    setState(168);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
@@ -1497,10 +1555,10 @@ GdbParser::MetaSectionContext* GdbParser::metaSection() {
       | (1ULL << GdbParser::Keyword30)
       | (1ULL << GdbParser::Keyword31)
       | (1ULL << GdbParser::Keyword32))) != 0)) {
-      setState(160);
+      setState(167);
       metaList();
     }
-    setState(163);
+    setState(170);
     match(GdbParser::T__1);
    
   }
@@ -1546,7 +1604,7 @@ void GdbParser::MetaListContext::exitRule(tree::ParseTreeListener *listener) {
 
 GdbParser::MetaListContext* GdbParser::metaList() {
   MetaListContext *_localctx = _tracker.createInstance<MetaListContext>(_ctx, getState());
-  enterRule(_localctx, 38, GdbParser::RuleMetaList);
+  enterRule(_localctx, 40, GdbParser::RuleMetaList);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1558,13 +1616,13 @@ GdbParser::MetaListContext* GdbParser::metaList() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(166); 
+    setState(173); 
     _errHandler->sync(this);
     _la = _input->LA(1);
     do {
-      setState(165);
+      setState(172);
       meta();
-      setState(168); 
+      setState(175); 
       _errHandler->sync(this);
       _la = _input->LA(1);
     } while ((((_la & ~ 0x3fULL) == 0) &&
@@ -1634,7 +1692,7 @@ void GdbParser::MetaContext::exitRule(tree::ParseTreeListener *listener) {
 
 GdbParser::MetaContext* GdbParser::meta() {
   MetaContext *_localctx = _tracker.createInstance<MetaContext>(_ctx, getState());
-  enterRule(_localctx, 40, GdbParser::RuleMeta);
+  enterRule(_localctx, 42, GdbParser::RuleMeta);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1644,47 +1702,47 @@ GdbParser::MetaContext* GdbParser::meta() {
     exitRule();
   });
   try {
-    setState(176);
+    setState(183);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case GdbParser::Keyword31: {
         enterOuterAlt(_localctx, 1);
-        setState(170);
+        setState(177);
         keyword31();
         break;
       }
 
       case GdbParser::Keyword2D: {
         enterOuterAlt(_localctx, 2);
-        setState(171);
+        setState(178);
         keyword2D();
         break;
       }
 
       case GdbParser::Keyword2F: {
         enterOuterAlt(_localctx, 3);
-        setState(172);
+        setState(179);
         keyword2F();
         break;
       }
 
       case GdbParser::Keyword30: {
         enterOuterAlt(_localctx, 4);
-        setState(173);
+        setState(180);
         keyword30();
         break;
       }
 
       case GdbParser::Keyword32: {
         enterOuterAlt(_localctx, 5);
-        setState(174);
+        setState(181);
         keyword32();
         break;
       }
 
       case GdbParser::Keyword27: {
         enterOuterAlt(_localctx, 6);
-        setState(175);
+        setState(182);
         keyword27();
         break;
       }
@@ -1740,7 +1798,7 @@ void GdbParser::Keyword31Context::exitRule(tree::ParseTreeListener *listener) {
 
 GdbParser::Keyword31Context* GdbParser::keyword31() {
   Keyword31Context *_localctx = _tracker.createInstance<Keyword31Context>(_ctx, getState());
-  enterRule(_localctx, 42, GdbParser::RuleKeyword31);
+  enterRule(_localctx, 44, GdbParser::RuleKeyword31);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1751,13 +1809,13 @@ GdbParser::Keyword31Context* GdbParser::keyword31() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(178);
+    setState(185);
     match(GdbParser::Keyword31);
-    setState(179);
+    setState(186);
     match(GdbParser::IntegerConstant);
-    setState(180);
+    setState(187);
     match(GdbParser::IntegerConstant);
-    setState(181);
+    setState(188);
     match(GdbParser::IntegerConstant);
    
   }
@@ -1807,7 +1865,7 @@ void GdbParser::Keyword2DContext::exitRule(tree::ParseTreeListener *listener) {
 
 GdbParser::Keyword2DContext* GdbParser::keyword2D() {
   Keyword2DContext *_localctx = _tracker.createInstance<Keyword2DContext>(_ctx, getState());
-  enterRule(_localctx, 44, GdbParser::RuleKeyword2D);
+  enterRule(_localctx, 46, GdbParser::RuleKeyword2D);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1818,11 +1876,11 @@ GdbParser::Keyword2DContext* GdbParser::keyword2D() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(183);
+    setState(190);
     match(GdbParser::Keyword2D);
-    setState(184);
+    setState(191);
     match(GdbParser::IntegerConstant);
-    setState(185);
+    setState(192);
     match(GdbParser::IntegerConstant);
    
   }
@@ -1868,7 +1926,7 @@ void GdbParser::Keyword2FContext::exitRule(tree::ParseTreeListener *listener) {
 
 GdbParser::Keyword2FContext* GdbParser::keyword2F() {
   Keyword2FContext *_localctx = _tracker.createInstance<Keyword2FContext>(_ctx, getState());
-  enterRule(_localctx, 46, GdbParser::RuleKeyword2F);
+  enterRule(_localctx, 48, GdbParser::RuleKeyword2F);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1879,9 +1937,9 @@ GdbParser::Keyword2FContext* GdbParser::keyword2F() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(187);
+    setState(194);
     match(GdbParser::Keyword2F);
-    setState(188);
+    setState(195);
     match(GdbParser::IntegerConstant);
    
   }
@@ -1923,7 +1981,7 @@ void GdbParser::Keyword30Context::exitRule(tree::ParseTreeListener *listener) {
 
 GdbParser::Keyword30Context* GdbParser::keyword30() {
   Keyword30Context *_localctx = _tracker.createInstance<Keyword30Context>(_ctx, getState());
-  enterRule(_localctx, 48, GdbParser::RuleKeyword30);
+  enterRule(_localctx, 50, GdbParser::RuleKeyword30);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1934,7 +1992,7 @@ GdbParser::Keyword30Context* GdbParser::keyword30() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(190);
+    setState(197);
     match(GdbParser::Keyword30);
    
   }
@@ -1980,7 +2038,7 @@ void GdbParser::Keyword32Context::exitRule(tree::ParseTreeListener *listener) {
 
 GdbParser::Keyword32Context* GdbParser::keyword32() {
   Keyword32Context *_localctx = _tracker.createInstance<Keyword32Context>(_ctx, getState());
-  enterRule(_localctx, 50, GdbParser::RuleKeyword32);
+  enterRule(_localctx, 52, GdbParser::RuleKeyword32);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1991,9 +2049,9 @@ GdbParser::Keyword32Context* GdbParser::keyword32() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(192);
+    setState(199);
     match(GdbParser::Keyword32);
-    setState(193);
+    setState(200);
     match(GdbParser::IntegerConstant);
    
   }
@@ -2039,7 +2097,7 @@ void GdbParser::Keyword27Context::exitRule(tree::ParseTreeListener *listener) {
 
 GdbParser::Keyword27Context* GdbParser::keyword27() {
   Keyword27Context *_localctx = _tracker.createInstance<Keyword27Context>(_ctx, getState());
-  enterRule(_localctx, 52, GdbParser::RuleKeyword27);
+  enterRule(_localctx, 54, GdbParser::RuleKeyword27);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -2050,10 +2108,77 @@ GdbParser::Keyword27Context* GdbParser::keyword27() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(195);
+    setState(202);
     match(GdbParser::Keyword27);
-    setState(196);
+    setState(203);
     match(GdbParser::IntegerConstant);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- FloatOrIntConstantContext ------------------------------------------------------------------
+
+GdbParser::FloatOrIntConstantContext::FloatOrIntConstantContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* GdbParser::FloatOrIntConstantContext::FloatingConstant() {
+  return getToken(GdbParser::FloatingConstant, 0);
+}
+
+tree::TerminalNode* GdbParser::FloatOrIntConstantContext::IntegerConstant() {
+  return getToken(GdbParser::IntegerConstant, 0);
+}
+
+
+size_t GdbParser::FloatOrIntConstantContext::getRuleIndex() const {
+  return GdbParser::RuleFloatOrIntConstant;
+}
+
+void GdbParser::FloatOrIntConstantContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<GdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterFloatOrIntConstant(this);
+}
+
+void GdbParser::FloatOrIntConstantContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<GdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitFloatOrIntConstant(this);
+}
+
+GdbParser::FloatOrIntConstantContext* GdbParser::floatOrIntConstant() {
+  FloatOrIntConstantContext *_localctx = _tracker.createInstance<FloatOrIntConstantContext>(_ctx, getState());
+  enterRule(_localctx, 56, GdbParser::RuleFloatOrIntConstant);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(205);
+    _la = _input->LA(1);
+    if (!(_la == GdbParser::IntegerConstant
+
+    || _la == GdbParser::FloatingConstant)) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
    
   }
   catch (RecognitionException &e) {

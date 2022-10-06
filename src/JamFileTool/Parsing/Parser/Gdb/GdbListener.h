@@ -40,14 +40,17 @@ public:
   virtual void enterVertexList(GdbParser::VertexListContext *ctx) = 0;
   virtual void exitVertexList(GdbParser::VertexListContext *ctx) = 0;
 
-  virtual void enterVertexPositionUv(GdbParser::VertexPositionUvContext *ctx) = 0;
-  virtual void exitVertexPositionUv(GdbParser::VertexPositionUvContext *ctx) = 0;
+  virtual void enterVertexDefPosition(GdbParser::VertexDefPositionContext *ctx) = 0;
+  virtual void exitVertexDefPosition(GdbParser::VertexDefPositionContext *ctx) = 0;
 
-  virtual void enterVertexPositionUvColor(GdbParser::VertexPositionUvColorContext *ctx) = 0;
-  virtual void exitVertexPositionUvColor(GdbParser::VertexPositionUvColorContext *ctx) = 0;
+  virtual void enterVertexDefPositionUv(GdbParser::VertexDefPositionUvContext *ctx) = 0;
+  virtual void exitVertexDefPositionUv(GdbParser::VertexDefPositionUvContext *ctx) = 0;
 
-  virtual void enterVertexPositionUvNormal(GdbParser::VertexPositionUvNormalContext *ctx) = 0;
-  virtual void exitVertexPositionUvNormal(GdbParser::VertexPositionUvNormalContext *ctx) = 0;
+  virtual void enterVertexDefPositionUvColor(GdbParser::VertexDefPositionUvColorContext *ctx) = 0;
+  virtual void exitVertexDefPositionUvColor(GdbParser::VertexDefPositionUvColorContext *ctx) = 0;
+
+  virtual void enterVertexDefPositionUvNormal(GdbParser::VertexDefPositionUvNormalContext *ctx) = 0;
+  virtual void exitVertexDefPositionUvNormal(GdbParser::VertexDefPositionUvNormalContext *ctx) = 0;
 
   virtual void enterVertexPosition(GdbParser::VertexPositionContext *ctx) = 0;
   virtual void exitVertexPosition(GdbParser::VertexPositionContext *ctx) = 0;
@@ -96,6 +99,9 @@ public:
 
   virtual void enterKeyword27(GdbParser::Keyword27Context *ctx) = 0;
   virtual void exitKeyword27(GdbParser::Keyword27Context *ctx) = 0;
+
+  virtual void enterFloatOrIntConstant(GdbParser::FloatOrIntConstantContext *ctx) = 0;
+  virtual void exitFloatOrIntConstant(GdbParser::FloatOrIntConstantContext *ctx) = 0;
 
 
 };

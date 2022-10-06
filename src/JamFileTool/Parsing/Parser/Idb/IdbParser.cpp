@@ -45,7 +45,7 @@ void idbParserInitialize() {
   auto staticData = std::make_unique<IdbParserStaticData>(
     std::vector<std::string>{
       "root", "images", "image", "imageName", "imageProperty", "colorImageProperty", 
-      "colorImagePropertyKeyword", "singleValueKeywords"
+      "colorImagePropertyKeyword", "singleValueKeywords", "floatOrIntConstant"
     },
     std::vector<std::string>{
       "", "'{'", "'}'", "'images'", "'image'", "'flipVertical'", "'bmp'", 
@@ -58,21 +58,22 @@ void idbParserInitialize() {
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,17,55,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
-  	7,7,1,0,1,0,1,1,1,1,1,1,5,1,22,8,1,10,1,12,1,25,9,1,1,1,1,1,1,2,1,2,1,
-  	2,1,2,5,2,33,8,2,10,2,12,2,36,9,2,1,2,1,2,1,3,1,3,1,4,1,4,3,4,44,8,4,
-  	1,5,1,5,1,5,1,5,1,5,1,6,1,6,1,7,1,7,1,7,0,0,8,0,2,4,6,8,10,12,14,0,2,
-  	1,0,8,9,1,0,5,7,49,0,16,1,0,0,0,2,18,1,0,0,0,4,28,1,0,0,0,6,39,1,0,0,
-  	0,8,43,1,0,0,0,10,45,1,0,0,0,12,50,1,0,0,0,14,52,1,0,0,0,16,17,3,2,1,
-  	0,17,1,1,0,0,0,18,19,5,3,0,0,19,23,5,1,0,0,20,22,3,4,2,0,21,20,1,0,0,
-  	0,22,25,1,0,0,0,23,21,1,0,0,0,23,24,1,0,0,0,24,26,1,0,0,0,25,23,1,0,0,
-  	0,26,27,5,2,0,0,27,3,1,0,0,0,28,29,5,4,0,0,29,30,3,6,3,0,30,34,5,1,0,
-  	0,31,33,3,8,4,0,32,31,1,0,0,0,33,36,1,0,0,0,34,32,1,0,0,0,34,35,1,0,0,
-  	0,35,37,1,0,0,0,36,34,1,0,0,0,37,38,5,2,0,0,38,5,1,0,0,0,39,40,5,13,0,
-  	0,40,7,1,0,0,0,41,44,3,10,5,0,42,44,3,14,7,0,43,41,1,0,0,0,43,42,1,0,
-  	0,0,44,9,1,0,0,0,45,46,3,12,6,0,46,47,5,10,0,0,47,48,5,10,0,0,48,49,5,
-  	10,0,0,49,11,1,0,0,0,50,51,7,0,0,0,51,13,1,0,0,0,52,53,7,1,0,0,53,15,
-  	1,0,0,0,3,23,34,43
+  	4,1,17,59,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+  	7,7,2,8,7,8,1,0,1,0,1,1,1,1,1,1,5,1,24,8,1,10,1,12,1,27,9,1,1,1,1,1,1,
+  	2,1,2,1,2,1,2,5,2,35,8,2,10,2,12,2,38,9,2,1,2,1,2,1,3,1,3,1,4,1,4,3,4,
+  	46,8,4,1,5,1,5,1,5,1,5,1,5,1,6,1,6,1,7,1,7,1,8,1,8,1,8,0,0,9,0,2,4,6,
+  	8,10,12,14,16,0,3,1,0,8,9,1,0,5,7,1,0,10,11,52,0,18,1,0,0,0,2,20,1,0,
+  	0,0,4,30,1,0,0,0,6,41,1,0,0,0,8,45,1,0,0,0,10,47,1,0,0,0,12,52,1,0,0,
+  	0,14,54,1,0,0,0,16,56,1,0,0,0,18,19,3,2,1,0,19,1,1,0,0,0,20,21,5,3,0,
+  	0,21,25,5,1,0,0,22,24,3,4,2,0,23,22,1,0,0,0,24,27,1,0,0,0,25,23,1,0,0,
+  	0,25,26,1,0,0,0,26,28,1,0,0,0,27,25,1,0,0,0,28,29,5,2,0,0,29,3,1,0,0,
+  	0,30,31,5,4,0,0,31,32,3,6,3,0,32,36,5,1,0,0,33,35,3,8,4,0,34,33,1,0,0,
+  	0,35,38,1,0,0,0,36,34,1,0,0,0,36,37,1,0,0,0,37,39,1,0,0,0,38,36,1,0,0,
+  	0,39,40,5,2,0,0,40,5,1,0,0,0,41,42,5,13,0,0,42,7,1,0,0,0,43,46,3,10,5,
+  	0,44,46,3,14,7,0,45,43,1,0,0,0,45,44,1,0,0,0,46,9,1,0,0,0,47,48,3,12,
+  	6,0,48,49,5,10,0,0,49,50,5,10,0,0,50,51,5,10,0,0,51,11,1,0,0,0,52,53,
+  	7,0,0,0,53,13,1,0,0,0,54,55,7,1,0,0,55,15,1,0,0,0,56,57,7,2,0,0,57,17,
+  	1,0,0,0,3,25,36,45
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -161,7 +162,7 @@ IdbParser::RootContext* IdbParser::root() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(16);
+    setState(18);
     images();
    
   }
@@ -223,21 +224,21 @@ IdbParser::ImagesContext* IdbParser::images() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(18);
+    setState(20);
     match(IdbParser::Images);
-    setState(19);
+    setState(21);
     match(IdbParser::T__0);
-    setState(23);
+    setState(25);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == IdbParser::Image) {
-      setState(20);
+      setState(22);
       image();
-      setState(25);
+      setState(27);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(26);
+    setState(28);
     match(IdbParser::T__1);
    
   }
@@ -303,13 +304,13 @@ IdbParser::ImageContext* IdbParser::image() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(28);
-    match(IdbParser::Image);
-    setState(29);
-    imageName();
     setState(30);
+    match(IdbParser::Image);
+    setState(31);
+    imageName();
+    setState(32);
     match(IdbParser::T__0);
-    setState(34);
+    setState(36);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
@@ -318,13 +319,13 @@ IdbParser::ImageContext* IdbParser::image() {
       | (1ULL << IdbParser::Tga)
       | (1ULL << IdbParser::ChromaKey)
       | (1ULL << IdbParser::Tint))) != 0)) {
-      setState(31);
+      setState(33);
       imageProperty();
-      setState(36);
+      setState(38);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(37);
+    setState(39);
     match(IdbParser::T__1);
    
   }
@@ -377,7 +378,7 @@ IdbParser::ImageNameContext* IdbParser::imageName() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(39);
+    setState(41);
     match(IdbParser::StringLiteral);
    
   }
@@ -433,13 +434,13 @@ IdbParser::ImagePropertyContext* IdbParser::imageProperty() {
     exitRule();
   });
   try {
-    setState(43);
+    setState(45);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case IdbParser::ChromaKey:
       case IdbParser::Tint: {
         enterOuterAlt(_localctx, 1);
-        setState(41);
+        setState(43);
         colorImageProperty();
         break;
       }
@@ -448,7 +449,7 @@ IdbParser::ImagePropertyContext* IdbParser::imageProperty() {
       case IdbParser::Bmp:
       case IdbParser::Tga: {
         enterOuterAlt(_localctx, 2);
-        setState(42);
+        setState(44);
         singleValueKeywords();
         break;
       }
@@ -515,13 +516,13 @@ IdbParser::ColorImagePropertyContext* IdbParser::colorImageProperty() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(45);
-    colorImagePropertyKeyword();
-    setState(46);
-    match(IdbParser::IntegerConstant);
     setState(47);
-    match(IdbParser::IntegerConstant);
+    colorImagePropertyKeyword();
     setState(48);
+    match(IdbParser::IntegerConstant);
+    setState(49);
+    match(IdbParser::IntegerConstant);
+    setState(50);
     match(IdbParser::IntegerConstant);
    
   }
@@ -579,7 +580,7 @@ IdbParser::ColorImagePropertyKeywordContext* IdbParser::colorImagePropertyKeywor
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(50);
+    setState(52);
     _la = _input->LA(1);
     if (!(_la == IdbParser::ChromaKey
 
@@ -650,12 +651,79 @@ IdbParser::SingleValueKeywordsContext* IdbParser::singleValueKeywords() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(52);
+    setState(54);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & ((1ULL << IdbParser::FlipVertical)
       | (1ULL << IdbParser::Bmp)
       | (1ULL << IdbParser::Tga))) != 0))) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- FloatOrIntConstantContext ------------------------------------------------------------------
+
+IdbParser::FloatOrIntConstantContext::FloatOrIntConstantContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* IdbParser::FloatOrIntConstantContext::FloatingConstant() {
+  return getToken(IdbParser::FloatingConstant, 0);
+}
+
+tree::TerminalNode* IdbParser::FloatOrIntConstantContext::IntegerConstant() {
+  return getToken(IdbParser::IntegerConstant, 0);
+}
+
+
+size_t IdbParser::FloatOrIntConstantContext::getRuleIndex() const {
+  return IdbParser::RuleFloatOrIntConstant;
+}
+
+void IdbParser::FloatOrIntConstantContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<IdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterFloatOrIntConstant(this);
+}
+
+void IdbParser::FloatOrIntConstantContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<IdbListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitFloatOrIntConstant(this);
+}
+
+IdbParser::FloatOrIntConstantContext* IdbParser::floatOrIntConstant() {
+  FloatOrIntConstantContext *_localctx = _tracker.createInstance<FloatOrIntConstantContext>(_ctx, getState());
+  enterRule(_localctx, 16, IdbParser::RuleFloatOrIntConstant);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(56);
+    _la = _input->LA(1);
+    if (!(_la == IdbParser::IntegerConstant
+
+    || _la == IdbParser::FloatingConstant)) {
     _errHandler->recoverInline(this);
     }
     else {

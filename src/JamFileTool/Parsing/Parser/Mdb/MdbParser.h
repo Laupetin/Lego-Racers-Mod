@@ -32,7 +32,8 @@ public:
     RuleTextMaterialProperty = 7, RuleTextMaterialPropertyKeyword = 8, RuleUint8MaterialProperty = 9, 
     RuleUint8MaterialPropertyKeyword = 10, RuleIntMaterialProperty = 11, 
     RuleIntMaterialPropertyKeyword = 12, RuleSingleValueKeywords = 13, RuleKeyword2F = 14, 
-    RuleKeyword2FSubtoken = 15, RuleKeyword38 = 16, RuleKeyword38Subtoken = 17
+    RuleKeyword2FSubtoken = 15, RuleKeyword38 = 16, RuleKeyword38Subtoken = 17, 
+    RuleFloatOrIntConstant = 18
   };
 
   explicit MdbParser(antlr4::TokenStream *input);
@@ -69,7 +70,8 @@ public:
   class Keyword2FContext;
   class Keyword2FSubtokenContext;
   class Keyword38Context;
-  class Keyword38SubtokenContext; 
+  class Keyword38SubtokenContext;
+  class FloatOrIntConstantContext; 
 
   class  RootContext : public antlr4::ParserRuleContext {
   public:
@@ -356,6 +358,20 @@ public:
   };
 
   Keyword38SubtokenContext* keyword38Subtoken();
+
+  class  FloatOrIntConstantContext : public antlr4::ParserRuleContext {
+  public:
+    FloatOrIntConstantContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *FloatingConstant();
+    antlr4::tree::TerminalNode *IntegerConstant();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  FloatOrIntConstantContext* floatOrIntConstant();
 
 
   // By default the static state used to implement the parser is lazily initialized during the first
