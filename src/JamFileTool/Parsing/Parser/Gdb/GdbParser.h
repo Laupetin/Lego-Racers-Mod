@@ -97,9 +97,9 @@ public:
     SectionsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     MaterialSectionContext *materialSection();
+    ScaleSectionContext *scaleSection();
     VertexSectionContext *vertexSection();
     FaceSectionContext *faceSection();
-    ScaleSectionContext *scaleSection();
     MetaSectionContext *metaSection();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;

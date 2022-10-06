@@ -6,7 +6,7 @@ root
     ;
 
 sections
-    :   materialSection scaleSection? vertexSection faceSection metaSection?
+    :   materialSection scaleSection? (vertexSection faceSection)? metaSection?
     ;
 
 materialSection
