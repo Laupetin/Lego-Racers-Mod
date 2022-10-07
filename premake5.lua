@@ -76,10 +76,12 @@ group ""
 -- ========================
 -- Components
 -- ========================
+include "src/AssetLib.lua"
 include "src/Utils.lua"
 
 -- Components group: All projects that are static libs for executables
 group "Components"
+    AssetLib:project()
     Utils:project()
 group ""
 
@@ -87,10 +89,12 @@ group ""
 -- ========================
 -- Executables
 -- ========================
+include "src/AssetConverter.lua"
 include "src/JamFileTool.lua"
 include "src/ProxyLibrary.lua"
 
 -- Main projects
+AssetConverter:project()
 JamFileTool:project()
 ProxyLibrary:project()
 

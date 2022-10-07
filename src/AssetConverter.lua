@@ -1,25 +1,26 @@
-JamFileTool = {}
+AssetConverter = {}
 
-function JamFileTool:include(includes)
+function AssetConverter:include(includes)
     if includes:handle(self:name()) then
         includedirs {
-            path.join(ProjectFolder(), "JamFileTool")
+            path.join(ProjectFolder(), "AssetConverter")
         }
     end
 end
 
-function JamFileTool:link(links)
+function AssetConverter:link(links)
+    
 end
 
-function JamFileTool:use()
+function AssetConverter:use()
     dependson(self:name())
 end
 
-function JamFileTool:name()
-    return "JamFileTool"
+function AssetConverter:name()
+    return "AssetConverter"
 end
 
-function JamFileTool:project()
+function AssetConverter:project()
     local folder = ProjectFolder()
     local includes = Includes:create()
     local links = Links:create()
@@ -31,15 +32,13 @@ function JamFileTool:project()
         language "C++"
         
         files {
-            path.join(folder, "JamFileTool/**.h"),
-            path.join(folder, "JamFileTool/**.cpp") 
+            path.join(folder, "AssetConverter/**.h"),
+            path.join(folder, "AssetConverter/**.cpp") 
         }
-              
+        
         self:include(includes)
-        AssetLib:include(includes)
         Utils:include(includes)
 
-        AssetLib:link(links)
         Utils:link(links)
         links:linkall()
 end
