@@ -37,8 +37,10 @@ function AssetConverter:project()
         }
         
         self:include(includes)
+        AssetLib:include(includes)
         Utils:include(includes)
 
+        AssetLib:link(links)
         Utils:link(links)
         links:linkall()
 end

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 namespace gdb
 {
     enum ModelToken
@@ -78,5 +81,27 @@ namespace gdb
 		Vec2 m_uv;
 		Vec3 m_normal;
 		Color4 m_color;
+	};
+
+	struct Meta
+	{
+		ModelToken m_keyword;
+		int m_value0;
+		int m_value1;
+		int m_value2;
+	};
+
+	struct Model
+	{
+		std::vector<std::string> m_materials;
+		std::vector<Vertex> m_vertices;
+		std::vector<ModelFace> m_faces;
+		std::vector<Meta> m_meta;
+		float m_scale;
+
+		Model()
+			: m_scale(1.0f)
+		{
+		}
 	};
 }
