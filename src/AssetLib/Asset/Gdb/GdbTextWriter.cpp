@@ -6,7 +6,7 @@ namespace gdb
 	class GdbTextWriterImpl final : public IGdbEmitter, AbstractTokenTextDumper
 	{
 	public:
-		GdbTextWriterImpl(std::ostream& out)
+        explicit GdbTextWriterImpl(std::ostream& out)
 			: AbstractTokenTextDumper(out),
 			  m_first_vertex_element(true)
 		{
@@ -21,7 +21,7 @@ namespace gdb
 			IncIndent();
 		}
 
-		void EmitMaterial(std::string materialName) override
+		void EmitMaterial(const std::string materialName) override
 		{
 			Indent();
 			m_stream << "\"" << materialName << "\"\n";
@@ -34,7 +34,7 @@ namespace gdb
 			m_stream << "}\n\n";
 		}
 
-		void EmitScale(float scale) override
+		void EmitScale(const float scale) override
 		{
 			Indent();
 			m_stream << "scale " << scale << "\n\n";
@@ -50,13 +50,13 @@ namespace gdb
 			m_first_vertex_element = true;
 		}
 
-		void EmitVertex(Vec3 position) override
+		void EmitVertex(const Vec3 position) override
 		{
 			Indent();
 			m_stream << "v " << position.x << " " << position.y << " " << position.z << "\n";
 		}
 
-		void EmitVertex(Vec3 position, Vec2 uv) override
+		void EmitVertex(const Vec3 position, const Vec2 uv) override
 		{
 			if (m_first_vertex_element)
 				m_first_vertex_element = false;
@@ -70,7 +70,7 @@ namespace gdb
 			m_stream << "uv " << uv.x << " " << uv.y << "\n";
 		}
 
-		void EmitVertex(Vec3 position, Vec2 uv, Color4 color) override
+		void EmitVertex(const Vec3 position, const Vec2 uv, const Color4 color) override
 		{
 			if (m_first_vertex_element)
 				m_first_vertex_element = false;
@@ -88,7 +88,7 @@ namespace gdb
 				<< " " << static_cast<unsigned>(color.b) << " " << static_cast<unsigned>(color.a) << "\n";
 		}
 
-		void EmitVertex(Vec3 position, Vec2 uv, Vec3 normal) override
+		void EmitVertex(const Vec3 position, const Vec2 uv, const Vec3 normal) override
 		{
 			if (m_first_vertex_element)
 				m_first_vertex_element = false;
@@ -120,7 +120,7 @@ namespace gdb
 			IncIndent();
 		}
 
-		void EmitFace(unsigned vertex0, unsigned vertex1, unsigned vertex2) override
+		void EmitFace(const unsigned vertex0, const unsigned vertex1, const unsigned vertex2) override
 		{
 			Indent();
 			m_stream << "f " << vertex0 << " " << vertex1 << " " << vertex2 << "\n";
@@ -141,19 +141,19 @@ namespace gdb
 			IncIndent();
 		}
 
-		void EmitMetaKeyword31(int value0, int value1, int value2) override
+		void EmitMetaKeyword31(const int value0, const int value1, const int value2) override
 		{
 			Indent();
 			m_stream << "keyword31 " << value0 << " " << value1 << " " << value2 << "\n";
 		}
 
-		void EmitMetaKeyword2D(int value0, int value1) override
+		void EmitMetaKeyword2D(const int value0, const int value1) override
 		{
 			Indent();
 			m_stream << "keyword2D " << value0 << " " << value1 << "\n";
 		}
 
-		void EmitMetaKeyword2F(int value0) override
+		void EmitMetaKeyword2F(const int value0) override
 		{
 			Indent();
 			m_stream << "keyword2F " << value0 << "\n";
@@ -165,13 +165,13 @@ namespace gdb
 			m_stream << "keyword30 " << "\n";
 		}
 
-		void EmitMetaKeyword32(int value0) override
+		void EmitMetaKeyword32(const int value0) override
 		{
 			Indent();
 			m_stream << "keyword32 " << value0 << "\n";
 		}
 
-		void EmitMetaKeyword27(int value0) override
+		void EmitMetaKeyword27(const int value0) override
 		{
 			Indent();
 			m_stream << "keyword27 " << value0 << "\n";

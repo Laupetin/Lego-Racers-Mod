@@ -9,7 +9,7 @@ namespace gdb
 	class GdbBinaryWriterImpl final : public IGdbEmitter
 	{
 	public:
-		GdbBinaryWriterImpl(std::ostream& stream)
+        explicit GdbBinaryWriterImpl(std::ostream& stream)
 			: m_stream(stream),
 			  m_tokens(ITokenOutputStream::Create(m_stream)),
 			  m_temp_tokens(ITokenOutputStream::Create(m_temp_buffer)),
@@ -22,7 +22,7 @@ namespace gdb
 			PrepareElementsInTempBuffer(TOKEN_SECTION_MATERIAL);
 		}
 
-		void EmitMaterial(std::string materialName) override
+		void EmitMaterial(const std::string materialName) override
 		{
 			m_temp_tokens->WriteString(materialName);
 			m_current_count++;
@@ -33,7 +33,7 @@ namespace gdb
 			WriteElementsFromTempBuffer();
 		}
 
-		void EmitScale(float scale) override
+		void EmitScale(const float scale) override
 		{
 			m_tokens->WriteCustom(TOKEN_SCALE);
 			m_tokens->WriteFloat(scale);
@@ -44,7 +44,7 @@ namespace gdb
 			// Do nothing
 		}
 
-		void EmitVertex(Vec3 position) override
+		void EmitVertex(const Vec3 position) override
 		{
 			if (m_current_count <= 0)
 				PrepareElementsInTempBuffer(TOKEN_SECTION_VERTEX_WITH_POSITION);
@@ -55,7 +55,7 @@ namespace gdb
 			m_current_count++;
 		}
 
-		void EmitVertex(Vec3 position, Vec2 uv) override
+		void EmitVertex(const Vec3 position, const Vec2 uv) override
 		{
 			if (m_current_count <= 0)
 				PrepareElementsInTempBuffer(TOKEN_SECTION_VERTEX_WITH_POSITION_UV);
@@ -70,7 +70,7 @@ namespace gdb
 			m_current_count++;
 		}
 
-		void EmitVertex(Vec3 position, Vec2 uv, Color4 color) override
+		void EmitVertex(const Vec3 position, const Vec2 uv, const Color4 color) override
 		{
 			if (m_current_count <= 0)
 				PrepareElementsInTempBuffer(TOKEN_SECTION_VERTEX_WITH_POSITION_UV_COLOR);
@@ -90,7 +90,7 @@ namespace gdb
 			m_current_count++;
 		}
 
-		void EmitVertex(Vec3 position, Vec2 uv, Vec3 normal) override
+		void EmitVertex(const Vec3 position, const Vec2 uv, const Vec3 normal) override
 		{
 			if (m_current_count <= 0)
 				PrepareElementsInTempBuffer(TOKEN_SECTION_VERTEX_WITH_POSITION_UV_NORMAL);
@@ -119,11 +119,11 @@ namespace gdb
 			PrepareElementsInTempBuffer(TOKEN_SECTION_INDICES);
 		}
 
-		void EmitFace(unsigned vertex0, unsigned vertex1, unsigned vertex2) override
+		void EmitFace(const unsigned vertex0, const unsigned vertex1, const unsigned vertex2) override
 		{
-			m_temp_tokens->WriteUInt8(vertex0);
-			m_temp_tokens->WriteUInt8(vertex1);
-			m_temp_tokens->WriteUInt8(vertex2);
+			m_temp_tokens->WriteUInt8(static_cast<uint8_t>(vertex0));
+			m_temp_tokens->WriteUInt8(static_cast<uint8_t>(vertex1));
+			m_temp_tokens->WriteUInt8(static_cast<uint8_t>(vertex2));
 
 			m_current_count++;
 		}
@@ -138,9 +138,9 @@ namespace gdb
 			PrepareElementsInTempBuffer(TOKEN_SECTION_VERTEX_META);
 		}
 
-		void EmitMetaKeyword31(int value0, int value1, int value2) override
+		void EmitMetaKeyword31(const int value0, const int value1, const int value2) override
 		{
-			m_temp_tokens->WriteCustom(TOKEN_META_31);
+			m_temp_tokens->WriteCustom(TOKEN_META_ADD_VERTICES);
 			m_temp_tokens->WriteInteger(value0);
 			m_temp_tokens->WriteInteger(value1);
 			m_temp_tokens->WriteInteger(value2);
@@ -148,16 +148,16 @@ namespace gdb
 			m_current_count++;
 		}
 
-		void EmitMetaKeyword2D(int value0, int value1) override
+		void EmitMetaKeyword2D(const int value0, const int value1) override
 		{
-			m_temp_tokens->WriteCustom(TOKEN_META_2D);
+			m_temp_tokens->WriteCustom(TOKEN_META_FACES);
 			m_temp_tokens->WriteInteger(value0);
 			m_temp_tokens->WriteInteger(value1);
 
 			m_current_count++;
 		}
 
-		void EmitMetaKeyword2F(int value0) override
+		void EmitMetaKeyword2F(const int value0) override
 		{
 			m_temp_tokens->WriteCustom(TOKEN_META_2F);
 			m_temp_tokens->WriteInteger(value0);
@@ -172,7 +172,7 @@ namespace gdb
 			m_current_count++;
 		}
 
-		void EmitMetaKeyword32(int value0) override
+		void EmitMetaKeyword32(const int value0) override
 		{
 			m_temp_tokens->WriteCustom(TOKEN_META_32);
 			m_temp_tokens->WriteInteger(value0);
@@ -180,9 +180,9 @@ namespace gdb
 			m_current_count++;
 		}
 
-		void EmitMetaKeyword27(int value0) override
+		void EmitMetaKeyword27(const int value0) override
 		{
-			m_temp_tokens->WriteCustom(TOKEN_META_27);
+			m_temp_tokens->WriteCustom(TOKEN_META_NEW_OBJECT);
 			m_temp_tokens->WriteInteger(value0);
 
 			m_current_count++;
@@ -194,8 +194,8 @@ namespace gdb
 		}
 
 	private:
-		void PrepareElementsInTempBuffer(token_type_t startTokenType)
-		{
+		void PrepareElementsInTempBuffer(const token_type_t startTokenType) const
+        {
 			m_tokens->WriteCustom(startTokenType);
 		}
 

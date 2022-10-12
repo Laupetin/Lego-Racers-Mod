@@ -122,7 +122,7 @@ namespace gdb
             m_emitter.StartMeta();
         }
 
-        virtual void exitKeyword31(GdbParser::Keyword31Context* ctx) override 
+        void exitKeyword31(GdbParser::Keyword31Context* ctx) override 
         {
             const auto value0 = GetInt(ctx->IntegerConstant(0));
             const auto value1 = GetInt(ctx->IntegerConstant(1));
@@ -131,7 +131,7 @@ namespace gdb
             m_emitter.EmitMetaKeyword31(value0, value1, value2);
         }
 
-        virtual void exitKeyword2D(GdbParser::Keyword2DContext* ctx) override 
+        void exitKeyword2D(GdbParser::Keyword2DContext* ctx) override 
         {
             const auto value0 = GetInt(ctx->IntegerConstant(0));
             const auto value1 = GetInt(ctx->IntegerConstant(1));
@@ -139,26 +139,26 @@ namespace gdb
             m_emitter.EmitMetaKeyword2D(value0, value1);
         }
 
-        virtual void exitKeyword2F(GdbParser::Keyword2FContext* ctx) override 
+        void exitKeyword2F(GdbParser::Keyword2FContext* ctx) override 
         {
             const auto value0 = GetInt(ctx->IntegerConstant());
 
             m_emitter.EmitMetaKeyword2F(value0);
         }
 
-        virtual void exitKeyword30(GdbParser::Keyword30Context* ctx) override 
+        void exitKeyword30(GdbParser::Keyword30Context* ctx) override 
         {
             m_emitter.EmitMetaKeyword30();
         }
 
-        virtual void exitKeyword32(GdbParser::Keyword32Context* ctx) override 
+        void exitKeyword32(GdbParser::Keyword32Context* ctx) override 
         {
             const auto value0 = GetInt(ctx->IntegerConstant());
 
             m_emitter.EmitMetaKeyword32(value0);
         }
 
-        virtual void exitKeyword27(GdbParser::Keyword27Context* ctx) override 
+        void exitKeyword27(GdbParser::Keyword27Context* ctx) override 
         {
             const auto value0 = GetInt(ctx->IntegerConstant());
 
@@ -171,7 +171,7 @@ namespace gdb
         }
 
     private:
-        Vec3 GetVertexPosition(GdbParser::VertexPositionContext* ctx)
+        Vec3 GetVertexPosition(GdbParser::VertexPositionContext* ctx) const
         {
             Vec3 value;
             value.x = GetFloat(ctx->floatOrIntConstant(0));
@@ -181,7 +181,7 @@ namespace gdb
             return value;
         }
 
-        Vec2 GetVertexUv(GdbParser::VertexUvContext* ctx)
+        Vec2 GetVertexUv(GdbParser::VertexUvContext* ctx) const
         {
             Vec2 value;
             value.x = GetFloat(ctx->floatOrIntConstant(0));
@@ -190,7 +190,7 @@ namespace gdb
             return value;
         }
 
-        Color4 GetVertexColor(GdbParser::VertexColorContext* ctx)
+        Color4 GetVertexColor(GdbParser::VertexColorContext* ctx) const
         {
             Color4 value;
             value.r = GetUInt8(ctx->IntegerConstant(0));
@@ -201,7 +201,7 @@ namespace gdb
             return value;
         }
 
-        Vec3 GetVertexNormal(GdbParser::VertexNormalContext* ctx)
+        Vec3 GetVertexNormal(GdbParser::VertexNormalContext* ctx) const
         {
             Vec3 value;
             value.x = GetFloat(ctx->floatOrIntConstant(0));
@@ -211,7 +211,7 @@ namespace gdb
             return value;
         }
 
-        uint8_t GetUInt8(antlr4::tree::TerminalNode* node)
+        uint8_t GetUInt8(antlr4::tree::TerminalNode* node) const
         {
             uint8_t value;
             if (!common_grammar::UInt8Value(node, value))
@@ -220,7 +220,7 @@ namespace gdb
             return value;
         }
 
-        int GetInt(antlr4::tree::TerminalNode* node)
+        int GetInt(antlr4::tree::TerminalNode* node) const
         {
             int value;
             if (!common_grammar::IntValue(node, value))
@@ -229,7 +229,7 @@ namespace gdb
             return value;
         }
 
-        unsigned int GetUnsignedInt(antlr4::tree::TerminalNode* node)
+        unsigned int GetUnsignedInt(antlr4::tree::TerminalNode* node) const
         {
             unsigned int value;
             if (!common_grammar::UnsignedIntValue(node, value))
@@ -238,7 +238,7 @@ namespace gdb
             return value;
         }
 
-        float GetFloat(GdbParser::FloatOrIntConstantContext* ctx)
+        float GetFloat(GdbParser::FloatOrIntConstantContext* ctx) const
         {
             float value;
             if (!common_grammar::FloatingOrIntValue(ctx, value))
@@ -271,8 +271,8 @@ namespace gdb
 		{
 		}
 
-		void Read()
-		{
+		void Read() const
+        {
             CustomGdbErrorListener errors;
             antlr4::ANTLRInputStream inputStream(m_stream);
 
@@ -298,6 +298,6 @@ using namespace gdb;
 
 void GdbTextReader::Read(std::istream& input, IGdbEmitter& emitter)
 {
-	GdbTextReaderImpl impl(input, emitter);
+    const GdbTextReaderImpl impl(input, emitter);
 	impl.Read();
 }

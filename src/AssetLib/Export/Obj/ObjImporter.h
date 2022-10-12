@@ -7,7 +7,7 @@ namespace obj
 	class ObjImporter final : public IAssetConverter
 	{
 	public:
-		bool SupportsExtension(const std::string& extensionName) const override;
+        [[nodiscard]] bool SupportsExtension(const std::string& extensionName) const override;
 		bool Convert(const std::string& directory, const std::string& filePath) override;
 	};
 }

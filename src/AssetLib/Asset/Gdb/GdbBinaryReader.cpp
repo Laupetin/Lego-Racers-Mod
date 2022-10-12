@@ -24,8 +24,8 @@ namespace gdb
 		{
 		}
 
-		void Read()
-		{
+		void Read() const
+        {
 			for (auto nextSectionToken = m_tokens->NextValue(); nextSectionToken.m_type != TOKEN_INVALID && nextSectionToken.m_type != TOKEN_EOF; nextSectionToken = m_tokens->NextValue())
 			{
 				switch (nextSectionToken.m_type)
@@ -69,8 +69,8 @@ namespace gdb
 		}
 
 	private:
-		void ReadMaterialList()
-		{
+		void ReadMaterialList() const
+        {
 			m_emitter.StartMaterials();
 
 			const auto materialCount = ReadCountInCurlyBraces();
@@ -86,8 +86,8 @@ namespace gdb
 			m_emitter.EndMaterials();
 		}
 
-		void ReadVerticesWithPositionAndUv()
-		{
+		void ReadVerticesWithPositionAndUv() const
+        {
 			m_emitter.StartVertices();
 
 			const auto vertexCount = ReadCountInCurlyBraces();
@@ -110,8 +110,8 @@ namespace gdb
 			m_emitter.EndVertices();
 		}
 
-		void ReadVerticesWithPositionAndUvAndNormal()
-		{
+		void ReadVerticesWithPositionAndUvAndNormal() const
+        {
 			m_emitter.StartVertices();
 
 			const auto vertexCount = ReadCountInCurlyBraces();
@@ -139,8 +139,8 @@ namespace gdb
 			m_emitter.EndVertices();
 		}
 
-		void ReadVerticesWithPositionAndUvAndColor()
-		{
+		void ReadVerticesWithPositionAndUvAndColor() const
+        {
 			m_emitter.StartVertices();
 
 			const auto vertexCount = ReadCountInCurlyBraces();
@@ -156,10 +156,10 @@ namespace gdb
 				uv.y = m_tokens->NextFloatValue();
 
 				Color4 color;
-				color.r = m_tokens->NextIntegerValue();
-				color.g = m_tokens->NextIntegerValue();
-				color.b = m_tokens->NextIntegerValue();
-				color.a = m_tokens->NextIntegerValue();
+				color.r = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+				color.g = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+				color.b = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+				color.a = static_cast<uint8_t>(m_tokens->NextIntegerValue());
 
 				m_emitter.EmitVertex(position, uv, color);
 			}
@@ -169,8 +169,8 @@ namespace gdb
 			m_emitter.EndVertices();
 		}
 
-		void ReadVerticesWithPosition()
-		{
+		void ReadVerticesWithPosition() const
+        {
 			m_emitter.StartVertices();
 
 			const auto vertexCount = ReadCountInCurlyBraces();
@@ -189,16 +189,16 @@ namespace gdb
 			m_emitter.EndVertices();
 		}
 
-		void ReadFaces()
-		{
+		void ReadFaces() const
+        {
 			m_emitter.StartFaces();
 
 			const auto faceCount = ReadCountInCurlyBraces();
 			for (auto index = 0; index < faceCount; index++)
 			{
-				const auto vertex0 = static_cast<unsigned char>(m_tokens->NextIntegerValue());
-				const auto vertex1 = static_cast<unsigned char>(m_tokens->NextIntegerValue());
-				const auto vertex2 = static_cast<unsigned char>(m_tokens->NextIntegerValue());
+				const auto vertex0 = static_cast<unsigned int>(m_tokens->NextIntegerValue());
+				const auto vertex1 = static_cast<unsigned int>(m_tokens->NextIntegerValue());
+				const auto vertex2 = static_cast<unsigned int>(m_tokens->NextIntegerValue());
 
 				m_emitter.EmitFace(vertex0, vertex1, vertex2);
 			}
@@ -208,8 +208,8 @@ namespace gdb
 			m_emitter.EndFaces();
 		}
 
-		void ReadVertexMeta()
-		{
+		void ReadVertexMeta() const
+        {
 			m_emitter.StartMeta();
 
 			const auto metaCount = ReadCountInCurlyBraces();
@@ -218,7 +218,7 @@ namespace gdb
 			{
 				switch (m_tokens->NextValue().m_type)
 				{
-				case TOKEN_META_31:
+				case TOKEN_META_ADD_VERTICES:
 				{
 					const auto value0 = m_tokens->NextIntegerValue();
 					const auto value1 = m_tokens->NextIntegerValue();
@@ -227,7 +227,7 @@ namespace gdb
 					m_emitter.EmitMetaKeyword31(value0, value1, value2);
 				}
 				break;
-				case TOKEN_META_2D:
+				case TOKEN_META_FACES:
 				{
 					const auto value0 = m_tokens->NextIntegerValue();
 					const auto value1 = m_tokens->NextIntegerValue();
@@ -254,7 +254,7 @@ namespace gdb
 					m_emitter.EmitMetaKeyword32(value0);
 				}
 				break;
-				case TOKEN_META_27:
+				case TOKEN_META_NEW_OBJECT:
 				{
 					const auto value0 = m_tokens->NextIntegerValue();
 
@@ -271,8 +271,8 @@ namespace gdb
 			m_emitter.EndMeta();
 		}
 
-		void ReadScale()
-		{
+		void ReadScale() const
+        {
 			const auto scaleValue = m_tokens->NextFloatValue();
 			m_emitter.EmitScale(scaleValue);
 		}

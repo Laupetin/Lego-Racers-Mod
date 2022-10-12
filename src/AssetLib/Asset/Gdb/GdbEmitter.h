@@ -11,8 +11,12 @@ namespace gdb
 	public:
 		IGdbEmitter() = default;
 		virtual ~IGdbEmitter() = default;
+        IGdbEmitter(const IGdbEmitter& other) = default;
+        IGdbEmitter(IGdbEmitter&& other) noexcept = default;
+        IGdbEmitter& operator=(const IGdbEmitter& other) = default;
+        IGdbEmitter& operator=(IGdbEmitter&& other) noexcept = default;
 
-		virtual void StartMaterials() = 0;
+        virtual void StartMaterials() = 0;
 		virtual void EmitMaterial(std::string materialName) = 0;
 		virtual void EndMaterials() = 0;
 
@@ -26,7 +30,7 @@ namespace gdb
 		virtual void EndVertices() = 0;
 
 		virtual void StartFaces() = 0;
-		virtual void EmitFace(unsigned vertex0, unsigned vertex1, unsigned vertex2) = 0;
+		virtual void EmitFace(unsigned int vertex0, unsigned int vertex1, unsigned int vertex2) = 0;
 		virtual void EndFaces() = 0;
 
 		virtual void StartMeta() = 0;

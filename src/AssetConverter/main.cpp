@@ -30,8 +30,9 @@ void main(const int argc, const char** argv)
         for (auto& c : extension)
             c = static_cast<char>(toupper(c));
 
-        const auto availableConverter = std::find_if(std::begin(availableConverters), std::end(availableConverters), [&extension](const IAssetConverter* converter) {
-            converter->SupportsExtension(extension);
+        const auto availableConverter = std::find_if(std::begin(availableConverters), std::end(availableConverters), [&extension](const IAssetConverter* converter)
+        {
+            return converter->SupportsExtension(extension);
         });
 
         if (availableConverter && availableConverter != std::end(availableConverters))
