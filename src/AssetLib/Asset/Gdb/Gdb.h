@@ -171,6 +171,32 @@ namespace gdb
         }
     };
 
+    struct VertexSelector
+    {
+        size_t m_look_behind_count;
+        size_t m_vertex_offset;
+        size_t m_vertex_count;
+
+        VertexSelector()
+            : m_look_behind_count(0u),
+              m_vertex_offset(0u),
+              m_vertex_count(0u)
+        {
+        }
+    };
+
+    struct FaceSelector
+    {
+        size_t m_face_offset;
+        size_t m_face_count;
+
+        FaceSelector()
+            : m_face_offset(0u),
+              m_face_count(0u)
+        {
+        }
+    };
+
     struct Model
     {
         std::vector<std::string> m_materials;
