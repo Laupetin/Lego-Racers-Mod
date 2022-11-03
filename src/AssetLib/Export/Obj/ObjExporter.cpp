@@ -99,18 +99,20 @@ namespace obj
     bool GetAbsoluteFaceVertex(const size_t relativeIndex, size_t& objIndex, const gdb::VertexSelector& vertexSelector, const gdb::VertexSelector& previousVertexSelector,
                                const size_t vertexSelectorObjOffset, const size_t previousVertexSelectorObjOffset)
     {
-        const auto relativeIndexWithLookBack = static_cast<int>(relativeIndex) - static_cast<int>(vertexSelector.m_look_behind_count);
 
-        if (relativeIndexWithLookBack < 0)
+        if (relativeIndex < vertexSelector.m_look_behind_count)
         {
-            if (previousVertexSelector.m_vertex_count < static_cast<size_t>(-relativeIndexWithLookBack))
+            // In theory the game could load this (would reference back to selectors even before the previous) but i doubt the game's tools would build such a file
+            if (previousVertexSelector.m_look_behind_count > relativeIndex)
                 return false;
 
-            objIndex = previousVertexSelectorObjOffset + previousVertexSelector.m_vertex_count + relativeIndexWithLookBack;
+            objIndex = previousVertexSelectorObjOffset + (relativeIndex - previousVertexSelector.m_look_behind_count);
             return true;
         }
 
-        if (static_cast<size_t>(relativeIndexWithLookBack) >= vertexSelector.m_vertex_count)
+        const auto relativeIndexWithLookBack = relativeIndex - vertexSelector.m_look_behind_count;
+
+        if (relativeIndexWithLookBack >= vertexSelector.m_vertex_count)
         {
             const size_t previousRelativeIndexWithLookBack = static_cast<size_t>(relativeIndexWithLookBack) - previousVertexSelector.m_look_behind_count;
             if (previousRelativeIndexWithLookBack >= previousVertexSelector.m_vertex_count)
