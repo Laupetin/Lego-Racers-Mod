@@ -5,6 +5,10 @@ Modding tools and experiments for [LEGO Racers (1999)](https://en.wikipedia.org/
 This project is mostly aiming to have fun experimenting with the game and its files.
 Many of the features it currently has were most probably already implemented somewhere else.
 
+Please note that this is only a modification for the vanilla game.
+This does not and does not intend to be a replacement for the original game nor does it include any code, assets or other copyrighted material of the original game.
+You will need the original game files to use this.
+
 ## Features
 
 This project has two parts: The ProxyLibrary for runtime modifications and the modding tools.
