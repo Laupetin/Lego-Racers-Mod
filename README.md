@@ -7,12 +7,43 @@ Many of the features it currently has were most probably already implemented som
 
 ## Features
 
-This project includes multiple components:
+This project has two parts: The ProxyLibrary for runtime modifications and the modding tools.
 
-- [The ProxyLibrary](docs/ProxyLibrary.md): A game modification that is loaded when launching the game and does modifications to the game's code.
-- [The modding tools](docs/Modding.md): Modding tools that allow to extract assets from the game files and create new game files with custom assets.
+### The ProxyLibrary
 
-For more information see the respective document.
+The ProxyLibrary is loaded when the game starts and modifies its code.
+Currently only the 2001 release binary is supported.
+
+Features currently include:
+- **Loading of modding assets:** Additionally to the main asset file `LEGO.JAM` another JAM file `MOD.JAM` is also loaded.
+All included files override the files of the vanilla JAM file.
+
+- **Window mode fix:** The game can be launched in windowed mode on modern systems.
+For this launch the game with the following parameters: `-window -novideo -horzres 640 -vertres 480`
+
+- **Debug logging:** Logs debug information to the console.
+
+So currently not much but with the potential to add more in the future.
+
+### The Modding Tools
+
+The modding tools provide the ability to dump and rebuild game assets.
+Assets are contained within JAM files, the game's container file for assets (The vanilla game has only one: `LEGO.JAM`).
+
+JAM files internally have a filesystem-like structure and can be dumped to a folder and rebuilt from a folder using the JamFileTool.
+Each file inside a JAM file represents an asset with the extension specifying the asset type.
+
+Each asset type has its own individual format.
+Currently every asset type can be dumped and rebuilt in JAM files in its original binary form.
+Some asset types that have custom code can also be dumped in a better readable text based format to be able to modify them.
+The text file format of these assets tries to represent the binary structure as much as possible in the most cases.
+
+You can convert these text based formats to more commonly used formats whenever implemented using the AssetConverter.
+For example `.GDB` files, the game's model format, can be converted to `.OBJ` using AssetConverter to be able to import it into applications like Blender.
+
+![Model export demonstration](docs/assets/ModelExport.png)
+
+Currently the amount of support asset types is still a bit slim but support for further asset types can be added in the future to improve the amount of moddability.
 
 ## Getting started
 
