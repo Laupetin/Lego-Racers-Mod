@@ -40,20 +40,6 @@ namespace obj
 
             object.m_vertices.emplace_back(vertex.m_position.x, vertex.m_position.y, vertex.m_position.z);
         }
-
-        //for (auto faceIndex = 0u; faceIndex < faceCount; faceIndex++)
-        //{
-        //    const auto& face = gdbModel.m_faces[faceStart + faceIndex];
-        //    size_t absoluteVertices[3];
-
-        //    if (!GetAbsoluteFaceVertices(face, absoluteVertices, vertexStart, vertexCount, lastVertexCountWasMax))
-        //    {
-        //        assert(false);
-        //        continue;
-        //    }
-
-        //    object.m_faces.emplace_back(absoluteVertices[0], absoluteVertices[1], absoluteVertices[2]);
-        //}
     }
 
     void AddVerticesWithPositionUv(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector)
@@ -68,23 +54,6 @@ namespace obj
             object.m_vertices.emplace_back(vertex.m_position.x, vertex.m_position.y, vertex.m_position.z);
             object.m_uvs.emplace_back(vertex.m_uv.x, vertex.m_uv.y);
         }
-
-        //for (auto faceIndex = 0u; faceIndex < faceCount; faceIndex++)
-        //{
-        //    const auto& face = gdbModel.m_faces[faceStart + faceIndex];
-
-        //    if (face.m_indices[0] < vertexStart || face.m_indices[0] >= vertexStart + vertexCount
-        //        || face.m_indices[1] < vertexStart || face.m_indices[1] >= vertexStart + vertexCount
-        //        || face.m_indices[2] < vertexStart || face.m_indices[2] >= vertexStart + vertexCount)
-        //    {
-        //        assert(false);
-        //        continue;
-        //    }
-
-        //    object.m_faces.emplace_back(face.m_indices[0], uvPerVertex[face.m_indices[0]],
-        //                                face.m_indices[1], uvPerVertex[face.m_indices[1]],
-        //                                face.m_indices[2], uvPerVertex[face.m_indices[2]]);
-        //}
     }
 
     void AddVerticesWithPositionUvNormal(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector)
@@ -102,31 +71,6 @@ namespace obj
             object.m_uvs.emplace_back(vertex.m_uv.x, vertex.m_uv.y);
             object.m_normals.emplace_back(vertex.m_normal.x, vertex.m_normal.y, vertex.m_normal.z);
         }
-
-        //bool shouldBackReferToPreviousVertices = lastVertexCountWasMax;
-        //for (auto faceIndex = 0u; faceIndex < faceCount; faceIndex++)
-        //{
-        //    const auto& face = gdbModel.m_faces[faceStart + faceIndex];
-
-        //    auto vertex0 = shouldBackReferToPreviousVertices && face.m_indices[0];
-        //    auto vertex1 = face.m_indices[1];
-        //    auto vertex2 = face.m_indices[2];
-
-        //    shouldBackReferToPreviousVertices = shouldBackReferToPreviousVertices
-        //        && (face.m_indices[0] > BACK_REFER_CUTOFF || face.m_indices[1] > BACK_REFER_CUTOFF || face.m_indices[2] > BACK_REFER_CUTOFF);
-
-        //    if (face.m_indices[0] < vertexStart || face.m_indices[0] >= vertexStart + vertexCount
-        //        || face.m_indices[1] < vertexStart || face.m_indices[1] >= vertexStart + vertexCount
-        //        || face.m_indices[2] < vertexStart || face.m_indices[2] >= vertexStart + vertexCount)
-        //    {
-        //        assert(false);
-        //        continue;
-        //    }
-
-        //    object.m_faces.emplace_back(face.m_indices[0], uvPerVertex[face.m_indices[0]], normalPerVertex[face.m_indices[0]],
-        //                                face.m_indices[1], uvPerVertex[face.m_indices[1]], normalPerVertex[face.m_indices[1]],
-        //                                face.m_indices[2], uvPerVertex[face.m_indices[2]], normalPerVertex[face.m_indices[2]]);
-        //}
     }
 
     void AddVerticesToObject(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector)
