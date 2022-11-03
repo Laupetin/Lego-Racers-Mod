@@ -173,12 +173,12 @@ namespace gdb
 
     struct VertexSelector
     {
-        size_t m_look_behind_count;
+        size_t m_shift_forward_count;
         size_t m_vertex_offset;
         size_t m_vertex_count;
 
         VertexSelector()
-            : m_look_behind_count(0u),
+            : m_shift_forward_count(0u),
               m_vertex_offset(0u),
               m_vertex_count(0u)
         {

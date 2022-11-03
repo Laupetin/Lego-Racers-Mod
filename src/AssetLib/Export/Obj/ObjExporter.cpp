@@ -100,21 +100,21 @@ namespace obj
                                const size_t vertexSelectorObjOffset, const size_t previousVertexSelectorObjOffset)
     {
 
-        if (relativeIndex < vertexSelector.m_look_behind_count)
+        if (relativeIndex < vertexSelector.m_shift_forward_count)
         {
             // In theory the game could load this (would reference back to selectors even before the previous) but i doubt the game's tools would build such a file
-            if (previousVertexSelector.m_look_behind_count > relativeIndex)
+            if (previousVertexSelector.m_shift_forward_count > relativeIndex)
                 return false;
 
-            objIndex = previousVertexSelectorObjOffset + (relativeIndex - previousVertexSelector.m_look_behind_count);
+            objIndex = previousVertexSelectorObjOffset + (relativeIndex - previousVertexSelector.m_shift_forward_count);
             return true;
         }
 
-        const auto relativeIndexWithLookBack = relativeIndex - vertexSelector.m_look_behind_count;
+        const auto relativeIndexWithLookBack = relativeIndex - vertexSelector.m_shift_forward_count;
 
         if (relativeIndexWithLookBack >= vertexSelector.m_vertex_count)
         {
-            const size_t previousRelativeIndexWithLookBack = static_cast<size_t>(relativeIndexWithLookBack) - previousVertexSelector.m_look_behind_count;
+            const size_t previousRelativeIndexWithLookBack = static_cast<size_t>(relativeIndexWithLookBack) - previousVertexSelector.m_shift_forward_count;
             if (previousRelativeIndexWithLookBack >= previousVertexSelector.m_vertex_count)
                 return false;
 
@@ -273,7 +273,7 @@ namespace obj
                 if (meta.m_value1 >= 0 && meta.m_value2 >= 0 && static_cast<size_t>(meta.m_value1) + static_cast<size_t>(meta.m_value2) <= gdbModel.m_vertices.size())
                 {
                     previousVertexSelector = currentVertexSelector;
-                    currentVertexSelector.m_look_behind_count = meta.m_value0;
+                    currentVertexSelector.m_shift_forward_count = meta.m_value0;
                     currentVertexSelector.m_vertex_offset = meta.m_value1;
                     currentVertexSelector.m_vertex_count = meta.m_value2;
                 }
