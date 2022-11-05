@@ -1,9 +1,12 @@
 #pragma once
 #include "Asset/IFileTypeProcessor.h"
 
-class MdbCreator final : public IFileTypeProcessor
+namespace mdb
 {
-public:
-    [[nodiscard]] bool SupportFileExtension(const std::string& extension) const override;
-    void ProcessFile(const std::string& filePath, const void* inputData, size_t inputDataSize, std::ostream& output) const override;
-};
+    class MdbCreator final : public AbstractStreamingFileTypeProcessor
+    {
+    public:
+        [[nodiscard]] bool SupportFileExtension(const std::string& extension) const override;
+        void ProcessFile(const std::string& filePath, std::istream& input, std::ostream& output) const override;
+    };
+}
