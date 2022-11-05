@@ -139,6 +139,27 @@ namespace obj
     {
         return m_normal_index[0] >= 0 && m_normal_index[1] >= 0 && m_normal_index[2] >= 0;
     }
+
+    ObjObject::ObjObject()
+        : m_material_index(-1)
+    {
+    }
+
+    ObjObject::ObjObject(std::string name, const int materialIndex)
+        : m_name(std::move(name)),
+          m_material_index(materialIndex)
+    {
+    }
+}
+
+std::size_t std::hash<ObjVertex>::operator()(const ObjVertex& v) const noexcept
+
+{
+    std::size_t seed = 0x58CACB27;
+    seed ^= (seed << 6) + (seed >> 2) + 0x6C7D59B7 + static_cast<std::size_t>(v.m_coordinates[0]);
+    seed ^= (seed << 6) + (seed >> 2) + 0x31B8AAE9 + static_cast<std::size_t>(v.m_coordinates[1]);
+    seed ^= (seed << 6) + (seed >> 2) + 0x35FC0176 + static_cast<std::size_t>(v.m_coordinates[2]);
+    return seed;
 }
 
 std::size_t std::hash<ObjNormal>::operator()(const ObjNormal& n) const noexcept
@@ -149,10 +170,6 @@ std::size_t std::hash<ObjNormal>::operator()(const ObjNormal& n) const noexcept
     seed ^= (seed << 6) + (seed >> 2) + 0x14785A83 + static_cast<std::size_t>(n.m_normal[1]);
     seed ^= (seed << 6) + (seed >> 2) + 0x43B671FE + static_cast<std::size_t>(n.m_normal[2]);
     return seed;
-
-    //return ((std::hash<float>()(n.m_normal[0])
-    //    ^ (std::hash<float>()(n.m_normal[1]) << 1)) >> 1)
-    //    ^ (std::hash<float>()(n.m_normal[2]) << 1);
 }
 
 std::size_t std::hash<ObjUv>::operator()(const ObjUv& uv) const noexcept

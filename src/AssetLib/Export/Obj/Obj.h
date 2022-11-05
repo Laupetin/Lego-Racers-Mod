@@ -75,11 +75,14 @@ namespace obj
     {
     public:
         std::string m_name;
-        int m_material_index = -1;
+        int m_material_index;
         std::vector<ObjVertex> m_vertices;
         std::vector<ObjNormal> m_normals;
         std::vector<ObjUv> m_uvs;
         std::vector<ObjFace> m_faces;
+
+        ObjObject();
+        ObjObject(std::string name, int materialIndex);
     };
 
     class ObjModel
@@ -92,6 +95,12 @@ namespace obj
 
 namespace std
 {
+    template <>
+    struct hash<obj::ObjVertex>
+    {
+        std::size_t operator()(const obj::ObjVertex& v) const noexcept;
+    };
+
     template <>
     struct hash<obj::ObjNormal>
     {
