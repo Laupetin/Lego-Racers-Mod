@@ -9,9 +9,8 @@ namespace gdb
     class GdbStructWriter
     {
 	public:
-		static std::unique_ptr<IGdbEmitter> Create(Model& model);
-
-	private:
 		GdbStructWriter() = delete;
+
+		static std::unique_ptr<IGdbEmitter> Create(Model& model);
     };
 }
