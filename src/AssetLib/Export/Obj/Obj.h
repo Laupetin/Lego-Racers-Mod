@@ -93,6 +93,12 @@ namespace obj
 namespace std
 {
     template <>
+    struct hash<obj::ObjVertex>
+    {
+        std::size_t operator()(const obj::ObjVertex& v) const noexcept;
+    };
+
+    template <>
     struct hash<obj::ObjNormal>
     {
         std::size_t operator()(const obj::ObjNormal& n) const noexcept;
