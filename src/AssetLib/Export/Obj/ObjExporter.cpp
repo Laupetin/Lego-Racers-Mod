@@ -8,6 +8,7 @@
 #include <unordered_map>
 
 #include "Obj.h"
+#include "ObjDeduplicator.h"
 #include "ObjWriter.h"
 #include "Asset/Gdb/GdbStructWriter.h"
 #include "Asset/Gdb/GdbTextReader.h"
@@ -99,7 +100,6 @@ namespace obj
     bool GetAbsoluteFaceVertex(const size_t relativeIndex, size_t& objIndex, const gdb::VertexSelector& vertexSelector, const gdb::VertexSelector& previousVertexSelector,
                                const size_t vertexSelectorObjOffset, const size_t previousVertexSelectorObjOffset)
     {
-
         if (relativeIndex < vertexSelector.m_shift_forward_count)
         {
             // In theory the game could load this (would reference back to selectors even before the previous) but i doubt the game's tools would build such a file
@@ -378,6 +378,12 @@ bool ObjExporter::Convert(const std::string& directory, const std::string& fileP
     const auto obj = CreateObjFromGdb(model);
     if (!obj)
         return false;
+
+    for (auto& objObject : obj->m_objects)
+    {
+        Deduplicator deduplicator(objObject);
+        objObject = deduplicator.Deduplicate();
+    }
 
     const auto fileName = fsPath.filename().string();
     ObjWriter writer(*obj);

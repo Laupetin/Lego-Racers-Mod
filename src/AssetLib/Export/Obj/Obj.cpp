@@ -139,6 +139,17 @@ namespace obj
     {
         return m_normal_index[0] >= 0 && m_normal_index[1] >= 0 && m_normal_index[2] >= 0;
     }
+
+    ObjObject::ObjObject()
+        : m_material_index(-1)
+    {
+    }
+
+    ObjObject::ObjObject(std::string name, const int materialIndex)
+        : m_name(std::move(name)),
+          m_material_index(materialIndex)
+    {
+    }
 }
 
 std::size_t std::hash<ObjVertex>::operator()(const ObjVertex& v) const noexcept
