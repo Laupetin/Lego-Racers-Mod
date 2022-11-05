@@ -32,7 +32,7 @@ public:
 
 const IFileTypeProcessor* availableFileTypeCreators[]
 {
-    new GdbCreator(),
+    new gdb::GdbCreator(),
     new IdbCreator(),
     new MdbCreator(),
     new SrfCreator(),
