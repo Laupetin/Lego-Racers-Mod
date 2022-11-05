@@ -12,7 +12,7 @@ namespace obj
         explicit ObjWriter(const ObjModel& model);
 
         void WriteObj(std::ostream& out, const std::string& matName) const;
-        void WriteMat(std::ostream& out) const;
+        void WriteMtl(std::ostream& out) const;
 
     private:
         const ObjModel& m_model;

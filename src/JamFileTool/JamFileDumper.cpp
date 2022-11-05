@@ -34,9 +34,9 @@ public:
 const IFileTypeProcessor* availableFileTypeDumpers[]
 {
     new BmpDumper(),
-    new GdbDumper(),
+    new gdb::GdbDumper(),
     new IdbDumper(),
-    new MdbDumper(),
+    new mdb::MdbDumper(),
     new SrfDumper(),
     new TdbDumper(),
 

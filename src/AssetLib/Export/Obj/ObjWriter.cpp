@@ -88,9 +88,9 @@ void ObjWriter::WriteObj(std::ostream& out, const std::string& matName) const
     }
 }
 
-void ObjWriter::WriteMat(std::ostream& out) const
+void ObjWriter::WriteMtl(std::ostream& out) const
 {
-    out << "# LegoRacersMod MAT File\n";
+    out << "# LegoRacersMod MTL File\n";
     out << "# Material count: " << m_model.m_materials.size() << "\n";
 
     for (const auto& material : m_model.m_materials)

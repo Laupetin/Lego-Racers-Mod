@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "Gdb.h"
 #include "GdbBinaryReader.h"
 #include "GdbTextWriter.h"
 

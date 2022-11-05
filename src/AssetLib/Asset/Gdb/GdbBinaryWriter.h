@@ -8,9 +8,8 @@ namespace gdb
 	class GdbBinaryWriter
 	{
 	public:
-		static std::unique_ptr<IGdbEmitter> Create(std::ostream& stream);
-
-	private:
 		GdbBinaryWriter() = delete;
+
+		static std::unique_ptr<IGdbEmitter> Create(std::ostream& stream);
 	};
 }

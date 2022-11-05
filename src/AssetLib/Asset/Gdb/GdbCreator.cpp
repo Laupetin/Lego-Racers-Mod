@@ -1,7 +1,6 @@
 #include "GdbCreator.h"
 
 #include <iostream>
-#include <sstream>
 
 #include "TokenStream.h"
 #include "GdbTextReader.h"

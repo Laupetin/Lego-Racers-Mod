@@ -9,9 +9,8 @@ namespace gdb
 	class GdbTextReader
 	{
 	public:
-		static void Read(std::istream& input, IGdbEmitter& emitter);
-
-	private:
 		GdbTextReader() = delete;
+
+		static void Read(std::istream& input, IGdbEmitter& emitter);
 	};
 }

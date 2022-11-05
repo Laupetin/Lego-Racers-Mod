@@ -9,9 +9,11 @@
 
 #include "Obj.h"
 #include "ObjDeduplicator.h"
+#include "ObjMtlConverter.h"
 #include "ObjWriter.h"
 #include "Asset/Gdb/GdbStructWriter.h"
 #include "Asset/Gdb/GdbTextReader.h"
+#include "Asset/Mdb/MdbTextReader.h"
 
 namespace fs = std::filesystem;
 
@@ -235,7 +237,46 @@ namespace obj
         return object;
     }
 
-    std::unique_ptr<ObjModel> CreateObjFromGdb(const gdb::Model& gdbModel)
+    std::unordered_map<std::string, MtlMaterial> ReadMaterialsFromDirectory(const std::string& directory)
+    {
+        std::unordered_map<std::string, MtlMaterial> result;
+        const fs::directory_iterator iterator(directory, std::filesystem::directory_options::skip_permission_denied);
+
+        for (const auto& file : iterator)
+        {
+            if (!file.is_regular_file())
+                continue;
+
+            if (file.path().extension() != ".MDB")
+                continue;
+
+            std::ifstream stream(file.path());
+            if (!stream.is_open())
+            {
+                std::cerr << "Failed to open MDB file for scanning: \"" << file.path() << "\"\n";
+                continue;
+            }
+
+            try
+            {
+                const auto mtlConverter = ObjMtlConverter::Create();
+                mdb::MdbTextReader::Read(stream, *mtlConverter);
+
+                auto materials = mtlConverter->RetrieveConvertedMaterials();
+
+                for (auto& material : materials)
+                    result.emplace(material.m_material_name, std::move(material));
+            }
+            catch (std::exception& e)
+            {
+                std::cerr << "Failed to read MDB file: \"" << file.path() << "\": " << e.what() << "\n";
+            }
+        }
+
+        return result;
+    }
+
+    std::unique_ptr<ObjModel> CreateObjFromGdb(const std::string& directory, const gdb::Model& gdbModel)
     {
         auto objModel = std::make_unique<ObjModel>();
 
@@ -303,10 +344,19 @@ namespace obj
         if (hasObject)
             objModel->m_objects.emplace_back(std::move(currentObject));
 
+        const auto mdbMaterials = ReadMaterialsFromDirectory(directory);
         for (const auto& material : gdbModel.m_materials)
         {
-            // TODO: Assume color map name is image name
-            objModel->m_materials.emplace_back(material, material);
+            const auto loadedMdbMaterial = mdbMaterials.find(material);
+
+            if (loadedMdbMaterial != mdbMaterials.end())
+            {
+                objModel->m_materials.emplace_back(loadedMdbMaterial->second);
+            }
+            else
+            {
+                objModel->m_materials.emplace_back(material, std::string());
+            }
         }
 
         return objModel;
@@ -343,7 +393,7 @@ namespace obj
             return false;
         }
 
-        writer.WriteMat(out);
+        writer.WriteMtl(out);
         return true;
     }
 }
@@ -375,7 +425,7 @@ bool ObjExporter::Convert(const std::string& directory, const std::string& fileP
     if (!ReadGdbModelFromFile(in, model))
         return false;
 
-    const auto obj = CreateObjFromGdb(model);
+    const auto obj = CreateObjFromGdb(directory, model);
     if (!obj)
         return false;
 

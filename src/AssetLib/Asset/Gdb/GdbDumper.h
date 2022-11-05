@@ -1,11 +1,14 @@
 #pragma once
 #include "Asset/IFileTypeProcessor.h"
 
-class GdbDumper final : public AbstractStreamingFileTypeProcessor
+namespace gdb
 {
-public:
-    [[nodiscard]] bool SupportFileExtension(const std::string& extension) const override;
+    class GdbDumper final : public AbstractStreamingFileTypeProcessor
+    {
+    public:
+        [[nodiscard]] bool SupportFileExtension(const std::string& extension) const override;
 
-protected:
-    void ProcessFile(const std::string& filePath, std::istream& input, std::ostream& output) const override;
-};
+    protected:
+        void ProcessFile(const std::string& filePath, std::istream& input, std::ostream& output) const override;
+    };
+}
