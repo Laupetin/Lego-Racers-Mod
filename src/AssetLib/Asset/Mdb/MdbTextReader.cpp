@@ -6,7 +6,6 @@
 
 #pragma warning(push, 0)
 #include "Parsing/Common/CommonGrammarHelper.h"
-#include "Parsing/Parser/Gdb/GdbLexer.h"
 #include "Parsing/Parser/Mdb/MdbLexer.h"
 #include "Parsing/Parser/Mdb/MdbParser.h"
 #include "Parsing/Parser/Mdb/MdbBaseListener.h"
@@ -285,7 +284,7 @@ namespace mdb
             CustomMdbErrorListener errors;
             antlr4::ANTLRInputStream inputStream(m_stream);
 
-            gdb::GdbLexer lexer(&inputStream);
+            MdbLexer lexer(&inputStream);
             lexer.addErrorListener(&errors);
 
             antlr4::CommonTokenStream tokenStream(&lexer);
