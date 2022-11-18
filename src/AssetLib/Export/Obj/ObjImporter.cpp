@@ -1,6 +1,33 @@
 #include "ObjImporter.h"
 
+#include <fstream>
+#include <iostream>
+#include <filesystem>
+
+#include "Obj.h"
+#include "Asset/Gdb/Gdb.h"
+
 using namespace obj;
+
+namespace fs = std::filesystem;
+
+namespace obj
+{
+    bool ReadObjModelFromFile(std::istream& stream, ObjModel& model)
+    {
+        return false;
+    }
+
+    std::unique_ptr<gdb::Model> CreateGdbFromObj(const ObjModel& obj)
+    {
+        return nullptr;
+    }
+
+    bool WriteGdbFile(const gdb::Model& model, const std::string& directory, const std::string& fileName)
+    {
+        return false;
+    }
+}
 
 bool ObjImporter::SupportsExtension(const std::string& extensionName) const
 {
@@ -9,5 +36,31 @@ bool ObjImporter::SupportsExtension(const std::string& extensionName) const
 
 bool ObjImporter::Convert(const std::string& directory, const std::string& filePath)
 {
-    return false;
+    const fs::path fsPath = fs::path(directory) / filePath;
+    if (!fs::is_regular_file(fsPath))
+    {
+        std::cerr << "Not a valid file: \"" << fsPath << "\"\n";
+        return false;
+    }
+
+    std::ifstream in(fsPath, std::ios::in | std::ios::binary);
+    if (!in.is_open())
+    {
+        std::cerr << "Failed to open obj: \"" << fsPath << "\"\n";
+        return false;
+    }
+
+    ObjModel model;
+    if (!ReadObjModelFromFile(in, model))
+        return false;
+
+    const auto gdb = CreateGdbFromObj(model);
+    if (!gdb)
+        return false;
+
+    const auto fileName = fsPath.filename().string();
+    if (!WriteGdbFile(*gdb, directory, fileName))
+        return false;
+
+    return true;
 }
