@@ -88,12 +88,12 @@ bool AbstractTextReader::ReadEscapedInQuotationMarks(std::string& value)
                 ss << "\n";
                 break;
             default:
-                ss << c;
+                ss << static_cast<char>(c);
                 break;
             }
         }
         else
-            ss << c;
+            ss << static_cast<char>(c);
 
         c = m_stream.get();
     }
@@ -109,7 +109,7 @@ bool AbstractTextReader::ReadIntegerValue(int& value)
     int c = NextChar();
     while (isdigit(c))
     {
-        ss << c;
+        ss << static_cast<char>(c);
         c = m_stream.get();
     }
 
@@ -151,11 +151,17 @@ bool AbstractTextReader::ReadFloatingPointStr(std::string& str)
     std::ostringstream ss;
     int c = NextChar();
 
+    if (c == '+' || c == '-')
+    {
+        ss << static_cast<char>(c);
+        c = m_stream.get();
+    }
+
     if (isdigit(c))
     {
         while (isdigit(c))
         {
-            ss << c;
+            ss << static_cast<char>(c);;
             c = m_stream.get();
         }
     }
@@ -164,7 +170,7 @@ bool AbstractTextReader::ReadFloatingPointStr(std::string& str)
 
     if (c == '.')
     {
-        ss << c;
+        ss << static_cast<char>(c);;
         c = m_stream.get();
 
         if (!isdigit(c))
@@ -172,12 +178,13 @@ bool AbstractTextReader::ReadFloatingPointStr(std::string& str)
 
         while (isdigit(c))
         {
-            ss << c;
+            ss << static_cast<char>(c);
             c = m_stream.get();
         }
     }
 
     SetPeeked(c);
+    str = ss.str();
     return true;
 }
 
@@ -192,11 +199,11 @@ bool AbstractTextReader::ReadIdentifier(std::string& value)
         return false;
     }
 
-    ss << c;
+    ss << static_cast<char>(c);
     c = m_stream.get();
     while (isalnum(c) || c == '_')
     {
-        ss << c;
+        ss << static_cast<char>(c);
         c = m_stream.get();
     }
 

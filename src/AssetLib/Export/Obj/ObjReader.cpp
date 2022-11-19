@@ -48,10 +48,9 @@ namespace obj
             {
                 m_model = std::make_unique<ObjModel>();
 
-                if (m_object_defined || !m_current_object.m_vertices.empty() || !m_current_object.m_uvs.empty() || !m_current_object.m_normals.empty())
-                    m_model->m_objects.emplace_back(std::move(m_current_object));
-
                 ReadData();
+
+                AddCurrentObject();
 
                 return std::move(m_model);
             }
@@ -64,7 +63,16 @@ namespace obj
         }
 
     private:
+
         void NextObject(std::string name)
+        {
+            AddCurrentObject();
+
+            m_current_object = ObjObject(std::move(name), -1);
+            m_object_defined = true;
+        }
+
+        void AddCurrentObject()
         {
             if (m_object_defined || !m_current_object.m_vertices.empty() || !m_current_object.m_uvs.empty() || !m_current_object.m_normals.empty())
             {
@@ -74,9 +82,6 @@ namespace obj
 
                 m_model->m_objects.emplace_back(std::move(m_current_object));
             }
-
-            m_current_object = ObjObject(std::move(name), -1);
-            m_object_defined = true;
         }
 
         void ReadData()
@@ -262,8 +267,9 @@ namespace obj
 
         bool ReadFaceIndices(int& vertexIndex, int& uvIndex, int& normalIndex)
         {
-            if (!ReadIntegerValue(vertexIndex))
+            if (!ReadIntegerValue(vertexIndex) || vertexIndex <= 0)
                 return false;
+            vertexIndex--;
 
             auto c = NextChar();
             if (c == '/')
@@ -272,15 +278,17 @@ namespace obj
                 if (c != '/')
                 {
                     SetPeeked(c);
-                    if (!ReadIntegerValue(uvIndex))
+                    if (!ReadIntegerValue(uvIndex) || uvIndex <= 0)
                         return false;
+                    uvIndex--;
                 }
 
                 c = NextChar();
                 if (c == '/')
                 {
-                    if (!ReadIntegerValue(normalIndex))
+                    if (!ReadIntegerValue(normalIndex) || normalIndex <= 0)
                         return false;
+                    normalIndex--;
                 }
                 else
                 {
