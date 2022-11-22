@@ -36,11 +36,11 @@ namespace gdb
         float x;
         float y;
 
-        Vec2()
-        {
-            x = 0.0f;
-            y = 0.0f;
-        }
+        Vec2();
+
+        friend bool operator==(const Vec2& lhs, const Vec2& rhs);
+        friend bool operator!=(const Vec2& lhs, const Vec2& rhs);
+        friend bool operator<(const Vec2& lhs, const Vec2& rhs);
     };
 
     struct Vec3
@@ -49,12 +49,11 @@ namespace gdb
         float y;
         float z;
 
-        Vec3()
-        {
-            x = 0.0f;
-            y = 0.0f;
-            z = 0.0f;
-        }
+        Vec3();
+
+        friend bool operator==(const Vec3& lhs, const Vec3& rhs);
+        friend bool operator!=(const Vec3& lhs, const Vec3& rhs);
+        friend bool operator<(const Vec3& lhs, const Vec3& rhs);
     };
 
     struct Color4
@@ -64,28 +63,19 @@ namespace gdb
         unsigned char b;
         unsigned char a;
 
-        Color4()
-        {
-            r = 0;
-            g = 0;
-            b = 0;
-            a = 0;
-        }
+        Color4();
+
+        friend bool operator==(const Color4& lhs, const Color4& rhs);
+        friend bool operator!=(const Color4& lhs, const Color4& rhs);
+        friend bool operator<(const Color4& lhs, const Color4& rhs);
     };
 
     struct ModelFace
     {
         unsigned char m_indices[3];
 
-        ModelFace()
-            : m_indices{}
-        {
-        }
-
-        ModelFace(const unsigned char index0, const unsigned char index1, const unsigned char index2)
-            : m_indices{index0, index1, index2}
-        {
-        }
+        ModelFace();
+        ModelFace(unsigned char index0, unsigned char index1, unsigned char index2);
     };
 
     struct Vertex
@@ -97,30 +87,14 @@ namespace gdb
 
         Vertex() = default;
 
-        explicit Vertex(const Vec3 position)
-            : m_position(position)
-        {
-        }
+        explicit Vertex(Vec3 position);
+        Vertex(Vec3 position, Vec2 uv);
+        Vertex(Vec3 position, Vec2 uv, Vec3 normal);
+        Vertex(Vec3 position, Vec2 uv, Color4 color);
 
-        Vertex(const Vec3 position, const Vec2 uv)
-            : m_position(position),
-              m_uv(uv)
-        {
-        }
-
-        Vertex(const Vec3 position, const Vec2 uv, const Vec3 normal)
-            : m_position(position),
-              m_uv(uv),
-              m_normal(normal)
-        {
-        }
-
-        Vertex(const Vec3 position, const Vec2 uv, const Color4 color)
-            : m_position(position),
-              m_uv(uv),
-              m_color(color)
-        {
-        }
+        friend bool operator==(const Vertex& lhs, const Vertex& rhs);
+        friend bool operator!=(const Vertex& lhs, const Vertex& rhs);
+        friend bool operator<(const Vertex& lhs, const Vertex& rhs);
     };
 
     struct Meta
@@ -130,45 +104,11 @@ namespace gdb
         int m_value1;
         int m_value2;
 
-        Meta()
-            : m_keyword{},
-              m_value0(0),
-              m_value1(0),
-              m_value2(0)
-        {
-        }
-
-        explicit Meta(const ModelToken keyword)
-            : m_keyword(keyword),
-              m_value0(0),
-              m_value1(0),
-              m_value2(0)
-        {
-        }
-
-        Meta(const ModelToken keyword, const int value0)
-            : m_keyword(keyword),
-              m_value0(value0),
-              m_value1(0),
-              m_value2(0)
-        {
-        }
-
-        Meta(const ModelToken keyword, const int value0, const int value1)
-            : m_keyword(keyword),
-              m_value0(value0),
-              m_value1(value1),
-              m_value2(0)
-        {
-        }
-
-        Meta(const ModelToken keyword, const int value0, const int value1, const int value2)
-            : m_keyword(keyword),
-              m_value0(value0),
-              m_value1(value1),
-              m_value2(value2)
-        {
-        }
+        Meta();
+        explicit Meta(ModelToken keyword);
+        Meta(ModelToken keyword, int value0);
+        Meta(ModelToken keyword, int value0, int value1);
+        Meta(ModelToken keyword, int value0, int value1, int value2);
     };
 
     struct VertexSelector
@@ -177,12 +117,7 @@ namespace gdb
         size_t m_vertex_offset;
         size_t m_vertex_count;
 
-        VertexSelector()
-            : m_shift_forward_count(0u),
-              m_vertex_offset(0u),
-              m_vertex_count(0u)
-        {
-        }
+        VertexSelector();
     };
 
     struct FaceSelector
@@ -190,11 +125,7 @@ namespace gdb
         size_t m_face_offset;
         size_t m_face_count;
 
-        FaceSelector()
-            : m_face_offset(0u),
-              m_face_count(0u)
-        {
-        }
+        FaceSelector();
     };
 
     struct Model
@@ -206,10 +137,30 @@ namespace gdb
         std::vector<Meta> m_meta;
         float m_scale;
 
-        Model()
-            : m_vertex_format(VertexFormat::POSITION),
-              m_scale(1.0f)
-        {
-        }
+        Model();
     };
 }
+
+template <>
+struct std::hash<gdb::Vec2>
+{
+    std::size_t operator()(const gdb::Vec2& vec) const noexcept;
+};
+
+template <>
+struct std::hash<gdb::Vec3>
+{
+    std::size_t operator()(const gdb::Vec3& vec) const noexcept;
+};
+
+template <>
+struct std::hash<gdb::Color4>
+{
+    std::size_t operator()(const gdb::Color4& clr) const noexcept;
+};
+
+template <>
+struct std::hash<gdb::Vertex>
+{
+    std::size_t operator()(const gdb::Vertex& v) const noexcept;
+};
