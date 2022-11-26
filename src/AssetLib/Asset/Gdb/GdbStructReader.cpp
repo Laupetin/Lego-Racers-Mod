@@ -16,6 +16,9 @@ namespace gdb
         void Read() const
         {
             ReadMaterials();
+            ReadVertices();
+            ReadFaces();
+            ReadMeta();
         }
 
     private:

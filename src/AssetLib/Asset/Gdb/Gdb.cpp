@@ -10,6 +10,12 @@ Vec2::Vec2()
     y = 0.0f;
 }
 
+Vec2::Vec2(const float x, const float y)
+    : x(x),
+      y(y)
+{
+}
+
 bool gdb::operator==(const Vec2& lhs, const Vec2& rhs)
 {
     return std::fabs(lhs.x - rhs.x) < std::numeric_limits<float>::epsilon()
@@ -39,6 +45,13 @@ Vec3::Vec3()
     x = 0.0f;
     y = 0.0f;
     z = 0.0f;
+}
+
+Vec3::Vec3(const float x, const float y, const float z)
+    : x(x),
+      y(y),
+      z(z)
+{
 }
 
 bool gdb::operator==(const Vec3& lhs, const Vec3& rhs)
@@ -73,6 +86,14 @@ Color4::Color4()
     g = 0;
     b = 0;
     a = 0;
+}
+
+Color4::Color4(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a)
+    : r(r),
+      g(g),
+      b(b),
+      a(a)
+{
 }
 
 bool gdb::operator==(const Color4& lhs, const Color4& rhs)

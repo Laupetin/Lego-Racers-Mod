@@ -37,6 +37,7 @@ namespace gdb
         float y;
 
         Vec2();
+        Vec2(float x, float y);
 
         friend bool operator==(const Vec2& lhs, const Vec2& rhs);
         friend bool operator!=(const Vec2& lhs, const Vec2& rhs);
@@ -50,6 +51,7 @@ namespace gdb
         float z;
 
         Vec3();
+        Vec3(float x, float y, float z);
 
         friend bool operator==(const Vec3& lhs, const Vec3& rhs);
         friend bool operator!=(const Vec3& lhs, const Vec3& rhs);
@@ -64,6 +66,7 @@ namespace gdb
         unsigned char a;
 
         Color4();
+        Color4(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
         friend bool operator==(const Color4& lhs, const Color4& rhs);
         friend bool operator!=(const Color4& lhs, const Color4& rhs);
