@@ -133,9 +133,6 @@ private:
 
     void DumpFile(const std::string& currentPath, const fs::path& dumpPath, const JamFileDiskFile& file) const
     {
-        if (file.dataSize <= 0)
-            return;
-
         const std::string fileName(file.fileName, strnlen(file.fileName, std::extent_v<decltype(file.fileName)>));
         const auto dumpFilePath = dumpPath / fileName;
 
@@ -149,23 +146,26 @@ private:
         if (!streamOut.is_open())
             throw JamFileReadingException("Could not open file for output");
 
-        const auto fileDataBuffer = std::make_unique<char[]>(file.dataSize);
-        m_stream.seekg(file.dataOffset, std::ios::beg);
-        m_stream.read(fileDataBuffer.get(), file.dataSize);
-
-        for (const auto* fileDumper : availableFileTypeDumpers)
+        if (file.dataSize > 0)
         {
-            if (fileDumper->SupportFileExtension(fileExtension))
+            const auto fileDataBuffer = std::make_unique<char[]>(file.dataSize);
+            m_stream.seekg(file.dataOffset, std::ios::beg);
+            m_stream.read(fileDataBuffer.get(), file.dataSize);
+
+            for (const auto* fileDumper : availableFileTypeDumpers)
             {
-                try
+                if (fileDumper->SupportFileExtension(fileExtension))
                 {
-                    fileDumper->ProcessFile(filePath, fileDataBuffer.get(), file.dataSize, streamOut);
+                    try
+                    {
+                        fileDumper->ProcessFile(filePath, fileDataBuffer.get(), file.dataSize, streamOut);
+                    }
+                    catch (std::exception& e)
+                    {
+                        std::cerr << "Failed to dump JAM file \"" << filePath << "\": " << e.what() << "\n";
+                    }
+                    break;
                 }
-                catch (std::exception& e)
-                {
-                    std::cerr << "Failed to dump JAM file \"" << filePath << "\": " << e.what() << "\n";
-                }
-                break;
             }
         }
     }
