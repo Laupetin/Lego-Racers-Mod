@@ -25,10 +25,18 @@ namespace fs = std::filesystem;
 class JamFileReadingException final : public std::exception
 {
 public:
-    explicit JamFileReadingException(const char* msg)
-        : exception(msg)
+    explicit JamFileReadingException(std::string msg)
+        : m_msg(std::move(msg))
     {
     }
+
+    [[nodiscard]] char const* what() const noexcept override
+    {
+        return m_msg.c_str();
+    }
+
+private:
+    std::string m_msg;
 };
 
 const IFileTypeProcessor* availableFileTypeDumpers[]
@@ -144,7 +152,11 @@ private:
 
         std::ofstream streamOut(dumpFilePath, std::ios::out | std::ios::binary);
         if (!streamOut.is_open())
-            throw JamFileReadingException("Could not open file for output");
+        {
+            std::ostringstream ss;
+            ss << "Could not open file for output: \"" << filePath << "\"";
+            throw JamFileReadingException(ss.str());
+        }
 
         if (file.dataSize > 0)
         {
