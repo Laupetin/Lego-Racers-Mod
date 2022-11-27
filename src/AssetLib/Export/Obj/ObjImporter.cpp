@@ -8,6 +8,7 @@
 
 #include "Obj.h"
 #include "ObjReader.h"
+#include "ObjWriter.h"
 #include "Asset/Gdb/Gdb.h"
 #include "Asset/Gdb/GdbStructReader.h"
 #include "Asset/Gdb/GdbTextWriter.h"
@@ -111,7 +112,6 @@ namespace obj
         {
             m_vertices.reserve(MAX_VERTEX_COUNT);
             m_used_vertices.reserve(MAX_VERTEX_COUNT);
-            m_vertex_order_remapping.reserve(MAX_VERTEX_COUNT);
         }
 
         bool GetExistingVertex(const gdb::Vertex& vertex, size_t& pendingGdbVertexIndex)
@@ -145,7 +145,6 @@ namespace obj
 
             m_used_vertices.emplace(vertex, newIndex);
             m_vertices.push_back(PendingGdbVertex::NotBackReferencing(vertex, newIndex));
-            m_vertex_order_remapping.push_back(newIndex);
             m_own_vertex_count++;
 
             return newIndex;
@@ -158,7 +157,6 @@ namespace obj
 
             m_used_vertices.emplace(vertex, newIndex);
             m_vertices.push_back(PendingGdbVertex::BackReferencing(vertex, backReferenceIndex));
-            m_vertex_order_remapping.push_back(newIndex);
 
             return newIndex;
         }
@@ -189,7 +187,14 @@ namespace obj
 
         void ReorderVerticesForBackReferencing()
         {
-            std::sort(m_vertex_order_remapping.begin(), m_vertex_order_remapping.end(), [this](const size_t& i0, const size_t& i1)
+            const auto vertexCount = m_vertices.size();
+            m_vertex_indices_in_new_order = std::make_unique<size_t[]>(vertexCount);
+            m_new_vertex_index_lookup = std::make_unique<size_t[]>(vertexCount);
+
+            for (auto vertexIndex = 0u; vertexIndex < vertexCount; vertexIndex++)
+                m_vertex_indices_in_new_order[vertexIndex] = vertexIndex;
+
+            std::sort(&m_vertex_indices_in_new_order[0], &m_vertex_indices_in_new_order[vertexCount], [this](const size_t& i0, const size_t& i1)
             {
                 const auto& v0 = m_vertices[i0];
                 const auto& v1 = m_vertices[i1];
@@ -207,6 +212,9 @@ namespace obj
 
                 return i0 < i1;
             });
+
+            for (auto index = 0u; index < vertexCount; index++)
+                m_new_vertex_index_lookup[m_vertex_indices_in_new_order[index]] = index;
         }
 
         void WriteVerticesToGdb(gdb::Model& gdb) const
@@ -214,13 +222,10 @@ namespace obj
             const auto gdbVertexOffset = gdb.m_vertices.size();
             gdb.m_vertices.resize(gdbVertexOffset + m_own_vertex_count);
 
-            for (auto i = 0u; i < m_vertex_order_remapping.size(); i++)
+            for (auto i = 0u; i < m_own_vertex_count; i++)
             {
-                const auto index = m_vertex_order_remapping[i];
-                if (index >= m_own_vertex_count)
-                    continue;
-
-                gdb.m_vertices[gdbVertexOffset + index] = m_vertices[i].Data();
+                const auto vertexIndex = m_vertex_indices_in_new_order[i];
+                gdb.m_vertices[gdbVertexOffset + i] = m_vertices[vertexIndex].Data();
             }
 
             gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_ADD_VERTICES, 0, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
@@ -228,14 +233,15 @@ namespace obj
 
         [[nodiscard]] size_t GetRemappedIndexForVertex(const size_t index) const
         {
-            assert(index < m_vertex_order_remapping.size());
-            return m_vertex_order_remapping[index];
+            assert(index < m_vertices.size() && m_new_vertex_index_lookup);
+            return m_new_vertex_index_lookup[index];
         }
 
     private:
         std::unordered_map<gdb::Vertex, size_t> m_used_vertices;
         std::vector<PendingGdbVertex> m_vertices;
-        std::vector<size_t> m_vertex_order_remapping;
+        std::unique_ptr<size_t[]> m_vertex_indices_in_new_order;
+        std::unique_ptr<size_t[]> m_new_vertex_index_lookup;
         size_t m_own_vertex_count;
         size_t m_current_back_reference_index;
     };
@@ -463,6 +469,9 @@ namespace obj
 
         void FinishSelector(PendingGdbVertexSelector& vertexSelector, const PendingGdbFaceSelector& faceSelector) const
         {
+            if (!vertexSelector.HasData())
+                return;
+
             vertexSelector.ReorderVerticesForBackReferencing();
             vertexSelector.WriteVerticesToGdb(m_gdb);
             faceSelector.WriteFacesToGdb(m_gdb, vertexSelector);
