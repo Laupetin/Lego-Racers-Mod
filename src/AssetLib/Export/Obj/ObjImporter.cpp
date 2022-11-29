@@ -24,6 +24,15 @@ namespace obj
         NOT_BACK_REFERENCING,
         BEING_BACK_REFERENCED,
         BACK_REFERENCING,
+
+        MAX
+    };
+
+    enum class VertexSelectorSortMode
+    {
+        NONE,
+        REFERENCEABLE_AT_FRONT,
+        REFERENCEABLE_AT_BACK
     };
 
     class PendingGdbVertex
@@ -108,7 +117,9 @@ namespace obj
 
         PendingGdbVertexSelector()
             : m_own_vertex_count(0u),
-              m_current_back_reference_index(0u)
+              m_current_back_reference_index(0u),
+              m_previous_sort_mode(VertexSelectorSortMode::NONE),
+              m_required_sort_mode(VertexSelectorSortMode::NONE)
         {
             m_vertices.reserve(MAX_VERTEX_COUNT);
             m_used_vertices.reserve(MAX_VERTEX_COUNT);
@@ -185,16 +196,41 @@ namespace obj
             return MAX_VERTEX_COUNT - m_vertices.size();
         }
 
+        void SetPreviousSortMode(const VertexSelectorSortMode sortMode)
+        {
+            m_previous_sort_mode = sortMode;
+        }
+
         void ReorderVerticesForBackReferencing()
         {
+            // Prepare buffers
             const auto vertexCount = m_vertices.size();
             m_vertex_indices_in_new_order = std::make_unique<size_t[]>(vertexCount);
             m_new_vertex_index_lookup = std::make_unique<size_t[]>(vertexCount);
 
+            // Initialize indices
             for (auto vertexIndex = 0u; vertexIndex < vertexCount; vertexIndex++)
                 m_vertex_indices_in_new_order[vertexIndex] = vertexIndex;
 
-            std::sort(&m_vertex_indices_in_new_order[0], &m_vertex_indices_in_new_order[vertexCount], [this](const size_t& i0, const size_t& i1)
+            // Initialize order to reorder vertices to
+            size_t orderByStatus[static_cast<size_t>(BackReferenceStatus::MAX)]{};
+            if (m_previous_sort_mode == VertexSelectorSortMode::NONE || m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_FRONT)
+            {
+                m_required_sort_mode = m_current_back_reference_index > 0 ? VertexSelectorSortMode::REFERENCEABLE_AT_BACK : VertexSelectorSortMode::NONE;
+                orderByStatus[static_cast<size_t>(BackReferenceStatus::BACK_REFERENCING)] = 0u;
+                orderByStatus[static_cast<size_t>(BackReferenceStatus::NOT_BACK_REFERENCING)] = 1u;
+                orderByStatus[static_cast<size_t>(BackReferenceStatus::BEING_BACK_REFERENCED)] = 2u;
+            }
+            else
+            {
+                m_required_sort_mode = m_current_back_reference_index > 0 ? VertexSelectorSortMode::REFERENCEABLE_AT_FRONT : VertexSelectorSortMode::NONE;
+                orderByStatus[static_cast<size_t>(BackReferenceStatus::BEING_BACK_REFERENCED)] = 0u;
+                orderByStatus[static_cast<size_t>(BackReferenceStatus::NOT_BACK_REFERENCING)] = 1u;
+                orderByStatus[static_cast<size_t>(BackReferenceStatus::BACK_REFERENCING)] = 2u;
+            }
+
+            // Reorder indices
+            std::sort(&m_vertex_indices_in_new_order[0], &m_vertex_indices_in_new_order[vertexCount], [this, orderByStatus](const size_t& i0, const size_t& i1)
             {
                 const auto& v0 = m_vertices[i0];
                 const auto& v1 = m_vertices[i1];
@@ -202,7 +238,7 @@ namespace obj
                 const auto referenceStatus0 = v0.GetBackReferenceStatus();
                 const auto referenceStatus1 = v1.GetBackReferenceStatus();
                 if (referenceStatus0 != referenceStatus1)
-                    return static_cast<size_t>(referenceStatus0) < static_cast<size_t>(referenceStatus1);
+                    return orderByStatus[static_cast<size_t>(referenceStatus0)] < orderByStatus[static_cast<size_t>(referenceStatus1)];
 
                 if (referenceStatus0 == BackReferenceStatus::BEING_BACK_REFERENCED
                     || referenceStatus0 == BackReferenceStatus::BACK_REFERENCING)
@@ -213,8 +249,14 @@ namespace obj
                 return i0 < i1;
             });
 
+            // Create lookup table
             for (auto index = 0u; index < vertexCount; index++)
                 m_new_vertex_index_lookup[m_vertex_indices_in_new_order[index]] = index;
+        }
+
+        [[nodiscard]] VertexSelectorSortMode GetRequiredSortMode() const
+        {
+            return m_required_sort_mode;
         }
 
         void WriteVerticesToGdb(gdb::Model& gdb) const
@@ -228,7 +270,21 @@ namespace obj
                 gdb.m_vertices[gdbVertexOffset + i] = m_vertices[vertexIndex].Data();
             }
 
-            gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_ADD_VERTICES, 0, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
+            if (m_previous_sort_mode == VertexSelectorSortMode::NONE)
+            {
+                gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_ADD_VERTICES, 0, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
+            }
+            else if (m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_BACK)
+            {
+                // Make sure always touches end of vertex buffer
+                const auto shiftForwardCount = static_cast<int>(MAX_VERTEX_COUNT - m_vertices.size());
+                gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_ADD_VERTICES, shiftForwardCount, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
+            }
+            else
+            {
+                const auto shiftForwardCount = static_cast<int>(m_vertices.size() - m_own_vertex_count);
+                gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_ADD_VERTICES, shiftForwardCount, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
+            }
         }
 
         [[nodiscard]] size_t GetRemappedIndexForVertex(const size_t index) const
@@ -244,6 +300,8 @@ namespace obj
         std::unique_ptr<size_t[]> m_new_vertex_index_lookup;
         size_t m_own_vertex_count;
         size_t m_current_back_reference_index;
+        VertexSelectorSortMode m_previous_sort_mode;
+        VertexSelectorSortMode m_required_sort_mode;
     };
 
     class PendingGdbFaceSelector
@@ -378,6 +436,17 @@ namespace obj
 
                 if (GetRequiredVertexCapacity(vertexAlreadyExists, vertexIsFromPreviousSelector) > currentVertexSelector.GetRemainingCapacity())
                 {
+                    // Add as many vertices to current selector as possible
+                    for (auto i = 0u; currentVertexSelector.GetRemainingCapacity() > 0 && i < 3u; i++)
+                    {
+                        if (vertexAlreadyExists[i])
+                            continue;
+
+                        pendingVertexIndex[i] = currentVertexSelector.AddVertex(gdbVertices[i]);
+                        vertexAlreadyExists[i] = true;
+                        vertexIsFromPreviousSelector[i] = false;
+                    }
+
                     AdvanceSelectors(previousVertexSelector, currentVertexSelector, previousFaceSelector, currentFaceSelector);
                     AdvanceFoundVertices(vertexAlreadyExists, vertexIsFromPreviousSelector);
                 }
@@ -459,6 +528,7 @@ namespace obj
                               PendingGdbFaceSelector& currentFaceSelector) const
         {
             FinishSelector(previousVertexSelector, previousFaceSelector);
+            currentVertexSelector.SetPreviousSortMode(previousVertexSelector.GetRequiredSortMode());
 
             previousVertexSelector = std::move(currentVertexSelector);
             previousFaceSelector = std::move(currentFaceSelector);
