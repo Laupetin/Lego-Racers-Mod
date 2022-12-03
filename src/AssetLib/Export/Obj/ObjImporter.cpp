@@ -205,8 +205,8 @@ namespace obj
         {
             // Prepare buffers
             const auto vertexCount = m_vertices.size();
-            m_vertex_indices_in_new_order = std::make_unique<size_t[]>(vertexCount);
-            m_new_vertex_index_lookup = std::make_unique<size_t[]>(vertexCount);
+            m_vertex_indices_in_new_order.resize(vertexCount);
+            m_new_vertex_index_lookup.resize(vertexCount);
 
             // Initialize indices
             for (auto vertexIndex = 0u; vertexIndex < vertexCount; vertexIndex++)
@@ -230,7 +230,7 @@ namespace obj
             }
 
             // Reorder indices
-            std::sort(&m_vertex_indices_in_new_order[0], &m_vertex_indices_in_new_order[vertexCount], [this, orderByStatus](const size_t& i0, const size_t& i1)
+            std::sort(m_vertex_indices_in_new_order.begin(), m_vertex_indices_in_new_order.end(), [this, orderByStatus](const size_t& i0, const size_t& i1)
             {
                 const auto& v0 = m_vertices[i0];
                 const auto& v1 = m_vertices[i1];
@@ -264,9 +264,10 @@ namespace obj
             const auto gdbVertexOffset = gdb.m_vertices.size();
             gdb.m_vertices.resize(gdbVertexOffset + m_own_vertex_count);
 
+            const size_t ownVertexStart = m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_FRONT ? m_vertices.size() - m_own_vertex_count : 0u;
             for (auto i = 0u; i < m_own_vertex_count; i++)
             {
-                const auto vertexIndex = m_vertex_indices_in_new_order[i];
+                const auto vertexIndex = m_vertex_indices_in_new_order[i + ownVertexStart];
                 gdb.m_vertices[gdbVertexOffset + i] = m_vertices[vertexIndex].Data();
             }
 
@@ -282,6 +283,8 @@ namespace obj
             }
             else
             {
+                assert(m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_FRONT);
+
                 const auto shiftForwardCount = static_cast<int>(m_vertices.size() - m_own_vertex_count);
                 gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_ADD_VERTICES, shiftForwardCount, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
             }
@@ -289,15 +292,15 @@ namespace obj
 
         [[nodiscard]] size_t GetRemappedIndexForVertex(const size_t index) const
         {
-            assert(index < m_vertices.size() && m_new_vertex_index_lookup);
+            assert(index < m_vertices.size() && !m_new_vertex_index_lookup.empty());
             return m_new_vertex_index_lookup[index];
         }
 
     private:
         std::unordered_map<gdb::Vertex, size_t> m_used_vertices;
         std::vector<PendingGdbVertex> m_vertices;
-        std::unique_ptr<size_t[]> m_vertex_indices_in_new_order;
-        std::unique_ptr<size_t[]> m_new_vertex_index_lookup;
+        std::vector<size_t> m_vertex_indices_in_new_order;
+        std::vector<size_t> m_new_vertex_index_lookup;
         size_t m_own_vertex_count;
         size_t m_current_back_reference_index;
         VertexSelectorSortMode m_previous_sort_mode;
@@ -321,8 +324,8 @@ namespace obj
 
         void WriteFacesToGdb(gdb::Model& gdb, const PendingGdbVertexSelector& vertexSelector) const
         {
-            const auto gdbVertexOffset = gdb.m_faces.size();
-            gdb.m_faces.reserve(gdbVertexOffset + m_faces.size());
+            const auto gdbFaceOffset = gdb.m_faces.size();
+            gdb.m_faces.reserve(gdbFaceOffset + m_faces.size());
 
             for (const auto& face : m_faces)
             {
@@ -333,7 +336,7 @@ namespace obj
                 );
             }
 
-            gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_FACES, static_cast<int>(gdbVertexOffset), static_cast<int>(m_faces.size()));
+            gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_FACES, static_cast<int>(gdbFaceOffset), static_cast<int>(m_faces.size()));
         }
 
     private:
