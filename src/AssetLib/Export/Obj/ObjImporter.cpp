@@ -264,7 +264,9 @@ namespace obj
             const auto gdbVertexOffset = gdb.m_vertices.size();
             gdb.m_vertices.resize(gdbVertexOffset + m_own_vertex_count);
 
-            const size_t ownVertexStart = m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_FRONT ? m_vertices.size() - m_own_vertex_count : 0u;
+            const size_t ownVertexStart = m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_FRONT || m_previous_sort_mode == VertexSelectorSortMode::NONE
+                                              ? m_vertices.size() - m_own_vertex_count
+                                              : 0u;
             for (auto i = 0u; i < m_own_vertex_count; i++)
             {
                 const auto vertexIndex = m_vertex_indices_in_new_order[i + ownVertexStart];
@@ -465,7 +467,10 @@ namespace obj
             }
 
             if (previousVertexSelector.HasData())
+            {
                 FinishSelector(previousVertexSelector, previousFaceSelector);
+                currentVertexSelector.SetPreviousSortMode(previousVertexSelector.GetRequiredSortMode());
+            }
 
             if (currentVertexSelector.HasData())
                 FinishSelector(currentVertexSelector, currentFaceSelector);
