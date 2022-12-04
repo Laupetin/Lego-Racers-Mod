@@ -1,5 +1,6 @@
 #include "ObjReader.h"
 
+#include <algorithm>
 #include <cassert>
 #include <exception>
 #include <iostream>
@@ -38,7 +39,8 @@ namespace obj
               m_object_defined(false),
               m_object_vertex_offset(0u),
               m_object_uv_offset(0u),
-              m_object_normal_offset(0u)
+              m_object_normal_offset(0u),
+              m_has_colors(false)
         {
         }
 
@@ -62,8 +64,12 @@ namespace obj
             return nullptr;
         }
 
-    private:
+        [[nodiscard]] bool HasColors() const override
+        {
+            return m_has_colors;
+        }
 
+    private:
         void NextObject(std::string name)
         {
             AddCurrentObject();
@@ -110,6 +116,7 @@ namespace obj
                 if (identifier[0] == 'v' && identifier[1] == '\0')
                 {
                     float x, y, z;
+                    float r, g, b;
                     if (!SkipWhitespaceNoNewline() || !ReadFloatingPoint(x)
                         || !SkipWhitespaceNoNewline() || !ReadFloatingPoint(y)
                         || !SkipWhitespaceNoNewline() || !ReadFloatingPoint(z))
@@ -117,7 +124,20 @@ namespace obj
                         ReportError("Invalid vertex");
                     }
 
-                    m_current_object.m_vertices.emplace_back(x, y, z);
+                    if (SkipWhitespaceNoNewline() && ReadFloatingPoint(r)
+                        && SkipWhitespaceNoNewline() && ReadFloatingPoint(g)
+                        && SkipWhitespaceNoNewline() && ReadFloatingPoint(b))
+                    {
+                        m_current_object.m_vertices.emplace_back(x, y, z,
+                                                                 std::clamp(r, 0.0f, 1.0f),
+                                                                 std::clamp(g, 0.0f, 1.0f),
+                                                                 std::clamp(b, 0.0f, 1.0f));
+                        m_has_colors = true;
+                    }
+                    else
+                    {
+                        m_current_object.m_vertices.emplace_back(x, y, z);
+                    }
                 }
                 else if (identifier[0] == 'v' && identifier[1] == 't' && identifier[2] == '\0')
                 {
@@ -358,6 +378,7 @@ namespace obj
         size_t m_object_vertex_offset;
         size_t m_object_uv_offset;
         size_t m_object_normal_offset;
+        bool m_has_colors;
     };
 }
 
