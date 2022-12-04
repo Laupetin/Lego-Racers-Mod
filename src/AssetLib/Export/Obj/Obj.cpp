@@ -9,12 +9,20 @@ using namespace obj;
 namespace obj
 {
     ObjVertex::ObjVertex()
-        : m_coordinates{}
+        : m_coordinates{},
+          m_colors{1.0, 1.0, 1.0}
     {
     }
 
     ObjVertex::ObjVertex(const float x, const float y, const float z)
-        : m_coordinates{x, y, z}
+        : m_coordinates{x, y, z},
+          m_colors{1.0, 1.0, 1.0}
+    {
+    }
+
+    ObjVertex::ObjVertex(const float x, const float y, const float z, const float r, const float g, const float b)
+        : m_coordinates{x, y, z},
+          m_colors{r, g, b}
     {
     }
 
@@ -22,7 +30,10 @@ namespace obj
     {
         return std::fabs(lhs.m_coordinates[0] - rhs.m_coordinates[0]) < std::numeric_limits<float>::epsilon()
             && std::fabs(lhs.m_coordinates[1] - rhs.m_coordinates[1]) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.m_coordinates[2] - rhs.m_coordinates[2]) < std::numeric_limits<float>::epsilon();
+            && std::fabs(lhs.m_coordinates[2] - rhs.m_coordinates[2]) < std::numeric_limits<float>::epsilon()
+            && std::fabs(lhs.m_colors[0] - rhs.m_colors[0]) < std::numeric_limits<float>::epsilon()
+            && std::fabs(lhs.m_colors[1] - rhs.m_colors[1]) < std::numeric_limits<float>::epsilon()
+            && std::fabs(lhs.m_colors[2] - rhs.m_colors[2]) < std::numeric_limits<float>::epsilon();
     }
 
     bool operator!=(const ObjVertex& lhs, const ObjVertex& rhs)
@@ -32,7 +43,8 @@ namespace obj
 
     bool operator<(const ObjVertex& lhs, const ObjVertex& rhs)
     {
-        return std::tie(lhs.m_coordinates[0], lhs.m_coordinates[1], lhs.m_coordinates[2]) < std::tie(rhs.m_coordinates[0], rhs.m_coordinates[1], rhs.m_coordinates[2]);
+        return std::tie(lhs.m_coordinates[0], lhs.m_coordinates[1], lhs.m_coordinates[2], lhs.m_colors[0], lhs.m_colors[1], lhs.m_colors[2])
+            < std::tie(rhs.m_coordinates[0], rhs.m_coordinates[1], rhs.m_coordinates[2], rhs.m_colors[0], rhs.m_colors[1], rhs.m_colors[2]);
     }
 
     ObjNormal::ObjNormal()
@@ -159,6 +171,9 @@ std::size_t std::hash<ObjVertex>::operator()(const ObjVertex& v) const noexcept
     seed ^= (seed << 6) + (seed >> 2) + 0x6C7D59B7 + static_cast<std::size_t>(v.m_coordinates[0]);
     seed ^= (seed << 6) + (seed >> 2) + 0x31B8AAE9 + static_cast<std::size_t>(v.m_coordinates[1]);
     seed ^= (seed << 6) + (seed >> 2) + 0x35FC0176 + static_cast<std::size_t>(v.m_coordinates[2]);
+    seed ^= (seed << 6) + (seed >> 2) + 0x169940DF + static_cast<std::size_t>(v.m_colors[0]);
+    seed ^= (seed << 6) + (seed >> 2) + 0x2025FC20 + static_cast<std::size_t>(v.m_colors[1]);
+    seed ^= (seed << 6) + (seed >> 2) + 0x0CFCD4A8 + static_cast<std::size_t>(v.m_colors[2]);
     return seed;
 }
 

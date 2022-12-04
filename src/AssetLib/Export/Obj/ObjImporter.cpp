@@ -352,8 +352,9 @@ namespace obj
     class ObjToGdbConverter
     {
     public:
-        ObjToGdbConverter(gdb::Model& gdb, const ObjModel& obj)
+        ObjToGdbConverter(gdb::Model& gdb, const ObjModel& obj, const bool hasColors)
             : m_any_null_materials(false),
+              m_has_colors(hasColors),
               m_gdb(gdb),
               m_obj(obj)
         {
@@ -386,13 +387,16 @@ namespace obj
 
             if (firstFace.HasUv())
             {
-                if (firstFace.HasNormals())
-                    return m_gdb.m_vertex_format = gdb::VertexFormat::POSITION_UV_NORMAL;
+                if (m_has_colors)
+                    return gdb::VertexFormat::POSITION_UV_COLOR;
 
-                return m_gdb.m_vertex_format = gdb::VertexFormat::POSITION_UV;
+                if (firstFace.HasNormals())
+                    return gdb::VertexFormat::POSITION_UV_NORMAL;
+
+                return gdb::VertexFormat::POSITION_UV;
             }
 
-            return m_gdb.m_vertex_format = gdb::VertexFormat::POSITION;
+            return gdb::VertexFormat::POSITION;
         }
 
         void ConvertMaterials()
@@ -480,7 +484,7 @@ namespace obj
                 FinishSelector(currentVertexSelector, currentFaceSelector);
         }
 
-        static gdb::Vertex CreateGdbVertex(const ObjObject& object, const int vertexIndex, const int uvIndex, const int normalIndex)
+        [[nodiscard]] gdb::Vertex CreateGdbVertex(const ObjObject& object, const int vertexIndex, const int uvIndex, const int normalIndex) const
         {
             assert(vertexIndex >= 0 && static_cast<size_t>(vertexIndex) < object.m_vertices.size());
             assert(uvIndex < 0 || static_cast<size_t>(uvIndex) < object.m_uvs.size());
@@ -492,6 +496,18 @@ namespace obj
             {
                 const auto& objUv = object.m_uvs[uvIndex];
                 const gdb::Vec2 uv(objUv.m_uv[0], objUv.m_uv[1]);
+
+                if (m_has_colors)
+                {
+                    const gdb::Color4 color(
+                        static_cast<unsigned char>(objVertex.m_colors[0] * std::numeric_limits<unsigned char>::max()),
+                        static_cast<unsigned char>(objVertex.m_colors[1] * std::numeric_limits<unsigned char>::max()),
+                        static_cast<unsigned char>(objVertex.m_colors[2] * std::numeric_limits<unsigned char>::max()),
+                        std::numeric_limits<unsigned char>::max()
+                    );
+
+                    return gdb::Vertex(position, uv, color);
+                }
 
                 if (normalIndex >= 0)
                 {
@@ -596,15 +612,16 @@ namespace obj
         }
 
         bool m_any_null_materials;
+        bool m_has_colors;
         gdb::Model& m_gdb;
         const ObjModel& m_obj;
     };
 
-    std::unique_ptr<gdb::Model> CreateGdbFromObj(const ObjModel& obj)
+    std::unique_ptr<gdb::Model> CreateGdbFromObj(const ObjModel& obj, const bool hasColors)
     {
         auto gdb = std::make_unique<gdb::Model>();
 
-        ObjToGdbConverter converter(*gdb, obj);
+        ObjToGdbConverter converter(*gdb, obj, hasColors);
         converter.Convert();
 
         return gdb;
@@ -654,7 +671,7 @@ bool ObjImporter::Convert(const std::string& directory, const std::string& fileP
         return false;
     }
 
-    const auto gdb = CreateGdbFromObj(*model);
+    const auto gdb = CreateGdbFromObj(*model, reader->HasColors());
     if (!gdb)
         return false;
 

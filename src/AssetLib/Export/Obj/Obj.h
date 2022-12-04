@@ -10,12 +10,14 @@ namespace obj
     public:
         ObjVertex();
         ObjVertex(float x, float y, float z);
+        ObjVertex(float x, float y, float z, float r, float g, float b);
 
         friend bool operator==(const ObjVertex& lhs, const ObjVertex& rhs);
         friend bool operator!=(const ObjVertex& lhs, const ObjVertex& rhs);
         friend bool operator<(const ObjVertex& lhs, const ObjVertex& rhs);
 
         float m_coordinates[3];
+        float m_colors[3];
     };
 
     class ObjNormal

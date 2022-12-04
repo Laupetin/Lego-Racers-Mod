@@ -20,5 +20,6 @@ namespace obj
         static std::unique_ptr<ObjReader> Create(std::istream& in);
 
         virtual std::unique_ptr<ObjModel> ReadModel() = 0;
+        [[nodiscard]] virtual bool HasColors() const = 0;
     };
 }
