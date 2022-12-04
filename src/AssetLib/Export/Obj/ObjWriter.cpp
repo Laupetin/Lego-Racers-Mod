@@ -3,8 +3,20 @@
 using namespace obj;
 
 ObjWriter::ObjWriter(const ObjModel& model)
-    : m_model(model)
+    : m_model(model),
+      m_include_colors(false),
+      m_include_normals(false)
 {
+}
+
+void ObjWriter::ExportColors(const bool value)
+{
+    m_include_colors = value;
+}
+
+void ObjWriter::ExportNormals(const bool value)
+{
+    m_include_normals = value;
 }
 
 void ObjWriter::WriteObj(std::ostream& out, const std::string& matName) const
@@ -24,19 +36,35 @@ void ObjWriter::WriteObj(std::ostream& out, const std::string& matName) const
         out << "o " << object.m_name << "\n";
 
         out << std::fixed;
-        for (const auto& v : object.m_vertices)
-            out << "v " << v.m_coordinates[0] << " " << v.m_coordinates[1] << " " << v.m_coordinates[2] << "\n";
+
+        if (m_include_colors)
+        {
+            for (const auto& v : object.m_vertices)
+                out << "v " << v.m_coordinates[0] << " " << v.m_coordinates[1] << " " << v.m_coordinates[2]
+                    << " " << v.m_colors[0] << " " << v.m_colors[1] << " " << v.m_colors[2] << "\n";
+        }
+        else
+        {
+            for (const auto& v : object.m_vertices)
+                out << "v " << v.m_coordinates[0] << " " << v.m_coordinates[1] << " " << v.m_coordinates[2] << "\n";
+        }
+
+
         for (const auto& uv : object.m_uvs)
             out << "vt " << uv.m_uv[0] << " " << uv.m_uv[1] << "\n";
-        for (const auto& n : object.m_normals)
-            out << "vn " << n.m_normal[0] << " " << n.m_normal[1] << " " << n.m_normal[2] << "\n";
+
+        if (m_include_normals)
+        {
+            for (const auto& n : object.m_normals)
+                out << "vn " << n.m_normal[0] << " " << n.m_normal[1] << " " << n.m_normal[2] << "\n";
+        }
 
         if (object.m_material_index >= 0 && static_cast<unsigned>(object.m_material_index) < m_model.m_materials.size())
             out << "usemtl " << m_model.m_materials[object.m_material_index].m_material_name << "\n";
 
         for (const auto& f : object.m_faces)
         {
-            const auto faceHasNormal = f.HasNormals();
+            const auto faceHasNormal = m_include_normals && f.HasNormals();
             const auto faceHasUv = f.HasUv();
 
             if (faceHasNormal && faceHasUv)

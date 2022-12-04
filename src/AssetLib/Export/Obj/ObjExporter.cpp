@@ -47,9 +47,6 @@ namespace obj
 
     void AddVerticesWithPositionUv(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector)
     {
-        std::unordered_map<ObjUv, size_t> uvs;
-        std::vector<size_t> uvPerVertex(vertexSelector.m_vertex_count);
-
         for (auto vertexIndex = 0u; vertexIndex < vertexSelector.m_vertex_count; vertexIndex++)
         {
             const auto& vertex = gdbModel.m_vertices[vertexSelector.m_vertex_offset + vertexIndex];
@@ -59,13 +56,22 @@ namespace obj
         }
     }
 
+    void AddVerticesWithPositionUvColor(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector)
+    {
+        for (auto vertexIndex = 0u; vertexIndex < vertexSelector.m_vertex_count; vertexIndex++)
+        {
+            const auto& vertex = gdbModel.m_vertices[vertexSelector.m_vertex_offset + vertexIndex];
+
+            object.m_vertices.emplace_back(vertex.m_position.x, vertex.m_position.y, vertex.m_position.z,
+                                           static_cast<float>(vertex.m_color.r) / static_cast<float>(std::numeric_limits<unsigned char>::max()),
+                                           static_cast<float>(vertex.m_color.g) / static_cast<float>(std::numeric_limits<unsigned char>::max()),
+                                           static_cast<float>(vertex.m_color.b) / static_cast<float>(std::numeric_limits<unsigned char>::max()));
+            object.m_uvs.emplace_back(vertex.m_uv.x, vertex.m_uv.y);
+        }
+    }
+
     void AddVerticesWithPositionUvNormal(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector)
     {
-        std::unordered_map<ObjUv, size_t> uvs;
-        std::vector<size_t> uvPerVertex(vertexSelector.m_vertex_count);
-        std::unordered_map<ObjNormal, size_t> normals;
-        std::vector<size_t> normalPerVertex(vertexSelector.m_vertex_count);
-
         for (auto vertexIndex = 0u; vertexIndex < vertexSelector.m_vertex_count; vertexIndex++)
         {
             const auto& vertex = gdbModel.m_vertices[vertexSelector.m_vertex_offset + vertexIndex];
@@ -85,8 +91,11 @@ namespace obj
             break;
 
         case gdb::VertexFormat::POSITION_UV:
-        case gdb::VertexFormat::POSITION_UV_COLOR:
             AddVerticesWithPositionUv(gdbModel, object, vertexSelector);
+            break;
+
+        case gdb::VertexFormat::POSITION_UV_COLOR:
+            AddVerticesWithPositionUvColor(gdbModel, object, vertexSelector);
             break;
 
         case gdb::VertexFormat::POSITION_UV_NORMAL:
@@ -437,6 +446,9 @@ bool ObjExporter::Convert(const std::string& directory, const std::string& fileP
 
     const auto fileName = fsPath.filename().string();
     ObjWriter writer(*obj);
+    writer.ExportColors(model.m_vertex_format == gdb::VertexFormat::POSITION_UV_COLOR);
+    writer.ExportNormals(model.m_vertex_format == gdb::VertexFormat::POSITION_UV_NORMAL);
+
     if (!WriteObjFile(writer, directory, fileName) || !WriteMatFile(writer, directory, fileName))
         return false;
 
