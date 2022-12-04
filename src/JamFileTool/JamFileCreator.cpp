@@ -24,10 +24,18 @@ namespace fs = std::filesystem;
 class JamFileWritingException final : public std::exception
 {
 public:
-    explicit JamFileWritingException(const char* msg)
-        : exception(msg)
+    explicit JamFileWritingException(std::string msg)
+        : m_msg(std::move(msg))
     {
     }
+
+    [[nodiscard]] char const* what() const noexcept override
+    {
+        return m_msg.c_str();
+    }
+
+private:
+    std::string m_msg;
 };
 
 const IFileTypeProcessor* availableFileTypeCreators[]
@@ -197,7 +205,11 @@ private:
                 const auto& file = m_files[currentFileIndex];
                 auto fileName = file.m_path.filename().string();
                 if (fileName.size() > std::extent_v<decltype(JamFileDiskFile::fileName)>)
-                    throw JamFileWritingException("File name too long");
+                {
+                    std::ostringstream ss;
+                    ss << "File name too long: \"" << fileName << "\"";
+                    throw JamFileWritingException(ss.str());
+                }
 
                 for (auto& c : fileName)
                     c = static_cast<char>(toupper(c));

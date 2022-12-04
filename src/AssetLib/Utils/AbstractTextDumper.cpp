@@ -63,7 +63,7 @@ void AbstractTokenTextDumper::WriteStringValue(const std::string& keyword, const
     m_stream << "\n";
 }
 
-void AbstractTokenTextDumper::WriteIntegerValue(const std::string& keyword, int value) const
+void AbstractTokenTextDumper::WriteIntegerValue(const std::string& keyword, const int value) const
 {
     Indent();
     m_stream << keyword << " " << value << "\n";
