@@ -116,7 +116,7 @@ namespace obj
 
         if (relativeIndexWithLookBack >= vertexSelector.m_vertex_count)
         {
-            const size_t previousRelativeIndexWithLookBack = static_cast<size_t>(relativeIndexWithLookBack) - previousVertexSelector.m_shift_forward_count;
+            const size_t previousRelativeIndexWithLookBack = static_cast<size_t>(relativeIndex) - previousVertexSelector.m_shift_forward_count;
             if (previousRelativeIndexWithLookBack >= previousVertexSelector.m_vertex_count)
                 return false;
 
