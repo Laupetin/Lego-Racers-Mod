@@ -47,6 +47,10 @@ For example `.GDB` files, the game's model format, can be converted to `.OBJ` us
 
 ![Model export demonstration](docs/assets/ModelExport.png)
 
+Or reimported from `.OBJ` (Screenshot showing the Powerup model being replaced by the default Blender Suzanne monkey head).
+
+![Model import demonstration](docs/assets/ModelImport.png)
+
 Currently the amount of support asset types is still a bit slim but support for further asset types can be added in the future to improve the amount of moddability.
 
 ## Getting started
