@@ -249,9 +249,13 @@ namespace obj
                 return i0 < i1;
             });
 
+            const auto shiftForwardCount = m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_BACK && m_own_vertex_count < m_vertices.size()
+                                               ? MAX_VERTEX_COUNT - m_vertices.size()
+                                               : 0u;
+
             // Create lookup table
             for (auto index = 0u; index < vertexCount; index++)
-                m_new_vertex_index_lookup[m_vertex_indices_in_new_order[index]] = index;
+                m_new_vertex_index_lookup[m_vertex_indices_in_new_order[index]] = index + shiftForwardCount;
         }
 
         [[nodiscard]] VertexSelectorSortMode GetRequiredSortMode() const
@@ -264,7 +268,7 @@ namespace obj
             const auto gdbVertexOffset = gdb.m_vertices.size();
             gdb.m_vertices.resize(gdbVertexOffset + m_own_vertex_count);
 
-            const size_t ownVertexStart = m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_FRONT || m_previous_sort_mode == VertexSelectorSortMode::NONE
+            const size_t ownVertexStart = m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_FRONT
                                               ? m_vertices.size() - m_own_vertex_count
                                               : 0u;
             for (auto i = 0u; i < m_own_vertex_count; i++)
@@ -273,15 +277,15 @@ namespace obj
                 gdb.m_vertices[gdbVertexOffset + i] = m_vertices[vertexIndex].Data();
             }
 
-            if (m_previous_sort_mode == VertexSelectorSortMode::NONE)
-            {
-                gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_ADD_VERTICES, 0, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
-            }
-            else if (m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_BACK)
+            if (m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_BACK && m_own_vertex_count < m_vertices.size())
             {
                 // Make sure always touches end of vertex buffer
                 const auto shiftForwardCount = static_cast<int>(MAX_VERTEX_COUNT - m_vertices.size());
                 gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_ADD_VERTICES, shiftForwardCount, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
+            }
+            else if (m_previous_sort_mode == VertexSelectorSortMode::NONE || m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_BACK)
+            {
+                gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_ADD_VERTICES, 0, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
             }
             else
             {
