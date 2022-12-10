@@ -24,9 +24,9 @@ namespace mdb
 		virtual void EmitColor1(uint8_t value0, uint8_t value1, uint8_t value2, uint8_t value3) = 0;
 		virtual void EmitTexture(std::string textureName) = 0;
 		virtual void EmitOpacity(uint8_t value) = 0;
+		virtual void EmitKeyword4D(int value) = 0;
 		virtual void EmitKeyword4E(int value) = 0;
 		virtual void EmitKeyword4F(int value) = 0;
-		virtual void EmitKeyword4D(int value) = 0;
 		virtual void EmitKeyword50(int value) = 0;
 		virtual void EmitKeyword2A() = 0;
 		virtual void EmitKeyword2B() = 0;
