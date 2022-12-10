@@ -126,20 +126,20 @@ namespace mdb
             {
             case TOKEN_KEYWORD_COLOR_1:
                 {
-                    const auto value0 = m_tokens->NextIntegerValue();
-                    const auto value1 = m_tokens->NextIntegerValue();
-                    const auto value2 = m_tokens->NextIntegerValue();
-                    const auto value3 = m_tokens->NextIntegerValue();
+                    const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                    const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                    const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                    const auto value3 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
                     m_emitter.EmitColor1(value0, value1, value2, value3);
                     break;
                 }
 
             case TOKEN_KEYWORD_COLOR_0:
                 {
-                    const auto value0 = m_tokens->NextIntegerValue();
-                    const auto value1 = m_tokens->NextIntegerValue();
-                    const auto value2 = m_tokens->NextIntegerValue();
-                    const auto value3 = m_tokens->NextIntegerValue();
+                    const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                    const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                    const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                    const auto value3 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
                     m_emitter.EmitColor0(value0, value1, value2, value3);
                     break;
                 }
@@ -149,7 +149,7 @@ namespace mdb
                 break;
 
             case TOKEN_KEYWORD_OPACITY:
-                m_emitter.EmitOpacity(m_tokens->NextIntegerValue());
+                m_emitter.EmitOpacity(static_cast<uint8_t>(m_tokens->NextIntegerValue()));
                 break;
 
             case TOKEN_KEYWORD_4E:

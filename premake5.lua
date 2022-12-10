@@ -62,6 +62,7 @@ workspace "LegoRacersMod"
 -- ========================
 include "thirdparty/antlr4.lua"
 include "thirdparty/asmjit.lua"
+include "thirdparty/catch2.lua"
 include "thirdparty/zycore.lua"
 include "thirdparty/zydis.lua"
 
@@ -69,6 +70,7 @@ include "thirdparty/zydis.lua"
 group "ThirdParty"
     antlr4:project()
     asmjit:project()
+    catch2:project()
     zycore:project()
     zydis:project()
 group ""
@@ -101,9 +103,9 @@ ProxyLibrary:project()
 -- ========================
 -- Tests
 -- ========================
--- include "test/sample.lua"
+include "test/AssetLibTests.lua"
 
 -- Tests group: Unit test and other tests projects
 group "Tests"
-    -- sample:project()
+    AssetLibTests:project()
 group ""
