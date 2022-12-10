@@ -35,6 +35,16 @@ namespace mdb
         {
         }
 
+        void enterMaterials(MdbParser::MaterialsContext*) override
+        {
+            m_emitter.StartMaterials();
+        }
+
+        void exitMaterials(MdbParser::MaterialsContext*) override
+        {
+            m_emitter.EndMaterials();
+        }
+
         void exitMaterialName(MdbParser::MaterialNameContext* context) override
         {
             auto materialName = common_grammar::StringValue(context->StringLiteral());

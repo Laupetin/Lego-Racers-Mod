@@ -25,10 +25,12 @@ namespace mdb
 		void EndMaterials() override
 		{
 			WriteElementsFromTempBuffer();
+			m_current_count = 0u;
 		}
 
         void StartMaterial(const std::string name) override
 		{
+			m_current_count++;
 			m_temp_tokens->WriteCustom(TOKEN_MATERIAL);
 			m_temp_tokens->WriteString(name);
 			m_temp_tokens->WriteLeftCurly();
@@ -176,7 +178,7 @@ namespace mdb
 
         void EmitKeyword38(const MaterialToken subToken0, const MaterialToken subToken1) override
 		{
-			m_temp_tokens->WriteCustom(TOKEN_KEYWORD_2F);
+			m_temp_tokens->WriteCustom(TOKEN_KEYWORD_38);
 			m_temp_tokens->WriteCustom(subToken0);
 			m_temp_tokens->WriteCustom(subToken1);
 		}
@@ -204,7 +206,6 @@ namespace mdb
 			m_tokens->WriteRightCurly();
 
 			m_temp_buffer.str(std::string());
-			m_current_count = 0u;
 		}
 
 		std::ostream& m_stream;
