@@ -1,11 +1,14 @@
 #include "JamFileDumper.h"
 
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <exception>
 #include <filesystem>
 #include <sstream>
 #include <memory>
+#include <vector>
+#include <cstring>
 
 #include "JamFileTypes.h"
 #include "Endianness.h"

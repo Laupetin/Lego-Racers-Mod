@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <exception>
+#include <memory>
 #include <sstream>
 
 #include "StreamUtils.h"

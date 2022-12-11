@@ -1,6 +1,8 @@
 #include "Detour.h"
 #include "Patch.h"
 
+#include <limits>
+
 #pragma warning(push, 0)
 #include <asmjit.h>
 #include <Zydis/Zydis.h>

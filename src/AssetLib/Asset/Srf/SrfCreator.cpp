@@ -1,5 +1,6 @@
 #include "SrfCreator.h"
 
+#include <limits>
 #include <iostream>
 #include <sstream>
 #include <vector>

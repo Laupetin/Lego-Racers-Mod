@@ -1,5 +1,6 @@
 #include "StreamUtils.h"
 
+#include <cstring>
 #include <sstream>
 
 using namespace utils;

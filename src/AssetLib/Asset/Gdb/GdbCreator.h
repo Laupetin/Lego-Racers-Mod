@@ -1,4 +1,8 @@
 #pragma once
+
+#include <string>
+#include <iostream>
+
 #include "Asset/IFileTypeProcessor.h"
 
 namespace gdb

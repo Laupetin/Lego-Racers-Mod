@@ -1,6 +1,7 @@
 #include "CommonGrammarHelper.h"
 
 #include <cstdlib>
+#include <limits>
 #include <sstream>
 
 #pragma warning(push, 0)

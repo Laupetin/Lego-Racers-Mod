@@ -5,6 +5,7 @@
 #include "StringUtils.h"
 
 #include <codecvt>
+#include <locale>
 
 std::string utils::ConvertWStringToString(const std::wstring& wstr)
 {

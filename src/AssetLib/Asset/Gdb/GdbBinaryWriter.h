@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <ostream>
+
 #include "GdbEmitter.h"
 #include "Utils/AbstractTextDumper.h"
 

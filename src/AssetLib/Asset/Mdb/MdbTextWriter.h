@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <ostream>
+
 #include "MdbEmitter.h"
 #include "Utils/AbstractTextDumper.h"
 

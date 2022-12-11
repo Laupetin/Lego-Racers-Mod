@@ -1,6 +1,7 @@
 #include "Gdb.h"
 
 #include <cmath>
+#include <limits>
 #include <tuple>
 
 using namespace gdb;

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <string>
 #include <filesystem>
 #include <iostream>
@@ -15,7 +16,7 @@ IAssetConverter* availableConverters[]
     new obj::ObjImporter()
 };
 
-void main(const int argc, const char** argv)
+int main(const int argc, const char** argv)
 {
     for (auto i = 1; i < argc; i++)
     {
@@ -45,4 +46,6 @@ void main(const int argc, const char** argv)
         else
             std::cout << "No converter for file \"" << targetPath << "\"\n";
     }
+
+    return 0;
 }
