@@ -28,6 +28,10 @@ function zydis:name()
 end
 
 function zydis:project()
+    if os.target() ~= "windows" then
+        return
+    end
+	
 	local folder = ThirdPartyFolder()
 	local includes = Includes:create()
 
