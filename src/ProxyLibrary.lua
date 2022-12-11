@@ -43,8 +43,10 @@ function ProxyLibrary:project()
         }
         
         self:include(includes)
+        Hooking:include(includes)
         Utils:include(includes)
 
+        Hooking:link(links)
         Utils:link(links)
         links:linkall()
         

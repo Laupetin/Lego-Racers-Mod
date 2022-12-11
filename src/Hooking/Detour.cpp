@@ -1,8 +1,10 @@
 #include "Detour.h"
 #include "Patch.h"
 
+#pragma warning(push, 0)
 #include <asmjit.h>
 #include <Zydis/Zydis.h>
+#pragma warning(pop)
 
 #include "RegisterToStackWrapperBuilder.h"
 #include "Internal/AsmJitWrapper.h"

@@ -4,9 +4,9 @@
 
 #include "Core.h"
 #include "RacersOffset.h"
-#include "Patch/Patch.h"
-#include "Patch/Detour.h"
-#include "Patch/Offset.h"
+#include "Patch.h"
+#include "Detour.h"
+#include "Offset.h"
 #include "Game/Fields.h"
 
 namespace jam_files

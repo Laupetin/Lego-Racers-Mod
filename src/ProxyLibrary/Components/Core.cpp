@@ -4,7 +4,7 @@
 
 #include "RacersOffset.h"
 #include "Game/LEGORacers2001.h"
-#include "Patch/Patch.h"
+#include "Patch.h"
 
 namespace core
 {

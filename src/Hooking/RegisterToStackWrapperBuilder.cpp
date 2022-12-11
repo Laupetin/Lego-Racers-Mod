@@ -1,12 +1,14 @@
-#include "StackToRegisterWrapperBuilder.h"
+#include "RegisterToStackWrapperBuilder.h"
 
+#pragma warning(push, 0)
 #include <asmjit.h>
+#pragma warning(pop)
 
 #include "Internal/AsmJitWrapper.h"
 #include "Internal/WrapperBuilderBase.h"
 #include "Offset.h"
 
-class StackToRegisterWrapperBuilderInternal : public WrapperBuilderBase
+class RegisterToStackWrapperBuilderInternal : public WrapperBuilderBase
 {
     const void* m_offset;
     const size_t* m_param_sizes;
@@ -14,7 +16,7 @@ class StackToRegisterWrapperBuilderInternal : public WrapperBuilderBase
     int m_params_word_count;
 
 public:
-    StackToRegisterWrapperBuilderInternal(const void* offset, const UsercallConfiguration& usercallConfiguration,
+    RegisterToStackWrapperBuilderInternal(const void* offset, const UsercallConfiguration& usercallConfiguration,
                                           const size_t* paramSizes, const int paramCount)
         : WrapperBuilderBase(usercallConfiguration),
           m_offset(offset),
@@ -22,14 +24,18 @@ public:
           m_param_count(paramCount),
           m_params_word_count(0)
     {
-        for (int param = 0; param < paramCount; param++)
+        for (int paramIndex = 0; paramIndex < paramCount; paramIndex++)
         {
-            // Round up to next multiple of WORD_SIZE
-            m_params_word_count += static_cast<int>((m_param_sizes[param] + WORD_SIZE - 1u) / WORD_SIZE);
+            Register _register;
+            if (!GetRegisterLocationForParam(paramIndex, &_register))
+            {
+                // Round up to next multiple of WORD_SIZE
+                m_params_word_count += static_cast<int>((m_param_sizes[paramIndex] + WORD_SIZE - 1u) / WORD_SIZE);
+            }
         }
     }
 
-    std::unique_ptr<IAsmWrapper> BuildWrapper(const CallDetails from, const CallDetails to) const
+    [[nodiscard]] std::unique_ptr<IAsmWrapper> BuildWrapper(const CallDetails from, const CallDetails to) const
     {
         Register nextRegister;
         asmjit::CodeHolder code;
@@ -50,12 +56,11 @@ public:
                 {
                     if (paramSize > WORD_SIZE)
                         throw std::exception(
-                            "Cannot move parameter to register that is bigger than the system's word size.");
+                            "Cannot move parameter from register that is bigger than the system's word size.");
 
-                    ThrowIfError(assembler.mov(AsmJitContext::GetRegister(nextRegister),
-                                               ptr(esp, paramWordOffset * WORD_SIZE)));
-
-                    paramWordOffset--;
+                    ThrowIfError(assembler.push(AsmJitContext::GetRegister(nextRegister)));
+                    pushedWordCount++;
+                    paramWordOffset++;
                 }
                 else
                 {
@@ -65,7 +70,6 @@ public:
                     for (int wordIndex = 0; wordIndex < paramWordCount; wordIndex++)
                     {
                         ThrowIfError(assembler.push(dword_ptr(esp, paramWordOffset * WORD_SIZE)));
-
                         pushedWordCount++;
                     }
                 }
@@ -94,10 +98,13 @@ public:
     }
 };
 
-std::unique_ptr<IAsmWrapper> StackToRegisterWrapperBuilder::BuildWrapper(
-    const void* offset, const UsercallConfiguration& usercallConfiguration, const size_t* paramSizes,
-    const int paramCount, const CallDetails from, const CallDetails to)
+std::unique_ptr<IAsmWrapper> RegisterToStackWrapperBuilder::BuildWrapper(const void* offset,
+                                                                         const UsercallConfiguration&
+                                                                         usercallConfiguration,
+                                                                         const size_t* paramSizes, const int paramCount,
+                                                                         const CallDetails from,
+                                                                         const CallDetails to)
 {
-    const StackToRegisterWrapperBuilderInternal builder(offset, usercallConfiguration, paramSizes, paramCount);
+    const RegisterToStackWrapperBuilderInternal builder(offset, usercallConfiguration, paramSizes, paramCount);
     return builder.BuildWrapper(from, to);
 }

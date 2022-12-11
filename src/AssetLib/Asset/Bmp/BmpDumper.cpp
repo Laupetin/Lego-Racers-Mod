@@ -7,9 +7,9 @@
 #include <sstream>
 
 #include "Bmp.h"
-#include "Utils/Alignment.h"
-#include "Utils/FileUtils.h"
-#include "Utils/StreamUtils.h"
+#include "Alignment.h"
+#include "FileUtils.h"
+#include "StreamUtils.h"
 
 class BmpDumpingException final : public std::exception
 {

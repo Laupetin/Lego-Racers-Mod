@@ -92,11 +92,13 @@ group ""
 -- Components
 -- ========================
 include "src/AssetLib.lua"
+include "src/Hooking.lua"
 include "src/Utils.lua"
 
 -- Components group: All projects that are static libs for executables
 group "Components"
     AssetLib:project()
+    Hooking:project()
     Utils:project()
 group ""
 

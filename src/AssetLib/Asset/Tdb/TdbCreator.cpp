@@ -4,7 +4,6 @@
 #include <sstream>
 
 #include "Tdb.h"
-#include "Utils/StringUtils.h"
 #include "TokenStream.h"
 
 #pragma warning(push, 0)

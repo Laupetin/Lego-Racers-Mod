@@ -1,25 +1,32 @@
 #pragma once
-#include "Patch/IAsmWrapper.h"
-#include "Patch/Register.h"
+#include "IAsmWrapper.h"
+#include "Register.h"
 
-#include <asmjit.h>
 #include <mutex>
 #include <memory>
 
-#include "Utils/Singleton.h"
+#pragma warning(push, 0)
+#include <asmjit.h>
+#pragma warning(pop)
 
-class AsmJitContext : public Singleton<AsmJitContext>
+class AsmJitContext
 {
     asmjit::JitRuntime m_runtime;
     bool m_runtime_active;
     std::mutex m_runtime_lock;
 
 public:
+    static AsmJitContext& Instance()
+    {
+        static AsmJitContext instance;
+        return instance;
+    }
+
     AsmJitContext();
     ~AsmJitContext();
     static asmjit::x86::Gp GetRegister(Register parameterLocation);
 
-    const asmjit::Environment& GetEnvironment() const;
+    [[nodiscard]] const asmjit::Environment& GetEnvironment() const;
 
     void* AddWrapper(asmjit::CodeHolder* code);
     void RemoveWrapper(void* wrapper);

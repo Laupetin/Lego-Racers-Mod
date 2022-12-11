@@ -4,8 +4,8 @@
 #include <deque>
 #include <vector>
 
-#include "Utils/Endianness.h"
-#include "Utils/StreamUtils.h"
+#include "Endianness.h"
+#include "StreamUtils.h"
 
 Token::Token()
     : m_type(TOKEN_INVALID),

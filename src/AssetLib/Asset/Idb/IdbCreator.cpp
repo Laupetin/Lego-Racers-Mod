@@ -4,7 +4,7 @@
 #include <sstream>
 
 #include "Idb.h"
-#include "Utils/StringUtils.h"
+#include "StringUtils.h"
 #include "TokenStream.h"
 
 #pragma warning(push, 0)

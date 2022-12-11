@@ -8,8 +8,6 @@
 #include <array>
 #include <vector>
 
-#include "Utils/Singleton.h"
-
 // ReSharper disable once CppPolymorphicClassWithNonVirtualPublicDestructor
 class ILazyOffsetInitTarget // NOLINT(clang-diagnostic-non-virtual-dtor)
 {
@@ -70,7 +68,7 @@ struct LazyOffsetInitializationTarget
 };
 
 template <size_t EnvironmentCount>
-class OffsetManagerStorage final : public Singleton<OffsetManagerStorage<EnvironmentCount>>, OffsetManager
+class OffsetManagerStorage final : OffsetManager
 {
     static constexpr auto NO_ENVIRONMENT_SELECTED = SIZE_MAX;
     size_t m_selected_environment_index = NO_ENVIRONMENT_SELECTED;
@@ -82,6 +80,12 @@ class OffsetManagerStorage final : public Singleton<OffsetManagerStorage<Environ
     std::vector<LazyOffsetInitializationTarget> m_lazy_offset_initialization_targets;
 
 public:
+    static OffsetManagerStorage<EnvironmentCount>& Instance()
+    {
+        static OffsetManagerStorage<EnvironmentCount> instance;
+        return instance;
+    }
+
     OffsetManagerStorage()
     {
         m_manager = this;

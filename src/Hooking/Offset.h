@@ -6,17 +6,22 @@
 #include "FunctionLike.h"
 #include "CallDetails.h"
 #include "OffsetBase.h"
-#include "Utils/Singleton.h"
 #include "StackToRegisterWrapperBuilder.h"
 #include "UsercallConfiguration.h"
 
 class BaseOffset;
 
-class TrampolineGlobals : public Singleton<TrampolineGlobals>
+class TrampolineGlobals
 {
     TargetCompiler m_compiler = TargetCompiler::UNKNOWN;
 
 public:
+    static TrampolineGlobals& Instance()
+    {
+        static TrampolineGlobals instance;
+        return instance;
+    }
+
     [[nodiscard]] TargetCompiler GetTargetCompiler() const;
     void SetTargetCompiler(TargetCompiler targetCompiler);
 };
