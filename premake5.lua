@@ -37,6 +37,19 @@ workspace "LegoRacersMod"
         defines "ARCH_x86"
     filter {}
 
+    filter "platforms:x64"
+        architecture "x86_64"
+        defines "ARCH_x64"
+    filter {}
+
+    filter "system:windows"
+        defines "OS_TARGET_WINDOWS"
+    filter {}
+
+    filter "system:linux"
+        defines "OS_TARGET_LINUX"
+    filter {}
+
     filter "configurations:Debug"
         defines "_DEBUG"
         optimize "Debug"
