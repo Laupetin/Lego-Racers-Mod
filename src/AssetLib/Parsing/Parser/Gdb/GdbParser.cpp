@@ -48,24 +48,24 @@ void gdbParserInitialize() {
       "scaleSection", "vertexSection", "vertexList", "vertexDefPosition", 
       "vertexDefPositionUv", "vertexDefPositionUvColor", "vertexDefPositionUvNormal", 
       "vertexPosition", "vertexUv", "vertexColor", "vertexNormal", "faceSection", 
-      "faceList", "face", "metaSection", "metaList", "meta", "keyword31", 
-      "keyword2D", "keyword2F", "keyword30", "keyword32", "keyword27", "floatOrIntConstant"
+      "faceList", "face", "metaSection", "metaList", "meta", "metaVertices", 
+      "metaFaces", "keyword2F", "keyword30", "keyword32", "metaObject", 
+      "floatOrIntConstant"
     },
     std::vector<std::string>{
       "", "'{'", "'}'", "'materials'", "'scale'", "'vertices'", "'faces'", 
-      "'meta'", "'v'", "'uv'", "'clr'", "'vn'", "'texture'", "'f'", "'keyword27'", 
-      "'keyword2D'", "'keyword2F'", "'keyword30'", "'keyword31'", "'keyword32'"
+      "'meta'", "'object'", "'v'", "'uv'", "'clr'", "'vn'", "'texture'", 
+      "'f'", "'keyword2F'", "'keyword30'", "'keyword32'"
     },
     std::vector<std::string>{
-      "", "", "", "Materials", "Scale", "Vertices", "Faces", "Meta", "Vertex", 
-      "Uv", "Color", "Normal", "Texture", "Face", "Keyword27", "Keyword2D", 
-      "Keyword2F", "Keyword30", "Keyword31", "Keyword32", "IntegerConstant", 
-      "FloatingConstant", "DigitSequence", "StringLiteral", "Whitespace", 
-      "Newline", "BlockComment", "LineComment"
+      "", "", "", "Materials", "Scale", "Vertices", "Faces", "Meta", "Object", 
+      "Vertex", "Uv", "Color", "Normal", "Texture", "Face", "Keyword2F", 
+      "Keyword30", "Keyword32", "IntegerConstant", "FloatingConstant", "DigitSequence", 
+      "StringLiteral", "Whitespace", "Newline", "BlockComment", "LineComment"
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,27,211,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	4,1,25,211,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
   	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
   	14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,
   	21,2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,2,27,7,27,2,28,7,
@@ -81,7 +81,7 @@ void gdbParserInitialize() {
   	20,12,20,178,1,21,1,21,1,21,1,21,1,21,1,21,3,21,187,8,21,1,22,1,22,1,
   	22,1,22,1,22,1,23,1,23,1,23,1,23,1,24,1,24,1,24,1,25,1,25,1,26,1,26,1,
   	26,1,27,1,27,1,27,1,28,1,28,1,28,0,0,29,0,2,4,6,8,10,12,14,16,18,20,22,
-  	24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,0,1,1,0,20,21,203,
+  	24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,0,1,1,0,18,19,203,
   	0,58,1,0,0,0,2,60,1,0,0,0,4,72,1,0,0,0,6,80,1,0,0,0,8,84,1,0,0,0,10,86,
   	1,0,0,0,12,89,1,0,0,0,14,116,1,0,0,0,16,118,1,0,0,0,18,120,1,0,0,0,20,
   	123,1,0,0,0,22,127,1,0,0,0,24,131,1,0,0,0,26,136,1,0,0,0,28,140,1,0,0,
@@ -94,7 +94,7 @@ void gdbParserInitialize() {
   	1,0,0,0,70,71,1,0,0,0,71,3,1,0,0,0,72,73,5,3,0,0,73,75,5,1,0,0,74,76,
   	3,6,3,0,75,74,1,0,0,0,75,76,1,0,0,0,76,77,1,0,0,0,77,78,5,2,0,0,78,5,
   	1,0,0,0,79,81,3,8,4,0,80,79,1,0,0,0,81,82,1,0,0,0,82,80,1,0,0,0,82,83,
-  	1,0,0,0,83,7,1,0,0,0,84,85,5,23,0,0,85,9,1,0,0,0,86,87,5,4,0,0,87,88,
+  	1,0,0,0,83,7,1,0,0,0,84,85,5,21,0,0,85,9,1,0,0,0,86,87,5,4,0,0,87,88,
   	3,56,28,0,88,11,1,0,0,0,89,90,5,5,0,0,90,92,5,1,0,0,91,93,3,14,7,0,92,
   	91,1,0,0,0,92,93,1,0,0,0,93,94,1,0,0,0,94,95,5,2,0,0,95,13,1,0,0,0,96,
   	98,3,20,10,0,97,96,1,0,0,0,98,99,1,0,0,0,99,97,1,0,0,0,99,100,1,0,0,0,
@@ -106,27 +106,27 @@ void gdbParserInitialize() {
   	0,0,0,116,112,1,0,0,0,117,15,1,0,0,0,118,119,3,24,12,0,119,17,1,0,0,0,
   	120,121,3,24,12,0,121,122,3,26,13,0,122,19,1,0,0,0,123,124,3,24,12,0,
   	124,125,3,26,13,0,125,126,3,28,14,0,126,21,1,0,0,0,127,128,3,24,12,0,
-  	128,129,3,26,13,0,129,130,3,30,15,0,130,23,1,0,0,0,131,132,5,8,0,0,132,
+  	128,129,3,26,13,0,129,130,3,30,15,0,130,23,1,0,0,0,131,132,5,9,0,0,132,
   	133,3,56,28,0,133,134,3,56,28,0,134,135,3,56,28,0,135,25,1,0,0,0,136,
-  	137,5,9,0,0,137,138,3,56,28,0,138,139,3,56,28,0,139,27,1,0,0,0,140,141,
-  	5,10,0,0,141,142,5,20,0,0,142,143,5,20,0,0,143,144,5,20,0,0,144,145,5,
-  	20,0,0,145,29,1,0,0,0,146,147,5,11,0,0,147,148,3,56,28,0,148,149,3,56,
+  	137,5,10,0,0,137,138,3,56,28,0,138,139,3,56,28,0,139,27,1,0,0,0,140,141,
+  	5,11,0,0,141,142,5,18,0,0,142,143,5,18,0,0,143,144,5,18,0,0,144,145,5,
+  	18,0,0,145,29,1,0,0,0,146,147,5,12,0,0,147,148,3,56,28,0,148,149,3,56,
   	28,0,149,150,3,56,28,0,150,31,1,0,0,0,151,152,5,6,0,0,152,154,5,1,0,0,
   	153,155,3,34,17,0,154,153,1,0,0,0,154,155,1,0,0,0,155,156,1,0,0,0,156,
   	157,5,2,0,0,157,33,1,0,0,0,158,160,3,36,18,0,159,158,1,0,0,0,160,161,
-  	1,0,0,0,161,159,1,0,0,0,161,162,1,0,0,0,162,35,1,0,0,0,163,164,5,13,0,
-  	0,164,165,5,20,0,0,165,166,5,20,0,0,166,167,5,20,0,0,167,37,1,0,0,0,168,
+  	1,0,0,0,161,159,1,0,0,0,161,162,1,0,0,0,162,35,1,0,0,0,163,164,5,14,0,
+  	0,164,165,5,18,0,0,165,166,5,18,0,0,166,167,5,18,0,0,167,37,1,0,0,0,168,
   	169,5,7,0,0,169,171,5,1,0,0,170,172,3,40,20,0,171,170,1,0,0,0,171,172,
   	1,0,0,0,172,173,1,0,0,0,173,174,5,2,0,0,174,39,1,0,0,0,175,177,3,42,21,
   	0,176,175,1,0,0,0,177,178,1,0,0,0,178,176,1,0,0,0,178,179,1,0,0,0,179,
   	41,1,0,0,0,180,187,3,44,22,0,181,187,3,46,23,0,182,187,3,48,24,0,183,
   	187,3,50,25,0,184,187,3,52,26,0,185,187,3,54,27,0,186,180,1,0,0,0,186,
   	181,1,0,0,0,186,182,1,0,0,0,186,183,1,0,0,0,186,184,1,0,0,0,186,185,1,
-  	0,0,0,187,43,1,0,0,0,188,189,5,18,0,0,189,190,5,20,0,0,190,191,5,20,0,
-  	0,191,192,5,20,0,0,192,45,1,0,0,0,193,194,5,15,0,0,194,195,5,20,0,0,195,
-  	196,5,20,0,0,196,47,1,0,0,0,197,198,5,16,0,0,198,199,5,20,0,0,199,49,
-  	1,0,0,0,200,201,5,17,0,0,201,51,1,0,0,0,202,203,5,19,0,0,203,204,5,20,
-  	0,0,204,53,1,0,0,0,205,206,5,14,0,0,206,207,5,20,0,0,207,55,1,0,0,0,208,
+  	0,0,0,187,43,1,0,0,0,188,189,5,5,0,0,189,190,5,18,0,0,190,191,5,18,0,
+  	0,191,192,5,18,0,0,192,45,1,0,0,0,193,194,5,6,0,0,194,195,5,18,0,0,195,
+  	196,5,18,0,0,196,47,1,0,0,0,197,198,5,15,0,0,198,199,5,18,0,0,199,49,
+  	1,0,0,0,200,201,5,16,0,0,201,51,1,0,0,0,202,203,5,17,0,0,203,204,5,18,
+  	0,0,204,53,1,0,0,0,205,206,5,8,0,0,206,207,5,18,0,0,207,55,1,0,0,0,208,
   	209,7,0,0,0,209,57,1,0,0,0,16,62,67,70,75,82,92,99,104,109,114,116,154,
   	161,171,178,186
   };
@@ -1556,11 +1556,11 @@ GdbParser::MetaSectionContext* GdbParser::metaSection() {
 
     _la = _input->LA(1);
     if ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << GdbParser::Keyword27)
-      | (1ULL << GdbParser::Keyword2D)
+      ((1ULL << _la) & ((1ULL << GdbParser::Vertices)
+      | (1ULL << GdbParser::Faces)
+      | (1ULL << GdbParser::Object)
       | (1ULL << GdbParser::Keyword2F)
       | (1ULL << GdbParser::Keyword30)
-      | (1ULL << GdbParser::Keyword31)
       | (1ULL << GdbParser::Keyword32))) != 0)) {
       setState(170);
       metaList();
@@ -1633,11 +1633,11 @@ GdbParser::MetaListContext* GdbParser::metaList() {
       _errHandler->sync(this);
       _la = _input->LA(1);
     } while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << GdbParser::Keyword27)
-      | (1ULL << GdbParser::Keyword2D)
+      ((1ULL << _la) & ((1ULL << GdbParser::Vertices)
+      | (1ULL << GdbParser::Faces)
+      | (1ULL << GdbParser::Object)
       | (1ULL << GdbParser::Keyword2F)
       | (1ULL << GdbParser::Keyword30)
-      | (1ULL << GdbParser::Keyword31)
       | (1ULL << GdbParser::Keyword32))) != 0));
    
   }
@@ -1656,12 +1656,12 @@ GdbParser::MetaContext::MetaContext(ParserRuleContext *parent, size_t invokingSt
   : ParserRuleContext(parent, invokingState) {
 }
 
-GdbParser::Keyword31Context* GdbParser::MetaContext::keyword31() {
-  return getRuleContext<GdbParser::Keyword31Context>(0);
+GdbParser::MetaVerticesContext* GdbParser::MetaContext::metaVertices() {
+  return getRuleContext<GdbParser::MetaVerticesContext>(0);
 }
 
-GdbParser::Keyword2DContext* GdbParser::MetaContext::keyword2D() {
-  return getRuleContext<GdbParser::Keyword2DContext>(0);
+GdbParser::MetaFacesContext* GdbParser::MetaContext::metaFaces() {
+  return getRuleContext<GdbParser::MetaFacesContext>(0);
 }
 
 GdbParser::Keyword2FContext* GdbParser::MetaContext::keyword2F() {
@@ -1676,8 +1676,8 @@ GdbParser::Keyword32Context* GdbParser::MetaContext::keyword32() {
   return getRuleContext<GdbParser::Keyword32Context>(0);
 }
 
-GdbParser::Keyword27Context* GdbParser::MetaContext::keyword27() {
-  return getRuleContext<GdbParser::Keyword27Context>(0);
+GdbParser::MetaObjectContext* GdbParser::MetaContext::metaObject() {
+  return getRuleContext<GdbParser::MetaObjectContext>(0);
 }
 
 
@@ -1712,17 +1712,17 @@ GdbParser::MetaContext* GdbParser::meta() {
     setState(186);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
-      case GdbParser::Keyword31: {
+      case GdbParser::Vertices: {
         enterOuterAlt(_localctx, 1);
         setState(180);
-        keyword31();
+        metaVertices();
         break;
       }
 
-      case GdbParser::Keyword2D: {
+      case GdbParser::Faces: {
         enterOuterAlt(_localctx, 2);
         setState(181);
-        keyword2D();
+        metaFaces();
         break;
       }
 
@@ -1747,10 +1747,10 @@ GdbParser::MetaContext* GdbParser::meta() {
         break;
       }
 
-      case GdbParser::Keyword27: {
+      case GdbParser::Object: {
         enterOuterAlt(_localctx, 6);
         setState(185);
-        keyword27();
+        metaObject();
         break;
       }
 
@@ -1768,44 +1768,44 @@ GdbParser::MetaContext* GdbParser::meta() {
   return _localctx;
 }
 
-//----------------- Keyword31Context ------------------------------------------------------------------
+//----------------- MetaVerticesContext ------------------------------------------------------------------
 
-GdbParser::Keyword31Context::Keyword31Context(ParserRuleContext *parent, size_t invokingState)
+GdbParser::MetaVerticesContext::MetaVerticesContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* GdbParser::Keyword31Context::Keyword31() {
-  return getToken(GdbParser::Keyword31, 0);
+tree::TerminalNode* GdbParser::MetaVerticesContext::Vertices() {
+  return getToken(GdbParser::Vertices, 0);
 }
 
-std::vector<tree::TerminalNode *> GdbParser::Keyword31Context::IntegerConstant() {
+std::vector<tree::TerminalNode *> GdbParser::MetaVerticesContext::IntegerConstant() {
   return getTokens(GdbParser::IntegerConstant);
 }
 
-tree::TerminalNode* GdbParser::Keyword31Context::IntegerConstant(size_t i) {
+tree::TerminalNode* GdbParser::MetaVerticesContext::IntegerConstant(size_t i) {
   return getToken(GdbParser::IntegerConstant, i);
 }
 
 
-size_t GdbParser::Keyword31Context::getRuleIndex() const {
-  return GdbParser::RuleKeyword31;
+size_t GdbParser::MetaVerticesContext::getRuleIndex() const {
+  return GdbParser::RuleMetaVertices;
 }
 
-void GdbParser::Keyword31Context::enterRule(tree::ParseTreeListener *listener) {
+void GdbParser::MetaVerticesContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterKeyword31(this);
+    parserListener->enterMetaVertices(this);
 }
 
-void GdbParser::Keyword31Context::exitRule(tree::ParseTreeListener *listener) {
+void GdbParser::MetaVerticesContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitKeyword31(this);
+    parserListener->exitMetaVertices(this);
 }
 
-GdbParser::Keyword31Context* GdbParser::keyword31() {
-  Keyword31Context *_localctx = _tracker.createInstance<Keyword31Context>(_ctx, getState());
-  enterRule(_localctx, 44, GdbParser::RuleKeyword31);
+GdbParser::MetaVerticesContext* GdbParser::metaVertices() {
+  MetaVerticesContext *_localctx = _tracker.createInstance<MetaVerticesContext>(_ctx, getState());
+  enterRule(_localctx, 44, GdbParser::RuleMetaVertices);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1817,7 +1817,7 @@ GdbParser::Keyword31Context* GdbParser::keyword31() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(188);
-    match(GdbParser::Keyword31);
+    match(GdbParser::Vertices);
     setState(189);
     match(GdbParser::IntegerConstant);
     setState(190);
@@ -1835,44 +1835,44 @@ GdbParser::Keyword31Context* GdbParser::keyword31() {
   return _localctx;
 }
 
-//----------------- Keyword2DContext ------------------------------------------------------------------
+//----------------- MetaFacesContext ------------------------------------------------------------------
 
-GdbParser::Keyword2DContext::Keyword2DContext(ParserRuleContext *parent, size_t invokingState)
+GdbParser::MetaFacesContext::MetaFacesContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* GdbParser::Keyword2DContext::Keyword2D() {
-  return getToken(GdbParser::Keyword2D, 0);
+tree::TerminalNode* GdbParser::MetaFacesContext::Faces() {
+  return getToken(GdbParser::Faces, 0);
 }
 
-std::vector<tree::TerminalNode *> GdbParser::Keyword2DContext::IntegerConstant() {
+std::vector<tree::TerminalNode *> GdbParser::MetaFacesContext::IntegerConstant() {
   return getTokens(GdbParser::IntegerConstant);
 }
 
-tree::TerminalNode* GdbParser::Keyword2DContext::IntegerConstant(size_t i) {
+tree::TerminalNode* GdbParser::MetaFacesContext::IntegerConstant(size_t i) {
   return getToken(GdbParser::IntegerConstant, i);
 }
 
 
-size_t GdbParser::Keyword2DContext::getRuleIndex() const {
-  return GdbParser::RuleKeyword2D;
+size_t GdbParser::MetaFacesContext::getRuleIndex() const {
+  return GdbParser::RuleMetaFaces;
 }
 
-void GdbParser::Keyword2DContext::enterRule(tree::ParseTreeListener *listener) {
+void GdbParser::MetaFacesContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterKeyword2D(this);
+    parserListener->enterMetaFaces(this);
 }
 
-void GdbParser::Keyword2DContext::exitRule(tree::ParseTreeListener *listener) {
+void GdbParser::MetaFacesContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitKeyword2D(this);
+    parserListener->exitMetaFaces(this);
 }
 
-GdbParser::Keyword2DContext* GdbParser::keyword2D() {
-  Keyword2DContext *_localctx = _tracker.createInstance<Keyword2DContext>(_ctx, getState());
-  enterRule(_localctx, 46, GdbParser::RuleKeyword2D);
+GdbParser::MetaFacesContext* GdbParser::metaFaces() {
+  MetaFacesContext *_localctx = _tracker.createInstance<MetaFacesContext>(_ctx, getState());
+  enterRule(_localctx, 46, GdbParser::RuleMetaFaces);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1884,7 +1884,7 @@ GdbParser::Keyword2DContext* GdbParser::keyword2D() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(193);
-    match(GdbParser::Keyword2D);
+    match(GdbParser::Faces);
     setState(194);
     match(GdbParser::IntegerConstant);
     setState(195);
@@ -2071,40 +2071,40 @@ GdbParser::Keyword32Context* GdbParser::keyword32() {
   return _localctx;
 }
 
-//----------------- Keyword27Context ------------------------------------------------------------------
+//----------------- MetaObjectContext ------------------------------------------------------------------
 
-GdbParser::Keyword27Context::Keyword27Context(ParserRuleContext *parent, size_t invokingState)
+GdbParser::MetaObjectContext::MetaObjectContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* GdbParser::Keyword27Context::Keyword27() {
-  return getToken(GdbParser::Keyword27, 0);
+tree::TerminalNode* GdbParser::MetaObjectContext::Object() {
+  return getToken(GdbParser::Object, 0);
 }
 
-tree::TerminalNode* GdbParser::Keyword27Context::IntegerConstant() {
+tree::TerminalNode* GdbParser::MetaObjectContext::IntegerConstant() {
   return getToken(GdbParser::IntegerConstant, 0);
 }
 
 
-size_t GdbParser::Keyword27Context::getRuleIndex() const {
-  return GdbParser::RuleKeyword27;
+size_t GdbParser::MetaObjectContext::getRuleIndex() const {
+  return GdbParser::RuleMetaObject;
 }
 
-void GdbParser::Keyword27Context::enterRule(tree::ParseTreeListener *listener) {
+void GdbParser::MetaObjectContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterKeyword27(this);
+    parserListener->enterMetaObject(this);
 }
 
-void GdbParser::Keyword27Context::exitRule(tree::ParseTreeListener *listener) {
+void GdbParser::MetaObjectContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitKeyword27(this);
+    parserListener->exitMetaObject(this);
 }
 
-GdbParser::Keyword27Context* GdbParser::keyword27() {
-  Keyword27Context *_localctx = _tracker.createInstance<Keyword27Context>(_ctx, getState());
-  enterRule(_localctx, 54, GdbParser::RuleKeyword27);
+GdbParser::MetaObjectContext* GdbParser::metaObject() {
+  MetaObjectContext *_localctx = _tracker.createInstance<MetaObjectContext>(_ctx, getState());
+  enterRule(_localctx, 54, GdbParser::RuleMetaObject);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -2116,7 +2116,7 @@ GdbParser::Keyword27Context* GdbParser::keyword27() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(205);
-    match(GdbParser::Keyword27);
+    match(GdbParser::Object);
     setState(206);
     match(GdbParser::IntegerConstant);
    

@@ -17,8 +17,8 @@ namespace gdb
         TOKEN_META_FACES = 0x2D,
         TOKEN_META_2F = 0x2F,
         TOKEN_META_30 = 0x30,
-        TOKEN_META_ADD_VERTICES = 0x31,
-        TOKEN_META_32 = 0x32,
+        TOKEN_META_VERTICES = 0x31,
+        TOKEN_META_32 = 0x32,    // Set Bone or something
         TOKEN_SCALE = 0x33,
         TOKEN_SECTION_VERTEX_WITH_POSITION = 0x34,
     };

@@ -94,20 +94,20 @@ metaList
     ;
 
 meta
-    :   keyword31
-    |   keyword2D
+    :   metaVertices
+    |   metaFaces
     |   keyword2F
     |   keyword30
     |   keyword32
-    |   keyword27
+    |   metaObject
     ;
 
-keyword31
-    :   Keyword31 IntegerConstant IntegerConstant IntegerConstant
+metaVertices
+    :   Vertices IntegerConstant IntegerConstant IntegerConstant
     ;
 
-keyword2D
-    :   Keyword2D IntegerConstant IntegerConstant
+metaFaces
+    :   Faces IntegerConstant IntegerConstant
     ;
 
 keyword2F
@@ -122,8 +122,8 @@ keyword32
     :  Keyword32 IntegerConstant
     ;
 
-keyword27
-    : Keyword27 IntegerConstant
+metaObject
+    : Object IntegerConstant
     ;
     
 Materials: 'materials';
@@ -131,15 +131,13 @@ Scale: 'scale';
 Vertices: 'vertices';
 Faces: 'faces';
 Meta: 'meta';
+Object: 'object';
 Vertex : 'v';
 Uv : 'uv';
 Color: 'clr';
 Normal: 'vn';
 Texture: 'texture';
 Face: 'f';
-Keyword27: 'keyword27';
-Keyword2D: 'keyword2D';
 Keyword2F: 'keyword2F';
 Keyword30: 'keyword30';
-Keyword31: 'keyword31';
 Keyword32: 'keyword32';

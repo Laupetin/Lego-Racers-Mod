@@ -120,10 +120,10 @@ namespace gdb
             IncIndent();
         }
 
-        void EmitFace(const unsigned vertex0, const unsigned vertex1, const unsigned vertex2) override
+        void EmitFace(const uint8_t vertex0, const uint8_t vertex1, const uint8_t vertex2) override
         {
             Indent();
-            m_stream << "f " << vertex0 << " " << vertex1 << " " << vertex2 << "\n";
+            m_stream << "f " << static_cast<int>(vertex0) << " " << static_cast<int>(vertex1) << " " << static_cast<int>(vertex2) << "\n";
         }
 
         void EndFaces() override
@@ -141,16 +141,16 @@ namespace gdb
             IncIndent();
         }
 
-        void EmitMetaKeyword31(const int value0, const int value1, const int value2) override
+        void EmitMetaSelectVertices(const uint8_t shiftForwardCount, const size_t vertexOffset, const uint8_t vertexCount) override
         {
             Indent();
-            m_stream << "keyword31 " << value0 << " " << value1 << " " << value2 << "\n";
+            m_stream << "vertices " << static_cast<int>(shiftForwardCount) << " " << vertexOffset << " " << static_cast<int>(vertexCount) << "\n";
         }
 
-        void EmitMetaKeyword2D(const int value0, const int value1) override
+        void EmitMetaAddFaces(const size_t faceOffset, const uint8_t faceCount) override
         {
             Indent();
-            m_stream << "keyword2D " << value0 << " " << value1 << "\n";
+            m_stream << "faces " << faceOffset << " " << static_cast<int>(faceCount) << "\n";
         }
 
         void EmitMetaKeyword2F(const int value0) override
@@ -171,10 +171,10 @@ namespace gdb
             m_stream << "keyword32 " << value0 << "\n";
         }
 
-        void EmitMetaKeyword27(const int value0) override
+        void EmitMetaNewObject(const size_t materialIndex) override
         {
             Indent();
-            m_stream << "keyword27 " << value0 << "\n";
+            m_stream << "object " << materialIndex << "\n";
         }
 
         void EndMeta() override

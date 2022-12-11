@@ -119,11 +119,11 @@ namespace gdb
 			PrepareElementsInTempBuffer(TOKEN_SECTION_INDICES);
 		}
 
-		void EmitFace(const unsigned vertex0, const unsigned vertex1, const unsigned vertex2) override
+		void EmitFace(const uint8_t vertex0, const uint8_t vertex1, const uint8_t vertex2) override
 		{
-			m_temp_tokens->WriteUInt8(static_cast<uint8_t>(vertex0));
-			m_temp_tokens->WriteUInt8(static_cast<uint8_t>(vertex1));
-			m_temp_tokens->WriteUInt8(static_cast<uint8_t>(vertex2));
+			m_temp_tokens->WriteUInt8(vertex0);
+			m_temp_tokens->WriteUInt8(vertex1);
+			m_temp_tokens->WriteUInt8(vertex2);
 
 			m_current_count++;
 		}
@@ -138,21 +138,21 @@ namespace gdb
 			PrepareElementsInTempBuffer(TOKEN_SECTION_VERTEX_META);
 		}
 
-		void EmitMetaKeyword31(const int value0, const int value1, const int value2) override
+		void EmitMetaSelectVertices(const uint8_t shiftForwardCount, const size_t vertexOffset, const uint8_t vertexCount) override
 		{
-			m_temp_tokens->WriteCustom(TOKEN_META_ADD_VERTICES);
-			m_temp_tokens->WriteInteger(value0);
-			m_temp_tokens->WriteInteger(value1);
-			m_temp_tokens->WriteInteger(value2);
+			m_temp_tokens->WriteCustom(TOKEN_META_VERTICES);
+			m_temp_tokens->WriteUInt8(shiftForwardCount);
+			m_temp_tokens->WriteInteger(static_cast<int>(vertexOffset));
+			m_temp_tokens->WriteUInt8(vertexCount);
 
 			m_current_count++;
 		}
 
-		void EmitMetaKeyword2D(const int value0, const int value1) override
+		void EmitMetaAddFaces(const size_t faceOffset, const uint8_t faceCount) override
 		{
 			m_temp_tokens->WriteCustom(TOKEN_META_FACES);
-			m_temp_tokens->WriteInteger(value0);
-			m_temp_tokens->WriteInteger(value1);
+			m_temp_tokens->WriteInteger(static_cast<int>(faceOffset));
+			m_temp_tokens->WriteUInt8(faceCount);
 
 			m_current_count++;
 		}
@@ -180,10 +180,10 @@ namespace gdb
 			m_current_count++;
 		}
 
-		void EmitMetaKeyword27(const int value0) override
+		void EmitMetaNewObject(const size_t materialIndex) override
 		{
 			m_temp_tokens->WriteCustom(TOKEN_META_NEW_OBJECT);
-			m_temp_tokens->WriteInteger(value0);
+			m_temp_tokens->WriteInteger(static_cast<int>(materialIndex));
 
 			m_current_count++;
 		}
