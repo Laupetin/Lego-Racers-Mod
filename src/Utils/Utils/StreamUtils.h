@@ -7,10 +7,18 @@ namespace utils
     class ReadingException final : public std::exception
     {
     public:
-        explicit ReadingException(const char* msg)
-            : exception(msg)
+        explicit ReadingException(std::string msg)
+            : m_msg(std::move(msg))
         {
         }
+
+        [[nodiscard]] char const* what() const noexcept override
+        {
+            return m_msg.c_str();
+        }
+
+    private:
+        std::string m_msg;
     };
 
     inline void ReadOrThrow(std::istream& stream, void* buffer, const size_t readSize)
@@ -136,6 +144,7 @@ namespace utils
         [[nodiscard]] const void* Buffer() const;
         [[nodiscard]] size_t BufferSize() const;
         [[nodiscard]] size_t Pos() const;
+
     private:
         const char* m_buffer;
         size_t m_buffer_size;

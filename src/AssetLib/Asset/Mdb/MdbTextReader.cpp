@@ -16,14 +16,18 @@ namespace mdb
     class MdbCreationException final : public std::exception
     {
     public:
-        explicit MdbCreationException(std::string str)
-            : exception(str.c_str()),
-              m_message(std::move(str))
+        explicit MdbCreationException(std::string msg)
+            : m_msg(std::move(msg))
         {
         }
 
+        [[nodiscard]] char const* what() const noexcept override
+        {
+            return m_msg.c_str();
+        }
+
     private:
-        std::string m_message;
+        std::string m_msg;
     };
 
     class CustomMdbListener final : public MdbBaseListener

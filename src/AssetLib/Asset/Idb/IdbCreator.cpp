@@ -19,10 +19,18 @@ namespace idb
     class IdbCreationException final : public std::exception
     {
     public:
-        explicit IdbCreationException(char const* msg)
-            : exception(msg)
+        explicit IdbCreationException(std::string msg)
+            : m_msg(std::move(msg))
         {
         }
+
+        [[nodiscard]] char const* what() const noexcept override
+        {
+            return m_msg.c_str();
+        }
+
+    private:
+        std::string m_msg;
     };
 
     class IdbParserState

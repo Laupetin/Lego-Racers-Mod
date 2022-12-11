@@ -17,13 +17,17 @@ namespace gdb
     {
     public:
         explicit GdbCreationException(std::string str)
-            : exception(str.c_str()),
-              m_message(std::move(str))
+            : m_msg(std::move(str))
         {
         }
 
+        [[nodiscard]] char const* what() const noexcept override
+        {
+            return m_msg.c_str();
+        }
+
     private:
-        std::string m_message;
+        std::string m_msg;
     };
 
     class CustomGdbListener final : public GdbBaseListener

@@ -10,10 +10,18 @@
 class SrfCreationException final : public std::exception
 {
 public:
-    explicit SrfCreationException(char const* msg)
-        : exception(msg)
+    explicit SrfCreationException(std::string msg)
+        : m_msg(std::move(msg))
     {
     }
+
+    [[nodiscard]] char const* what() const noexcept override
+    {
+        return m_msg.c_str();
+    }
+
+private:
+    std::string m_msg;
 };
 
 namespace creation

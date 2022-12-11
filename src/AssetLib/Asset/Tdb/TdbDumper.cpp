@@ -11,10 +11,18 @@ namespace tdb
     class TdbDumpingException final : public std::exception
     {
     public:
-        explicit TdbDumpingException(char const* msg)
-            : exception(msg)
+        explicit TdbDumpingException(std::string msg)
+            : m_msg(std::move(msg))
         {
         }
+
+        [[nodiscard]] char const* what() const noexcept override
+        {
+            return m_msg.c_str();
+        }
+
+    private:
+        std::string m_msg;
     };
 }
 
