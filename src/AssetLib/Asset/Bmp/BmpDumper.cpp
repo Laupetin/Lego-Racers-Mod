@@ -1,7 +1,9 @@
 #include "BmpDumper.h"
 
 #include <cassert>
+#include <cstring>
 #include <iostream>
+#include <memory>
 #include <sstream>
 
 #include "Bmp.h"
@@ -12,10 +14,13 @@
 class BmpDumpingException final : public std::exception
 {
 public:
-    explicit BmpDumpingException(char const* msg)
-        : exception(msg)
+    explicit BmpDumpingException(std::string msg)
+        : m_msg(std::move(msg))
     {
     }
+
+private:
+    std::string m_msg;
 };
 
 constexpr auto BMP_PALETTE_MAX_SIZE = 256;
