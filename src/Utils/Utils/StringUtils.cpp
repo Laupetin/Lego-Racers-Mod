@@ -1,25 +1,20 @@
+// Even with codecvt being deprecated there is no suitable replacement yet.
+// So this will be used to be able to have multi platform compilation until a replacement is available
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+
 #include "StringUtils.h"
 
-#include <Windows.h>
+#include <codecvt>
 
 std::string utils::ConvertWStringToString(const std::wstring& wstr)
 {
-    const auto bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast<int>(wstr.size()), nullptr, 0, nullptr, nullptr);
-    if (bufferSize <= 0)
-        return {};
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
-    std::string result(bufferSize, '\0');
-    WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, result.data(), bufferSize, nullptr, nullptr);
-    return result;
+    return converter.to_bytes(wstr);
 }
 
 std::wstring utils::ConvertStringToWString(const std::string& str)
 {
-    const auto bufferSize = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), static_cast<int>(str.size()), nullptr, 0);
-    if (bufferSize <= 0)
-        return {};
-
-    std::wstring result(bufferSize, L'\0');
-    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, result.data(), bufferSize);
-    return result;
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    return converter.from_bytes(str);
 }
