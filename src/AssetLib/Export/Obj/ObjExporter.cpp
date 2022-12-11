@@ -319,7 +319,7 @@ namespace obj
                     assert(false);
                 break;
 
-            case gdb::TOKEN_META_ADD_VERTICES:
+            case gdb::TOKEN_META_VERTICES:
                 if (meta.m_value1 >= 0 && meta.m_value2 >= 0 && static_cast<size_t>(meta.m_value1) + static_cast<size_t>(meta.m_value2) <= gdbModel.m_vertices.size())
                 {
                     previousVertexSelector = currentVertexSelector;

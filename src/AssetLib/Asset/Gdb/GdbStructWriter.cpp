@@ -69,7 +69,7 @@ namespace gdb
             // Do nothing
         }
 
-        void EmitFace(unsigned int vertex0, unsigned int vertex1, unsigned int vertex2) override
+        void EmitFace(uint8_t vertex0, uint8_t vertex1, uint8_t vertex2) override
         {
             m_model.m_faces.emplace_back(vertex0, vertex1, vertex2);
         }
@@ -84,14 +84,14 @@ namespace gdb
             // Do nothing
         }
 
-        void EmitMetaKeyword31(int value0, int value1, int value2) override
+        void EmitMetaSelectVertices(const uint8_t shiftForwardCount, const size_t vertexOffset, const uint8_t vertexCount) override
         {
-            m_model.m_meta.emplace_back(TOKEN_META_ADD_VERTICES, value0, value1, value2);
+            m_model.m_meta.emplace_back(TOKEN_META_VERTICES, shiftForwardCount, vertexOffset, vertexCount);
         }
 
-        void EmitMetaKeyword2D(int value0, int value1) override
+        void EmitMetaAddFaces(size_t faceOffset, uint8_t faceCount) override
         {
-            m_model.m_meta.emplace_back(TOKEN_META_FACES, value0, value1);
+            m_model.m_meta.emplace_back(TOKEN_META_FACES, faceOffset, faceCount);
         }
 
         void EmitMetaKeyword2F(int value0) override
@@ -109,9 +109,9 @@ namespace gdb
             m_model.m_meta.emplace_back(TOKEN_META_32, value0);
         }
 
-        void EmitMetaKeyword27(int value0) override
+        void EmitMetaNewObject(size_t materialIndex) override
         {
-            m_model.m_meta.emplace_back(TOKEN_META_NEW_OBJECT, value0);
+            m_model.m_meta.emplace_back(TOKEN_META_NEW_OBJECT, materialIndex);
         }
 
         void EndMeta() override

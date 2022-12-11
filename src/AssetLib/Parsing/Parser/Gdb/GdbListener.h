@@ -82,11 +82,11 @@ public:
   virtual void enterMeta(GdbParser::MetaContext *ctx) = 0;
   virtual void exitMeta(GdbParser::MetaContext *ctx) = 0;
 
-  virtual void enterKeyword31(GdbParser::Keyword31Context *ctx) = 0;
-  virtual void exitKeyword31(GdbParser::Keyword31Context *ctx) = 0;
+  virtual void enterMetaVertices(GdbParser::MetaVerticesContext *ctx) = 0;
+  virtual void exitMetaVertices(GdbParser::MetaVerticesContext *ctx) = 0;
 
-  virtual void enterKeyword2D(GdbParser::Keyword2DContext *ctx) = 0;
-  virtual void exitKeyword2D(GdbParser::Keyword2DContext *ctx) = 0;
+  virtual void enterMetaFaces(GdbParser::MetaFacesContext *ctx) = 0;
+  virtual void exitMetaFaces(GdbParser::MetaFacesContext *ctx) = 0;
 
   virtual void enterKeyword2F(GdbParser::Keyword2FContext *ctx) = 0;
   virtual void exitKeyword2F(GdbParser::Keyword2FContext *ctx) = 0;
@@ -97,8 +97,8 @@ public:
   virtual void enterKeyword32(GdbParser::Keyword32Context *ctx) = 0;
   virtual void exitKeyword32(GdbParser::Keyword32Context *ctx) = 0;
 
-  virtual void enterKeyword27(GdbParser::Keyword27Context *ctx) = 0;
-  virtual void exitKeyword27(GdbParser::Keyword27Context *ctx) = 0;
+  virtual void enterMetaObject(GdbParser::MetaObjectContext *ctx) = 0;
+  virtual void exitMetaObject(GdbParser::MetaObjectContext *ctx) = 0;
 
   virtual void enterFloatOrIntConstant(GdbParser::FloatOrIntConstantContext *ctx) = 0;
   virtual void exitFloatOrIntConstant(GdbParser::FloatOrIntConstantContext *ctx) = 0;

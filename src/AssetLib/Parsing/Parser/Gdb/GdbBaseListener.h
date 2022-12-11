@@ -84,11 +84,11 @@ public:
   virtual void enterMeta(GdbParser::MetaContext * /*ctx*/) override { }
   virtual void exitMeta(GdbParser::MetaContext * /*ctx*/) override { }
 
-  virtual void enterKeyword31(GdbParser::Keyword31Context * /*ctx*/) override { }
-  virtual void exitKeyword31(GdbParser::Keyword31Context * /*ctx*/) override { }
+  virtual void enterMetaVertices(GdbParser::MetaVerticesContext * /*ctx*/) override { }
+  virtual void exitMetaVertices(GdbParser::MetaVerticesContext * /*ctx*/) override { }
 
-  virtual void enterKeyword2D(GdbParser::Keyword2DContext * /*ctx*/) override { }
-  virtual void exitKeyword2D(GdbParser::Keyword2DContext * /*ctx*/) override { }
+  virtual void enterMetaFaces(GdbParser::MetaFacesContext * /*ctx*/) override { }
+  virtual void exitMetaFaces(GdbParser::MetaFacesContext * /*ctx*/) override { }
 
   virtual void enterKeyword2F(GdbParser::Keyword2FContext * /*ctx*/) override { }
   virtual void exitKeyword2F(GdbParser::Keyword2FContext * /*ctx*/) override { }
@@ -99,8 +99,8 @@ public:
   virtual void enterKeyword32(GdbParser::Keyword32Context * /*ctx*/) override { }
   virtual void exitKeyword32(GdbParser::Keyword32Context * /*ctx*/) override { }
 
-  virtual void enterKeyword27(GdbParser::Keyword27Context * /*ctx*/) override { }
-  virtual void exitKeyword27(GdbParser::Keyword27Context * /*ctx*/) override { }
+  virtual void enterMetaObject(GdbParser::MetaObjectContext * /*ctx*/) override { }
+  virtual void exitMetaObject(GdbParser::MetaObjectContext * /*ctx*/) override { }
 
   virtual void enterFloatOrIntConstant(GdbParser::FloatOrIntConstantContext * /*ctx*/) override { }
   virtual void exitFloatOrIntConstant(GdbParser::FloatOrIntConstantContext * /*ctx*/) override { }

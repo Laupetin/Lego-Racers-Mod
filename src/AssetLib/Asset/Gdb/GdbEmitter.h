@@ -30,16 +30,16 @@ namespace gdb
 		virtual void EndVertices() = 0;
 
 		virtual void StartFaces() = 0;
-		virtual void EmitFace(unsigned int vertex0, unsigned int vertex1, unsigned int vertex2) = 0;
+		virtual void EmitFace(uint8_t vertex0, uint8_t vertex1, uint8_t vertex2) = 0;
 		virtual void EndFaces() = 0;
 
 		virtual void StartMeta() = 0;
-		virtual void EmitMetaKeyword31(int value0, int value1, int value2) = 0;
-		virtual void EmitMetaKeyword2D(int value0, int value1) = 0;
+		virtual void EmitMetaSelectVertices(uint8_t shiftForwardCount, size_t vertexOffset, uint8_t vertexCount) = 0;
+		virtual void EmitMetaAddFaces(size_t faceOffset, uint8_t faceCount) = 0;
 		virtual void EmitMetaKeyword2F(int value0) = 0;
 		virtual void EmitMetaKeyword30() = 0;
 		virtual void EmitMetaKeyword32(int value0) = 0;
-		virtual void EmitMetaKeyword27(int value0) = 0;
+		virtual void EmitMetaNewObject(size_t materialIndex) = 0;
 		virtual void EndMeta() = 0;
 	};
 }

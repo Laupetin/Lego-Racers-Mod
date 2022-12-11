@@ -117,19 +117,19 @@ namespace gdb
                 switch (meta.m_keyword)
                 {
                 case TOKEN_META_NEW_OBJECT:
-                    m_emitter.EmitMetaKeyword27(meta.m_value0);
+                    m_emitter.EmitMetaNewObject(meta.m_value0);
                     break;
 
                 case TOKEN_META_30:
                     m_emitter.EmitMetaKeyword30();
                     break;
 
-                case TOKEN_META_ADD_VERTICES:
-                    m_emitter.EmitMetaKeyword31(meta.m_value0, meta.m_value1, meta.m_value2);
+                case TOKEN_META_VERTICES:
+                    m_emitter.EmitMetaSelectVertices(meta.m_value0, meta.m_value1, meta.m_value2);
                     break;
 
                 case TOKEN_META_FACES:
-                    m_emitter.EmitMetaKeyword2D(meta.m_value0, meta.m_value1);
+                    m_emitter.EmitMetaAddFaces(meta.m_value0, meta.m_value1);
                     break;
 
                 case TOKEN_META_2F:

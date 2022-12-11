@@ -218,13 +218,13 @@ namespace gdb
 			{
 				switch (m_tokens->NextValue().m_type)
 				{
-				case TOKEN_META_ADD_VERTICES:
+				case TOKEN_META_VERTICES:
 				{
 					const auto value0 = m_tokens->NextIntegerValue();
 					const auto value1 = m_tokens->NextIntegerValue();
 					const auto value2 = m_tokens->NextIntegerValue();
 
-					m_emitter.EmitMetaKeyword31(value0, value1, value2);
+					m_emitter.EmitMetaSelectVertices(value0, value1, value2);
 				}
 				break;
 				case TOKEN_META_FACES:
@@ -232,7 +232,7 @@ namespace gdb
 					const auto value0 = m_tokens->NextIntegerValue();
 					const auto value1 = m_tokens->NextIntegerValue();
 
-					m_emitter.EmitMetaKeyword2D(value0, value1);
+					m_emitter.EmitMetaAddFaces(value0, value1);
 				}
 				break;
 				case TOKEN_META_2F:
@@ -258,7 +258,7 @@ namespace gdb
 				{
 					const auto value0 = m_tokens->NextIntegerValue();
 
-					m_emitter.EmitMetaKeyword27(value0);
+					m_emitter.EmitMetaNewObject(value0);
 				}
 				break;
 				default:

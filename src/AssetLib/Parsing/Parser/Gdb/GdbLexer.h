@@ -14,11 +14,10 @@ class  GdbLexer : public antlr4::Lexer {
 public:
   enum {
     T__0 = 1, T__1 = 2, Materials = 3, Scale = 4, Vertices = 5, Faces = 6, 
-    Meta = 7, Vertex = 8, Uv = 9, Color = 10, Normal = 11, Texture = 12, 
-    Face = 13, Keyword27 = 14, Keyword2D = 15, Keyword2F = 16, Keyword30 = 17, 
-    Keyword31 = 18, Keyword32 = 19, IntegerConstant = 20, FloatingConstant = 21, 
-    DigitSequence = 22, StringLiteral = 23, Whitespace = 24, Newline = 25, 
-    BlockComment = 26, LineComment = 27
+    Meta = 7, Object = 8, Vertex = 9, Uv = 10, Color = 11, Normal = 12, 
+    Texture = 13, Face = 14, Keyword2F = 15, Keyword30 = 16, Keyword32 = 17, 
+    IntegerConstant = 18, FloatingConstant = 19, DigitSequence = 20, StringLiteral = 21, 
+    Whitespace = 22, Newline = 23, BlockComment = 24, LineComment = 25
   };
 
   explicit GdbLexer(antlr4::CharStream *input);

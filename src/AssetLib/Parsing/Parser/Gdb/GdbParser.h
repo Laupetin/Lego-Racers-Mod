@@ -14,11 +14,10 @@ class  GdbParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, Materials = 3, Scale = 4, Vertices = 5, Faces = 6, 
-    Meta = 7, Vertex = 8, Uv = 9, Color = 10, Normal = 11, Texture = 12, 
-    Face = 13, Keyword27 = 14, Keyword2D = 15, Keyword2F = 16, Keyword30 = 17, 
-    Keyword31 = 18, Keyword32 = 19, IntegerConstant = 20, FloatingConstant = 21, 
-    DigitSequence = 22, StringLiteral = 23, Whitespace = 24, Newline = 25, 
-    BlockComment = 26, LineComment = 27
+    Meta = 7, Object = 8, Vertex = 9, Uv = 10, Color = 11, Normal = 12, 
+    Texture = 13, Face = 14, Keyword2F = 15, Keyword30 = 16, Keyword32 = 17, 
+    IntegerConstant = 18, FloatingConstant = 19, DigitSequence = 20, StringLiteral = 21, 
+    Whitespace = 22, Newline = 23, BlockComment = 24, LineComment = 25
   };
 
   enum {
@@ -28,8 +27,8 @@ public:
     RuleVertexDefPositionUvNormal = 11, RuleVertexPosition = 12, RuleVertexUv = 13, 
     RuleVertexColor = 14, RuleVertexNormal = 15, RuleFaceSection = 16, RuleFaceList = 17, 
     RuleFace = 18, RuleMetaSection = 19, RuleMetaList = 20, RuleMeta = 21, 
-    RuleKeyword31 = 22, RuleKeyword2D = 23, RuleKeyword2F = 24, RuleKeyword30 = 25, 
-    RuleKeyword32 = 26, RuleKeyword27 = 27, RuleFloatOrIntConstant = 28
+    RuleMetaVertices = 22, RuleMetaFaces = 23, RuleKeyword2F = 24, RuleKeyword30 = 25, 
+    RuleKeyword32 = 26, RuleMetaObject = 27, RuleFloatOrIntConstant = 28
   };
 
   explicit GdbParser(antlr4::TokenStream *input);
@@ -71,12 +70,12 @@ public:
   class MetaSectionContext;
   class MetaListContext;
   class MetaContext;
-  class Keyword31Context;
-  class Keyword2DContext;
+  class MetaVerticesContext;
+  class MetaFacesContext;
   class Keyword2FContext;
   class Keyword30Context;
   class Keyword32Context;
-  class Keyword27Context;
+  class MetaObjectContext;
   class FloatOrIntConstantContext; 
 
   class  RootContext : public antlr4::ParserRuleContext {
@@ -390,12 +389,12 @@ public:
   public:
     MetaContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    Keyword31Context *keyword31();
-    Keyword2DContext *keyword2D();
+    MetaVerticesContext *metaVertices();
+    MetaFacesContext *metaFaces();
     Keyword2FContext *keyword2F();
     Keyword30Context *keyword30();
     Keyword32Context *keyword32();
-    Keyword27Context *keyword27();
+    MetaObjectContext *metaObject();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -404,11 +403,11 @@ public:
 
   MetaContext* meta();
 
-  class  Keyword31Context : public antlr4::ParserRuleContext {
+  class  MetaVerticesContext : public antlr4::ParserRuleContext {
   public:
-    Keyword31Context(antlr4::ParserRuleContext *parent, size_t invokingState);
+    MetaVerticesContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *Keyword31();
+    antlr4::tree::TerminalNode *Vertices();
     std::vector<antlr4::tree::TerminalNode *> IntegerConstant();
     antlr4::tree::TerminalNode* IntegerConstant(size_t i);
 
@@ -417,13 +416,13 @@ public:
    
   };
 
-  Keyword31Context* keyword31();
+  MetaVerticesContext* metaVertices();
 
-  class  Keyword2DContext : public antlr4::ParserRuleContext {
+  class  MetaFacesContext : public antlr4::ParserRuleContext {
   public:
-    Keyword2DContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    MetaFacesContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *Keyword2D();
+    antlr4::tree::TerminalNode *Faces();
     std::vector<antlr4::tree::TerminalNode *> IntegerConstant();
     antlr4::tree::TerminalNode* IntegerConstant(size_t i);
 
@@ -432,7 +431,7 @@ public:
    
   };
 
-  Keyword2DContext* keyword2D();
+  MetaFacesContext* metaFaces();
 
   class  Keyword2FContext : public antlr4::ParserRuleContext {
   public:
@@ -475,11 +474,11 @@ public:
 
   Keyword32Context* keyword32();
 
-  class  Keyword27Context : public antlr4::ParserRuleContext {
+  class  MetaObjectContext : public antlr4::ParserRuleContext {
   public:
-    Keyword27Context(antlr4::ParserRuleContext *parent, size_t invokingState);
+    MetaObjectContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *Keyword27();
+    antlr4::tree::TerminalNode *Object();
     antlr4::tree::TerminalNode *IntegerConstant();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -487,7 +486,7 @@ public:
    
   };
 
-  Keyword27Context* keyword27();
+  MetaObjectContext* metaObject();
 
   class  FloatOrIntConstantContext : public antlr4::ParserRuleContext {
   public:

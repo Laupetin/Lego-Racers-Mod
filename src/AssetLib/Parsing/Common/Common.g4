@@ -8,7 +8,7 @@ IntegerConstant
 
 fragment
 DecimalConstant
-    :   IntegerSign? NonzeroDigit Digit*
+    :   IntegerSign? Digit+
     ;
 
 fragment

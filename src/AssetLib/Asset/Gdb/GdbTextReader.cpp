@@ -35,32 +35,32 @@ namespace gdb
         {
         }
 
-        void enterMaterialSection(GdbParser::MaterialSectionContext* ctx) override 
+        void enterMaterialSection(GdbParser::MaterialSectionContext* ctx) override
         {
             m_emitter.StartMaterials();
         }
 
-        void exitMaterialName(GdbParser::MaterialNameContext* ctx) override 
+        void exitMaterialName(GdbParser::MaterialNameContext* ctx) override
         {
             m_emitter.EmitMaterial(common_grammar::StringValue(ctx->StringLiteral()));
         }
 
-        void exitMaterialSection(GdbParser::MaterialSectionContext* ctx) override 
+        void exitMaterialSection(GdbParser::MaterialSectionContext* ctx) override
         {
             m_emitter.EndMaterials();
         }
 
-        void exitScaleSection(GdbParser::ScaleSectionContext* ctx) override 
+        void exitScaleSection(GdbParser::ScaleSectionContext* ctx) override
         {
             m_emitter.EmitScale(GetFloat(ctx->floatOrIntConstant()));
         }
 
-        void enterVertexSection(GdbParser::VertexSectionContext* ctx) override 
+        void enterVertexSection(GdbParser::VertexSectionContext* ctx) override
         {
             m_emitter.StartVertices();
         }
 
-        void exitVertexDefPositionUv(GdbParser::VertexDefPositionUvContext* ctx) override 
+        void exitVertexDefPositionUv(GdbParser::VertexDefPositionUvContext* ctx) override
         {
             const auto position = GetVertexPosition(ctx->vertexPosition());
             const auto uv = GetVertexUv(ctx->vertexUv());
@@ -68,7 +68,7 @@ namespace gdb
             m_emitter.EmitVertex(position, uv);
         }
 
-        void exitVertexDefPositionUvColor(GdbParser::VertexDefPositionUvColorContext* ctx) override 
+        void exitVertexDefPositionUvColor(GdbParser::VertexDefPositionUvColorContext* ctx) override
         {
             const auto position = GetVertexPosition(ctx->vertexPosition());
             const auto uv = GetVertexUv(ctx->vertexUv());
@@ -77,7 +77,7 @@ namespace gdb
             m_emitter.EmitVertex(position, uv, color);
         }
 
-        void exitVertexDefPositionUvNormal(GdbParser::VertexDefPositionUvNormalContext* ctx) override 
+        void exitVertexDefPositionUvNormal(GdbParser::VertexDefPositionUvNormalContext* ctx) override
         {
             const auto position = GetVertexPosition(ctx->vertexPosition());
             const auto uv = GetVertexUv(ctx->vertexUv());
@@ -86,86 +86,86 @@ namespace gdb
             m_emitter.EmitVertex(position, uv, normal);
         }
 
-        void exitVertexDefPosition(GdbParser::VertexDefPositionContext* ctx) override 
+        void exitVertexDefPosition(GdbParser::VertexDefPositionContext* ctx) override
         {
             const auto position = GetVertexPosition(ctx->vertexPosition());
 
             m_emitter.EmitVertex(position);
         }
 
-        void exitVertexSection(GdbParser::VertexSectionContext* ctx) override 
+        void exitVertexSection(GdbParser::VertexSectionContext* ctx) override
         {
             m_emitter.EndVertices();
         }
 
-        void enterFaceSection(GdbParser::FaceSectionContext* ctx) override 
+        void enterFaceSection(GdbParser::FaceSectionContext* ctx) override
         {
             m_emitter.StartFaces();
         }
 
-        void exitFace(GdbParser::FaceContext* ctx) override 
+        void exitFace(GdbParser::FaceContext* ctx) override
         {
-            const auto vertex0 = GetUnsignedInt(ctx->IntegerConstant(0));
-            const auto vertex1 = GetUnsignedInt(ctx->IntegerConstant(1));
-            const auto vertex2 = GetUnsignedInt(ctx->IntegerConstant(2));
+            const auto vertex0 = GetUInt8(ctx->IntegerConstant(0));
+            const auto vertex1 = GetUInt8(ctx->IntegerConstant(1));
+            const auto vertex2 = GetUInt8(ctx->IntegerConstant(2));
 
             m_emitter.EmitFace(vertex0, vertex1, vertex2);
         }
 
-        void exitFaceSection(GdbParser::FaceSectionContext* ctx) override 
+        void exitFaceSection(GdbParser::FaceSectionContext* ctx) override
         {
             m_emitter.EndFaces();
         }
 
-        void enterMetaSection(GdbParser::MetaSectionContext* ctx) override 
+        void enterMetaSection(GdbParser::MetaSectionContext* ctx) override
         {
             m_emitter.StartMeta();
         }
 
-        void exitKeyword31(GdbParser::Keyword31Context* ctx) override 
+        void exitMetaVertices(GdbParser::MetaVerticesContext* ctx) override
         {
-            const auto value0 = GetInt(ctx->IntegerConstant(0));
+            const auto value0 = GetUInt8(ctx->IntegerConstant(0));
             const auto value1 = GetInt(ctx->IntegerConstant(1));
-            const auto value2 = GetInt(ctx->IntegerConstant(2));
+            const auto value2 = GetUInt8(ctx->IntegerConstant(2));
 
-            m_emitter.EmitMetaKeyword31(value0, value1, value2);
+            m_emitter.EmitMetaSelectVertices(value0, value1, value2);
         }
 
-        void exitKeyword2D(GdbParser::Keyword2DContext* ctx) override 
+        void exitMetaFaces(GdbParser::MetaFacesContext* ctx) override
         {
             const auto value0 = GetInt(ctx->IntegerConstant(0));
-            const auto value1 = GetInt(ctx->IntegerConstant(1));
+            const auto value1 = GetUInt8(ctx->IntegerConstant(1));
 
-            m_emitter.EmitMetaKeyword2D(value0, value1);
+            m_emitter.EmitMetaAddFaces(value0, value1);
         }
 
-        void exitKeyword2F(GdbParser::Keyword2FContext* ctx) override 
+        void exitKeyword2F(GdbParser::Keyword2FContext* ctx) override
         {
             const auto value0 = GetInt(ctx->IntegerConstant());
 
             m_emitter.EmitMetaKeyword2F(value0);
         }
 
-        void exitKeyword30(GdbParser::Keyword30Context* ctx) override 
+        void exitKeyword30(GdbParser::Keyword30Context* ctx) override
         {
             m_emitter.EmitMetaKeyword30();
         }
 
-        void exitKeyword32(GdbParser::Keyword32Context* ctx) override 
+        void exitKeyword32(GdbParser::Keyword32Context* ctx) override
         {
             const auto value0 = GetInt(ctx->IntegerConstant());
 
             m_emitter.EmitMetaKeyword32(value0);
         }
 
-        void exitKeyword27(GdbParser::Keyword27Context* ctx) override 
+        void exitMetaObject(GdbParser::MetaObjectContext* ctx) override
         {
-            const auto value0 = GetInt(ctx->IntegerConstant());
+            const auto value0 = GetUnsignedInt(ctx->IntegerConstant());
 
-            m_emitter.EmitMetaKeyword27(value0);
+            m_emitter.EmitMetaNewObject(value0);
         }
 
-        void exitMetaSection(GdbParser::MetaSectionContext* ctx) override 
+        void exitMetaSection(GdbParser::MetaSectionContext* ctx) override
         {
             m_emitter.EndMeta();
         }
@@ -262,16 +262,16 @@ namespace gdb
         }
     };
 
-	class GdbTextReaderImpl
-	{
-	public:
-		GdbTextReaderImpl(std::istream& in, IGdbEmitter& emitter)
-			: m_stream(in),
-			  m_emitter(emitter)
-		{
-		}
+    class GdbTextReaderImpl
+    {
+    public:
+        GdbTextReaderImpl(std::istream& in, IGdbEmitter& emitter)
+            : m_stream(in),
+              m_emitter(emitter)
+        {
+        }
 
-		void Read() const
+        void Read() const
         {
             CustomGdbErrorListener errors;
             antlr4::ANTLRInputStream inputStream(m_stream);
@@ -287,11 +287,11 @@ namespace gdb
 
             CustomGdbListener listener(parser, m_emitter);
             antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, parseTree);
-		}
+        }
 
-		std::istream& m_stream;
-		IGdbEmitter& m_emitter;
-	};
+        std::istream& m_stream;
+        IGdbEmitter& m_emitter;
+    };
 }
 
 using namespace gdb;
@@ -299,5 +299,5 @@ using namespace gdb;
 void GdbTextReader::Read(std::istream& input, IGdbEmitter& emitter)
 {
     const GdbTextReaderImpl impl(input, emitter);
-	impl.Read();
+    impl.Read();
 }
