@@ -38,6 +38,5 @@ jobs:
       
     - name: Test
       working-directory: ${{github.workspace}}/build/lib/Release_x86/tests
-      run: |
-        AssetLibTests
+      run: ./AssetLibTests
 
