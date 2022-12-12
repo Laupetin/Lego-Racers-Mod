@@ -9,9 +9,9 @@ function Hooking:include(includes)
 end
 
 function Hooking:link(links)
+    links:add(self:name())
     asmjit:link(links)
     zydis:link(links)
-    links:add(self:name())
 end
 
 function Hooking:use()
