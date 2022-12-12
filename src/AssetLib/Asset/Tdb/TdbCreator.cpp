@@ -4,7 +4,6 @@
 #include <sstream>
 
 #include "Tdb.h"
-#include "Utils/StringUtils.h"
 #include "TokenStream.h"
 
 #pragma warning(push, 0)
@@ -19,10 +18,18 @@ namespace tdb
     class TdbCreationException final : public std::exception
     {
     public:
-        explicit TdbCreationException(char const* msg)
-            : exception(msg)
+        explicit TdbCreationException(std::string msg)
+            : m_msg(std::move(msg))
         {
         }
+
+        [[nodiscard]] char const* what() const noexcept override
+        {
+            return m_msg.c_str();
+        }
+
+    private:
+        std::string m_msg;
     };
 
     class TdbParserState
@@ -30,7 +37,7 @@ namespace tdb
     public:
         explicit TdbParserState(ITokenOutputStream* out)
             : m_texture_count(0u),
-            m_out(out)
+              m_out(out)
         {
         }
 
@@ -56,7 +63,7 @@ namespace tdb
     public:
         explicit CustomTdbListener(TdbParser& parser, TdbParserState& state)
             : m_parser(parser),
-            m_state(state)
+              m_state(state)
         {
         }
 

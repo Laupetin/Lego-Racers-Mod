@@ -1,9 +1,11 @@
 #pragma once
 
+#pragma warning(push, 0)
 #include <asmjit.h>
+#pragma warning(pop)
 
-#include "Patch/Register.h"
-#include "Patch/UsercallConfiguration.h"
+#include "Register.h"
+#include "UsercallConfiguration.h"
 
 class WrapperBuilderBase
 {

@@ -1,4 +1,8 @@
 #pragma once
+
+#include <string>
+#include <iostream>
+
 #include "Asset/IFileTypeProcessor.h"
 
 class TdbDumper final : public AbstractStreamingFileTypeProcessor

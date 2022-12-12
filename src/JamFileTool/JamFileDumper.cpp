@@ -1,18 +1,21 @@
 #include "JamFileDumper.h"
 
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <exception>
 #include <filesystem>
 #include <sstream>
 #include <memory>
+#include <vector>
+#include <cstring>
 
 #include "JamFileTypes.h"
-#include "Utils/Endianness.h"
+#include "Endianness.h"
 #include "Asset/IFileTypeProcessor.h"
 #include "Asset/Bmp/BmpDumper.h"
 #include "Asset/Mdb/MdbDumper.h"
-#include "Utils/StreamUtils.h"
+#include "StreamUtils.h"
 #include "Asset/PassthroughDumper.h"
 #include "Asset/Gdb/GdbDumper.h"
 #include "Asset/Idb/IdbDumper.h"
@@ -41,7 +44,7 @@ private:
 
 const IFileTypeProcessor* availableFileTypeDumpers[]
 {
-    new BmpDumper(),
+    new bmp::BmpDumper(),
     new gdb::GdbDumper(),
     new IdbDumper(),
     new mdb::MdbDumper(),

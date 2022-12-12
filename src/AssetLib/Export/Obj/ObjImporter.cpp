@@ -1,5 +1,6 @@
 #include "ObjImporter.h"
 
+#include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <iostream>

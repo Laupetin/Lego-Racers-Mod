@@ -1,6 +1,6 @@
 #pragma once
 
-#include "patch/OffsetBase.h"
+#include "OffsetBase.h"
 
 class Offset : public OffsetBase<2>
 {

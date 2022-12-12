@@ -1,4 +1,9 @@
 #pragma once
+
+#include <cstddef>
+#include <string>
+#include <ostream>
+
 #include "IFileTypeProcessor.h"
 
 class PassthroughDumper final : public IFileTypeProcessor

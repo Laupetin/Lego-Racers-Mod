@@ -9,9 +9,9 @@ function AssetLib:include(includes)
 end
 
 function AssetLib:link(links)
+    links:add(self:name())
     Utils:link(links)
     antlr4:link(links)
-    links:add(self:name())
 end
 
 function AssetLib:use()

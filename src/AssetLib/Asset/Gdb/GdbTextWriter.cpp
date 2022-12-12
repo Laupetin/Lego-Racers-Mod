@@ -1,5 +1,8 @@
 #include "GdbTextWriter.h"
+
 #include <iomanip>
+
+#include "Utils/AbstractTextDumper.h"
 
 namespace gdb
 {

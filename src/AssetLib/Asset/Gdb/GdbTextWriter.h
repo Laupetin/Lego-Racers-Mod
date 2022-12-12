@@ -1,7 +1,9 @@
 #pragma once
 
+#include <ostream>
+#include <memory>
+
 #include "GdbEmitter.h"
-#include "Utils/AbstractTextDumper.h"
 
 namespace gdb
 {

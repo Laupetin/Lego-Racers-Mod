@@ -1,4 +1,9 @@
 #pragma once
+
+#include <cstddef>
+#include <string>
+#include <ostream>
+
 #include "Asset/IFileTypeProcessor.h"
 
 class SrfCreator final : public IFileTypeProcessor

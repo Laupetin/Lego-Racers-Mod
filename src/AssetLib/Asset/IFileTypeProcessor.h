@@ -1,5 +1,8 @@
 #pragma once
-#include <istream>
+
+#include <cstddef>
+#include <string>
+#include <iostream>
 
 class IFileTypeProcessor
 {

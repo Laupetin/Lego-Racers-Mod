@@ -3,19 +3,28 @@
 #include <string>
 #include <iostream>
 #include <exception>
+#include <memory>
 #include <sstream>
 
-#include "Utils/StreamUtils.h"
-#include "Utils/StringUtils.h"
-#include "Utils/Endianness.h"
+#include "StreamUtils.h"
+#include "StringUtils.h"
+#include "Endianness.h"
 
 class SrfDumpingException final : public std::exception
 {
 public:
-    explicit SrfDumpingException(char const* msg)
-        : exception(msg)
+    explicit SrfDumpingException(std::string msg)
+        : m_msg(std::move(msg))
     {
     }
+
+    [[nodiscard]] char const* what() const noexcept override
+    {
+        return m_msg.c_str();
+    }
+
+private:
+    std::string m_msg;
 };
 
 bool SrfDumper::SupportFileExtension(const std::string& extension) const

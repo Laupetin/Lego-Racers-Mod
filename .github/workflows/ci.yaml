@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  BUILD_TYPE: release_x86
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install multilib
+      run: |
+        sudo apt-get update
+        sudo apt-get install gcc-multilib g++-multilib
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Setup premake
+      uses: abel0b/setup-premake@v2.1
+      with:
+        version: "5.0.0-beta2"
+
+    - name: Premake generate
+      working-directory: ${{github.workspace}}
+      run: premake5 gmake2
+
+    - name: Build
+      working-directory: ${{github.workspace}}
+      run: make -C build -j$(nproc) config=${BUILD_TYPE} all
+      
+    - name: Test
+      working-directory: ${{github.workspace}}/build/lib/Release_x86/tests
+      run: ./AssetLibTests
+

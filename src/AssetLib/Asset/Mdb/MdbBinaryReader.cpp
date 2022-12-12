@@ -9,10 +9,18 @@ namespace mdb
     class MdbBinaryReadingException final : public std::exception
     {
     public:
-        explicit MdbBinaryReadingException(char const* msg)
-            : exception(msg)
+        explicit MdbBinaryReadingException(std::string msg)
+            : m_msg(std::move(msg))
         {
         }
+
+        [[nodiscard]] char const* what() const noexcept override
+        {
+            return m_msg.c_str();
+        }
+
+    private:
+        std::string m_msg;
     };
 
     class MdbBinaryReaderImpl

@@ -4,9 +4,9 @@
 #include <Windows.h>
 
 #include "RacersOffset.h"
-#include "Patch/Detour.h"
-#include "Patch/Offset.h"
-#include "Patch/Patch.h"
+#include "Detour.h"
+#include "Offset.h"
+#include "Patch.h"
 
 namespace debug
 {

@@ -1,5 +1,7 @@
 #include "Patch.h"
 
+#if defined(OS_TARGET_WINDOWS) && defined(ARCH_x86)
+
 #include <cassert>
 #include <Windows.h>
 
@@ -53,12 +55,12 @@ void Patch::Call(const uintptr_t ptr, void* func, const int size)
 
     DWORD oldProtect;
     VirtualProtect(reinterpret_cast<void*>(ptr), sizeof uint8_t + sizeof uintptr_t + nopSize, PAGE_EXECUTE_READWRITE,
-                   &oldProtect);
+        &oldProtect);
 
     *reinterpret_cast<uint8_t*>(ptr) = OP_CALL_NEAR32;
     *reinterpret_cast<uintptr_t*>(ptr + 1) = reinterpret_cast<uintptr_t>(func) - ptr - 5;
 
-    if(nopSize > 0)
+    if (nopSize > 0)
         memset(reinterpret_cast<void*>(ptr + 5), OP_NOP, nopSize);
 
     VirtualProtect(reinterpret_cast<void*>(ptr), sizeof uint8_t + sizeof uintptr_t + nopSize, oldProtect, &oldProtect);
@@ -68,7 +70,7 @@ void Patch::Jump(const uintptr_t ptr, void* func)
 {
     DWORD oldProtect;
     VirtualProtect(reinterpret_cast<void*>(ptr), sizeof uint8_t + sizeof uintptr_t, PAGE_EXECUTE_READWRITE,
-                   &oldProtect);
+        &oldProtect);
 
     *reinterpret_cast<uint8_t*>(ptr) = OP_JMP_NEAR32;
     *reinterpret_cast<uintptr_t*>(ptr + 1) = reinterpret_cast<uintptr_t>(func) - ptr - 5;
@@ -98,3 +100,55 @@ void Patch::Data(const OffsetValue ptr, const void* data, const size_t dataSize)
 
     Data(ptr.m_fixed_value, data, dataSize);
 }
+
+#else
+
+#include <iostream>
+
+void Patch::Nop(const OffsetValue ptr, const size_t size)
+{
+    std::cerr << "Hooking not supported on platform/architecture combination\n";
+}
+
+void Patch::Nop(const uintptr_t ptr, const size_t size)
+{
+    std::cerr << "Hooking not supported on platform/architecture combination\n";
+}
+
+void Patch::NopRange(const uintptr_t start, const uintptr_t end)
+{
+    std::cerr << "Hooking not supported on platform/architecture combination\n";
+}
+
+void Patch::NopRange(const OffsetValue start, const OffsetValue end)
+{
+    std::cerr << "Hooking not supported on platform/architecture combination\n";
+}
+
+void Patch::Call(const uintptr_t ptr, void* func, const int size)
+{
+    std::cerr << "Hooking not supported on platform/architecture combination\n";
+}
+
+void Patch::Jump(const uintptr_t ptr, void* func)
+{
+    std::cerr << "Hooking not supported on platform/architecture combination\n";
+}
+
+void Patch::Data(const uintptr_t ptr, const void* data, const size_t dataSize)
+{
+    std::cerr << "Hooking not supported on platform/architecture combination\n";
+}
+
+void Patch::Data(void* ptr, const void* data, const size_t dataSize)
+{
+    std::cerr << "Hooking not supported on platform/architecture combination\n";
+}
+
+void Patch::Data(const OffsetValue ptr, const void* data, const size_t dataSize)
+{
+    std::cerr << "Hooking not supported on platform/architecture combination\n";
+}
+
+#endif
+

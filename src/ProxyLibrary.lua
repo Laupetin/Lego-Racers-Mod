@@ -21,6 +21,10 @@ function ProxyLibrary:name()
 end
 
 function ProxyLibrary:project()
+    if os.target() ~= "windows" then
+        return
+    end
+
     local folder = ProjectFolder()
     local includes = Includes:create()
     local links = Links:create()
@@ -39,8 +43,10 @@ function ProxyLibrary:project()
         }
         
         self:include(includes)
+        Hooking:include(includes)
         Utils:include(includes)
 
+        Hooking:link(links)
         Utils:link(links)
         links:linkall()
         

@@ -1,18 +1,21 @@
 #include "JamFileCreator.h"
 
 #include <deque>
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <exception>
 #include <filesystem>
 #include <sstream>
 #include <memory>
+#include <vector>
+#include <cstring>
 
 #include "JamFileTypes.h"
-#include "Utils/Endianness.h"
+#include "Endianness.h"
 #include "Asset/IFileTypeProcessor.h"
 #include "Asset/Mdb/MdbCreator.h"
-#include "Utils/StreamUtils.h"
+#include "StreamUtils.h"
 #include "Asset/PassthroughCreator.h"
 #include "Asset/Gdb/GdbCreator.h"
 #include "Asset/Idb/IdbCreator.h"

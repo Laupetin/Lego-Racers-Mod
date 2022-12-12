@@ -7,7 +7,7 @@
 
 namespace fs = std::filesystem;
 
-void main(const int argc, const char** argv)
+int main(const int argc, const char** argv)
 {
     for (auto i = 1; i < argc; i++)
     {
@@ -31,4 +31,6 @@ void main(const int argc, const char** argv)
             std::cout << "Unknown filesystem element type for \"" << targetPath << "\"\n";
         }
     }
+
+    return 0;
 }

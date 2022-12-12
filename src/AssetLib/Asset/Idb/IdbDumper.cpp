@@ -11,10 +11,18 @@ namespace idb
     class IdbDumpingException final : public std::exception
     {
     public:
-        explicit IdbDumpingException(char const* msg)
-            : exception(msg)
+        explicit IdbDumpingException(std::string msg)
+            : m_msg(std::move(msg))
         {
         }
+
+        [[nodiscard]] char const* what() const noexcept override
+        {
+            return m_msg.c_str();
+        }
+
+    private:
+        std::string m_msg;
     };
 }
 
@@ -25,7 +33,7 @@ class IdbTextOutputStream final : public AbstractTokenTextDumper
 public:
     explicit IdbTextOutputStream(std::istream& in, std::ostream& out)
         : AbstractTokenTextDumper(out),
-        m_tokens(ITokenInputStream::Create(in))
+          m_tokens(ITokenInputStream::Create(in))
     {
     }
 
@@ -82,21 +90,21 @@ private:
             WriteKeyword("tga");
             break;
         case TOKEN_KEYWORD_CHROMA_KEY:
-        {
-            const auto value0 = m_tokens->NextIntegerValue();
-            const auto value1 = m_tokens->NextIntegerValue();
-            const auto value2 = m_tokens->NextIntegerValue();
-            WriteTripletValue("chromaKey", value0, value1, value2);
-            break;
-        }
+            {
+                const auto value0 = m_tokens->NextIntegerValue();
+                const auto value1 = m_tokens->NextIntegerValue();
+                const auto value2 = m_tokens->NextIntegerValue();
+                WriteTripletValue("chromaKey", value0, value1, value2);
+                break;
+            }
         case TOKEN_KEYWORD_TINT:
-        {
-            const auto value0 = m_tokens->NextIntegerValue();
-            const auto value1 = m_tokens->NextIntegerValue();
-            const auto value2 = m_tokens->NextIntegerValue();
-            WriteTripletValue("tint", value0, value1, value2);
-            break;
-        }
+            {
+                const auto value0 = m_tokens->NextIntegerValue();
+                const auto value1 = m_tokens->NextIntegerValue();
+                const auto value2 = m_tokens->NextIntegerValue();
+                WriteTripletValue("tint", value0, value1, value2);
+                break;
+            }
         default:
             throw IdbDumpingException("Unexpected token");
         }

@@ -4,8 +4,8 @@
 #include <Windows.h>
 
 #include "RacersOffset.h"
-#include "Patch/Offset.h"
-#include "Patch/Patch.h"
+#include "Offset.h"
+#include "Patch.h"
 #include "Game/LEGORacers2001.h"
 
 namespace windowed
