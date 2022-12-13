@@ -7,36 +7,67 @@ on:
     branches: [ "master" ]
 
 env:
-  BUILD_TYPE: release_x86
+  PREMAKE_VERSION: "5.0.0-beta2"
 
 jobs:
-  build:
+  build-test-linux:
+    env:
+      PREMAKE_CONFIG: gmake2
     runs-on: ubuntu-latest
     steps:
-    - name: Install multilib
-      run: |
-        sudo apt-get update
-        sudo apt-get install gcc-multilib g++-multilib
-
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
         submodules: recursive
 
+    - name: Install multilib
+      run: |
+        sudo apt-get update
+        sudo apt-get install gcc-multilib g++-multilib
+
     - name: Setup premake
       uses: abel0b/setup-premake@v2.1
       with:
-        version: "5.0.0-beta2"
+        version: ${{ env.PREMAKE_VERSION }}
 
     - name: Premake generate
-      working-directory: ${{github.workspace}}
-      run: premake5 gmake2
+      working-directory: ${{ github.workspace }}
+      run: premake5 ${{ env.PREMAKE_CONFIG }}
 
     - name: Build
-      working-directory: ${{github.workspace}}
-      run: make -C build -j$(nproc) config=${BUILD_TYPE} all
+      working-directory: ${{ github.workspace }}
+      run: make -C build -j$(nproc) config=release_x86 all
       
     - name: Test
-      working-directory: ${{github.workspace}}/build/lib/Release_x86/tests
+      working-directory: ${{ github.workspace }}/build/lib/Release_x86/tests
       run: ./AssetLibTests
 
+  build-test-windows:
+    env:
+      PREMAKE_CONFIG: vs2022
+    runs-on: windows-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Setup premake
+      uses: abel0b/setup-premake@v2.1
+      with:
+        version: ${{ env.PREMAKE_VERSION }}
+
+    - name: Premake generate
+      working-directory: ${{ github.workspace }}
+      run: premake5 ${{ env.PREMAKE_CONFIG }}
+
+    - name: Build
+      working-directory: ${{ github.workspace }}
+      run: msbuild /m /p:Configuration=Release /p:Platform=Win32 build
+      
+    - name: Test
+      working-directory: ${{ github.workspace }}/build/lib/Release_x86/tests
+      run: ./AssetLibTests
