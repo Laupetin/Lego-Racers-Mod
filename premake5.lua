@@ -76,6 +76,7 @@ workspace "LegoRacersMod"
 include "thirdparty/antlr4.lua"
 include "thirdparty/asmjit.lua"
 include "thirdparty/catch2.lua"
+include "thirdparty/jsonlib.lua"
 include "thirdparty/zycore.lua"
 include "thirdparty/zydis.lua"
 
@@ -84,6 +85,7 @@ group "ThirdParty"
     antlr4:project()
     asmjit:project()
     catch2:project()
+    jsonlib:project()
     zycore:project()
     zydis:project()
 group ""
