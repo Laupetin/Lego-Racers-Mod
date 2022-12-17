@@ -110,11 +110,13 @@ group ""
 -- ========================
 include "src/AssetConverter.lua"
 include "src/JamFileTool.lua"
+include "src/LRCompiler.lua"
 include "src/ProxyLibrary.lua"
 
 -- Main projects
 AssetConverter:project()
 JamFileTool:project()
+LRCompiler:project()
 ProxyLibrary:project()
 
 -- ========================
