@@ -1,10 +1,12 @@
 #include "LRCompiler.h"
 
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 
 #include "LRCompilerArgs.h"
 #include "StringUtils.h"
+#include "Project/ProjectDefinition.h"
 
 namespace fs = std::filesystem;
 
@@ -40,6 +42,7 @@ private:
 
     void CompileObjectDirectory(const std::string& directoryObject)
     {
+        auto foundProjectFile = false;
         for (const auto& file : fs::directory_iterator(directoryObject))
         {
             if (!file.is_regular_file())
@@ -49,12 +52,30 @@ private:
                 continue;
 
             CompileObjectFile(file.path().string());
+            foundProjectFile = true;
         }
+
+        if (!foundProjectFile)
+            std::cerr << "Failed to find lrproj file in: \"" << directoryObject << "\"\n";
     }
 
     void CompileObjectFile(const std::string& fileObject)
     {
-        std::cout << "Compiling object file: \"" << fileObject << "\"\n";
+        std::ifstream stream(fileObject, std::ios::in | std::ios::binary);
+        if (!stream.is_open())
+        {
+            std::cerr << "Failed to open project file: \"" << fileObject << "\"\n";
+            return;
+        }
+
+        const auto definition = ProjectDefinitionReader::ReadDefinition(stream, fileObject);
+        if (!definition)
+        {
+            std::cerr << "Failed to read project file: \"" << fileObject << "\"\n";
+            return;
+        }
+
+        std::cout << "Compiling object file: \"" << fileObject << "\": target=" << definition->m_target.m_name << "\n";
     }
 
     LRCompilerArgs m_args;

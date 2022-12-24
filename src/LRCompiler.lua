@@ -38,6 +38,7 @@ function LRCompiler:project()
               
         self:include(includes)
         AssetLib:include(includes)
+        jsonlib:include(includes)
         Utils:include(includes)
 
         AssetLib:link(links)
