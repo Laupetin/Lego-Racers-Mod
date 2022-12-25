@@ -16,6 +16,7 @@ public:
 private:
     std::vector<std::unique_ptr<ProjectContext>> CreateContextsForDirectoryOrFiles(const std::string& projectDirectory) const;
     std::unique_ptr<ProjectContext> CreateContextForDirectory(const std::string& projectDirectory) const;
+    static void SetDefaultsFromFileName(ProjectDefinition& definition, const std::string& projectFile);
     std::unique_ptr<ProjectContext> CreateContextForFile(const std::string& projectFile) const;
 
     const LRCompilerArgs& m_args;

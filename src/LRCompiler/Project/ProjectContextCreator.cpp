@@ -71,7 +71,7 @@ std::unique_ptr<ProjectContext> ProjectContextCreator::CreateContextForDirectory
         return nullptr;
     }
 
-    std::cout << "Compiling project directory: \"" << projectDirectory << "\":\n" << *definition << "\n";
+    std::cout << "Opened project directory: \"" << projectDirectory << "\":\n" << *definition << "\n";
 
     return ProjectContext::CreateFromDefinition(projectDirectory, *definition);
 }
@@ -80,6 +80,7 @@ std::unique_ptr<ProjectContext> ProjectContextCreator::CreateContextForFile(cons
 {
     const auto directory = fs::path(projectFile).parent_path();
     const auto definition = ProjectDefinition::DefaultDefinition(directory.string());
+    SetDefaultsFromFileName(*definition, projectFile);
 
     std::ifstream stream(projectFile, std::ios::in | std::ios::binary);
     if (!stream.is_open())
@@ -102,7 +103,14 @@ std::unique_ptr<ProjectContext> ProjectContextCreator::CreateContextForFile(cons
         return nullptr;
     }
 
-    std::cout << "Compiling project file: \"" << projectFile << "\":\n" << *definition << "\n";
+    std::cout << "Opened project file: \"" << projectFile << "\":\n" << *definition << "\n";
 
     return ProjectContext::CreateFromDefinition(directory.string(), *definition);
+}
+
+void ProjectContextCreator::SetDefaultsFromFileName(ProjectDefinition& definition, const std::string& projectFile)
+{
+    definition.m_project_name = fs::path(projectFile).filename().replace_extension().string();
+    definition.m_target_name = definition.m_project_name;
+    utils::MakeStringUpperCase(definition.m_target_name);
 }

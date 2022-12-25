@@ -14,11 +14,12 @@ std::unique_ptr<ProjectDefinition> ProjectDefinition::DefaultDefinition(const st
 {
     auto definition = std::make_unique<ProjectDefinition>();
 
+    definition->m_project_name = fs::absolute(fs::path(folderPath)).filename().string();
     definition->m_data_directory = DEFAULT_DATA_FOLDER;
     definition->m_dist_directory = DEFAULT_DIST_FOLDER;
     definition->m_obj_directory = DEFAULT_OBJ_FOLDER;
 
-    definition->m_target_name = fs::absolute(fs::path(folderPath)).filename().string();
+    definition->m_target_name = definition->m_project_name;
     utils::MakeStringUpperCase(definition->m_target_name);
 
     return definition;
@@ -43,7 +44,9 @@ bool ProjectDefinition::Validate() const
 
 std::ostream& operator<<(std::ostream& os, const ProjectDefinition& obj)
 {
-    os << "  Data Directory: \"" << obj.m_data_directory << "\"\n"
+    os
+        << "  Project Name: \"" << obj.m_project_name << "\"\n"
+        << "  Data Directory: \"" << obj.m_data_directory << "\"\n"
         << "  Dist Directory: \"" << obj.m_dist_directory << "\"\n"
         << "  Obj Directory: \"" << obj.m_obj_directory << "\"\n"
         << "  Target Name: \"" << obj.m_target_name << "\"\n";
@@ -62,6 +65,7 @@ public:
         {
             const auto root = json::parse(stream);
 
+            ReadStringValue(definition.m_project_name, root, "name");
             ReadStringValue(definition.m_data_directory, root, "dataDirectory");
             ReadStringValue(definition.m_dist_directory, root, "distDirectory");
             ReadStringValue(definition.m_obj_directory, root, "objDirectory");

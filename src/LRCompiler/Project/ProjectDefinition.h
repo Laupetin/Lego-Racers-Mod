@@ -13,6 +13,7 @@ public:
     static constexpr auto DEFAULT_OBJ_FOLDER = "obj";
     static constexpr auto PROJ_EXTENSION = ".lrproj";
 
+    std::string m_project_name;
     std::string m_data_directory;
     std::string m_dist_directory;
     std::string m_obj_directory;

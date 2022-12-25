@@ -20,6 +20,8 @@ public:
 
     std::unique_ptr<CompilerResult> Compile(const ProjectContext& context) const override
     {
+        std::cout << "============== Compiling " << context.m_project_name << " ==============\n";
+
         if (!PrepareContext(context))
         {
             std::cerr << "Failed to prepare context.\n";

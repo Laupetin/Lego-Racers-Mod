@@ -15,6 +15,7 @@ std::unique_ptr<ProjectContext> ProjectContext::CreateFromDefinition(const std::
     const auto baseDirectoryPath = fs::path(baseDirectory);
     auto context = std::make_unique<ProjectContext>();
 
+    context->m_project_name = definition.m_project_name;
     context->m_data_path = CreateProjectContextPath(baseDirectoryPath, definition.m_data_directory);
     context->m_dist_path = CreateProjectContextPath(baseDirectoryPath, definition.m_dist_directory);
     context->m_target_file_path = context->m_dist_path / (definition.m_target_name + ".JAM");
