@@ -2,6 +2,5 @@
 
 int main(const int argc, const char** argv)
 {
-    const LRCompiler compiler;
-    return compiler.Start(argc, argv) ? 1 : 0;
+    return LRCompiler::Start(argc, argv) ? 1 : 0;
 }
