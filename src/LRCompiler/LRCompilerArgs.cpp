@@ -58,7 +58,7 @@ void LRCompilerArgs::PrintUsage()
         usage.AddCommandLineOption(commandLineOption);
     }
 
-    usage.AddArgument("compilationObjects");
+    usage.AddArgument("compilationProjects");
     usage.SetVariableArguments(true);
 
     usage.Print();
@@ -79,11 +79,11 @@ bool LRCompilerArgs::ParseArgs(const int argc, const char** argv)
         return false;
     }
 
-    m_compile_objects = m_argument_parser.GetArguments();
-    const size_t compileObjectCount = m_compile_objects.size();
-    if (compileObjectCount < 1)
+    m_compile_projects = m_argument_parser.GetArguments();
+    const size_t compileProjectCount = m_compile_projects.size();
+    if (compileProjectCount < 1)
     {
-        // No compile objects specified...
+        // No compile projects specified...
         PrintUsage();
         return false;
     }

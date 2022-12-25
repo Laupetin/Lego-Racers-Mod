@@ -15,7 +15,7 @@ public:
 
     void ConfigureProjectDefinition(ProjectDefinition& definition) const;
 
-    std::vector<std::string> m_compile_objects;
+    std::vector<std::string> m_compile_projects;
     std::string m_dist_folder;
     std::string m_obj_folder;
     bool m_verbose;

@@ -22,24 +22,24 @@ public:
         if (!m_args.ParseArgs(argc, argv))
             return false;
 
-        for (const auto& object : m_args.m_compile_objects)
-            CompileObject(object);
+        for (const auto& project : m_args.m_compile_projects)
+            CompileProject(project);
 
         return true;
     }
 
 private:
-    void CompileObject(const std::string& object)
+    void CompileProject(const std::string& object)
     {
         const auto status = fs::status(object);
 
         if (status.type() == std::filesystem::file_type::directory)
-            CompileObjectDirectoryOrFiles(object);
+            CompileProjectDirectoryOrFiles(object);
         else if (status.type() == std::filesystem::file_type::regular)
-            CompileObjectFile(object);
+            CompileProjectFile(object);
     }
 
-    void CompileObjectDirectoryOrFiles(const std::string& directory)
+    void CompileProjectDirectoryOrFiles(const std::string& directory)
     {
         auto foundProjectFile = false;
         for (const auto& file : fs::directory_iterator(directory))
@@ -50,15 +50,15 @@ private:
             if (!utils::StringEqualsIgnoreCase(file.path().extension().string(), ProjectDefinition::PROJ_EXTENSION))
                 continue;
 
-            CompileObjectFile(file.path().string());
+            CompileProjectFile(file.path().string());
             foundProjectFile = true;
         }
 
         if (!foundProjectFile)
-            CompileObjectDirectory(directory);
+            CompileProjectDirectory(directory);
     }
 
-    void CompileObjectDirectory(const std::string& directoryObject)
+    void CompileProjectDirectory(const std::string& directoryObject)
     {
         const auto definition = ProjectDefinition::DefaultDefinition(directoryObject);
         m_args.ConfigureProjectDefinition(*definition);
@@ -69,13 +69,13 @@ private:
             return;
         }
 
-        std::cout << "Compiling object directory: \"" << directoryObject << "\":\n" << *definition << "\n";
+        std::cout << "Compiling project directory: \"" << directoryObject << "\":\n" << *definition << "\n";
 
         const auto context = ProjectContext::CreateFromDefinition(directoryObject, *definition);
         Compile(*context);
     }
 
-    void CompileObjectFile(const std::string& fileObject)
+    void CompileProjectFile(const std::string& fileObject)
     {
         const auto directory = fs::path(fileObject).parent_path();
         const auto definition = ProjectDefinition::DefaultDefinition(directory.string());
@@ -101,7 +101,7 @@ private:
             return;
         }
 
-        std::cout << "Compiling object file: \"" << fileObject << "\":\n" << *definition << "\n";
+        std::cout << "Compiling project file: \"" << fileObject << "\":\n" << *definition << "\n";
 
         const auto context = ProjectContext::CreateFromDefinition(directory.string(), *definition);
         Compile(*context);
