@@ -4,6 +4,7 @@
 #include <type_traits>
 
 #include "Arguments/UsageInformation.h"
+#include "Project/ProjectDefinition.h"
 
 const CommandLineOption* const OPTION_HELP =
     CommandLineOption::Builder::Create()
@@ -19,18 +20,18 @@ const CommandLineOption* const OPTION_VERBOSE =
     .WithDescription("Outputs a lot more and more detailed messages.")
     .Build();
 
-const CommandLineOption* const OPTION_OUTPUT_FOLDER =
+const CommandLineOption* const OPTION_DIST_FOLDER =
     CommandLineOption::Builder::Create()
-    .WithShortName("o")
-    .WithLongName("output")
-    .WithDescription("Specifies the output folder containing the compilation results. Defaults to \"" + std::string(LRCompilerArgs::DEFAULT_OUTPUT_FOLDER) + "\"")
-    .WithParameter("outputFolderPath")
+    .WithShortName("d")
+    .WithLongName("dist")
+    .WithDescription("Specifies the dist folder containing the compilation results. Defaults to \"" + std::string(ProjectDefinition::DEFAULT_DIST_FOLDER) + "\"")
+    .WithParameter("distFolderPath")
     .Build();
 
 const CommandLineOption* const OPTION_OBJ_FOLDER =
     CommandLineOption::Builder::Create()
     .WithLongName("obj")
-    .WithDescription("Specifies the obj folder containing intermediate compilation files. Defaults to \"" + std::string(LRCompilerArgs::DEFAULT_OBJ_FOLDER) + "\"")
+    .WithDescription("Specifies the obj folder containing intermediate compilation files. Defaults to \"" + std::string(ProjectDefinition::DEFAULT_OBJ_FOLDER) + "\"")
     .WithParameter("objFolderPath")
     .Build();
 
@@ -38,7 +39,7 @@ const CommandLineOption* const COMMAND_LINE_OPTIONS[]
 {
     OPTION_HELP,
     OPTION_VERBOSE,
-    OPTION_OUTPUT_FOLDER,
+    OPTION_DIST_FOLDER,
     OPTION_OBJ_FOLDER
 };
 
@@ -90,17 +91,22 @@ bool LRCompilerArgs::ParseArgs(const int argc, const char** argv)
     // -v; --verbose
     m_verbose = m_argument_parser.IsOptionSpecified(OPTION_VERBOSE);
 
-    // -o; --output
-    if (m_argument_parser.IsOptionSpecified(OPTION_OUTPUT_FOLDER))
-        m_output_folder = m_argument_parser.GetValueForOption(OPTION_OUTPUT_FOLDER);
-    else
-        m_output_folder = DEFAULT_OUTPUT_FOLDER;
+    // -d; --dist
+    if (m_argument_parser.IsOptionSpecified(OPTION_DIST_FOLDER))
+        m_dist_folder = m_argument_parser.GetValueForOption(OPTION_DIST_FOLDER);
 
     // --obj
     if (m_argument_parser.IsOptionSpecified(OPTION_OBJ_FOLDER))
         m_obj_folder = m_argument_parser.GetValueForOption(OPTION_OBJ_FOLDER);
-    else
-        m_obj_folder = DEFAULT_OBJ_FOLDER;
 
     return true;
+}
+
+void LRCompilerArgs::ConfigureProjectDefinition(ProjectDefinition& definition) const
+{
+    if (!m_dist_folder.empty())
+        definition.m_dist_directory = m_dist_folder;
+
+    if (!m_obj_folder.empty())
+        definition.m_obj_directory = m_obj_folder;
 }

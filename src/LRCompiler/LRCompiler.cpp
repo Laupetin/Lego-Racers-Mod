@@ -6,14 +6,13 @@
 
 #include "LRCompilerArgs.h"
 #include "StringUtils.h"
+#include "Project/ProjectContext.h"
 #include "Project/ProjectDefinition.h"
 
 namespace fs = std::filesystem;
 
 class LRCompiler::Impl
 {
-    static constexpr auto PROJECT_FILE_EXTENSION = ".lrproj";
-
 public:
     Impl()
     = default;
@@ -35,20 +34,20 @@ private:
         const auto status = fs::status(object);
 
         if (status.type() == std::filesystem::file_type::directory)
-            CompileObjectDirectory(object);
+            CompileObjectDirectoryOrFiles(object);
         else if (status.type() == std::filesystem::file_type::regular)
             CompileObjectFile(object);
     }
 
-    void CompileObjectDirectory(const std::string& directoryObject)
+    void CompileObjectDirectoryOrFiles(const std::string& directory)
     {
         auto foundProjectFile = false;
-        for (const auto& file : fs::directory_iterator(directoryObject))
+        for (const auto& file : fs::directory_iterator(directory))
         {
             if (!file.is_regular_file())
                 continue;
 
-            if (!utils::StringEqualsIgnoreCase(file.path().extension().string(), PROJECT_FILE_EXTENSION))
+            if (!utils::StringEqualsIgnoreCase(file.path().extension().string(), ProjectDefinition::PROJ_EXTENSION))
                 continue;
 
             CompileObjectFile(file.path().string());
@@ -56,11 +55,31 @@ private:
         }
 
         if (!foundProjectFile)
-            std::cerr << "Failed to find lrproj file in: \"" << directoryObject << "\"\n";
+            CompileObjectDirectory(directory);
+    }
+
+    void CompileObjectDirectory(const std::string& directoryObject)
+    {
+        const auto definition = ProjectDefinition::DefaultDefinition(directoryObject);
+        m_args.ConfigureProjectDefinition(*definition);
+
+        if (!definition->Validate())
+        {
+            std::cerr << "Illegal project definition:\n" << *definition << "\n";
+            return;
+        }
+
+        std::cout << "Compiling object directory: \"" << directoryObject << "\":\n" << *definition << "\n";
+
+        const auto context = ProjectContext::CreateFromDefinition(directoryObject, *definition);
+        Compile(*context);
     }
 
     void CompileObjectFile(const std::string& fileObject)
     {
+        const auto directory = fs::path(fileObject).parent_path();
+        const auto definition = ProjectDefinition::DefaultDefinition(directory.string());
+
         std::ifstream stream(fileObject, std::ios::in | std::ios::binary);
         if (!stream.is_open())
         {
@@ -68,14 +87,56 @@ private:
             return;
         }
 
-        const auto definition = ProjectDefinitionReader::ReadDefinition(stream, fileObject);
-        if (!definition)
+        if (!ProjectDefinitionReader::ReadDefinition(*definition, stream, fileObject))
         {
             std::cerr << "Failed to read project file: \"" << fileObject << "\"\n";
             return;
         }
 
-        std::cout << "Compiling object file: \"" << fileObject << "\": target=" << definition->m_target.m_name << "\n";
+        m_args.ConfigureProjectDefinition(*definition);
+
+        if (!definition->Validate())
+        {
+            std::cerr << "Illegal project definition:\n" << *definition << "\n";
+            return;
+        }
+
+        std::cout << "Compiling object file: \"" << fileObject << "\":\n" << *definition << "\n";
+
+        const auto context = ProjectContext::CreateFromDefinition(directory.string(), *definition);
+        Compile(*context);
+    }
+
+    void Compile(const ProjectContext& context)
+    {
+        if (!PrepareContext(context))
+        {
+            std::cerr << "Failed to prepare context.\n";
+            return;
+        }
+    }
+
+    bool PrepareContext(const ProjectContext& context) const
+    {
+        if (!fs::is_directory(context.m_data_path))
+        {
+            std::cerr << "Data directory " << context.m_data_path << " does not exist!\n";
+            return false;
+        }
+
+        if (!fs::is_directory(context.m_dist_path) && !fs::create_directories(context.m_dist_path))
+        {
+            std::cerr << "Could not create dist directory " << context.m_dist_path << "!\n";
+            return false;
+        }
+
+        if (!fs::is_directory(context.m_obj_path) && !fs::create_directories(context.m_obj_path))
+        {
+            std::cerr << "Could not create obj directory " << context.m_obj_path << "!\n";
+            return false;
+        }
+
+        return true;
     }
 
     LRCompilerArgs m_args;

@@ -1,8 +1,12 @@
 #pragma once
+
 #include <cstdint>
 
 namespace utils
 {
+    static constexpr auto ILLEGAL_PATH_CHARS = R"(<>:"|?*)";
+    static constexpr auto ILLEGAL_FILENAME_CHARS = R"(<>:"/\|?*)";
+
     static constexpr uint16_t MakeMagic16(const char ch0, const char ch1)
     {
         return static_cast<uint16_t>(
