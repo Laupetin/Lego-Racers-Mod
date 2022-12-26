@@ -7,19 +7,19 @@
 
 namespace fs = std::filesystem;
 
-void AddDefaultProcessors(std::vector<std::unique_ptr<IUnitProcessor>>& processors)
+void AddDefaultProcessors(std::vector<std::unique_ptr<IUnitProcessorFactory>>& processors)
 {
     // =======================================
     // ADD YOUR CUSTOM UNIT PROCESSORS HERE
     // =======================================
-    processors.emplace_back(std::make_unique<GdbUnitProcessor>());
+    processors.emplace_back(std::make_unique<GdbUnitProcessorFactory>());
 }
 
 class CompilerImpl final : public ICompiler
 {
 public:
-    explicit CompilerImpl(std::vector<std::unique_ptr<IUnitProcessor>> processors)
-        : m_unit_processors(std::move(processors))
+    explicit CompilerImpl(std::vector<std::unique_ptr<IUnitProcessorFactory>> processors)
+        : m_unit_processor_factories(std::move(processors))
     {
     }
 
@@ -39,7 +39,7 @@ public:
             if (!file.is_regular_file())
                 continue;
 
-            const auto* unitProcessor = FindUnitProcessorForFile(context, file.path());
+            const auto unitProcessor = FindUnitProcessorForFile(context, file.path());
             if (!unitProcessor)
                 continue;
 
@@ -74,24 +74,23 @@ private:
         return true;
     }
 
-    [[nodiscard]] IUnitProcessor* FindUnitProcessorForFile(const ProjectContext& context, const fs::path& filePath) const
+    [[nodiscard]] std::unique_ptr<IUnitProcessor> FindUnitProcessorForFile(const ProjectContext& context, const fs::path& filePath) const
     {
-        for (const auto& unitProcessor : m_unit_processors)
+        for (const auto& unitProcessorFactory : m_unit_processor_factories)
         {
-            if (unitProcessor->Handles(context, filePath))
-                return unitProcessor.get();
+            if (auto processor = unitProcessorFactory->CreateHandler(context, filePath))
+                return processor;
         }
 
         return nullptr;
     }
 
-    bool ProcessUnit(const IUnitProcessor& unitProcessor, const ProjectContext& context, CompilerResult& result, const fs::path& file) const
+    bool ProcessUnit(IUnitProcessor& unitProcessor, const ProjectContext& context, CompilerResult& result, const fs::path& file) const
     {
         UnitProcessorInputsAndOutputs io;
-        UnitProcessorUserData userData;
 
         const auto relativePathToData = fs::relative(file, context.m_data_path);
-        if (!unitProcessor.ExamineInputsAndOutputs(context, userData, file, io))
+        if (!unitProcessor.ExamineInputsAndOutputs(context, file, io))
             return false;
 
         if (io.m_inputs.empty() || io.m_outputs.empty())
@@ -117,10 +116,21 @@ private:
         if (!missingFiles.empty() || minWriteOutput < maxWriteInput)
         {
             std::cout << "Compiling: \"" << relativePathToData.string() << "\"\n";
-            return unitProcessor.Compile(context, userData, file, result.m_unit_processor_results);
-        }
+            if (!CreateDirectoriesForOutput(io))
+                return false;
 
-        std::cout << "File up to date: \"" << relativePathToData.string() << "\"\n";
+            if (!unitProcessor.Compile(context, file))
+            {
+                std::cerr << "Compilation failed: \"" << relativePathToData.string() << "\"\n";
+                return false;
+            }
+        }
+        else
+            std::cout << "File up to date: \"" << relativePathToData.string() << "\"\n";
+
+        for (auto& output : io.m_outputs)
+            result.m_unit_processor_results.emplace_back(std::move(output));
+
         return true;
     }
 
@@ -168,18 +178,34 @@ private:
         maxTimestamp = std::max(maxTimestamp, lastWriteTimeNumeric);
     }
 
-    std::vector<std::unique_ptr<IUnitProcessor>> m_unit_processors;
+    static bool CreateDirectoriesForOutput(const UnitProcessorInputsAndOutputs& files)
+    {
+        for (const auto& result : files.m_outputs)
+        {
+            const auto parentPath = fs::absolute(result.m_file).parent_path();
+
+            if (!fs::is_directory(parentPath) && !fs::create_directories(parentPath))
+            {
+                std::cerr << "Failed to create directory " << parentPath << "!\n";
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    std::vector<std::unique_ptr<IUnitProcessorFactory>> m_unit_processor_factories;
 };
 
 std::unique_ptr<ICompiler> ICompiler::Default()
 {
-    std::vector<std::unique_ptr<IUnitProcessor>> processors;
+    std::vector<std::unique_ptr<IUnitProcessorFactory>> processors;
     AddDefaultProcessors(processors);
 
     return std::make_unique<CompilerImpl>(std::move(processors));
 }
 
-std::unique_ptr<ICompiler> ICompiler::Custom(std::vector<std::unique_ptr<IUnitProcessor>> processors)
+std::unique_ptr<ICompiler> ICompiler::Custom(std::vector<std::unique_ptr<IUnitProcessorFactory>> processors)
 {
     return std::make_unique<CompilerImpl>(std::move(processors));
 }

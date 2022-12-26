@@ -15,7 +15,7 @@ class ICompiler
 {
 public:
     static std::unique_ptr<ICompiler> Default();
-    static std::unique_ptr<ICompiler> Custom(std::vector<std::unique_ptr<IUnitProcessor>> processors);
+    static std::unique_ptr<ICompiler> Custom(std::vector<std::unique_ptr<IUnitProcessorFactory>> processors);
 
     ICompiler() = default;
     virtual ~ICompiler() = default;

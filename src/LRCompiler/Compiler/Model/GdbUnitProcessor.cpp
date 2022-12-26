@@ -6,23 +6,33 @@
 
 namespace fs = std::filesystem;
 
-bool GdbUnitProcessor::Handles(const ProjectContext& context, const std::filesystem::path& file) const
+class GdbUnitProcessor final : public IUnitProcessor
 {
-    return utils::StringEqualsIgnoreCase(file.extension().string(), ".gdb");
-}
+public:
+    [[nodiscard]] bool ExamineInputsAndOutputs(const ProjectContext& context, const std::filesystem::path& file, UnitProcessorInputsAndOutputs& io) override
+    {
+        const auto relativeFilePath = fs::relative(file, context.m_data_path);
+        m_out_path = context.m_obj_path / relativeFilePath;
 
-bool GdbUnitProcessor::ExamineInputsAndOutputs(const ProjectContext& context, UnitProcessorUserData& userData, const std::filesystem::path& file,
-                                               UnitProcessorInputsAndOutputs& io) const
+        io.AddInput(file);
+        io.AddOutput(m_out_path, JamFilePath(relativeFilePath.string()));
+
+        return true;
+    }
+
+    [[nodiscard]] bool Compile(const ProjectContext& context, const std::filesystem::path& file) override
+    {
+        return false;
+    }
+
+private:
+    fs::path m_out_path;
+};
+
+std::unique_ptr<IUnitProcessor> GdbUnitProcessorFactory::CreateHandler(const ProjectContext& context, const std::filesystem::path& file) const
 {
-    const auto relativeFilePath = fs::relative(file, context.m_data_path);
+    if (utils::StringEqualsIgnoreCase(file.extension().string(), ".gdb"))
+        return std::make_unique<GdbUnitProcessor>();
 
-    io.AddInput(file);
-    io.AddOutput(context.m_obj_path / relativeFilePath, JamFilePath(relativeFilePath.string()));
-
-    return true;
-}
-
-bool GdbUnitProcessor::Compile(const ProjectContext& context, UnitProcessorUserData& userData, const std::filesystem::path& file, std::vector<UnitProcessorResult>& results) const
-{
-    return false;
+    return nullptr;
 }
