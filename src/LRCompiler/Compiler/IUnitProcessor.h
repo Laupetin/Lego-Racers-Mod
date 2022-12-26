@@ -3,23 +3,28 @@
 #include <filesystem>
 #include <vector>
 
+#include "JamFilePath.h"
 #include "Project/ProjectContext.h"
-
-class UnitProcessorInputsAndOutputs
-{
-public:
-    std::vector<std::filesystem::path> m_inputs;
-    std::vector<std::filesystem::path> m_outputs;
-};
 
 class UnitProcessorResult
 {
 public:
     std::filesystem::path m_file;
-    std::string m_jam_path;
+    JamFilePath m_jam_path;
 
     UnitProcessorResult();
-    UnitProcessorResult(std::filesystem::path file, std::string jamPath);
+    UnitProcessorResult(std::filesystem::path file, JamFilePath jamPath);
+};
+
+class UnitProcessorInputsAndOutputs
+{
+public:
+    std::vector<std::filesystem::path> m_inputs;
+    std::vector<UnitProcessorResult> m_outputs;
+
+    void AddInput(std::filesystem::path inputFile);
+    void AddOutput(UnitProcessorResult output);
+    void AddOutput(std::filesystem::path file, JamFilePath jamPath);
 };
 
 class IUnitProcessor
