@@ -11,7 +11,8 @@ bool GdbUnitProcessor::Handles(const ProjectContext& context, const std::filesys
     return utils::StringEqualsIgnoreCase(file.extension().string(), ".gdb");
 }
 
-bool GdbUnitProcessor::ExamineInputsAndOutputs(const ProjectContext& context, const std::filesystem::path& file, UnitProcessorInputsAndOutputs& io) const
+bool GdbUnitProcessor::ExamineInputsAndOutputs(const ProjectContext& context, UnitProcessorUserData& userData, const std::filesystem::path& file,
+                                               UnitProcessorInputsAndOutputs& io) const
 {
     const auto relativeFilePath = fs::relative(file, context.m_data_path);
 
@@ -21,7 +22,7 @@ bool GdbUnitProcessor::ExamineInputsAndOutputs(const ProjectContext& context, co
     return true;
 }
 
-bool GdbUnitProcessor::Compile(const ProjectContext& context, const std::filesystem::path& file, std::vector<UnitProcessorResult>& results) const
+bool GdbUnitProcessor::Compile(const ProjectContext& context, UnitProcessorUserData& userData, const std::filesystem::path& file, std::vector<UnitProcessorResult>& results) const
 {
     return false;
 }

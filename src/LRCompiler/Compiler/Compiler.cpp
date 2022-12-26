@@ -88,9 +88,10 @@ private:
     bool ProcessUnit(const IUnitProcessor& unitProcessor, const ProjectContext& context, CompilerResult& result, const fs::path& file) const
     {
         UnitProcessorInputsAndOutputs io;
+        UnitProcessorUserData userData;
 
         const auto relativePathToData = fs::relative(file, context.m_data_path);
-        if (!unitProcessor.ExamineInputsAndOutputs(context, file, io))
+        if (!unitProcessor.ExamineInputsAndOutputs(context, userData, file, io))
             return false;
 
         if (io.m_inputs.empty() || io.m_outputs.empty())
@@ -116,7 +117,7 @@ private:
         if (!missingFiles.empty() || minWriteOutput < maxWriteInput)
         {
             std::cout << "Compiling: \"" << relativePathToData.string() << "\"\n";
-            return unitProcessor.Compile(context, file, result.m_unit_processor_results);
+            return unitProcessor.Compile(context, userData, file, result.m_unit_processor_results);
         }
 
         std::cout << "File up to date: \"" << relativePathToData.string() << "\"\n";
