@@ -1,5 +1,6 @@
 #include "Compiler.h"
 
+#include <cstdint>
 #include <filesystem>
 #include <limits>
 
@@ -100,7 +101,7 @@ private:
         }
 
         std::vector<fs::path> missingFiles;
-        size_t maxWriteInput, minWriteOutput;
+        int64_t maxWriteInput, minWriteOutput;
         ExamineInputFiles(io, missingFiles, maxWriteInput);
         if (!missingFiles.empty())
         {
@@ -134,10 +135,10 @@ private:
         return true;
     }
 
-    static void ExamineInputFiles(const UnitProcessorInputsAndOutputs& files, std::vector<fs::path>& missingFiles, size_t& maxTimestamp)
+    static void ExamineInputFiles(const UnitProcessorInputsAndOutputs& files, std::vector<fs::path>& missingFiles, int64_t& maxTimestamp)
     {
-        size_t minTimestamp = std::numeric_limits<size_t>::max();
-        maxTimestamp = std::numeric_limits<size_t>::min();
+        auto minTimestamp = std::numeric_limits<int64_t>::max();
+        maxTimestamp = std::numeric_limits<int64_t>::min();
 
         for (const auto& file : files.m_inputs)
         {
@@ -145,10 +146,10 @@ private:
         }
     }
 
-    static void ExamineOutputFiles(const UnitProcessorInputsAndOutputs& files, std::vector<fs::path>& missingFiles, size_t& minTimestamp)
+    static void ExamineOutputFiles(const UnitProcessorInputsAndOutputs& files, std::vector<fs::path>& missingFiles, int64_t& minTimestamp)
     {
-        minTimestamp = std::numeric_limits<size_t>::max();
-        size_t maxTimestamp = std::numeric_limits<size_t>::min();
+        minTimestamp = std::numeric_limits<int64_t>::max();
+        auto maxTimestamp = std::numeric_limits<int64_t>::min();
 
         for (const auto& result : files.m_outputs)
         {
@@ -156,7 +157,7 @@ private:
         }
     }
 
-    static void ExamineFile(const fs::path& file, std::vector<fs::path>& missingFiles, size_t& minTimestamp, size_t& maxTimestamp)
+    static void ExamineFile(const fs::path& file, std::vector<fs::path>& missingFiles, int64_t& minTimestamp, int64_t& maxTimestamp)
     {
         const auto fileStatus = fs::status(file);
         if (fileStatus.type() != std::filesystem::file_type::regular)
@@ -173,7 +174,7 @@ private:
             return;
         }
 
-        const auto lastWriteTimeNumeric = static_cast<size_t>(lastWriteTime.time_since_epoch().count());
+        const auto lastWriteTimeNumeric = static_cast<int64_t>(lastWriteTime.time_since_epoch().count());
         minTimestamp = std::min(minTimestamp, lastWriteTimeNumeric);
         maxTimestamp = std::max(maxTimestamp, lastWriteTimeNumeric);
     }
