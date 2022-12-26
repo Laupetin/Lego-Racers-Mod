@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <limits>
 
+#include "Material/MdbUnitProcessor.h"
 #include "Model/GdbUnitProcessor.h"
 
 namespace fs = std::filesystem;
@@ -14,6 +15,7 @@ void AddDefaultProcessors(std::vector<std::unique_ptr<IUnitProcessorFactory>>& p
     // ADD YOUR CUSTOM UNIT PROCESSORS HERE
     // =======================================
     processors.emplace_back(std::make_unique<GdbUnitProcessorFactory>());
+    processors.emplace_back(std::make_unique<MdbUnitProcessorFactory>());
 }
 
 class CompilerImpl final : public ICompiler
