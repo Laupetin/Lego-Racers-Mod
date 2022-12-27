@@ -11,7 +11,7 @@
 #include <vector>
 #include <cstring>
 
-#include "JamFileTypes.h"
+#include "Jam/JamDiskTypes.h"
 #include "Endianness.h"
 #include "Asset/IFileTypeProcessor.h"
 #include "Asset/Mdb/MdbCreator.h"
@@ -23,6 +23,7 @@
 #include "Asset/Tdb/TdbCreator.h"
 
 namespace fs = std::filesystem;
+using namespace jam;
 
 class JamFileWritingException final : public std::exception
 {
@@ -157,8 +158,8 @@ private:
     {
         const auto fileDataStartOffset = sizeof(JAM_FILE_MAGIC)
             + (sizeof(uint32_t) + sizeof(uint32_t)) * m_directories.size()
-            + sizeof(JamFileDiskDirectory) * std::max(m_directories.size() - 1, 0u)
-            + sizeof(JamFileDiskFile) * m_files.size();
+            + sizeof(DiskDirectoryEntry) * std::max(m_directories.size() - 1, 0u)
+            + sizeof(DiskFileEntry) * m_files.size();
 
         m_stream.seekp(fileDataStartOffset, std::ios::beg);
 
@@ -207,7 +208,7 @@ private:
             {
                 const auto& file = m_files[currentFileIndex];
                 auto fileName = file.m_path.filename().string();
-                if (fileName.size() > std::extent_v<decltype(JamFileDiskFile::fileName)>)
+                if (fileName.size() > std::extent_v<decltype(DiskFileEntry::fileName)>)
                 {
                     std::ostringstream ss;
                     ss << "File name too long: \"" << fileName << "\"";
@@ -217,8 +218,8 @@ private:
                 for (auto& c : fileName)
                     c = static_cast<char>(toupper(c));
 
-                JamFileDiskFile diskFile{};
-                strncpy(diskFile.fileName, fileName.c_str(), std::extent_v<decltype(JamFileDiskFile::fileName)>);
+                DiskFileEntry diskFile{};
+                strncpy(diskFile.fileName, fileName.c_str(), std::extent_v<decltype(DiskFileEntry::fileName)>);
                 diskFile.dataOffset = endianness::ToLittleEndian(static_cast<uint32_t>(file.m_offset));
                 diskFile.dataSize = endianness::ToLittleEndian(static_cast<uint32_t>(file.m_size));
                 Write(&diskFile, sizeof(diskFile));
@@ -234,11 +235,11 @@ private:
             {
                 const auto& subDir = m_directories[subDirectoryIndex];
                 const auto dirName = subDir.m_path.filename().string();
-                if (dirName.size() > std::extent_v<decltype(JamFileDiskDirectory::directoryName)>)
+                if (dirName.size() > std::extent_v<decltype(DiskDirectoryEntry::directoryName)>)
                     throw JamFileWritingException("Directory name too long");
 
-                JamFileDiskDirectory diskDir{};
-                strncpy(diskDir.directoryName, dirName.c_str(), std::extent_v<decltype(JamFileDiskDirectory::directoryName)>);
+                DiskDirectoryEntry diskDir{};
+                strncpy(diskDir.directoryName, dirName.c_str(), std::extent_v<decltype(DiskDirectoryEntry::directoryName)>);
 
                 const auto directoryDataBeforeMe = subDirectoryIndex;
                 const auto diskDirectoriesBeforeMe = std::max(subDir.m_sub_directory_start_index - 1, 0u);
@@ -246,9 +247,9 @@ private:
 
                 diskDir.dataOffset = sizeof(JAM_FILE_MAGIC)
                     + directoryDataBeforeMe * (sizeof(uint32_t) + sizeof(uint32_t))
-                    + diskDirectoriesBeforeMe * sizeof(JamFileDiskDirectory)
-                    + diskFilesBeforeMe * sizeof(JamFileDiskFile);
-                Write(&diskDir, sizeof(JamFileDiskDirectory));
+                    + diskDirectoriesBeforeMe * sizeof(DiskDirectoryEntry)
+                    + diskFilesBeforeMe * sizeof(DiskFileEntry);
+                Write(&diskDir, sizeof(DiskDirectoryEntry));
             }
 
             currentDirectoryIndex++;

@@ -10,7 +10,7 @@
 #include <vector>
 #include <cstring>
 
-#include "JamFileTypes.h"
+#include "Jam/JamDiskTypes.h"
 #include "Endianness.h"
 #include "Asset/IFileTypeProcessor.h"
 #include "Asset/Bmp/BmpDumper.h"
@@ -23,6 +23,7 @@
 #include "Asset/Tdb/TdbDumper.h"
 
 using namespace dumping;
+using namespace jam;
 namespace fs = std::filesystem;
 
 class JamFileReadingException final : public std::exception
@@ -73,7 +74,7 @@ public:
         if (magicBuffer != JAM_FILE_MAGIC)
             throw JamFileReadingException("Not a JAM file");
 
-        JamFileDiskDirectory rootDirectory{};
+        DiskDirectoryEntry rootDirectory{};
         memset(rootDirectory.directoryName, 0, std::extent_v<decltype(rootDirectory.directoryName)>);
         rootDirectory.dataOffset = 4u;
 
@@ -81,7 +82,7 @@ public:
     }
 
 private:
-    static std::string GetDiskDirectoryPath(const std::string& currentPath, const JamFileDiskDirectory& diskDirectory)
+    static std::string GetDiskDirectoryPath(const std::string& currentPath, const DiskDirectoryEntry& diskDirectory)
     {
         std::ostringstream ss;
         ss << currentPath;
@@ -102,9 +103,9 @@ private:
         return filePath;
     }
 
-    [[nodiscard]] std::vector<JamFileDiskFile> ReadDirectoryFiles() const
+    [[nodiscard]] std::vector<DiskFileEntry> ReadDirectoryFiles() const
     {
-        std::vector<JamFileDiskFile> files;
+        std::vector<DiskFileEntry> files;
         uint32_t fileCount;
         utils::ReadOrThrow(m_stream, &fileCount, sizeof(fileCount));
         fileCount = endianness::FromLittleEndian(fileCount);
@@ -114,7 +115,7 @@ private:
 
         for (auto i = 0u; i < fileCount; i++)
         {
-            JamFileDiskFile file{};
+            DiskFileEntry file{};
             utils::ReadOrThrow(m_stream, &file, sizeof(file));
             files.emplace_back(file);
         }
@@ -122,9 +123,9 @@ private:
         return files;
     }
 
-    [[nodiscard]] std::vector<JamFileDiskDirectory> ReadDirectorySubDirectories() const
+    [[nodiscard]] std::vector<DiskDirectoryEntry> ReadDirectorySubDirectories() const
     {
-        std::vector<JamFileDiskDirectory> subDirectories;
+        std::vector<DiskDirectoryEntry> subDirectories;
         uint32_t subDirectoryCount;
         utils::ReadOrThrow(m_stream, &subDirectoryCount, sizeof(subDirectoryCount));
         subDirectoryCount = endianness::FromLittleEndian(subDirectoryCount);
@@ -134,7 +135,7 @@ private:
 
         for (auto i = 0u; i < subDirectoryCount; i++)
         {
-            JamFileDiskDirectory subDirectory{};
+            DiskDirectoryEntry subDirectory{};
             utils::ReadOrThrow(m_stream, &subDirectory, sizeof(subDirectory));
             subDirectories.emplace_back(subDirectory);
         }
@@ -142,7 +143,7 @@ private:
         return subDirectories;
     }
 
-    void DumpFile(const std::string& currentPath, const fs::path& dumpPath, const JamFileDiskFile& file) const
+    void DumpFile(const std::string& currentPath, const fs::path& dumpPath, const DiskFileEntry& file) const
     {
         const std::string fileName(file.fileName, strnlen(file.fileName, std::extent_v<decltype(file.fileName)>));
         const auto dumpFilePath = dumpPath / fileName;
@@ -185,7 +186,7 @@ private:
         }
     }
 
-    void DumpDirectory(const std::string& currentPath, const JamFileDiskDirectory& diskDirectory)
+    void DumpDirectory(const std::string& currentPath, const DiskDirectoryEntry& diskDirectory)
     {
         const auto diskDirectoryPath = GetDiskDirectoryPath(currentPath, diskDirectory);
         const auto dumpPath = m_dump_folder / diskDirectoryPath;
@@ -201,7 +202,7 @@ private:
 
         for (const auto& subDirectory : subDirectories)
         {
-            if (subDirectory.dataOffset < diskDirectory.dataOffset + sizeof(JamFileDiskDirectory))
+            if (subDirectory.dataOffset < diskDirectory.dataOffset + sizeof(DiskDirectoryEntry))
                 throw JamFileReadingException("SubDirectory does not follow current directory");
 
             DumpDirectory(diskDirectoryPath, subDirectory);
