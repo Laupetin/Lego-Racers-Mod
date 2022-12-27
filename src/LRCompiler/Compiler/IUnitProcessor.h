@@ -5,17 +5,17 @@
 #include <memory>
 #include <vector>
 
-#include "JamFilePath.h"
+#include "Jam/JamFilePath.h"
 #include "Project/ProjectContext.h"
 
 class UnitProcessorResult
 {
 public:
     std::filesystem::path m_file;
-    JamFilePath m_jam_path;
+    jam::JamFilePath m_jam_path;
 
     UnitProcessorResult();
-    UnitProcessorResult(std::filesystem::path file, JamFilePath jamPath);
+    UnitProcessorResult(std::filesystem::path file, jam::JamFilePath jamPath);
 };
 
 class UnitProcessorInputsAndOutputs
@@ -26,7 +26,7 @@ public:
 
     void AddInput(std::filesystem::path inputFile);
     void AddOutput(UnitProcessorResult output);
-    void AddOutput(std::filesystem::path file, JamFilePath jamPath);
+    void AddOutput(std::filesystem::path file, jam::JamFilePath jamPath);
 };
 
 class IUnitProcessor

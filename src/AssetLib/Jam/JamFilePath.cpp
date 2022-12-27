@@ -6,6 +6,8 @@
 #include "FileUtils.h"
 #include "StringUtils.h"
 
+using namespace jam;
+
 JamFilePath::JamFilePath()
     : m_depth(0u)
 {
@@ -35,47 +37,54 @@ JamFilePath::JamFilePath(std::string path, const size_t depth)
 {
 }
 
-bool operator==(const JamFilePath& lhs, const JamFilePath& rhs)
+namespace jam
 {
-    return lhs.m_path == rhs.m_path;
+    bool operator==(const JamFilePath& lhs, const JamFilePath& rhs)
+    {
+        return lhs.m_path == rhs.m_path;
+    }
+
+    bool operator!=(const JamFilePath& lhs, const JamFilePath& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
+    bool operator<(const JamFilePath& lhs, const JamFilePath& rhs)
+    {
+        return lhs.m_path < rhs.m_path;
+    }
+
+    bool operator<=(const JamFilePath& lhs, const JamFilePath& rhs)
+    {
+        return !(rhs < lhs);
+    }
+
+    bool operator>(const JamFilePath& lhs, const JamFilePath& rhs)
+    {
+        return rhs < lhs;
+    }
+
+    bool operator>=(const JamFilePath& lhs, const JamFilePath& rhs)
+    {
+        return !(lhs < rhs);
+    }
+
+    std::size_t hash_value(const JamFilePath& obj)
+    {
+        std::size_t seed = 0x2CD55458;
+        seed ^= (seed << 6) + (seed >> 2) + 0x2D165998 + std::hash<std::string>()(obj.m_path);
+        seed ^= (seed << 6) + (seed >> 2) + 0x1D87BAC0 + static_cast<std::size_t>(obj.m_depth);
+        return seed;
+    }
 }
 
-bool operator!=(const JamFilePath& lhs, const JamFilePath& rhs)
-{
-    return !(lhs == rhs);
-}
 
-bool operator<(const JamFilePath& lhs, const JamFilePath& rhs)
+namespace std
 {
-    return lhs.m_path < rhs.m_path;
-}
-
-bool operator<=(const JamFilePath& lhs, const JamFilePath& rhs)
-{
-    return !(rhs < lhs);
-}
-
-bool operator>(const JamFilePath& lhs, const JamFilePath& rhs)
-{
-    return rhs < lhs;
-}
-
-bool operator>=(const JamFilePath& lhs, const JamFilePath& rhs)
-{
-    return !(lhs < rhs);
-}
-
-std::size_t hash_value(const JamFilePath& obj)
-{
-    std::size_t seed = 0x2CD55458;
-    seed ^= (seed << 6) + (seed >> 2) + 0x2D165998 + std::hash<std::string>()(obj.m_path);
-    seed ^= (seed << 6) + (seed >> 2) + 0x1D87BAC0 + static_cast<std::size_t>(obj.m_depth);
-    return seed;
-}
-
-std::size_t std::hash<JamFilePath>::operator()(const JamFilePath& v) const noexcept
-{
-    return hash_value(v);
+    std::size_t hash<JamFilePath>::operator()(const JamFilePath& v) const noexcept
+    {
+        return hash_value(v);
+    }
 }
 
 JamFilePath JamFilePath::Parent() const

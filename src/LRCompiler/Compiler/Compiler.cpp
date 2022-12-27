@@ -18,6 +18,11 @@ void AddDefaultProcessors(std::vector<std::unique_ptr<IUnitProcessorFactory>>& p
     processors.emplace_back(std::make_unique<MdbUnitProcessorFactory>());
 }
 
+CompilerResult::CompilerResult()
+    : m_any_changes(false)
+{
+}
+
 class CompilerImpl final : public ICompiler
 {
 public:
@@ -127,6 +132,8 @@ private:
                 std::cerr << "Compilation failed: \"" << relativePathToData.string() << "\"\n";
                 return false;
             }
+
+            result.m_any_changes = true;
         }
         else
             std::cout << "File up to date: \"" << relativePathToData.string() << "\"\n";

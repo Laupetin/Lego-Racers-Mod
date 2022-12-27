@@ -18,7 +18,7 @@ public:
         m_out_path = (context.m_obj_path / relativeFilePath).replace_extension(".gdb_bin");
 
         io.AddInput(file);
-        io.AddOutput(m_out_path, JamFilePath(relativeFilePath.string()));
+        io.AddOutput(m_out_path, jam::JamFilePath(relativeFilePath.string()));
 
         return true;
     }

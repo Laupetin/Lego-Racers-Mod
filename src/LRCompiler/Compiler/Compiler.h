@@ -8,7 +8,10 @@
 class CompilerResult
 {
 public:
+    bool m_any_changes;
     std::vector<UnitProcessorResult> m_unit_processor_results;
+
+    CompilerResult();
 };
 
 class ICompiler

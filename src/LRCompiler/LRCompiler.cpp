@@ -2,6 +2,7 @@
 
 #include "LRCompilerArgs.h"
 #include "Compiler/Compiler.h"
+#include "Linker/Linker.h"
 #include "Project/ProjectContextCreator.h"
 
 bool LRCompiler::Start(const int argc, const char** argv)
@@ -12,6 +13,7 @@ bool LRCompiler::Start(const int argc, const char** argv)
 
     const ProjectContextCreator contextCreator(args);
     const auto compiler = ICompiler::Default();
+    const auto linker = ILinker::Default();
     for (const auto& project : args.m_compile_projects)
     {
         const auto contexts = contextCreator.CreateContexts(project);
@@ -22,7 +24,8 @@ bool LRCompiler::Start(const int argc, const char** argv)
             if (!compilationResult)
                 continue;
 
-            // TODO: Link compiler results
+            if (!linker->Link(*context, *compilationResult))
+                continue;
         }
     }
 
