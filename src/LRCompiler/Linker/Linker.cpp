@@ -23,9 +23,25 @@ public:
     }
 };
 
-class LinkerData
+class LinkerData final : public jam::IJamFileWriterDataProvider
 {
 public:
+    std::unique_ptr<std::istream> GetDataForFile(const jam::jam_id_t file) override
+    {
+        assert(file < m_file_data.size());
+        if (file >= m_file_data.size())
+            return nullptr;
+
+        auto stream = std::make_unique<std::ifstream>(m_file_data[file].m_path, std::ios::in | std::ios::binary);
+        if (!stream->is_open())
+        {
+            std::cerr << "Failed to open file: " << m_file_data[file].m_path << "!\n";
+            return nullptr;
+        }
+
+        return stream;
+    }
+
     jam::DirectoryTree m_directory_tree;
     std::vector<FileData> m_file_data;
 };
@@ -57,12 +73,7 @@ public:
         const auto writer = jam::IJamFileWriter::Create(stream);
         assert(writer);
 
-        writer->PrepareDirectoryTree(linkerData->m_directory_tree);
-
-        if (!WriteFileData(*writer, *linkerData))
-            return false;
-
-        writer->WriteMetaData();
+        writer->Write(linkerData->m_directory_tree, *linkerData);
 
         return true;
     }
@@ -103,23 +114,6 @@ private:
         }
 
         return data;
-    }
-
-    static bool WriteFileData(jam::IJamFileWriter& writer, const LinkerData& linkerData)
-    {
-        for (const auto& fileData : linkerData.m_file_data)
-        {
-            std::ifstream inStream(fileData.m_path, std::ios::in | std::ios::binary);
-            if (!inStream.is_open())
-            {
-                std::cerr << "Failed to open file " << fileData.m_path << "!\n";
-                return false;
-            }
-
-            writer.WriteDataForFile(fileData.m_id, inStream);
-        }
-
-        return true;
     }
 };
 

@@ -115,7 +115,8 @@ size_t JamFilePath::Depth() const
 
 std::vector<std::string> JamFilePath::GetPathFragments() const
 {
-    std::vector<std::string> result(m_depth);
+    std::vector<std::string> result;
+    result.reserve(m_depth);
 
     size_t head = 0u, tail = 0u;
     while (head < m_path.size())

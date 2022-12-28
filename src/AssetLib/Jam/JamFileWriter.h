@@ -6,6 +6,19 @@
 
 namespace jam
 {
+    class IJamFileWriterDataProvider
+    {
+    public:
+        IJamFileWriterDataProvider() = default;
+        virtual ~IJamFileWriterDataProvider() = default;
+        IJamFileWriterDataProvider(const IJamFileWriterDataProvider& other) = default;
+        IJamFileWriterDataProvider(IJamFileWriterDataProvider&& other) noexcept = default;
+        IJamFileWriterDataProvider& operator=(const IJamFileWriterDataProvider& other) = default;
+        IJamFileWriterDataProvider& operator=(IJamFileWriterDataProvider&& other) noexcept = default;
+
+        virtual std::unique_ptr<std::istream> GetDataForFile(jam_id_t file) = 0;
+    };
+
     class IJamFileWriter
     {
     public:
@@ -18,8 +31,6 @@ namespace jam
         IJamFileWriter& operator=(const IJamFileWriter& other) = default;
         IJamFileWriter& operator=(IJamFileWriter&& other) noexcept = default;
 
-        virtual void PrepareDirectoryTree(DirectoryTree& tree) = 0;
-        virtual void WriteDataForFile(const jam_id_t& file, std::istream& stream) = 0;
-        virtual void WriteMetaData() = 0;
+        virtual bool Write(const DirectoryTree& tree, IJamFileWriterDataProvider& provider) = 0;
     };
 }
