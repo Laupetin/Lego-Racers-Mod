@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <limits>
 
+#include "Localization/SrfUnitProcessor.h"
 #include "Material/MdbUnitProcessor.h"
 #include "Model/GdbUnitProcessor.h"
 
@@ -16,6 +17,7 @@ void AddDefaultProcessors(std::vector<std::unique_ptr<IUnitProcessorFactory>>& p
     // =======================================
     processors.emplace_back(std::make_unique<GdbUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<MdbUnitProcessorFactory>());
+    processors.emplace_back(std::make_unique<SrfUnitProcessorFactory>());
 }
 
 CompilerResult::CompilerResult()
