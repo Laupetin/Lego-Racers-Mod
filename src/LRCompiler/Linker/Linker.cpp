@@ -73,8 +73,10 @@ public:
         const auto writer = jam::IJamFileWriter::Create(stream);
         assert(writer);
 
-        writer->Write(linkerData->m_directory_tree, *linkerData);
+        if (!writer->Write(linkerData->m_directory_tree, *linkerData))
+            return false;
 
+        std::cout << "Linking successful -> \"" << context.m_target_file_path.string() << "\"\n";
         return true;
     }
 
