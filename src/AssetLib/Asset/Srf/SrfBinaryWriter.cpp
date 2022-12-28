@@ -1,5 +1,6 @@
 #include "SrfBinaryWriter.h"
 
+#include <limits>
 #include <sstream>
 #include <vector>
 

@@ -1,6 +1,7 @@
 #include "JamFileWriter.h"
 
 #include <cstdint>
+#include <cstring>
 #include <deque>
 
 #include "Endianness.h"

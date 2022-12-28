@@ -1,7 +1,7 @@
 #include "JamFilePath.h"
 
 #include <algorithm>
-#include <exception>
+#include <stdexcept>
 
 #include "FileUtils.h"
 #include "StringUtils.h"
@@ -16,7 +16,7 @@ JamFilePath::JamFilePath()
 JamFilePath::JamFilePath(std::string path)
 {
     if (path.find_first_of(utils::ILLEGAL_PATH_CHARS) != std::string::npos)
-        throw std::exception("Illegal path");
+        throw std::runtime_error("Illegal path");
 
     std::replace(path.begin(), path.end(), '\\', '/');
     if (path.rfind("./", 0u) == 0u)
