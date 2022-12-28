@@ -2,6 +2,8 @@
 
 #include <iomanip>
 
+#include "Utils/AbstractTextDumper.h"
+
 namespace mdb
 {
     class MdbTextWriterImpl final : public IMdbEmitter, AbstractTokenTextDumper

@@ -49,7 +49,7 @@ const IFileTypeProcessor* availableFileTypeDumpers[]
     new gdb::GdbDumper(),
     new IdbDumper(),
     new mdb::MdbDumper(),
-    new SrfDumper(),
+    new srf::SrfDumper(),
     new TdbDumper(),
 
     // Passthrough should be last due to it accepting any file and simply dumps its data unmodified
