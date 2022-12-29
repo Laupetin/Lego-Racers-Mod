@@ -17,6 +17,9 @@ public:
 class CompilerResult
 {
 public:
+    size_t m_asset_success_count;
+    size_t m_asset_failed_count;
+    size_t m_asset_skipped_count;
     bool m_any_changes;
     std::vector<UnitProcessorResult> m_unit_processor_results;
 

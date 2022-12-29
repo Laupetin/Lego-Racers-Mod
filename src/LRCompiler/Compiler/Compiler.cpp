@@ -34,7 +34,10 @@ CompilerSettings::CompilerSettings()
 }
 
 CompilerResult::CompilerResult()
-    : m_any_changes(false)
+    : m_asset_success_count(0u),
+      m_asset_failed_count(0u),
+      m_asset_skipped_count(0u),
+      m_any_changes(false)
 {
 }
 
@@ -68,9 +71,14 @@ public:
                 continue;
 
             if (!ProcessUnit(*unitProcessor, context, *result, file.path()))
+            {
                 std::cerr << "Failed to compile \"" << fs::relative(file, context.m_data_path).string() << "\"\n";
+                result->m_asset_failed_count++;
+            }
         }
 
+        std::cout << "Compiler result: " << result->m_asset_success_count << " compiled, " << result->m_asset_failed_count << " failed, " << result->m_asset_skipped_count <<
+            " skipped.\n";
         return result;
     }
 
@@ -150,9 +158,13 @@ private:
             }
 
             result.m_any_changes = true;
+            result.m_asset_success_count++;
         }
         else
+        {
             std::cout << "File up to date: \"" << relativePathToData.string() << "\"\n";
+            result.m_asset_skipped_count++;
+        }
 
         for (auto& output : io.m_outputs)
             result.m_unit_processor_results.emplace_back(std::move(output));

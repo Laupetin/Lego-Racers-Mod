@@ -37,20 +37,31 @@ bool LRCompiler::Start(const int argc, const char** argv)
     const ProjectContextCreator contextCreator(args);
     const auto compiler = ICompiler::Default(CreateCompilerSettings(args));
     const auto linker = ILinker::Default(CreateLinkerSettings(args));
+    size_t projectCount = 0u;
+    size_t projectSuccessCount = 0u;
     for (const auto& project : args.m_compile_projects)
     {
         const auto contexts = contextCreator.CreateContexts(project);
 
         for (const auto& context : contexts)
         {
+            projectCount++;
+
             const auto compilationResult = compiler->Compile(*context);
-            if (!compilationResult)
+            if (!compilationResult || compilationResult->m_asset_failed_count > 0)
                 continue;
 
             if (!linker->Link(*context, *compilationResult))
                 continue;
+
+            projectSuccessCount++;
         }
     }
 
-    return true;
+    if (projectCount > 1)
+    {
+        std::cout << "\nProjects successfully handled: " << projectSuccessCount << "/" << projectCount << "\n";
+    }
+
+    return projectSuccessCount == projectCount;
 }
