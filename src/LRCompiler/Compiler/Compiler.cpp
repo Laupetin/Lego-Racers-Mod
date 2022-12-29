@@ -1,10 +1,12 @@
 #include "Compiler.h"
 
+#include <algorithm>
 #include <cstdint>
 #include <filesystem>
 #include <limits>
 
 #include "Localization/SrfUnitProcessor.h"
+#include "Material/BmpUnitProcessor.h"
 #include "Material/IdbUnitProcessor.h"
 #include "Material/MdbUnitProcessor.h"
 #include "Material/TdbUnitProcessor.h"
@@ -17,6 +19,7 @@ void AddDefaultProcessors(std::vector<std::unique_ptr<IUnitProcessorFactory>>& p
     // =======================================
     // ADD YOUR CUSTOM UNIT PROCESSORS HERE
     // =======================================
+    processors.emplace_back(std::make_unique<BmpUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<IdbUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<GdbUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<MdbUnitProcessorFactory>());
@@ -166,6 +169,11 @@ private:
         minTimestamp = std::numeric_limits<int64_t>::max();
         auto maxTimestamp = std::numeric_limits<int64_t>::min();
 
+        for (const auto& result : files.m_intermediate)
+        {
+            ExamineFile(result, missingFiles, minTimestamp, maxTimestamp);
+        }
+
         for (const auto& result : files.m_outputs)
         {
             ExamineFile(result.m_file, missingFiles, minTimestamp, maxTimestamp);
@@ -196,15 +204,24 @@ private:
 
     static bool CreateDirectoriesForOutput(const UnitProcessorInputsAndOutputs& files)
     {
-        for (const auto& result : files.m_outputs)
-        {
-            const auto parentPath = fs::absolute(result.m_file).parent_path();
-
-            if (!fs::is_directory(parentPath) && !fs::create_directories(parentPath))
+        return std::all_of(files.m_intermediate.begin(), files.m_intermediate.end(), [](const fs::path& file)
             {
-                std::cerr << "Failed to create directory " << parentPath << "!\n";
-                return false;
-            }
+                return CreateOutputDirectoryForFile(file);
+            })
+            && std::all_of(files.m_outputs.begin(), files.m_outputs.end(), [](const UnitProcessorResult& result)
+            {
+                return CreateOutputDirectoryForFile(result.m_file);
+            });
+    }
+
+    static bool CreateOutputDirectoryForFile(const fs::path& file)
+    {
+        const auto parentPath = fs::absolute(file).parent_path();
+
+        if (!fs::is_directory(parentPath) && !fs::create_directories(parentPath))
+        {
+            std::cerr << "Failed to create directory " << parentPath << "!\n";
+            return false;
         }
 
         return true;

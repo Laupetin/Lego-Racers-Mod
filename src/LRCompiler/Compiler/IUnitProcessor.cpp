@@ -5,9 +5,9 @@ void UnitProcessorInputsAndOutputs::AddInput(std::filesystem::path inputFile)
     m_inputs.emplace_back(std::move(inputFile));
 }
 
-void UnitProcessorInputsAndOutputs::AddOutput(UnitProcessorResult output)
+void UnitProcessorInputsAndOutputs::AddIntermediate(std::filesystem::path intermediate)
 {
-    m_outputs.emplace_back(std::move(output));
+    m_intermediate.emplace_back(std::move(intermediate));
 }
 
 void UnitProcessorInputsAndOutputs::AddOutput(std::filesystem::path file, jam::JamFilePath jamPath)
