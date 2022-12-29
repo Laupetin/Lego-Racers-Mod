@@ -5,6 +5,15 @@
 
 #include "IUnitProcessor.h"
 
+class CompilerSettings
+{
+public:
+    bool m_verbose;
+    bool m_recompile;
+
+    CompilerSettings();
+};
+
 class CompilerResult
 {
 public:
@@ -17,8 +26,8 @@ public:
 class ICompiler
 {
 public:
-    static std::unique_ptr<ICompiler> Default();
-    static std::unique_ptr<ICompiler> Custom(std::vector<std::unique_ptr<IUnitProcessorFactory>> processors);
+    static std::unique_ptr<ICompiler> Default(CompilerSettings settings);
+    static std::unique_ptr<ICompiler> Custom(CompilerSettings settings, std::vector<std::unique_ptr<IUnitProcessorFactory>> processors);
 
     ICompiler() = default;
     virtual ~ICompiler() = default;

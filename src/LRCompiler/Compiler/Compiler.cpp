@@ -27,6 +27,12 @@ void AddDefaultProcessors(std::vector<std::unique_ptr<IUnitProcessorFactory>>& p
     processors.emplace_back(std::make_unique<TdbUnitProcessorFactory>());
 }
 
+CompilerSettings::CompilerSettings()
+    : m_verbose(false),
+      m_recompile(false)
+{
+}
+
 CompilerResult::CompilerResult()
     : m_any_changes(false)
 {
@@ -35,8 +41,9 @@ CompilerResult::CompilerResult()
 class CompilerImpl final : public ICompiler
 {
 public:
-    explicit CompilerImpl(std::vector<std::unique_ptr<IUnitProcessorFactory>> processors)
-        : m_unit_processor_factories(std::move(processors))
+    explicit CompilerImpl(const CompilerSettings settings, std::vector<std::unique_ptr<IUnitProcessorFactory>> processors)
+        : m_settings(settings),
+          m_unit_processor_factories(std::move(processors))
     {
     }
 
@@ -130,7 +137,7 @@ private:
 
         ExamineOutputFiles(io, missingFiles, minWriteOutput);
 
-        if (!missingFiles.empty() || minWriteOutput < maxWriteInput)
+        if (m_settings.m_recompile || !missingFiles.empty() || minWriteOutput < maxWriteInput)
         {
             std::cout << "Compiling: \"" << relativePathToData.string() << "\"\n";
             if (!CreateDirectoriesForOutput(io))
@@ -227,18 +234,19 @@ private:
         return true;
     }
 
+    CompilerSettings m_settings;
     std::vector<std::unique_ptr<IUnitProcessorFactory>> m_unit_processor_factories;
 };
 
-std::unique_ptr<ICompiler> ICompiler::Default()
+std::unique_ptr<ICompiler> ICompiler::Default(CompilerSettings settings)
 {
     std::vector<std::unique_ptr<IUnitProcessorFactory>> processors;
     AddDefaultProcessors(processors);
 
-    return std::make_unique<CompilerImpl>(std::move(processors));
+    return std::make_unique<CompilerImpl>(settings, std::move(processors));
 }
 
-std::unique_ptr<ICompiler> ICompiler::Custom(std::vector<std::unique_ptr<IUnitProcessorFactory>> processors)
+std::unique_ptr<ICompiler> ICompiler::Custom(CompilerSettings settings, std::vector<std::unique_ptr<IUnitProcessorFactory>> processors)
 {
-    return std::make_unique<CompilerImpl>(std::move(processors));
+    return std::make_unique<CompilerImpl>(settings, std::move(processors));
 }

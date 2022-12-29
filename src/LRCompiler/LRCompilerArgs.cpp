@@ -35,16 +35,32 @@ const CommandLineOption* const OPTION_OBJ_FOLDER =
     .WithParameter("objFolderPath")
     .Build();
 
+const CommandLineOption* const OPTION_RECOMPILE =
+    CommandLineOption::Builder::Create()
+    .WithLongName("recompile")
+    .WithDescription("Recompiles everything regardless whether it is outdated or not.")
+    .Build();
+
+const CommandLineOption* const OPTION_FORCE_LINKING =
+    CommandLineOption::Builder::Create()
+    .WithLongName("force-linking")
+    .WithDescription("Forces the linker to produce new target regardless whether it is outdated or not.")
+    .Build();
+
 const CommandLineOption* const COMMAND_LINE_OPTIONS[]
 {
     OPTION_HELP,
     OPTION_VERBOSE,
     OPTION_DIST_FOLDER,
-    OPTION_OBJ_FOLDER
+    OPTION_OBJ_FOLDER,
+    OPTION_RECOMPILE,
+    OPTION_FORCE_LINKING
 };
 
 LRCompilerArgs::LRCompilerArgs()
     : m_verbose(false),
+      m_recompile(false),
+      m_force_linking(false),
       m_argument_parser(COMMAND_LINE_OPTIONS, std::extent_v<decltype(COMMAND_LINE_OPTIONS)>)
 {
 }
@@ -98,6 +114,12 @@ bool LRCompilerArgs::ParseArgs(const int argc, const char** argv)
     // --obj
     if (m_argument_parser.IsOptionSpecified(OPTION_OBJ_FOLDER))
         m_obj_folder = m_argument_parser.GetValueForOption(OPTION_OBJ_FOLDER);
+
+    // --recompile
+    m_recompile = m_argument_parser.IsOptionSpecified(OPTION_RECOMPILE);
+
+    // --force-linking
+    m_force_linking = m_argument_parser.IsOptionSpecified(OPTION_FORCE_LINKING);
 
     return true;
 }

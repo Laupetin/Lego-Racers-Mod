@@ -10,6 +10,12 @@
 
 namespace fs = std::filesystem;
 
+LinkerSettings::LinkerSettings()
+    : m_verbose(false),
+      m_force_linking(false)
+{
+}
+
 class FileData
 {
 public:
@@ -49,6 +55,11 @@ public:
 class LinkerImpl final : public ILinker
 {
 public:
+    explicit LinkerImpl(const LinkerSettings settings)
+        : m_settings(settings)
+    {
+    }
+
     bool Link(const ProjectContext& context, const CompilerResult& compilerResult) const override
     {
         std::cout << "\n=============== Linking " << context.m_project_name << " ===============\n";
@@ -81,9 +92,9 @@ public:
     }
 
 private:
-    static bool TargetUpToDate(const ProjectContext& context, const CompilerResult& compilerResult)
+    bool TargetUpToDate(const ProjectContext& context, const CompilerResult& compilerResult) const
     {
-        if (compilerResult.m_any_changes)
+        if (m_settings.m_force_linking || compilerResult.m_any_changes)
             return false;
 
         std::error_code err;
@@ -117,9 +128,11 @@ private:
 
         return data;
     }
+
+    LinkerSettings m_settings;
 };
 
-std::unique_ptr<ILinker> ILinker::Default()
+std::unique_ptr<ILinker> ILinker::Default(LinkerSettings settings)
 {
-    return std::make_unique<LinkerImpl>();
+    return std::make_unique<LinkerImpl>(settings);
 }

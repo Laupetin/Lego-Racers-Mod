@@ -4,10 +4,19 @@
 
 #include "Compiler/Compiler.h"
 
+class LinkerSettings
+{
+public:
+    bool m_verbose;
+    bool m_force_linking;
+
+    LinkerSettings();
+};
+
 class ILinker
 {
 public:
-    static std::unique_ptr<ILinker> Default();
+    static std::unique_ptr<ILinker> Default(LinkerSettings settings);
 
     ILinker() = default;
     virtual ~ILinker() = default;
