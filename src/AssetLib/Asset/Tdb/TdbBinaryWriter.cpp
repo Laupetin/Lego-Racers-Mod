@@ -37,9 +37,9 @@ namespace tdb
             m_temp_tokens->WriteLeftCurly();
         }
 
-        void EmitFlipVertically() override
+        void EmitFlipVertical() override
         {
-            m_temp_tokens->WriteCustom(TOKEN_KEYWORD_FLIP_VERTICALLY);
+            m_temp_tokens->WriteCustom(TOKEN_KEYWORD_FLIP_VERTICAL);
         }
 
         void EmitKeyword29(const int value) override

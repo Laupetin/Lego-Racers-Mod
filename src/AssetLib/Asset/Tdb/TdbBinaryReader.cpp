@@ -76,8 +76,8 @@ namespace tdb
 
             switch (token.m_type)
             {
-            case TOKEN_KEYWORD_FLIP_VERTICALLY:
-                m_emitter.EmitFlipVertically();
+            case TOKEN_KEYWORD_FLIP_VERTICAL:
+                m_emitter.EmitFlipVertical();
                 break;
             case TOKEN_KEYWORD_29:
                 m_emitter.EmitKeyword29(m_tokens->NextIntegerValue());

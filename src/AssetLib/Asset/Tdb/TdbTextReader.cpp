@@ -95,8 +95,8 @@ namespace tdb
             const auto keywordType = context->getStart()->getType();
             switch (keywordType)
             {
-            case TdbLexer::FlipVertically:
-                m_emitter.EmitFlipVertically();
+            case TdbLexer::FlipVertical:
+                m_emitter.EmitFlipVertical();
                 break;
             case TdbLexer::Bmp:
                 m_emitter.EmitBmp();

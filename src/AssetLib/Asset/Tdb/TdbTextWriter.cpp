@@ -50,9 +50,9 @@ namespace tdb
             IncIndent();
         }
 
-        void EmitFlipVertically() override
+        void EmitFlipVertical() override
         {
-            WriteKeyword("flipVertically");
+            WriteKeyword("flipVertical");
         }
 
         void EmitKeyword29(const int value) override

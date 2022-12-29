@@ -40,7 +40,7 @@ intTexturePropertyKeyword
     ;
 
 singleValueKeywords
-    :   FlipVertically
+    :   FlipVertical
     |   Bmp
     |   Tga
     |   Keyword2D
@@ -49,7 +49,7 @@ singleValueKeywords
 
 Textures: 'textures';
 Texture: 'texture';
-FlipVertically: 'flipVertically';
+FlipVertical: 'flipVertical';
 Keyword29: 'keyword29';
 Bmp: 'bmp';
 Tga: 'tga';

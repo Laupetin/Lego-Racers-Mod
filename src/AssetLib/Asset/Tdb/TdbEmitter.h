@@ -19,7 +19,7 @@ namespace tdb
         virtual void EndTextures() = 0;
 
         virtual void StartTexture(std::string name) = 0;
-        virtual void EmitFlipVertically() = 0;
+        virtual void EmitFlipVertical() = 0;
         virtual void EmitKeyword29(int value) = 0;
         virtual void EmitBmp() = 0;
         virtual void EmitTga() = 0;

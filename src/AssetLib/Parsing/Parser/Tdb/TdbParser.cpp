@@ -49,14 +49,14 @@ void tdbParserInitialize() {
       "singleValueKeywords", "floatOrIntConstant"
     },
     std::vector<std::string>{
-      "", "'{'", "'}'", "'textures'", "'texture'", "'flipVertically'", "'keyword29'", 
+      "", "'{'", "'}'", "'textures'", "'texture'", "'flipVertical'", "'keyword29'", 
       "'bmp'", "'tga'", "'chromaKey'", "'keyword2D'", "'keyword2E'"
     },
     std::vector<std::string>{
-      "", "", "", "Textures", "Texture", "FlipVertically", "Keyword29", 
-      "Bmp", "Tga", "ChromaKey", "Keyword2D", "Keyword2E", "IntegerConstant", 
-      "FloatingConstant", "DigitSequence", "StringLiteral", "Whitespace", 
-      "Newline", "BlockComment", "LineComment"
+      "", "", "", "Textures", "Texture", "FlipVertical", "Keyword29", "Bmp", 
+      "Tga", "ChromaKey", "Keyword2D", "Keyword2E", "IntegerConstant", "FloatingConstant", 
+      "DigitSequence", "StringLiteral", "Whitespace", "Newline", "BlockComment", 
+      "LineComment"
     }
   );
   static const int32_t serializedATNSegment[] = {
@@ -318,7 +318,7 @@ TdbParser::TextureContext* TdbParser::texture() {
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << TdbParser::FlipVertically)
+      ((1ULL << _la) & ((1ULL << TdbParser::FlipVertical)
       | (1ULL << TdbParser::Keyword29)
       | (1ULL << TdbParser::Bmp)
       | (1ULL << TdbParser::Tga)
@@ -461,7 +461,7 @@ TdbParser::TexturePropertyContext* TdbParser::textureProperty() {
         break;
       }
 
-      case TdbParser::FlipVertically:
+      case TdbParser::FlipVertical:
       case TdbParser::Bmp:
       case TdbParser::Tga:
       case TdbParser::Keyword2D:
@@ -724,8 +724,8 @@ TdbParser::SingleValueKeywordsContext::SingleValueKeywordsContext(ParserRuleCont
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* TdbParser::SingleValueKeywordsContext::FlipVertically() {
-  return getToken(TdbParser::FlipVertically, 0);
+tree::TerminalNode* TdbParser::SingleValueKeywordsContext::FlipVertical() {
+  return getToken(TdbParser::FlipVertical, 0);
 }
 
 tree::TerminalNode* TdbParser::SingleValueKeywordsContext::Bmp() {
@@ -778,7 +778,7 @@ TdbParser::SingleValueKeywordsContext* TdbParser::singleValueKeywords() {
     setState(64);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << TdbParser::FlipVertically)
+      ((1ULL << _la) & ((1ULL << TdbParser::FlipVertical)
       | (1ULL << TdbParser::Bmp)
       | (1ULL << TdbParser::Tga)
       | (1ULL << TdbParser::Keyword2D)
