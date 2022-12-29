@@ -48,7 +48,7 @@ const IFileTypeProcessor* availableFileTypeCreators[]
     new IdbCreator(),
     new mdb::MdbCreator(),
     new srf::SrfCreator(),
-    new TdbCreator(),
+    new tdb::TdbCreator(),
 
     // Passthrough should be last due to it accepting any file and simply creates its data unmodified
     new PassthroughCreator()
