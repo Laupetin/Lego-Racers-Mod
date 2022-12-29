@@ -22,6 +22,42 @@ namespace utils
         return converter.from_bytes(str);
     }
 
+    bool StringEndsWith(const std::string& str, const std::string& ending)
+    {
+        const auto stringSize = str.size();
+        const auto endingSize = ending.size();
+
+        if (stringSize < endingSize)
+            return false;
+
+        const auto stringEndingOffset = stringSize - endingSize;
+        for (auto i = 0u; i < endingSize; i++)
+        {
+            if (str[stringEndingOffset + i] != ending[i])
+                return false;
+        }
+
+        return true;
+    }
+
+    bool StringEndsWithIgnoreCase(const std::string& str, const std::string& ending)
+    {
+        const auto stringSize = str.size();
+        const auto endingSize = ending.size();
+
+        if (stringSize < endingSize)
+            return false;
+
+        const auto stringEndingOffset = stringSize - endingSize;
+        for (auto i = 0u; i < endingSize; i++)
+        {
+            if (tolower(str[stringEndingOffset + i]) != tolower(ending[i]))
+                return false;
+        }
+
+        return true;
+    }
+
     bool StringEqualsIgnoreCase(const std::string& str0, const std::string& str1)
     {
         const auto stringSize = str0.size();

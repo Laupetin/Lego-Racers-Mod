@@ -5,6 +5,9 @@ function jsonlib:include(includes)
         includedirs {
             path.join(ThirdPartyFolder(), "json/single_include")
         }
+        defines {
+            "JSON_USE_IMPLICIT_CONVERSIONS=0"
+        }
 	end
 end
 

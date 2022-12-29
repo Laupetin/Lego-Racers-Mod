@@ -11,6 +11,7 @@
 #include "Material/MdbUnitProcessor.h"
 #include "Material/TdbUnitProcessor.h"
 #include "Model/GdbUnitProcessor.h"
+#include "Model/ModelUnitProcessor.h"
 
 namespace fs = std::filesystem;
 
@@ -19,6 +20,7 @@ void AddDefaultProcessors(std::vector<std::unique_ptr<IUnitProcessorFactory>>& p
     // =======================================
     // ADD YOUR CUSTOM UNIT PROCESSORS HERE
     // =======================================
+    processors.emplace_back(std::make_unique<ModelUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<BmpUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<IdbUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<GdbUnitProcessorFactory>());
