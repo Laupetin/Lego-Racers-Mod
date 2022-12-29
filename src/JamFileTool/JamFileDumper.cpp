@@ -47,7 +47,7 @@ const IFileTypeProcessor* availableFileTypeDumpers[]
 {
     new bmp::BmpDumper(),
     new gdb::GdbDumper(),
-    new IdbDumper(),
+    new idb::IdbDumper(),
     new mdb::MdbDumper(),
     new srf::SrfDumper(),
     new tdb::TdbDumper(),

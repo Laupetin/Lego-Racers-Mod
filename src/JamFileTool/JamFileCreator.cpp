@@ -45,7 +45,7 @@ private:
 const IFileTypeProcessor* availableFileTypeCreators[]
 {
     new gdb::GdbCreator(),
-    new IdbCreator(),
+    new idb::IdbCreator(),
     new mdb::MdbCreator(),
     new srf::SrfCreator(),
     new tdb::TdbCreator(),
