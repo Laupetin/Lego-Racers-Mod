@@ -4,7 +4,6 @@
 #include <ostream>
 
 #include "MdbEmitter.h"
-#include "Utils/AbstractTextDumper.h"
 
 namespace mdb
 {
