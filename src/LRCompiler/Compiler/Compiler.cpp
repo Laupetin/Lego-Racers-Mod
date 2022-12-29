@@ -6,6 +6,7 @@
 
 #include "Localization/SrfUnitProcessor.h"
 #include "Material/MdbUnitProcessor.h"
+#include "Material/TdbUnitProcessor.h"
 #include "Model/GdbUnitProcessor.h"
 
 namespace fs = std::filesystem;
@@ -18,6 +19,7 @@ void AddDefaultProcessors(std::vector<std::unique_ptr<IUnitProcessorFactory>>& p
     processors.emplace_back(std::make_unique<GdbUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<MdbUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<SrfUnitProcessorFactory>());
+    processors.emplace_back(std::make_unique<TdbUnitProcessorFactory>());
 }
 
 CompilerResult::CompilerResult()
