@@ -23,6 +23,7 @@ namespace
 
         settings.m_verbose = args.m_verbose;
         settings.m_force_linking = args.m_force_linking;
+        settings.m_copy_to = args.m_copy_to;
 
         return settings;
     }

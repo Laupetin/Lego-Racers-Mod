@@ -7,6 +7,7 @@
 class LinkerSettings
 {
 public:
+    std::string m_copy_to;
     bool m_verbose;
     bool m_force_linking;
 

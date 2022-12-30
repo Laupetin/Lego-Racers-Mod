@@ -2,15 +2,11 @@
 
 #include <algorithm>
 #include <cassert>
-#include <filesystem>
-#include <fstream>
 #include <unordered_map>
 #include <vector>
 
 #include "Asset/Gdb/GdbStructReader.h"
 #include "Asset/Gdb/GdbTextWriter.h"
-
-namespace fs = std::filesystem;
 
 namespace obj
 {
@@ -344,7 +340,7 @@ namespace obj
         std::vector<PendingGdbFace> m_faces;
     };
 
-    class ObjToGdbConverterImpl : public IObjToGdbConverter
+    class ObjToGdbConverterImpl final : public IObjToGdbConverter
     {
     public:
         ObjToGdbConverterImpl(gdb::Model& gdb, const ObjModel& obj, const bool hasColors)

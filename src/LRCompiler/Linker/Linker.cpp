@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 
+#include "FileUtils.h"
 #include "Jam/JamFileWriter.h"
 #include "Jam/JamTypes.h"
 
@@ -55,9 +56,35 @@ public:
 class LinkerImpl final : public ILinker
 {
 public:
-    explicit LinkerImpl(const LinkerSettings settings)
-        : m_settings(settings)
+    explicit LinkerImpl(LinkerSettings settings)
+        : m_settings(std::move(settings))
     {
+    }
+
+    void CopyTargetIfRequired(const fs::path& targetLocation) const
+    {
+        if (m_settings.m_copy_to.empty())
+            return;
+
+        fs::path copyToPath(m_settings.m_copy_to);
+
+        if (!fs::is_directory(copyToPath))
+        {
+            const auto parentDirectory = fs::absolute(copyToPath).parent_path();
+
+            if (!fs::is_directory(parentDirectory) && !fs::create_directories(parentDirectory))
+            {
+                std::cerr << "Failed to create directory for file copy: " << parentDirectory << "!\n";
+                return;
+            }
+        }
+        else
+            copyToPath = copyToPath / targetLocation.filename();
+
+        if (fs::copy_file(targetLocation, copyToPath, std::filesystem::copy_options::overwrite_existing))
+            std::cout << "Copied target to \"" << copyToPath.string() << "\"\n";
+        else
+            std::cerr << "Failed to copy target to \"" << copyToPath.string() << "\"!\n";
     }
 
     bool Link(const ProjectContext& context, const CompilerResult& compilerResult) const override
@@ -88,6 +115,8 @@ public:
             return false;
 
         std::cout << "Linking successful -> \"" << context.m_target_file_path.string() << "\"\n";
+
+        CopyTargetIfRequired(context.m_target_file_path);
         return true;
     }
 

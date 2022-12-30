@@ -47,6 +47,13 @@ const CommandLineOption* const OPTION_FORCE_LINKING =
     .WithDescription("Forces the linker to produce new target regardless whether it is outdated or not.")
     .Build();
 
+const CommandLineOption* const OPTION_COPY_TO =
+    CommandLineOption::Builder::Create()
+    .WithLongName("copy-to")
+    .WithDescription("Copies the newly linked target to the specified location.")
+    .WithParameter("copyToPath")
+    .Build();
+
 const CommandLineOption* const COMMAND_LINE_OPTIONS[]
 {
     OPTION_HELP,
@@ -54,7 +61,8 @@ const CommandLineOption* const COMMAND_LINE_OPTIONS[]
     OPTION_DIST_FOLDER,
     OPTION_OBJ_FOLDER,
     OPTION_RECOMPILE,
-    OPTION_FORCE_LINKING
+    OPTION_FORCE_LINKING,
+    OPTION_COPY_TO
 };
 
 LRCompilerArgs::LRCompilerArgs()
@@ -114,6 +122,10 @@ bool LRCompilerArgs::ParseArgs(const int argc, const char** argv)
     // --obj
     if (m_argument_parser.IsOptionSpecified(OPTION_OBJ_FOLDER))
         m_obj_folder = m_argument_parser.GetValueForOption(OPTION_OBJ_FOLDER);
+
+    // --copy-to
+    if (m_argument_parser.IsOptionSpecified(OPTION_COPY_TO))
+        m_copy_to = m_argument_parser.GetValueForOption(OPTION_COPY_TO);
 
     // --recompile
     m_recompile = m_argument_parser.IsOptionSpecified(OPTION_RECOMPILE);
