@@ -56,10 +56,12 @@ namespace obj
 
         [[nodiscard]] bool HasUv() const;
         [[nodiscard]] bool HasNormals() const;
+        [[nodiscard]] bool HasGroup() const;
 
         int m_vertex_index[3];
         int m_uv_index[3];
         int m_normal_index[3];
+        int m_group;
     };
 
     class MtlMaterial
@@ -82,6 +84,7 @@ namespace obj
         std::vector<ObjNormal> m_normals;
         std::vector<ObjUv> m_uvs;
         std::vector<ObjFace> m_faces;
+        std::vector<std::string> m_groups;
 
         ObjObject();
         ObjObject(std::string name, int materialIndex);

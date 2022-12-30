@@ -117,28 +117,32 @@ namespace obj
     ObjFace::ObjFace()
         : m_vertex_index{-1, -1, -1},
           m_uv_index{-1, -1, -1},
-          m_normal_index{-1, -1, -1}
+          m_normal_index{-1, -1, -1},
+          m_group(-1)
     {
     }
 
     ObjFace::ObjFace(const int vertex0, const int vertex1, const int vertex2)
         : m_vertex_index{vertex0, vertex1, vertex2},
           m_uv_index{-1, -1, -1},
-          m_normal_index{-1, -1, -1}
+          m_normal_index{-1, -1, -1},
+          m_group(-1)
     {
     }
 
     ObjFace::ObjFace(const int vertex0, const int uv0, const int vertex1, const int uv1, const int vertex2, const int uv2)
         : m_vertex_index{vertex0, vertex1, vertex2},
           m_uv_index{uv0, uv1, uv2},
-          m_normal_index{-1, -1, -1}
+          m_normal_index{-1, -1, -1},
+          m_group(-1)
     {
     }
 
     ObjFace::ObjFace(const int vertex0, const int uv0, const int normal0, const int vertex1, const int uv1, const int normal1, const int vertex2, const int uv2, const int normal2)
         : m_vertex_index{vertex0, vertex1, vertex2},
           m_uv_index{uv0, uv1, uv2},
-          m_normal_index{normal0, normal1, normal2}
+          m_normal_index{normal0, normal1, normal2},
+          m_group(-1)
     {
     }
 
@@ -150,6 +154,11 @@ namespace obj
     bool ObjFace::HasNormals() const
     {
         return m_normal_index[0] >= 0 && m_normal_index[1] >= 0 && m_normal_index[2] >= 0;
+    }
+
+    bool ObjFace::HasGroup() const
+    {
+        return m_group >= 0;
     }
 
     ObjObject::ObjObject()
