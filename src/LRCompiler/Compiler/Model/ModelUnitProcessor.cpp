@@ -10,6 +10,8 @@
 #include "Asset/Gdb/GdbStructReader.h"
 #include "Asset/Gdb/GdbStructWriter.h"
 #include "Asset/Gdb/GdbTextReader.h"
+#include "Export/Obj/ObjReader.h"
+#include "Export/Obj/ObjToGdbConverter.h"
 
 namespace fs = std::filesystem;
 using namespace nlohmann;
@@ -41,14 +43,14 @@ public:
     [[nodiscard]] bool ExamineInputsAndOutputs(const ProjectContext& context, const std::filesystem::path& file, UnitProcessorInputsAndOutputs& io) override
     {
         const auto relativeFilePath = fs::relative(file, context.m_data_path);
-        m_out_path = (context.m_obj_path / relativeFilePath).replace_extension(".gdb_bin");
+        m_out_path = (context.m_obj_path / relativeFilePath).replace_extension().replace_extension(".gdb_bin");
 
         if (!ParseAsset(file))
             return false;
 
         io.AddInput(file);
         io.AddInput(m_model_file);
-        io.AddOutput(m_out_path, jam::JamFilePath(relativeFilePath.string()));
+        io.AddOutput(m_out_path, jam::JamFilePath(fs::path(relativeFilePath).replace_extension().replace_extension(".gdb").string()));
 
         return true;
     }
@@ -218,17 +220,29 @@ private:
         }
         catch (std::exception& e)
         {
-            std::cerr << "Failed to read model: " << file << "!\n";
+            std::cerr << "Failed to read model: " << e.what() << "\n";
             return nullptr;
         }
 
         return model;
     }
 
-    std::unique_ptr<gdb::Model> LoadAndConvertFromObj(std::ifstream& in, const fs::path& file)
+    std::unique_ptr<gdb::Model> LoadAndConvertFromObj(std::ifstream& in, const fs::path& file) const
     {
-        // TODO
-        return nullptr;
+        const auto reader = obj::ObjReader::Create(in);
+        const auto obj = reader->ReadModel();
+        if (!obj)
+        {
+            std::cerr << "Failed to read model: " << file << "!\n";
+            return nullptr;
+        }
+
+        auto gdb = std::make_unique<gdb::Model>();
+
+        const auto converter = obj::IObjToGdbConverter::Create(*gdb, *obj, reader->HasColors());
+        converter->Convert();
+
+        return gdb;
     }
 
     void ApplyModelValuesToGdb(gdb::Model& model) const
