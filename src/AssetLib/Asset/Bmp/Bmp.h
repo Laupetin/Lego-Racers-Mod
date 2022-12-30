@@ -12,6 +12,7 @@ namespace bmp
     constexpr auto BMP_BI_JPEG = 4L;
     constexpr auto BMP_BI_PNG = 5L;
 
+#pragma pack(push, 2)
     struct BitmapFileHeader
     {
         uint16_t bfType;
@@ -20,6 +21,9 @@ namespace bmp
         uint16_t bfReserved2;
         uint32_t bfOffBits;
     };
+#pragma pack(pop)
+
+    static_assert(sizeof(BitmapFileHeader) == 14u);
 
     struct BitmapInfoHeader
     {
@@ -36,6 +40,8 @@ namespace bmp
         uint32_t biClrImportant;
     };
 
+    static_assert(sizeof(BitmapInfoHeader) == 40u);
+
     struct BitmapRgbQuad
     {
         uint8_t rgbBlue;
@@ -43,4 +49,6 @@ namespace bmp
         uint8_t rgbRed;
         uint8_t rgbReserved;
     };
+
+    static_assert(sizeof(BitmapRgbQuad) == 4u);
 }
