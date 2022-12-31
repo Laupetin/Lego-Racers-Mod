@@ -94,8 +94,8 @@ public:
   virtual void enterKeyword30(GdbParser::Keyword30Context *ctx) = 0;
   virtual void exitKeyword30(GdbParser::Keyword30Context *ctx) = 0;
 
-  virtual void enterKeyword32(GdbParser::Keyword32Context *ctx) = 0;
-  virtual void exitKeyword32(GdbParser::Keyword32Context *ctx) = 0;
+  virtual void enterMetaBone(GdbParser::MetaBoneContext *ctx) = 0;
+  virtual void exitMetaBone(GdbParser::MetaBoneContext *ctx) = 0;
 
   virtual void enterMetaObject(GdbParser::MetaObjectContext *ctx) = 0;
   virtual void exitMetaObject(GdbParser::MetaObjectContext *ctx) = 0;

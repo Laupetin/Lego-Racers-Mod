@@ -26,6 +26,39 @@ namespace obj
         REFERENCEABLE_AT_BACK
     };
 
+    class BoneIndexSupplier
+    {
+    public:
+        void SetBoneIndexForGroup(std::string groupName, const int boneIndex)
+        {
+            m_specified_bone_indices.emplace(std::move(groupName), boneIndex);
+        }
+
+        void NextObject(const ObjObject& object)
+        {
+            m_bone_index_by_group_index = std::vector<int>(object.m_groups.size());
+
+            for (auto i = 0u; i < object.m_groups.size(); i++)
+            {
+                const auto specifiedBoneIndex = m_specified_bone_indices.find(object.m_groups[i]);
+                m_bone_index_by_group_index[i] = specifiedBoneIndex != m_specified_bone_indices.end() ? specifiedBoneIndex->second : -1;
+            }
+        }
+
+        [[nodiscard]] int BoneIndexForGroup(const int groupIndex) const
+        {
+            if (groupIndex < 0)
+                return -1;
+
+            assert(static_cast<unsigned>(groupIndex) < m_bone_index_by_group_index.size());
+            return m_bone_index_by_group_index[groupIndex];
+        }
+
+    private:
+        std::vector<int> m_bone_index_by_group_index;
+        std::unordered_map<std::string, int> m_specified_bone_indices;
+    };
+
     class PendingGdbVertex
     {
     public:
@@ -309,9 +342,35 @@ namespace obj
     public:
         static constexpr auto MAX_FACE_COUNT = 255u;
 
+        PendingGdbFaceSelector()
+            : m_bone_index(-1),
+              m_previous_bone_index(-1)
+        {
+        }
+
+        [[nodiscard]] int GetBoneIndex() const
+        {
+            return m_bone_index;
+        }
+
+        void SetBoneIndex(const int boneIndex)
+        {
+            m_bone_index = boneIndex;
+        }
+
+        void SetPreviousBoneIndex(const int previousBoneIndex)
+        {
+            m_previous_bone_index = previousBoneIndex;
+        }
+
         void AddFace(const size_t index0, const size_t index1, const size_t index2)
         {
             m_faces.emplace_back(index0, index1, index2);
+        }
+
+        [[nodiscard]] bool HasAnyFaces() const
+        {
+            return !m_faces.empty();
         }
 
         [[nodiscard]] size_t GetRemainingCapacity() const
@@ -333,11 +392,16 @@ namespace obj
                 );
             }
 
+            if (m_previous_bone_index != m_bone_index)
+                gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_BONE, m_bone_index);
+
             gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_FACES, static_cast<int>(gdbFaceOffset), static_cast<int>(m_faces.size()));
         }
 
     private:
         std::vector<PendingGdbFace> m_faces;
+        int m_bone_index;
+        int m_previous_bone_index;
     };
 
     class ObjToGdbConverterImpl final : public IObjToGdbConverter
@@ -351,12 +415,18 @@ namespace obj
         {
         }
 
+        void SetBoneIndexForGroup(std::string groupName, const int boneIndex) override
+        {
+            m_bone_index_supplier.SetBoneIndexForGroup(std::move(groupName), boneIndex);
+        }
+
         void Convert() override
         {
             ConvertMaterials();
 
             for (const auto& object : m_obj.m_objects)
             {
+                m_bone_index_supplier.NextObject(object);
                 ConvertObject(object);
             }
 
@@ -418,9 +488,16 @@ namespace obj
 
             for (const auto& face : object.m_faces)
             {
-                if (currentFaceSelector.GetRemainingCapacity() <= 0)
+                const auto faceBoneIndex = m_bone_index_supplier.BoneIndexForGroup(face.m_group);
+                const auto outdatedBoneIndex = currentFaceSelector.GetBoneIndex() != faceBoneIndex;
+                if (currentFaceSelector.GetRemainingCapacity() <= 0 || (outdatedBoneIndex && currentFaceSelector.HasAnyFaces()))
                 {
                     AdvanceSelectors(previousVertexSelector, currentVertexSelector, previousFaceSelector, currentFaceSelector);
+                    currentFaceSelector.SetBoneIndex(faceBoneIndex);
+                }
+                else if (outdatedBoneIndex)
+                {
+                    currentFaceSelector.SetBoneIndex(faceBoneIndex);
                 }
 
                 const gdb::Vertex gdbVertices[3]
@@ -469,6 +546,7 @@ namespace obj
             {
                 FinishSelector(previousVertexSelector, previousFaceSelector);
                 currentVertexSelector.SetPreviousSortMode(previousVertexSelector.GetRequiredSortMode());
+                currentFaceSelector.SetPreviousBoneIndex(previousFaceSelector.GetBoneIndex());
             }
 
             if (currentVertexSelector.HasData())
@@ -549,6 +627,7 @@ namespace obj
         {
             FinishSelector(previousVertexSelector, previousFaceSelector);
             currentVertexSelector.SetPreviousSortMode(previousVertexSelector.GetRequiredSortMode());
+            currentFaceSelector.SetPreviousBoneIndex(previousFaceSelector.GetBoneIndex());
 
             previousVertexSelector = std::move(currentVertexSelector);
             previousFaceSelector = std::move(currentFaceSelector);
@@ -608,6 +687,7 @@ namespace obj
         bool m_has_colors;
         gdb::Model& m_gdb;
         const ObjModel& m_obj;
+        BoneIndexSupplier m_bone_index_supplier;
     };
 }
 

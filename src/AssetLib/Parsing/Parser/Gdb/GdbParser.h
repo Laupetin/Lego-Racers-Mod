@@ -15,7 +15,7 @@ public:
   enum {
     T__0 = 1, T__1 = 2, Materials = 3, Scale = 4, Vertices = 5, Faces = 6, 
     Meta = 7, Object = 8, Vertex = 9, Uv = 10, Color = 11, Normal = 12, 
-    Texture = 13, Face = 14, Keyword2F = 15, Keyword30 = 16, Keyword32 = 17, 
+    Texture = 13, Face = 14, Keyword2F = 15, Keyword30 = 16, Bone = 17, 
     IntegerConstant = 18, FloatingConstant = 19, DigitSequence = 20, StringLiteral = 21, 
     Whitespace = 22, Newline = 23, BlockComment = 24, LineComment = 25
   };
@@ -28,7 +28,7 @@ public:
     RuleVertexColor = 14, RuleVertexNormal = 15, RuleFaceSection = 16, RuleFaceList = 17, 
     RuleFace = 18, RuleMetaSection = 19, RuleMetaList = 20, RuleMeta = 21, 
     RuleMetaVertices = 22, RuleMetaFaces = 23, RuleKeyword2F = 24, RuleKeyword30 = 25, 
-    RuleKeyword32 = 26, RuleMetaObject = 27, RuleFloatOrIntConstant = 28
+    RuleMetaBone = 26, RuleMetaObject = 27, RuleFloatOrIntConstant = 28
   };
 
   explicit GdbParser(antlr4::TokenStream *input);
@@ -74,7 +74,7 @@ public:
   class MetaFacesContext;
   class Keyword2FContext;
   class Keyword30Context;
-  class Keyword32Context;
+  class MetaBoneContext;
   class MetaObjectContext;
   class FloatOrIntConstantContext; 
 
@@ -393,7 +393,7 @@ public:
     MetaFacesContext *metaFaces();
     Keyword2FContext *keyword2F();
     Keyword30Context *keyword30();
-    Keyword32Context *keyword32();
+    MetaBoneContext *metaBone();
     MetaObjectContext *metaObject();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -460,11 +460,11 @@ public:
 
   Keyword30Context* keyword30();
 
-  class  Keyword32Context : public antlr4::ParserRuleContext {
+  class  MetaBoneContext : public antlr4::ParserRuleContext {
   public:
-    Keyword32Context(antlr4::ParserRuleContext *parent, size_t invokingState);
+    MetaBoneContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *Keyword32();
+    antlr4::tree::TerminalNode *Bone();
     antlr4::tree::TerminalNode *IntegerConstant();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -472,7 +472,7 @@ public:
    
   };
 
-  Keyword32Context* keyword32();
+  MetaBoneContext* metaBone();
 
   class  MetaObjectContext : public antlr4::ParserRuleContext {
   public:

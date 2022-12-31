@@ -96,8 +96,8 @@ public:
   virtual void enterKeyword30(GdbParser::Keyword30Context * /*ctx*/) override { }
   virtual void exitKeyword30(GdbParser::Keyword30Context * /*ctx*/) override { }
 
-  virtual void enterKeyword32(GdbParser::Keyword32Context * /*ctx*/) override { }
-  virtual void exitKeyword32(GdbParser::Keyword32Context * /*ctx*/) override { }
+  virtual void enterMetaBone(GdbParser::MetaBoneContext * /*ctx*/) override { }
+  virtual void exitMetaBone(GdbParser::MetaBoneContext * /*ctx*/) override { }
 
   virtual void enterMetaObject(GdbParser::MetaObjectContext * /*ctx*/) override { }
   virtual void exitMetaObject(GdbParser::MetaObjectContext * /*ctx*/) override { }

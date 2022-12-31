@@ -15,7 +15,7 @@ public:
   enum {
     T__0 = 1, T__1 = 2, Materials = 3, Scale = 4, Vertices = 5, Faces = 6, 
     Meta = 7, Object = 8, Vertex = 9, Uv = 10, Color = 11, Normal = 12, 
-    Texture = 13, Face = 14, Keyword2F = 15, Keyword30 = 16, Keyword32 = 17, 
+    Texture = 13, Face = 14, Keyword2F = 15, Keyword30 = 16, Bone = 17, 
     IntegerConstant = 18, FloatingConstant = 19, DigitSequence = 20, StringLiteral = 21, 
     Whitespace = 22, Newline = 23, BlockComment = 24, LineComment = 25
   };

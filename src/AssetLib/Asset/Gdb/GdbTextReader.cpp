@@ -155,11 +155,11 @@ namespace gdb
             m_emitter.EmitMetaKeyword30();
         }
 
-        void exitKeyword32(GdbParser::Keyword32Context* ctx) override
+        void exitMetaBone(GdbParser::MetaBoneContext* ctx) override
         {
-            const auto value0 = GetInt(ctx->IntegerConstant());
+            const auto value0 = GetUnsignedInt(ctx->IntegerConstant());
 
-            m_emitter.EmitMetaKeyword32(value0);
+            m_emitter.EmitMetaBone(value0);
         }
 
         void exitMetaObject(GdbParser::MetaObjectContext* ctx) override
@@ -257,7 +257,8 @@ namespace gdb
 
     class CustomGdbErrorListener final : public antlr4::BaseErrorListener
     {
-        void syntaxError(antlr4::Recognizer* recognizer, antlr4::Token* offendingSymbol, size_t line, size_t charPositionInLine, const std::string& msg, std::exception_ptr e) override
+        void syntaxError(antlr4::Recognizer* recognizer, antlr4::Token* offendingSymbol, size_t line, size_t charPositionInLine, const std::string& msg,
+                         std::exception_ptr e) override
         {
             std::ostringstream ss;
             ss << "Parsing GDB failed: L" << line << ':' << charPositionInLine << " " << msg;

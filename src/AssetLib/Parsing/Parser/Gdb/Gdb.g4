@@ -98,7 +98,7 @@ meta
     |   metaFaces
     |   keyword2F
     |   keyword30
-    |   keyword32
+    |   metaBone
     |   metaObject
     ;
 
@@ -118,8 +118,8 @@ keyword30
     :   Keyword30
     ;
 
-keyword32
-    :  Keyword32 IntegerConstant
+metaBone
+    :  Bone IntegerConstant
     ;
 
 metaObject
@@ -140,4 +140,4 @@ Texture: 'texture';
 Face: 'f';
 Keyword2F: 'keyword2F';
 Keyword30: 'keyword30';
-Keyword32: 'keyword32';
+Bone: 'bone';

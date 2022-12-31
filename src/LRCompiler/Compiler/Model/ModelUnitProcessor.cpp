@@ -20,6 +20,7 @@ namespace model
 {
     static constexpr auto PROPERTY_MODEL_FILE = "modelFile";
     static constexpr auto PROPERTY_SCALE = "scale";
+    static constexpr auto PROPERTY_BONES = "bones";
 
     enum class SupportedModelFormat
     {
@@ -27,6 +28,24 @@ namespace model
 
         OBJ,
         GDB
+    };
+
+    class SpecifiedBone
+    {
+    public:
+        std::string m_group_name;
+        int m_bone_index;
+
+        SpecifiedBone()
+            : m_bone_index(-1)
+        {
+        }
+
+        SpecifiedBone(std::string groupName, const int boneIndex)
+            : m_group_name(std::move(groupName)),
+              m_bone_index(boneIndex)
+        {
+        }
     };
 }
 
@@ -132,7 +151,8 @@ private:
         }
 
         return ParseModelFile(root, file)
-            && ParseScale(root, file);
+            && ParseScale(root, file)
+            && ParseBones(root, file);
     }
 
     bool ParseModelFile(const json& root, const std::filesystem::path& file)
@@ -143,7 +163,7 @@ private:
             return false;
         }
 
-        const auto& modelFile = root["modelFile"];
+        const auto& modelFile = root[model::PROPERTY_MODEL_FILE];
         if (!modelFile.is_string())
         {
             std::cerr << "Model asset modelFile property must be a string: " << file << "!\n";
@@ -196,7 +216,7 @@ private:
             return true;
         }
 
-        const auto& scale = root["scale"];
+        const auto& scale = root[model::PROPERTY_SCALE];
         if (!scale.is_number_float())
         {
             std::cerr << "Model asset scale property must be floating point: " << file << "!\n";
@@ -205,6 +225,39 @@ private:
 
         m_scale = scale.get<float>();
         m_scale_specified = true;
+
+        return true;
+    }
+
+    bool ParseBones(const json& root, const std::filesystem::path& file)
+    {
+        if (!root.contains(model::PROPERTY_BONES))
+            return true;
+
+        const auto& bones = root[model::PROPERTY_BONES];
+        if (!bones.is_object())
+        {
+            std::cerr << "Model asset bones property must be object: " << file << "!\n";
+            return false;
+        }
+
+        for (const auto& item : bones.items())
+        {
+            if (!item.value().is_number_integer())
+            {
+                std::cerr << "Model asset bones property must have string/int key value pairs: " << file << "!\n";
+                return false;
+            }
+
+            const auto value = item.value().get<int>();
+            if (value < 0)
+            {
+                std::cerr << "Model asset bones property must have positive bone indices: " << file << "!\n";
+                return false;
+            }
+
+            m_specified_bones.emplace_back(item.key(), value);
+        }
 
         return true;
     }
@@ -240,6 +293,10 @@ private:
         auto gdb = std::make_unique<gdb::Model>();
 
         const auto converter = obj::IObjToGdbConverter::Create(*gdb, *obj, reader->HasColors());
+
+        for (const auto& specifiedBone : m_specified_bones)
+            converter->SetBoneIndexForGroup(specifiedBone.m_group_name, specifiedBone.m_bone_index);
+
         converter->Convert();
 
         return gdb;
@@ -256,6 +313,7 @@ private:
     model::SupportedModelFormat m_model_format;
     float m_scale;
     bool m_scale_specified;
+    std::vector<model::SpecifiedBone> m_specified_bones;
 };
 
 std::unique_ptr<IUnitProcessor> ModelUnitProcessorFactory::CreateHandler(const ProjectContext& context, const std::filesystem::path& file) const

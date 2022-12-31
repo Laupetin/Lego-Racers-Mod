@@ -16,7 +16,7 @@ null
 'f'
 'keyword2F'
 'keyword30'
-'keyword32'
+'bone'
 null
 null
 null
@@ -44,7 +44,7 @@ Texture
 Face
 Keyword2F
 Keyword30
-Keyword32
+Bone
 IntegerConstant
 FloatingConstant
 DigitSequence
@@ -81,7 +81,7 @@ metaVertices
 metaFaces
 keyword2F
 keyword30
-keyword32
+metaBone
 metaObject
 floatOrIntConstant
 

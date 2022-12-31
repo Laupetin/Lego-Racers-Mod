@@ -19,6 +19,7 @@ namespace obj
 
         static std::unique_ptr<IObjToGdbConverter> Create(gdb::Model& gdb, const ObjModel& obj, bool hasColors);
 
+        virtual void SetBoneIndexForGroup(std::string groupName, int boneIndex) = 0;
         virtual void Convert() = 0;
     };
 }
