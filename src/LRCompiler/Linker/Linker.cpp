@@ -61,30 +61,19 @@ public:
     {
     }
 
-    void CopyTargetIfRequired(const fs::path& targetLocation) const
+    static bool WriteJamFile(const ProjectContext& context, LinkerData& linkerData)
     {
-        if (m_settings.m_copy_to.empty())
-            return;
-
-        fs::path copyToPath(m_settings.m_copy_to);
-
-        if (!fs::is_directory(copyToPath))
+        std::ofstream stream(context.m_target_file_path, std::ios::out | std::ios::binary);
+        if (!stream.is_open())
         {
-            const auto parentDirectory = fs::absolute(copyToPath).parent_path();
-
-            if (!fs::is_directory(parentDirectory) && !fs::create_directories(parentDirectory))
-            {
-                std::cerr << "Failed to create directory for file copy: " << parentDirectory << "!\n";
-                return;
-            }
+            std::cerr << "Failed to open output file: " << context.m_target_file_path << "!\n";
+            return false;
         }
-        else
-            copyToPath = copyToPath / targetLocation.filename();
 
-        if (fs::copy_file(targetLocation, copyToPath, std::filesystem::copy_options::overwrite_existing))
-            std::cout << "Copied target to \"" << copyToPath.string() << "\"\n";
-        else
-            std::cerr << "Failed to copy target to \"" << copyToPath.string() << "\"!\n";
+        const auto writer = jam::IJamFileWriter::Create(stream);
+        assert(writer);
+
+        return writer->Write(linkerData.m_directory_tree, linkerData);
     }
 
     bool Link(const ProjectContext& context, const CompilerResult& compilerResult) const override
@@ -101,17 +90,7 @@ public:
         if (!CreateDirectoryForTargetFile(context.m_target_file_path))
             return false;
 
-        std::ofstream stream(context.m_target_file_path, std::ios::out | std::ios::binary);
-        if (!stream.is_open())
-        {
-            std::cerr << "Failed to open output file: " << context.m_target_file_path << "!\n";
-            return false;
-        }
-
-        const auto writer = jam::IJamFileWriter::Create(stream);
-        assert(writer);
-
-        if (!writer->Write(linkerData->m_directory_tree, *linkerData))
+        if (!WriteJamFile(context, *linkerData))
             return false;
 
         std::cout << "Linking successful -> \"" << context.m_target_file_path.string() << "\"\n";
@@ -158,10 +137,36 @@ private:
         return data;
     }
 
+    void CopyTargetIfRequired(const fs::path& targetLocation) const
+    {
+        if (m_settings.m_copy_to.empty())
+            return;
+
+        fs::path copyToPath(m_settings.m_copy_to);
+
+        if (!fs::is_directory(copyToPath))
+        {
+            const auto parentDirectory = fs::absolute(copyToPath).parent_path();
+
+            if (!fs::is_directory(parentDirectory) && !fs::create_directories(parentDirectory))
+            {
+                std::cerr << "Failed to create directory for file copy: " << parentDirectory << "!\n";
+                return;
+            }
+        }
+        else
+            copyToPath = copyToPath / targetLocation.filename();
+
+        if (fs::copy_file(targetLocation, copyToPath, std::filesystem::copy_options::overwrite_existing))
+            std::cout << "Copied target to \"" << copyToPath.string() << "\"\n";
+        else
+            std::cerr << "Failed to copy target to \"" << copyToPath.string() << "\"!\n";
+    }
+
     LinkerSettings m_settings;
 };
 
 std::unique_ptr<ILinker> ILinker::Default(LinkerSettings settings)
 {
-    return std::make_unique<LinkerImpl>(settings);
+    return std::make_unique<LinkerImpl>(std::move(settings));
 }
