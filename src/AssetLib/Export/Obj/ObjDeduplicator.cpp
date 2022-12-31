@@ -13,7 +13,7 @@ size_t Deduplicator::IndexForVertex(ObjVertex vertex)
 {
     const auto existingVertex = m_previous_vertices.find(vertex);
 
-    if(existingVertex != m_previous_vertices.end())
+    if (existingVertex != m_previous_vertices.end())
     {
         return existingVertex->second;
     }
@@ -60,6 +60,7 @@ size_t Deduplicator::IndexForNormal(ObjNormal normal)
 ObjObject Deduplicator::Deduplicate()
 {
     m_deduplicated_object = ObjObject(m_object.m_name, m_object.m_material_index);
+    m_deduplicated_object.m_groups = m_object.m_groups;
 
     for (const auto& face : m_object.m_faces)
     {
@@ -91,21 +92,24 @@ ObjObject Deduplicator::Deduplicate()
                 };
 
                 m_deduplicated_object.m_faces.emplace_back(indicesForVertices[0], indicesForUvs[0], indicesForNormals[0],
-                                               indicesForVertices[1], indicesForUvs[1], indicesForNormals[1],
-                                               indicesForVertices[2], indicesForUvs[2], indicesForNormals[2]);
+                                                           indicesForVertices[1], indicesForUvs[1], indicesForNormals[1],
+                                                           indicesForVertices[2], indicesForUvs[2], indicesForNormals[2],
+                                                           face.m_group);
             }
             else
             {
                 m_deduplicated_object.m_faces.emplace_back(indicesForVertices[0], indicesForUvs[0],
-                                               indicesForVertices[1], indicesForUvs[1],
-                                               indicesForVertices[2], indicesForUvs[2]);
+                                                           indicesForVertices[1], indicesForUvs[1],
+                                                           indicesForVertices[2], indicesForUvs[2],
+                                                           face.m_group);
             }
         }
         else
         {
             m_deduplicated_object.m_faces.emplace_back(indicesForVertices[0],
-                                           indicesForVertices[1],
-                                           indicesForVertices[2]);
+                                                       indicesForVertices[1],
+                                                       indicesForVertices[2],
+                                                       face.m_group);
         }
     }
 

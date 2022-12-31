@@ -10,6 +10,7 @@
 #include "Asset/Gdb/GdbStructReader.h"
 #include "Asset/Gdb/GdbStructWriter.h"
 #include "Asset/Gdb/GdbTextReader.h"
+#include "Asset/Gdb/GdbTextWriter.h"
 #include "Export/Obj/ObjReader.h"
 #include "Export/Obj/ObjToGdbConverter.h"
 
@@ -117,6 +118,7 @@ public:
 
         try
         {
+            //const auto writer = gdb::GdbTextWriter::Create(out);
             const auto writer = gdb::GdbBinaryWriter::Create(out);
             gdb::GdbStructReader::Read(*gdbModel, *writer);
         }

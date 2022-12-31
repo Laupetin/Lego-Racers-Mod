@@ -1,5 +1,7 @@
 #include "ObjWriter.h"
 
+#include <cassert>
+
 using namespace obj;
 
 ObjWriter::ObjWriter(const ObjModel& model)
@@ -62,10 +64,18 @@ void ObjWriter::WriteObj(std::ostream& out, const std::string& matName) const
         if (object.m_material_index >= 0 && static_cast<unsigned>(object.m_material_index) < m_model.m_materials.size())
             out << "usemtl " << m_model.m_materials[object.m_material_index].m_material_name << "\n";
 
+        int currentGroup = -1;
         for (const auto& f : object.m_faces)
         {
             const auto faceHasNormal = m_include_normals && f.HasNormals();
             const auto faceHasUv = f.HasUv();
+
+            if (f.m_group != currentGroup)
+            {
+                assert(object.m_groups.size() >= f.m_group);
+                out << "g " << object.m_groups[f.m_group] << "\n";
+                currentGroup = f.m_group;
+            }
 
             if (faceHasNormal && faceHasUv)
             {

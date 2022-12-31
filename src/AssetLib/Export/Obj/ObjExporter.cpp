@@ -138,7 +138,7 @@ namespace obj
     }
 
     void AddFacesWithPosition(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector, const gdb::VertexSelector& previousVertexSelector,
-                              const gdb::FaceSelector& currentFaceSelector)
+                              const gdb::FaceSelector& currentFaceSelector, const int currentGroup)
     {
         const auto vertexSelectorObjOffset = object.m_vertices.size() - vertexSelector.m_vertex_count;
         const auto previousVertexSelectorObjOffset = vertexSelectorObjOffset - previousVertexSelector.m_vertex_count;
@@ -156,12 +156,12 @@ namespace obj
                 continue;
             }
 
-            object.m_faces.emplace_back(absoluteVertices[0], absoluteVertices[1], absoluteVertices[2]);
+            object.m_faces.emplace_back(absoluteVertices[0], absoluteVertices[1], absoluteVertices[2], currentGroup);
         }
     }
 
     void AddFacesWithPositionUv(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector, const gdb::VertexSelector& previousVertexSelector,
-                                const gdb::FaceSelector& currentFaceSelector)
+                                const gdb::FaceSelector& currentFaceSelector, const int currentGroup)
     {
         const auto vertexSelectorObjOffset = object.m_vertices.size() - vertexSelector.m_vertex_count;
         const auto previousVertexSelectorObjOffset = vertexSelectorObjOffset - previousVertexSelector.m_vertex_count;
@@ -181,12 +181,13 @@ namespace obj
 
             object.m_faces.emplace_back(absoluteVertices[0], absoluteVertices[0],
                                         absoluteVertices[1], absoluteVertices[1],
-                                        absoluteVertices[2], absoluteVertices[2]);
+                                        absoluteVertices[2], absoluteVertices[2],
+                                        currentGroup);
         }
     }
 
     void AddFacesWithPositionUvNormal(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector, const gdb::VertexSelector& previousVertexSelector,
-                                      const gdb::FaceSelector& currentFaceSelector)
+                                      const gdb::FaceSelector& currentFaceSelector, const int currentGroup)
     {
         const auto vertexSelectorObjOffset = object.m_vertices.size() - vertexSelector.m_vertex_count;
         const auto previousVertexSelectorObjOffset = vertexSelectorObjOffset - previousVertexSelector.m_vertex_count;
@@ -206,26 +207,27 @@ namespace obj
 
             object.m_faces.emplace_back(absoluteVertices[0], absoluteVertices[0], absoluteVertices[0],
                                         absoluteVertices[1], absoluteVertices[1], absoluteVertices[1],
-                                        absoluteVertices[2], absoluteVertices[2], absoluteVertices[2]);
+                                        absoluteVertices[2], absoluteVertices[2], absoluteVertices[2],
+                                        currentGroup);
         }
     }
 
     void AddFacesToObject(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector, const gdb::VertexSelector& previousVertexSelector,
-                          const gdb::FaceSelector& currentFaceSelector)
+                          const gdb::FaceSelector& currentFaceSelector, const int currentGroup)
     {
         switch (gdbModel.m_vertex_format)
         {
         case gdb::VertexFormat::POSITION:
-            AddFacesWithPosition(gdbModel, object, vertexSelector, previousVertexSelector, currentFaceSelector);
+            AddFacesWithPosition(gdbModel, object, vertexSelector, previousVertexSelector, currentFaceSelector, currentGroup);
             break;
 
         case gdb::VertexFormat::POSITION_UV:
         case gdb::VertexFormat::POSITION_UV_COLOR:
-            AddFacesWithPositionUv(gdbModel, object, vertexSelector, previousVertexSelector, currentFaceSelector);
+            AddFacesWithPositionUv(gdbModel, object, vertexSelector, previousVertexSelector, currentFaceSelector, currentGroup);
             break;
 
         case gdb::VertexFormat::POSITION_UV_NORMAL:
-            AddFacesWithPositionUvNormal(gdbModel, object, vertexSelector, previousVertexSelector, currentFaceSelector);
+            AddFacesWithPositionUvNormal(gdbModel, object, vertexSelector, previousVertexSelector, currentFaceSelector, currentGroup);
             break;
 
         default:
@@ -244,6 +246,22 @@ namespace obj
 
         object.m_name = ss.str();
         return object;
+    }
+
+    int GetGroupForBone(ObjObject& object, const int boneIndex)
+    {
+        std::ostringstream groupNameStream;
+        groupNameStream << "Bone" << boneIndex;
+        auto groupName = groupNameStream.str();
+
+        const auto existingGroup = std::find(object.m_groups.begin(), object.m_groups.end(), groupName);
+        if (existingGroup != object.m_groups.end())
+            return existingGroup - object.m_groups.begin();
+
+        const auto newGroupIndex = object.m_groups.size();
+        object.m_groups.emplace_back(std::move(groupName));
+
+        return static_cast<int>(newGroupIndex);
     }
 
     std::unordered_map<std::string, MtlMaterial> ReadMaterialsFromDirectory(const std::string& directory)
@@ -295,6 +313,7 @@ namespace obj
 
         bool hasObject = false;
         ObjObject currentObject;
+        int currentGroup = -1;
         for (const auto& meta : gdbModel.m_meta)
         {
             switch (meta.m_keyword)
@@ -317,6 +336,10 @@ namespace obj
                 }
                 else
                     assert(false);
+                break;
+
+            case gdb::TOKEN_META_BONE:
+                currentGroup = GetGroupForBone(currentObject, meta.m_value0);
                 break;
 
             case gdb::TOKEN_META_VERTICES:
@@ -342,7 +365,7 @@ namespace obj
                 else
                     assert(false);
 
-                AddFacesToObject(gdbModel, currentObject, currentVertexSelector, previousVertexSelector, currentFaceSelector);
+                AddFacesToObject(gdbModel, currentObject, currentVertexSelector, previousVertexSelector, currentFaceSelector, currentGroup);
                 break;
 
             default:

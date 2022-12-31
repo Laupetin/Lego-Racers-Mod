@@ -50,9 +50,9 @@ namespace obj
     {
     public:
         ObjFace();
-        ObjFace(int vertex0, int vertex1, int vertex2);
-        ObjFace(int vertex0, int uv0, int vertex1, int uv1, int vertex2, int uv2);
-        ObjFace(int vertex0, int uv0, int normal0, int vertex1, int uv1, int normal1, int vertex2, int uv2, int normal2);
+        ObjFace(int vertex0, int vertex1, int vertex2, int group);
+        ObjFace(int vertex0, int uv0, int vertex1, int uv1, int vertex2, int uv2, int group);
+        ObjFace(int vertex0, int uv0, int normal0, int vertex1, int uv1, int normal1, int vertex2, int uv2, int normal2, int group);
 
         [[nodiscard]] bool HasUv() const;
         [[nodiscard]] bool HasNormals() const;

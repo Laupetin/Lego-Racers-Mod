@@ -294,28 +294,28 @@ namespace obj
                         ReportError("Face normal out of bounds");
                     }
 
-                    auto& face = m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset, uvIndices[0] - m_object_uv_offset,
-                                                                       normalIndices[0] - m_object_normal_offset,
-                                                                       vertexIndices[1] - m_object_vertex_offset, uvIndices[1] - m_object_uv_offset,
-                                                                       normalIndices[1] - m_object_normal_offset,
-                                                                       vertexIndices[2] - m_object_vertex_offset, uvIndices[2] - m_object_uv_offset,
-                                                                       normalIndices[2] - m_object_normal_offset);
-                    face.m_group = m_current_group;
+                    m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset, uvIndices[0] - m_object_uv_offset,
+                                                          normalIndices[0] - m_object_normal_offset,
+                                                          vertexIndices[1] - m_object_vertex_offset, uvIndices[1] - m_object_uv_offset,
+                                                          normalIndices[1] - m_object_normal_offset,
+                                                          vertexIndices[2] - m_object_vertex_offset, uvIndices[2] - m_object_uv_offset,
+                                                          normalIndices[2] - m_object_normal_offset,
+                                                          m_current_group);
                 }
                 else
                 {
-                    auto& face = m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset, uvIndices[0] - m_object_uv_offset,
-                                                                       vertexIndices[1] - m_object_vertex_offset, uvIndices[1] - m_object_uv_offset,
-                                                                       vertexIndices[2] - m_object_vertex_offset, uvIndices[2] - m_object_uv_offset);
-                    face.m_group = m_current_group;
+                    m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset, uvIndices[0] - m_object_uv_offset,
+                                                          vertexIndices[1] - m_object_vertex_offset, uvIndices[1] - m_object_uv_offset,
+                                                          vertexIndices[2] - m_object_vertex_offset, uvIndices[2] - m_object_uv_offset,
+                                                          m_current_group);
                 }
             }
             else
             {
-                auto& face = m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset,
-                                                                   vertexIndices[1] - m_object_vertex_offset,
-                                                                   vertexIndices[2] - m_object_vertex_offset);
-                face.m_group = m_current_group;
+                m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset,
+                                                      vertexIndices[1] - m_object_vertex_offset,
+                                                      vertexIndices[2] - m_object_vertex_offset,
+                                                      m_current_group);
             }
         }
 

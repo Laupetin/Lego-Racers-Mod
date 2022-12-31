@@ -122,27 +122,28 @@ namespace obj
     {
     }
 
-    ObjFace::ObjFace(const int vertex0, const int vertex1, const int vertex2)
+    ObjFace::ObjFace(const int vertex0, const int vertex1, const int vertex2, const int group)
         : m_vertex_index{vertex0, vertex1, vertex2},
           m_uv_index{-1, -1, -1},
           m_normal_index{-1, -1, -1},
-          m_group(-1)
+          m_group(group)
     {
     }
 
-    ObjFace::ObjFace(const int vertex0, const int uv0, const int vertex1, const int uv1, const int vertex2, const int uv2)
+    ObjFace::ObjFace(const int vertex0, const int uv0, const int vertex1, const int uv1, const int vertex2, const int uv2, const int group)
         : m_vertex_index{vertex0, vertex1, vertex2},
           m_uv_index{uv0, uv1, uv2},
           m_normal_index{-1, -1, -1},
-          m_group(-1)
+          m_group(group)
     {
     }
 
-    ObjFace::ObjFace(const int vertex0, const int uv0, const int normal0, const int vertex1, const int uv1, const int normal1, const int vertex2, const int uv2, const int normal2)
+    ObjFace::ObjFace(const int vertex0, const int uv0, const int normal0, const int vertex1, const int uv1, const int normal1, const int vertex2, const int uv2, const int normal2,
+                     const int group)
         : m_vertex_index{vertex0, vertex1, vertex2},
           m_uv_index{uv0, uv1, uv2},
           m_normal_index{normal0, normal1, normal2},
-          m_group(-1)
+          m_group(group)
     {
     }
 
