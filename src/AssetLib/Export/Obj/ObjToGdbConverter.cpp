@@ -378,6 +378,12 @@ namespace obj
             return MAX_FACE_COUNT - m_faces.size();
         }
 
+        void WriteBoneToGdb(gdb::Model& gdb) const
+        {
+            if (m_previous_bone_index != m_bone_index)
+                gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_BONE, m_bone_index);
+        }
+
         void WriteFacesToGdb(gdb::Model& gdb, const PendingGdbVertexSelector& vertexSelector) const
         {
             const auto gdbFaceOffset = gdb.m_faces.size();
@@ -391,9 +397,6 @@ namespace obj
                     static_cast<unsigned char>(vertexSelector.GetRemappedIndexForVertex(face.GetIndex(2)))
                 );
             }
-
-            if (m_previous_bone_index != m_bone_index)
-                gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_BONE, m_bone_index);
 
             gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_FACES, static_cast<int>(gdbFaceOffset), static_cast<int>(m_faces.size()));
         }
@@ -529,6 +532,7 @@ namespace obj
                     }
 
                     AdvanceSelectors(previousVertexSelector, currentVertexSelector, previousFaceSelector, currentFaceSelector);
+                    currentFaceSelector.SetBoneIndex(faceBoneIndex);
                     AdvanceFoundVertices(vertexAlreadyExists, vertexIsFromPreviousSelector);
                 }
 
@@ -627,13 +631,14 @@ namespace obj
         {
             FinishSelector(previousVertexSelector, previousFaceSelector);
             currentVertexSelector.SetPreviousSortMode(previousVertexSelector.GetRequiredSortMode());
-            currentFaceSelector.SetPreviousBoneIndex(previousFaceSelector.GetBoneIndex());
 
             previousVertexSelector = std::move(currentVertexSelector);
             previousFaceSelector = std::move(currentFaceSelector);
 
             currentVertexSelector = PendingGdbVertexSelector();
             currentFaceSelector = PendingGdbFaceSelector();
+
+            currentFaceSelector.SetPreviousBoneIndex(previousFaceSelector.GetBoneIndex());
         }
 
         void FinishSelector(PendingGdbVertexSelector& vertexSelector, const PendingGdbFaceSelector& faceSelector) const
@@ -642,6 +647,7 @@ namespace obj
                 return;
 
             vertexSelector.ReorderVerticesForBackReferencing();
+            faceSelector.WriteBoneToGdb(m_gdb);
             vertexSelector.WriteVerticesToGdb(m_gdb);
             faceSelector.WriteFacesToGdb(m_gdb, vertexSelector);
         }
