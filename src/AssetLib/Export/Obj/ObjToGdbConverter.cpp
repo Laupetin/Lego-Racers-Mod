@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cassert>
 #include <unordered_map>
+#include <regex>
 #include <vector>
 
 #include "Asset/Gdb/GdbStructReader.h"
@@ -40,8 +41,10 @@ namespace obj
 
             for (auto i = 0u; i < object.m_groups.size(); i++)
             {
-                const auto specifiedBoneIndex = m_specified_bone_indices.find(object.m_groups[i]);
-                m_bone_index_by_group_index[i] = specifiedBoneIndex != m_specified_bone_indices.end() ? specifiedBoneIndex->second : -1;
+                if (!SpecifyBoneIndexByPredefined(object, i) && !SpecifyBoneIndexByBoneName(object, i))
+                {
+                    m_bone_index_by_group_index[i] = -1;
+                }
             }
         }
 
@@ -55,6 +58,32 @@ namespace obj
         }
 
     private:
+        bool SpecifyBoneIndexByPredefined(const ObjObject& object, const unsigned index)
+        {
+            const auto specifiedBoneIndex = m_specified_bone_indices.find(object.m_groups[index]);
+            if (specifiedBoneIndex != m_specified_bone_indices.end())
+            {
+                m_bone_index_by_group_index[index] = specifiedBoneIndex->second;
+                return true;
+            }
+
+            return false;
+        }
+
+        bool SpecifyBoneIndexByBoneName(const ObjObject& object, const unsigned index)
+        {
+            std::smatch match;
+            if (std::regex_match(object.m_groups[index], match, BONE_NAME_REGEX))
+            {
+                const auto numberStr = match[1].str();
+                m_bone_index_by_group_index[index] = strtol(numberStr.c_str(), nullptr, 10);
+                return true;
+            }
+
+            return false;
+        }
+
+        inline static const std::regex BONE_NAME_REGEX = std::regex("^Bone(\\d+)$", std::regex_constants::ECMAScript | std::regex_constants::optimize);
         std::vector<int> m_bone_index_by_group_index;
         std::unordered_map<std::string, int> m_specified_bone_indices;
     };

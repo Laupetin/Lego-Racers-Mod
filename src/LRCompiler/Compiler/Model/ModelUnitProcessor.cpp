@@ -118,7 +118,6 @@ public:
 
         try
         {
-            //const auto writer = gdb::GdbTextWriter::Create(out);
             const auto writer = gdb::GdbBinaryWriter::Create(out);
             gdb::GdbStructReader::Read(*gdbModel, *writer);
         }
