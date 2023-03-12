@@ -79,7 +79,16 @@ private:
     void PrepareFromDirectoryTree(const DirectoryTree& tree)
     {
         std::deque<DirectoryEntry*> scanQueue;
-        scanQueue.emplace_back(tree.RootDirectory().get());
+
+        const auto& rootDir = tree.RootDirectory();
+        if (!rootDir)
+        {
+            static const std::string DEFAULT_DIR = std::string();
+            m_directories.emplace_back(jam_id_t(), DEFAULT_DIR);
+            return;
+        }
+
+        scanQueue.emplace_back(rootDir.get());
 
         m_directories.reserve(tree.DirectoryCount());
         m_files.reserve(tree.FileCount());
