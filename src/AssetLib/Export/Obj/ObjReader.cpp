@@ -36,6 +36,7 @@ namespace obj
         explicit ObjReaderImpl(std::istream& stream)
             : AbstractTextReader(stream),
               m_line(1u),
+              m_current_group(-1),
               m_object_defined(false),
               m_object_vertex_offset(0u),
               m_object_uv_offset(0u),
@@ -75,7 +76,20 @@ namespace obj
             AddCurrentObject();
 
             m_current_object = ObjObject(std::move(name), -1);
+            m_current_group = -1;
             m_object_defined = true;
+        }
+
+        void SetGroup(const std::string& string)
+        {
+            const auto existingGroup = std::find(m_current_object.m_groups.begin(), m_current_object.m_groups.end(), string);
+            if (existingGroup == m_current_object.m_groups.end())
+            {
+                m_current_group = static_cast<int>(m_current_object.m_groups.size());
+                m_current_object.m_groups.emplace_back(string);
+            }
+            else
+                m_current_group = static_cast<int>(existingGroup - m_current_object.m_groups.begin());
         }
 
         void AddCurrentObject()
@@ -174,6 +188,14 @@ namespace obj
 
                     NextObject(objectName);
                 }
+                else if (identifier[0] == 'g' && identifier[1] == '\0')
+                {
+                    std::string groupName;
+                    if (!SkipWhitespaceNoNewline() || !ReadIdentifier(groupName) || !SkipWhitespaceNoNewline() || !ExpectLineEnd())
+                        ReportError("Invalid group");
+
+                    SetGroup(groupName);
+                }
                 else if (identifier == "usemtl")
                 {
                     std::string materialName;
@@ -241,9 +263,12 @@ namespace obj
             if (hasNormals && !hasUvs)
                 ReportError("Does not support faces with normals but without uvs");
 
-            if (static_cast<size_t>(vertexIndices[0]) < m_object_vertex_offset || static_cast<size_t>(vertexIndices[0]) >= m_object_vertex_offset + m_current_object.m_vertices.size()
-                || static_cast<size_t>(vertexIndices[1]) < m_object_vertex_offset || static_cast<size_t>(vertexIndices[1]) >= m_object_vertex_offset + m_current_object.m_vertices.size()
-                || static_cast<size_t>(vertexIndices[2]) < m_object_vertex_offset || static_cast<size_t>(vertexIndices[2]) >= m_object_vertex_offset + m_current_object.m_vertices.size())
+            if (static_cast<size_t>(vertexIndices[0]) < m_object_vertex_offset || static_cast<size_t>(vertexIndices[0])
+                >= m_object_vertex_offset + m_current_object.m_vertices.size()
+                || static_cast<size_t>(vertexIndices[1]) < m_object_vertex_offset || static_cast<size_t>(vertexIndices[1])
+                >= m_object_vertex_offset + m_current_object.m_vertices.size()
+                || static_cast<size_t>(vertexIndices[2]) < m_object_vertex_offset || static_cast<size_t>(vertexIndices[2])
+                >= m_object_vertex_offset + m_current_object.m_vertices.size())
             {
                 ReportError("Face vertex out of bounds");
             }
@@ -259,29 +284,38 @@ namespace obj
 
                 if (hasNormals)
                 {
-                    if (static_cast<size_t>(normalIndices[0]) < m_object_normal_offset || static_cast<size_t>(normalIndices[0]) >= m_object_normal_offset + m_current_object.m_normals.size()
-                        || static_cast<size_t>(normalIndices[1]) < m_object_normal_offset || static_cast<size_t>(normalIndices[1]) >= m_object_normal_offset + m_current_object.m_normals.size()
-                        || static_cast<size_t>(normalIndices[2]) < m_object_normal_offset || static_cast<size_t>(normalIndices[2]) >= m_object_normal_offset + m_current_object.m_normals.size())
+                    if (static_cast<size_t>(normalIndices[0]) < m_object_normal_offset || static_cast<size_t>(normalIndices[0])
+                        >= m_object_normal_offset + m_current_object.m_normals.size()
+                        || static_cast<size_t>(normalIndices[1]) < m_object_normal_offset || static_cast<size_t>(normalIndices[1])
+                        >= m_object_normal_offset + m_current_object.m_normals.size()
+                        || static_cast<size_t>(normalIndices[2]) < m_object_normal_offset || static_cast<size_t>(normalIndices[2])
+                        >= m_object_normal_offset + m_current_object.m_normals.size())
                     {
                         ReportError("Face normal out of bounds");
                     }
 
-                    m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset, uvIndices[0] - m_object_uv_offset, normalIndices[0] - m_object_normal_offset,
-                                                          vertexIndices[1] - m_object_vertex_offset, uvIndices[1] - m_object_uv_offset, normalIndices[1] - m_object_normal_offset,
-                                                          vertexIndices[2] - m_object_vertex_offset, uvIndices[2] - m_object_uv_offset, normalIndices[2] - m_object_normal_offset);
+                    m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset, uvIndices[0] - m_object_uv_offset,
+                                                          normalIndices[0] - m_object_normal_offset,
+                                                          vertexIndices[1] - m_object_vertex_offset, uvIndices[1] - m_object_uv_offset,
+                                                          normalIndices[1] - m_object_normal_offset,
+                                                          vertexIndices[2] - m_object_vertex_offset, uvIndices[2] - m_object_uv_offset,
+                                                          normalIndices[2] - m_object_normal_offset,
+                                                          m_current_group);
                 }
                 else
                 {
                     m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset, uvIndices[0] - m_object_uv_offset,
                                                           vertexIndices[1] - m_object_vertex_offset, uvIndices[1] - m_object_uv_offset,
-                                                          vertexIndices[2] - m_object_vertex_offset, uvIndices[2] - m_object_uv_offset);
+                                                          vertexIndices[2] - m_object_vertex_offset, uvIndices[2] - m_object_uv_offset,
+                                                          m_current_group);
                 }
             }
             else
             {
                 m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset,
                                                       vertexIndices[1] - m_object_vertex_offset,
-                                                      vertexIndices[2] - m_object_vertex_offset);
+                                                      vertexIndices[2] - m_object_vertex_offset,
+                                                      m_current_group);
             }
         }
 
@@ -374,6 +408,7 @@ namespace obj
         std::unique_ptr<ObjModel> m_model;
         std::unordered_map<std::string, size_t> m_used_materials;
         ObjObject m_current_object;
+        int m_current_group;
         bool m_object_defined;
         size_t m_object_vertex_offset;
         size_t m_object_uv_offset;

@@ -1,14 +1,16 @@
 #pragma once
 
-#include <cstddef>
 #include <string>
-#include <ostream>
+#include <iostream>
 
 #include "Asset/IFileTypeProcessor.h"
 
-class TdbCreator final : public IFileTypeProcessor
+namespace tdb
 {
-public:
-    [[nodiscard]] bool SupportFileExtension(const std::string& extension) const override;
-    void ProcessFile(const std::string& filePath, const void* inputData, size_t inputDataSize, std::ostream& output) const override;
-};
+    class TdbCreator final : public AbstractStreamingFileTypeProcessor
+    {
+    public:
+        [[nodiscard]] bool SupportFileExtension(const std::string& extension) const override;
+        void ProcessFile(const std::string& filePath, std::istream& input, std::ostream& output) const override;
+    };
+}

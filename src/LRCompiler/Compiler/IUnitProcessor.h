@@ -22,10 +22,11 @@ class UnitProcessorInputsAndOutputs
 {
 public:
     std::vector<std::filesystem::path> m_inputs;
+    std::vector<std::filesystem::path> m_intermediate;
     std::vector<UnitProcessorResult> m_outputs;
 
     void AddInput(std::filesystem::path inputFile);
-    void AddOutput(UnitProcessorResult output);
+    void AddIntermediate(std::filesystem::path intermediate);
     void AddOutput(std::filesystem::path file, jam::JamFilePath jamPath);
 };
 

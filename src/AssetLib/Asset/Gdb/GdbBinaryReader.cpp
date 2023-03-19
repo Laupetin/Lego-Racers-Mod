@@ -34,7 +34,8 @@ namespace gdb
 
         void Read() const
         {
-            for (auto nextSectionToken = m_tokens->NextValue(); nextSectionToken.m_type != TOKEN_INVALID && nextSectionToken.m_type != TOKEN_EOF; nextSectionToken = m_tokens->NextValue())
+            for (auto nextSectionToken = m_tokens->NextValue(); nextSectionToken.m_type != TOKEN_INVALID && nextSectionToken.m_type != TOKEN_EOF; nextSectionToken = m_tokens->
+                 NextValue())
             {
                 switch (nextSectionToken.m_type)
                 {
@@ -255,11 +256,11 @@ namespace gdb
                         m_emitter.EmitMetaKeyword30();
                     }
                     break;
-                case TOKEN_META_32:
+                case TOKEN_META_BONE:
                     {
                         const auto value0 = m_tokens->NextIntegerValue();
 
-                        m_emitter.EmitMetaKeyword32(value0);
+                        m_emitter.EmitMetaBone(value0);
                     }
                     break;
                 case TOKEN_META_NEW_OBJECT:

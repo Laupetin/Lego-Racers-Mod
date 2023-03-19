@@ -13,7 +13,7 @@ namespace tdb {
 class  TdbParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, Textures = 3, Texture = 4, FlipVertically = 5, Keyword29 = 6, 
+    T__0 = 1, T__1 = 2, Textures = 3, Texture = 4, FlipVertical = 5, Keyword29 = 6, 
     Bmp = 7, Tga = 8, ChromaKey = 9, Keyword2D = 10, Keyword2E = 11, IntegerConstant = 12, 
     FloatingConstant = 13, DigitSequence = 14, StringLiteral = 15, Whitespace = 16, 
     Newline = 17, BlockComment = 18, LineComment = 19
@@ -186,7 +186,7 @@ public:
   public:
     SingleValueKeywordsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *FlipVertically();
+    antlr4::tree::TerminalNode *FlipVertical();
     antlr4::tree::TerminalNode *Bmp();
     antlr4::tree::TerminalNode *Tga();
     antlr4::tree::TerminalNode *Keyword2D();

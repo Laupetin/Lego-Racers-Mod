@@ -50,16 +50,18 @@ namespace obj
     {
     public:
         ObjFace();
-        ObjFace(int vertex0, int vertex1, int vertex2);
-        ObjFace(int vertex0, int uv0, int vertex1, int uv1, int vertex2, int uv2);
-        ObjFace(int vertex0, int uv0, int normal0, int vertex1, int uv1, int normal1, int vertex2, int uv2, int normal2);
+        ObjFace(int vertex0, int vertex1, int vertex2, int group);
+        ObjFace(int vertex0, int uv0, int vertex1, int uv1, int vertex2, int uv2, int group);
+        ObjFace(int vertex0, int uv0, int normal0, int vertex1, int uv1, int normal1, int vertex2, int uv2, int normal2, int group);
 
         [[nodiscard]] bool HasUv() const;
         [[nodiscard]] bool HasNormals() const;
+        [[nodiscard]] bool HasGroup() const;
 
         int m_vertex_index[3];
         int m_uv_index[3];
         int m_normal_index[3];
+        int m_group;
     };
 
     class MtlMaterial
@@ -82,6 +84,7 @@ namespace obj
         std::vector<ObjNormal> m_normals;
         std::vector<ObjUv> m_uvs;
         std::vector<ObjFace> m_faces;
+        std::vector<std::string> m_groups;
 
         ObjObject();
         ObjObject(std::string name, int materialIndex);

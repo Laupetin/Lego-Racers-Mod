@@ -49,18 +49,17 @@ void gdbParserInitialize() {
       "vertexDefPositionUv", "vertexDefPositionUvColor", "vertexDefPositionUvNormal", 
       "vertexPosition", "vertexUv", "vertexColor", "vertexNormal", "faceSection", 
       "faceList", "face", "metaSection", "metaList", "meta", "metaVertices", 
-      "metaFaces", "keyword2F", "keyword30", "keyword32", "metaObject", 
-      "floatOrIntConstant"
+      "metaFaces", "keyword2F", "keyword30", "metaBone", "metaObject", "floatOrIntConstant"
     },
     std::vector<std::string>{
       "", "'{'", "'}'", "'materials'", "'scale'", "'vertices'", "'faces'", 
       "'meta'", "'object'", "'v'", "'uv'", "'clr'", "'vn'", "'texture'", 
-      "'f'", "'keyword2F'", "'keyword30'", "'keyword32'"
+      "'f'", "'keyword2F'", "'keyword30'", "'bone'"
     },
     std::vector<std::string>{
       "", "", "", "Materials", "Scale", "Vertices", "Faces", "Meta", "Object", 
       "Vertex", "Uv", "Color", "Normal", "Texture", "Face", "Keyword2F", 
-      "Keyword30", "Keyword32", "IntegerConstant", "FloatingConstant", "DigitSequence", 
+      "Keyword30", "Bone", "IntegerConstant", "FloatingConstant", "DigitSequence", 
       "StringLiteral", "Whitespace", "Newline", "BlockComment", "LineComment"
     }
   );
@@ -1561,7 +1560,7 @@ GdbParser::MetaSectionContext* GdbParser::metaSection() {
       | (1ULL << GdbParser::Object)
       | (1ULL << GdbParser::Keyword2F)
       | (1ULL << GdbParser::Keyword30)
-      | (1ULL << GdbParser::Keyword32))) != 0)) {
+      | (1ULL << GdbParser::Bone))) != 0)) {
       setState(170);
       metaList();
     }
@@ -1638,7 +1637,7 @@ GdbParser::MetaListContext* GdbParser::metaList() {
       | (1ULL << GdbParser::Object)
       | (1ULL << GdbParser::Keyword2F)
       | (1ULL << GdbParser::Keyword30)
-      | (1ULL << GdbParser::Keyword32))) != 0));
+      | (1ULL << GdbParser::Bone))) != 0));
    
   }
   catch (RecognitionException &e) {
@@ -1672,8 +1671,8 @@ GdbParser::Keyword30Context* GdbParser::MetaContext::keyword30() {
   return getRuleContext<GdbParser::Keyword30Context>(0);
 }
 
-GdbParser::Keyword32Context* GdbParser::MetaContext::keyword32() {
-  return getRuleContext<GdbParser::Keyword32Context>(0);
+GdbParser::MetaBoneContext* GdbParser::MetaContext::metaBone() {
+  return getRuleContext<GdbParser::MetaBoneContext>(0);
 }
 
 GdbParser::MetaObjectContext* GdbParser::MetaContext::metaObject() {
@@ -1740,10 +1739,10 @@ GdbParser::MetaContext* GdbParser::meta() {
         break;
       }
 
-      case GdbParser::Keyword32: {
+      case GdbParser::Bone: {
         enterOuterAlt(_localctx, 5);
         setState(184);
-        keyword32();
+        metaBone();
         break;
       }
 
@@ -2012,40 +2011,40 @@ GdbParser::Keyword30Context* GdbParser::keyword30() {
   return _localctx;
 }
 
-//----------------- Keyword32Context ------------------------------------------------------------------
+//----------------- MetaBoneContext ------------------------------------------------------------------
 
-GdbParser::Keyword32Context::Keyword32Context(ParserRuleContext *parent, size_t invokingState)
+GdbParser::MetaBoneContext::MetaBoneContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* GdbParser::Keyword32Context::Keyword32() {
-  return getToken(GdbParser::Keyword32, 0);
+tree::TerminalNode* GdbParser::MetaBoneContext::Bone() {
+  return getToken(GdbParser::Bone, 0);
 }
 
-tree::TerminalNode* GdbParser::Keyword32Context::IntegerConstant() {
+tree::TerminalNode* GdbParser::MetaBoneContext::IntegerConstant() {
   return getToken(GdbParser::IntegerConstant, 0);
 }
 
 
-size_t GdbParser::Keyword32Context::getRuleIndex() const {
-  return GdbParser::RuleKeyword32;
+size_t GdbParser::MetaBoneContext::getRuleIndex() const {
+  return GdbParser::RuleMetaBone;
 }
 
-void GdbParser::Keyword32Context::enterRule(tree::ParseTreeListener *listener) {
+void GdbParser::MetaBoneContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterKeyword32(this);
+    parserListener->enterMetaBone(this);
 }
 
-void GdbParser::Keyword32Context::exitRule(tree::ParseTreeListener *listener) {
+void GdbParser::MetaBoneContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<GdbListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitKeyword32(this);
+    parserListener->exitMetaBone(this);
 }
 
-GdbParser::Keyword32Context* GdbParser::keyword32() {
-  Keyword32Context *_localctx = _tracker.createInstance<Keyword32Context>(_ctx, getState());
-  enterRule(_localctx, 52, GdbParser::RuleKeyword32);
+GdbParser::MetaBoneContext* GdbParser::metaBone() {
+  MetaBoneContext *_localctx = _tracker.createInstance<MetaBoneContext>(_ctx, getState());
+  enterRule(_localctx, 52, GdbParser::RuleMetaBone);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -2057,7 +2056,7 @@ GdbParser::Keyword32Context* GdbParser::keyword32() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(202);
-    match(GdbParser::Keyword32);
+    match(GdbParser::Bone);
     setState(203);
     match(GdbParser::IntegerConstant);
    

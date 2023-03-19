@@ -18,7 +18,10 @@ public:
     std::vector<std::string> m_compile_projects;
     std::string m_dist_folder;
     std::string m_obj_folder;
+    std::string m_copy_to;
     bool m_verbose;
+    bool m_recompile;
+    bool m_force_linking;
 
 private:
     static void PrintUsage();

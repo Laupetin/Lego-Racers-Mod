@@ -104,9 +104,9 @@ namespace gdb
             m_model.m_meta.emplace_back(TOKEN_META_30);
         }
 
-        void EmitMetaKeyword32(int value0) override
+        void EmitMetaBone(size_t value0) override
         {
-            m_model.m_meta.emplace_back(TOKEN_META_32, value0);
+            m_model.m_meta.emplace_back(TOKEN_META_BONE, value0);
         }
 
         void EmitMetaNewObject(size_t materialIndex) override

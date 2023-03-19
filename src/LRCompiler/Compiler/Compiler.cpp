@@ -1,12 +1,17 @@
 #include "Compiler.h"
 
+#include <algorithm>
 #include <cstdint>
 #include <filesystem>
 #include <limits>
 
 #include "Localization/SrfUnitProcessor.h"
+#include "Material/BmpUnitProcessor.h"
+#include "Material/IdbUnitProcessor.h"
 #include "Material/MdbUnitProcessor.h"
+#include "Material/TdbUnitProcessor.h"
 #include "Model/GdbUnitProcessor.h"
+#include "Model/ModelUnitProcessor.h"
 
 namespace fs = std::filesystem;
 
@@ -15,21 +20,35 @@ void AddDefaultProcessors(std::vector<std::unique_ptr<IUnitProcessorFactory>>& p
     // =======================================
     // ADD YOUR CUSTOM UNIT PROCESSORS HERE
     // =======================================
+    processors.emplace_back(std::make_unique<ModelUnitProcessorFactory>());
+    processors.emplace_back(std::make_unique<BmpUnitProcessorFactory>());
+    processors.emplace_back(std::make_unique<IdbUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<GdbUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<MdbUnitProcessorFactory>());
     processors.emplace_back(std::make_unique<SrfUnitProcessorFactory>());
+    processors.emplace_back(std::make_unique<TdbUnitProcessorFactory>());
+}
+
+CompilerSettings::CompilerSettings()
+    : m_verbose(false),
+      m_recompile(false)
+{
 }
 
 CompilerResult::CompilerResult()
-    : m_any_changes(false)
+    : m_asset_success_count(0u),
+      m_asset_failed_count(0u),
+      m_asset_skipped_count(0u),
+      m_any_changes(false)
 {
 }
 
 class CompilerImpl final : public ICompiler
 {
 public:
-    explicit CompilerImpl(std::vector<std::unique_ptr<IUnitProcessorFactory>> processors)
-        : m_unit_processor_factories(std::move(processors))
+    explicit CompilerImpl(const CompilerSettings settings, std::vector<std::unique_ptr<IUnitProcessorFactory>> processors)
+        : m_settings(settings),
+          m_unit_processor_factories(std::move(processors))
     {
     }
 
@@ -54,9 +73,14 @@ public:
                 continue;
 
             if (!ProcessUnit(*unitProcessor, context, *result, file.path()))
+            {
                 std::cerr << "Failed to compile \"" << fs::relative(file, context.m_data_path).string() << "\"\n";
+                result->m_asset_failed_count++;
+            }
         }
 
+        std::cout << "Compiler result: " << result->m_asset_success_count << " compiled, " << result->m_asset_failed_count << " failed, " << result->m_asset_skipped_count <<
+            " skipped.\n";
         return result;
     }
 
@@ -123,7 +147,7 @@ private:
 
         ExamineOutputFiles(io, missingFiles, minWriteOutput);
 
-        if (!missingFiles.empty() || minWriteOutput < maxWriteInput)
+        if (m_settings.m_recompile || !missingFiles.empty() || minWriteOutput < maxWriteInput)
         {
             std::cout << "Compiling: \"" << relativePathToData.string() << "\"\n";
             if (!CreateDirectoriesForOutput(io))
@@ -136,9 +160,13 @@ private:
             }
 
             result.m_any_changes = true;
+            result.m_asset_success_count++;
         }
         else
+        {
             std::cout << "File up to date: \"" << relativePathToData.string() << "\"\n";
+            result.m_asset_skipped_count++;
+        }
 
         for (auto& output : io.m_outputs)
             result.m_unit_processor_results.emplace_back(std::move(output));
@@ -161,6 +189,11 @@ private:
     {
         minTimestamp = std::numeric_limits<int64_t>::max();
         auto maxTimestamp = std::numeric_limits<int64_t>::min();
+
+        for (const auto& result : files.m_intermediate)
+        {
+            ExamineFile(result, missingFiles, minTimestamp, maxTimestamp);
+        }
 
         for (const auto& result : files.m_outputs)
         {
@@ -192,32 +225,42 @@ private:
 
     static bool CreateDirectoriesForOutput(const UnitProcessorInputsAndOutputs& files)
     {
-        for (const auto& result : files.m_outputs)
-        {
-            const auto parentPath = fs::absolute(result.m_file).parent_path();
-
-            if (!fs::is_directory(parentPath) && !fs::create_directories(parentPath))
+        return std::all_of(files.m_intermediate.begin(), files.m_intermediate.end(), [](const fs::path& file)
             {
-                std::cerr << "Failed to create directory " << parentPath << "!\n";
-                return false;
-            }
+                return CreateOutputDirectoryForFile(file);
+            })
+            && std::all_of(files.m_outputs.begin(), files.m_outputs.end(), [](const UnitProcessorResult& result)
+            {
+                return CreateOutputDirectoryForFile(result.m_file);
+            });
+    }
+
+    static bool CreateOutputDirectoryForFile(const fs::path& file)
+    {
+        const auto parentPath = fs::absolute(file).parent_path();
+
+        if (!fs::is_directory(parentPath) && !fs::create_directories(parentPath))
+        {
+            std::cerr << "Failed to create directory " << parentPath << "!\n";
+            return false;
         }
 
         return true;
     }
 
+    CompilerSettings m_settings;
     std::vector<std::unique_ptr<IUnitProcessorFactory>> m_unit_processor_factories;
 };
 
-std::unique_ptr<ICompiler> ICompiler::Default()
+std::unique_ptr<ICompiler> ICompiler::Default(CompilerSettings settings)
 {
     std::vector<std::unique_ptr<IUnitProcessorFactory>> processors;
     AddDefaultProcessors(processors);
 
-    return std::make_unique<CompilerImpl>(std::move(processors));
+    return std::make_unique<CompilerImpl>(settings, std::move(processors));
 }
 
-std::unique_ptr<ICompiler> ICompiler::Custom(std::vector<std::unique_ptr<IUnitProcessorFactory>> processors)
+std::unique_ptr<ICompiler> ICompiler::Custom(CompilerSettings settings, std::vector<std::unique_ptr<IUnitProcessorFactory>> processors)
 {
-    return std::make_unique<CompilerImpl>(std::move(processors));
+    return std::make_unique<CompilerImpl>(settings, std::move(processors));
 }

@@ -168,10 +168,10 @@ namespace gdb
             m_stream << "keyword30 " << "\n";
         }
 
-        void EmitMetaKeyword32(const int value0) override
+        void EmitMetaBone(const size_t value0) override
         {
             Indent();
-            m_stream << "keyword32 " << value0 << "\n";
+            m_stream << "bone " << value0 << "\n";
         }
 
         void EmitMetaNewObject(const size_t materialIndex) override
