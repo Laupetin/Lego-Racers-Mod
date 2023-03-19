@@ -1,5 +1,6 @@
 #include "ObjExporter.h"
 
+#include <algorithm>
 #include <sstream>
 #include <cassert>
 #include <fstream>
