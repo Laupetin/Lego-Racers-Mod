@@ -10,7 +10,6 @@ include "tools/scripts/platform.lua"
 workspace "LegoRacersMod"
     location "build"
     objdir "%{wks.location}/obj"
-    symbols "On"
     systemversion "latest"
     cppdialect "C++17"
 
@@ -53,11 +52,13 @@ workspace "LegoRacersMod"
     filter "configurations:Debug"
         defines "_DEBUG"
         optimize "Debug"
+        symbols "On"
     filter {}
 
     filter "configurations:Release"
         defines "NDEBUG"
         optimize "Full"
+        symbols "Off"
         flags {
             "FatalWarnings"
         }
