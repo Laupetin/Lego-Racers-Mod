@@ -41,6 +41,13 @@ jobs:
     - name: Test
       working-directory: ${{ github.workspace }}/build/lib/Release_x86/tests
       run: ./AssetLibTests
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: lego-racers-mod-linux
+        path: |
+          ${{ github.workspace }}/build/bin/Release_x86
 
   build-test-windows:
     env:
@@ -71,3 +78,10 @@ jobs:
     - name: Test
       working-directory: ${{ github.workspace }}/build/lib/Release_x86/tests
       run: ./AssetLibTests
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: lego-racers-mod-windows
+        path: |
+          ${{ github.workspace }}/build/bin/Release_x86
