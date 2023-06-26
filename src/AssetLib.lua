@@ -79,4 +79,5 @@ function AssetLib:project()
         self:include(includes)
         Utils:include(includes)
         antlr4:include(includes)
+        jsonlib:include(includes)
 end
