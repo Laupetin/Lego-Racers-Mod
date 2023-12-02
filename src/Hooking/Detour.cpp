@@ -1,15 +1,16 @@
 #include "Detour.h"
+
 #include "Patch.h"
 
 #include <limits>
 
 #pragma warning(push, 0)
-#include <asmjit.h>
 #include <Zydis/Zydis.h>
+#include <asmjit.h>
 #pragma warning(pop)
 
-#include "RegisterToStackWrapperBuilder.h"
 #include "Internal/AsmJitWrapper.h"
+#include "RegisterToStackWrapperBuilder.h"
 #include "StackToRegisterWrapperBuilder.h"
 
 class TrampolineBuilder
@@ -40,20 +41,22 @@ public:
         Assembler assembler(&m_code);
         bool omitJumpBack = false;
         while (m_current_offset < m_minimum_length
-            && ZYAN_SUCCESS(
-                ZydisDecoderDecodeFull(&m_decoder, reinterpret_cast<void*>(m_start_address + m_current_offset),
-                    std::numeric_limits<ZyanUSize>::max(), &instr, operands, static_cast<ZyanU8>(std::extent_v<decltype(operands)>), 0)))
+               && ZYAN_SUCCESS(ZydisDecoderDecodeFull(&m_decoder,
+                                                      reinterpret_cast<void*>(m_start_address + m_current_offset),
+                                                      std::numeric_limits<ZyanUSize>::max(),
+                                                      &instr,
+                                                      operands,
+                                                      static_cast<ZyanU8>(std::extent_v<decltype(operands)>),
+                                                      0)))
         {
             switch (instr.mnemonic)
             {
             case ZYDIS_MNEMONIC_JMP:
                 omitJumpBack = true;
-                assembler.jmp(static_cast<uint64_t>(m_start_address) + m_current_offset
-                    + instr.length + operands[0].imm.value.s);
+                assembler.jmp(static_cast<uint64_t>(m_start_address) + m_current_offset + instr.length + operands[0].imm.value.s);
                 break;
             case ZYDIS_MNEMONIC_CALL:
-                assembler.call(static_cast<uint64_t>(m_start_address) + m_current_offset
-                    + instr.length + operands[0].imm.value.s);
+                assembler.call(static_cast<uint64_t>(m_start_address) + m_current_offset + instr.length + operands[0].imm.value.s);
                 break;
             case ZYDIS_MNEMONIC_JO:
             case ZYDIS_MNEMONIC_JNO:
@@ -200,8 +203,7 @@ DetourBase::~DetourBase()
     }
 }
 
-DetourTrampolineBase::DetourTrampolineBase()
-= default;
+DetourTrampolineBase::DetourTrampolineBase() = default;
 
 DetourTrampolineBase::DetourTrampolineBase(const uintptr_t address, void* detourFuncPtr)
     : DetourBase(address, detourFuncPtr),
@@ -215,11 +217,9 @@ void DetourTrampolineBase::BuildTrampoline()
     m_trampoline = builder.BuildTrampoline();
 }
 
-DetourTrampolineBase::~DetourTrampolineBase()
-= default;
+DetourTrampolineBase::~DetourTrampolineBase() = default;
 
-DetourUsercallBase::DetourUsercallBase()
-= default;
+DetourUsercallBase::DetourUsercallBase() = default;
 
 DetourUsercallBase::DetourUsercallBase(const uintptr_t address)
     : DetourBase(address)
@@ -234,28 +234,29 @@ DetourUsercallBase::DetourUsercallBase(const OffsetValue address)
     m_address = address.m_fixed_value;
 }
 
-void DetourUsercallBase::InitWrapper(const void* userFunc, const size_t* paramSizes, const int paramCount,
-                                     size_t returnParamSize, const UsercallConfiguration& usercallConfiguration,
+void DetourUsercallBase::InitWrapper(const void* userFunc,
+                                     const size_t* paramSizes,
+                                     const int paramCount,
+                                     size_t returnParamSize,
+                                     const UsercallConfiguration& usercallConfiguration,
                                      const CallingConvention callingConvention)
 {
-    m_wrapper = RegisterToStackWrapperBuilder::BuildWrapper(userFunc, usercallConfiguration, paramSizes, paramCount,
-                                                            CallDetails(callingConvention),
-                                                            CallDetails(MY_COMPILER, MY_CALLING_CONVENTION));
+    m_wrapper = RegisterToStackWrapperBuilder::BuildWrapper(
+        userFunc, usercallConfiguration, paramSizes, paramCount, CallDetails(callingConvention), CallDetails(MY_COMPILER, MY_CALLING_CONVENTION));
     m_detour_func_ptr = m_wrapper->GetPtr();
 }
 
-DetourUsercallBase::~DetourUsercallBase()
-= default;
+DetourUsercallBase::~DetourUsercallBase() = default;
 
-DetourTrampolineUsercallBase::DetourTrampolineUsercallBase()
-= default;
+DetourTrampolineUsercallBase::DetourTrampolineUsercallBase() = default;
 
 DetourTrampolineUsercallBase::DetourTrampolineUsercallBase(const uintptr_t address)
     : DetourUsercallBase(address)
 {
 }
 
-void DetourTrampolineUsercallBase::BuildTrampoline(const size_t* paramSizes, const int paramCount,
+void DetourTrampolineUsercallBase::BuildTrampoline(const size_t* paramSizes,
+                                                   const int paramCount,
                                                    size_t returnParamSize,
                                                    const UsercallConfiguration& usercallConfiguration,
                                                    const CallingConvention callingConvention)
@@ -263,11 +264,8 @@ void DetourTrampolineUsercallBase::BuildTrampoline(const size_t* paramSizes, con
     TrampolineBuilder builder(m_address, 5);
     m_trampoline = builder.BuildTrampoline();
 
-    m_trampoline_wrapper = StackToRegisterWrapperBuilder::BuildWrapper(m_trampoline->GetPtr(), usercallConfiguration,
-                                                                       paramSizes, paramCount,
-                                                                       CallDetails(MY_COMPILER, MY_CALLING_CONVENTION),
-                                                                       CallDetails(callingConvention));
+    m_trampoline_wrapper = StackToRegisterWrapperBuilder::BuildWrapper(
+        m_trampoline->GetPtr(), usercallConfiguration, paramSizes, paramCount, CallDetails(MY_COMPILER, MY_CALLING_CONVENTION), CallDetails(callingConvention));
 }
 
-DetourTrampolineUsercallBase::~DetourTrampolineUsercallBase()
-= default;
+DetourTrampolineUsercallBase::~DetourTrampolineUsercallBase() = default;

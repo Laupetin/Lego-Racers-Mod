@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstdint>
-#include <istream>
 #include <exception>
+#include <istream>
 
 namespace utils
 {
@@ -152,4 +152,4 @@ namespace utils
         size_t m_buffer_size;
         size_t m_current_offset;
     };
-}
+} // namespace utils

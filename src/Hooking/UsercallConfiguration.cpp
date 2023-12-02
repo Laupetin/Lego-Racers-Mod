@@ -82,7 +82,7 @@ void UsercallConfiguration::ApplyParameter()
             }
         }
 
-        if(!existingParameterUsed)
+        if (!existingParameterUsed)
             m_parameter_locations.emplace_back(m_parameter.m_location, m_parameter_index);
     }
 

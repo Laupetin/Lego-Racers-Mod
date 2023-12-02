@@ -1,11 +1,11 @@
 #include "TdbUnitProcessor.h"
 
+#include "Asset/Tdb/TdbBinaryWriter.h"
+#include "Asset/Tdb/TdbTextReader.h"
+#include "StringUtils.h"
+
 #include <filesystem>
 #include <fstream>
-
-#include "StringUtils.h"
-#include "Asset/Tdb/TdbTextReader.h"
-#include "Asset/Tdb/TdbBinaryWriter.h"
 
 namespace fs = std::filesystem;
 

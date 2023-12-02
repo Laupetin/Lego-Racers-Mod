@@ -12,4 +12,4 @@ namespace idb
         TOKEN_KEYWORD_CHROMA_KEY = 0x2B,
         TOKEN_KEYWORD_TINT = 0x2C,
     };
-}
+} // namespace idb

@@ -1,16 +1,16 @@
 #pragma once
 
-#include <istream>
-
 #include "GdbEmitter.h"
+
+#include <istream>
 
 namespace gdb
 {
-	class GdbBinaryReader
-	{
-	public:
-		GdbBinaryReader() = delete;
+    class GdbBinaryReader
+    {
+    public:
+        GdbBinaryReader() = delete;
 
-		static void Read(std::istream& input, IGdbEmitter& emitter);
-	};
-}
+        static void Read(std::istream& input, IGdbEmitter& emitter);
+    };
+} // namespace gdb

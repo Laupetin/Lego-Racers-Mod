@@ -17,4 +17,4 @@ namespace srf
         const auto writer = SrfTextWriter::Create(output);
         SrfBinaryReader::Read(input, *writer);
     }
-}
+} // namespace srf

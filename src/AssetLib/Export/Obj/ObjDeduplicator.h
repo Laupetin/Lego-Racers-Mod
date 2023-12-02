@@ -1,7 +1,7 @@
 #pragma once
-#include <unordered_map>
-
 #include "Obj.h"
+
+#include <unordered_map>
 
 namespace obj
 {
@@ -25,4 +25,4 @@ namespace obj
         std::unordered_map<ObjUv, size_t> m_previous_uvs;
         std::unordered_map<ObjNormal, size_t> m_previous_normals;
     };
-}
+} // namespace obj

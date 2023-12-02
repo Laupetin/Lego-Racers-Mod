@@ -1,12 +1,12 @@
 #pragma once
 
+#include "Jam/JamFilePath.h"
+#include "Project/ProjectContext.h"
+
 #include <cassert>
 #include <filesystem>
 #include <memory>
 #include <vector>
-
-#include "Jam/JamFilePath.h"
-#include "Project/ProjectContext.h"
 
 class UnitProcessorResult
 {

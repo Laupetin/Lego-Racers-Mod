@@ -1,10 +1,5 @@
 #include "Compiler.h"
 
-#include <algorithm>
-#include <cstdint>
-#include <filesystem>
-#include <limits>
-
 #include "Localization/SrfUnitProcessor.h"
 #include "Material/BmpUnitProcessor.h"
 #include "Material/IdbUnitProcessor.h"
@@ -12,6 +7,11 @@
 #include "Material/TdbUnitProcessor.h"
 #include "Model/GdbUnitProcessor.h"
 #include "Model/ModelUnitProcessor.h"
+
+#include <algorithm>
+#include <cstdint>
+#include <filesystem>
+#include <limits>
 
 namespace fs = std::filesystem;
 
@@ -79,8 +79,8 @@ public:
             }
         }
 
-        std::cout << "Compiler result: " << result->m_asset_success_count << " compiled, " << result->m_asset_failed_count << " failed, " << result->m_asset_skipped_count <<
-            " skipped.\n";
+        std::cout << "Compiler result: " << result->m_asset_success_count << " compiled, " << result->m_asset_failed_count << " failed, "
+                  << result->m_asset_skipped_count << " skipped.\n";
         return result;
     }
 
@@ -225,14 +225,18 @@ private:
 
     static bool CreateDirectoriesForOutput(const UnitProcessorInputsAndOutputs& files)
     {
-        return std::all_of(files.m_intermediate.begin(), files.m_intermediate.end(), [](const fs::path& file)
-            {
-                return CreateOutputDirectoryForFile(file);
-            })
-            && std::all_of(files.m_outputs.begin(), files.m_outputs.end(), [](const UnitProcessorResult& result)
-            {
-                return CreateOutputDirectoryForFile(result.m_file);
-            });
+        return std::all_of(files.m_intermediate.begin(),
+                           files.m_intermediate.end(),
+                           [](const fs::path& file)
+                           {
+                               return CreateOutputDirectoryForFile(file);
+                           })
+               && std::all_of(files.m_outputs.begin(),
+                              files.m_outputs.end(),
+                              [](const UnitProcessorResult& result)
+                              {
+                                  return CreateOutputDirectoryForFile(result.m_file);
+                              });
     }
 
     static bool CreateOutputDirectoryForFile(const fs::path& file)

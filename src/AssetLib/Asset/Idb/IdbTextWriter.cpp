@@ -1,8 +1,8 @@
 #include "IdbTextWriter.h"
 
-#include <iomanip>
-
 #include "Utils/AbstractTextDumper.h"
+
+#include <iomanip>
 
 namespace idb
 {
@@ -91,7 +91,7 @@ namespace idb
 
         bool m_first_image_element;
     };
-}
+} // namespace idb
 
 using namespace idb;
 

@@ -1,10 +1,10 @@
 #pragma once
 
+#include "CommandLineOption.h"
+
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
-
-#include "CommandLineOption.h"
 
 class ArgumentParser
 {

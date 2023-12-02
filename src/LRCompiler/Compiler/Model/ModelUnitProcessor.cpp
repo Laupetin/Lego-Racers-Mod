@@ -1,11 +1,5 @@
 #include "ModelUnitProcessor.h"
 
-#include <filesystem>
-#include <fstream>
-#include <nlohmann/json.hpp>
-
-#include "FileUtils.h"
-#include "StringUtils.h"
 #include "Asset/Gdb/GdbBinaryWriter.h"
 #include "Asset/Gdb/GdbStructReader.h"
 #include "Asset/Gdb/GdbStructWriter.h"
@@ -13,6 +7,12 @@
 #include "Asset/Gdb/GdbTextWriter.h"
 #include "Export/Obj/ObjReader.h"
 #include "Export/Obj/ObjToGdbConverter.h"
+#include "FileUtils.h"
+#include "StringUtils.h"
+
+#include <filesystem>
+#include <fstream>
+#include <nlohmann/json.hpp>
 
 namespace fs = std::filesystem;
 using namespace nlohmann;
@@ -48,7 +48,7 @@ namespace model
         {
         }
     };
-}
+} // namespace model
 
 class ModelUnitProcessor final : public IUnitProcessor
 {
@@ -151,9 +151,7 @@ private:
             return false;
         }
 
-        return ParseModelFile(root, file)
-            && ParseScale(root, file)
-            && ParseBones(root, file);
+        return ParseModelFile(root, file) && ParseScale(root, file) && ParseBones(root, file);
     }
 
     bool ParseModelFile(const json& root, const std::filesystem::path& file)

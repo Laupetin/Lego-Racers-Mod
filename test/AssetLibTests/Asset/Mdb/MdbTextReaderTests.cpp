@@ -1,11 +1,10 @@
+#include "Asset/Mdb/MdbTextReader.h"
+
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/generators/catch_generators.hpp>
-
 #include <cstdint>
 #include <sstream>
 #include <string>
-
-#include "Asset/Mdb/MdbTextReader.h"
 
 using namespace mdb;
 
@@ -31,12 +30,14 @@ namespace test::asset::mdb::text_reader
 
         void EmitColor0(const uint8_t value0, const uint8_t value1, const uint8_t value2, const uint8_t value3) override
         {
-            m_str << "color0:" << static_cast<int>(value0) << ":" << static_cast<int>(value1) << ":" << static_cast<int>(value2) << ":" << static_cast<int>(value3) << " ";
+            m_str << "color0:" << static_cast<int>(value0) << ":" << static_cast<int>(value1) << ":" << static_cast<int>(value2) << ":"
+                  << static_cast<int>(value3) << " ";
         }
 
         void EmitColor1(const uint8_t value0, const uint8_t value1, const uint8_t value2, const uint8_t value3) override
         {
-            m_str << "color1:" << static_cast<int>(value0) << ":" << static_cast<int>(value1) << ":" << static_cast<int>(value2) << ":" << static_cast<int>(value3) << " ";
+            m_str << "color1:" << static_cast<int>(value0) << ":" << static_cast<int>(value1) << ":" << static_cast<int>(value2) << ":"
+                  << static_cast<int>(value3) << " ";
         }
 
         void EmitTexture(const std::string textureName) override
@@ -155,23 +156,22 @@ namespace test::asset::mdb::text_reader
 
     TEST_CASE("MdbTextReader: Ensure can read simple mdb", "[token][input]")
     {
-        constexpr static auto MDB_DATA =
-            "materials\n"
-            "{\n"
-            "  material \"wave\"\n"
-            "  {\n"
-            "    texture \"warp\"\n"
-            "    color0 12 34 56 78\n"
-            "    keyword48\n"
-            "  }\n"
-            "  \n"
-            "  material \"otherMaterial\"\n"
-            "  {\n"
-            "    texture \"funny-cat\"\n"
-            "  }\n"
-            "}\n";
-        constexpr static auto EXPECTED_RESULT =
-            "materials material:wave texture:warp color0:12:34:56:78 keyword48 end_material material:otherMaterial texture:funny-cat end_material end_materials ";
+        constexpr static auto MDB_DATA = "materials\n"
+                                         "{\n"
+                                         "  material \"wave\"\n"
+                                         "  {\n"
+                                         "    texture \"warp\"\n"
+                                         "    color0 12 34 56 78\n"
+                                         "    keyword48\n"
+                                         "  }\n"
+                                         "  \n"
+                                         "  material \"otherMaterial\"\n"
+                                         "  {\n"
+                                         "    texture \"funny-cat\"\n"
+                                         "  }\n"
+                                         "}\n";
+        constexpr static auto EXPECTED_RESULT = "materials material:wave texture:warp color0:12:34:56:78 keyword48 end_material material:otherMaterial "
+                                                "texture:funny-cat end_material end_materials ";
 
         std::istringstream inputDataStream(MDB_DATA);
         MdbTestEmitter emitter;
@@ -182,16 +182,14 @@ namespace test::asset::mdb::text_reader
 
     TEST_CASE("MdbTextReader: Ensure can read color0", "[token][input]")
     {
-        constexpr static auto MDB_DATA =
-            "materials\n"
-            "{\n"
-            "  material \"wave\"\n"
-            "  {\n"
-            "    color0 12 34 56 78\n"
-            "  }\n"
-            "}\n";
-        constexpr static auto EXPECTED_RESULT =
-            "materials material:wave color0:12:34:56:78 end_material end_materials ";
+        constexpr static auto MDB_DATA = "materials\n"
+                                         "{\n"
+                                         "  material \"wave\"\n"
+                                         "  {\n"
+                                         "    color0 12 34 56 78\n"
+                                         "  }\n"
+                                         "}\n";
+        constexpr static auto EXPECTED_RESULT = "materials material:wave color0:12:34:56:78 end_material end_materials ";
 
         std::istringstream inputDataStream(MDB_DATA);
         MdbTestEmitter emitter;
@@ -202,16 +200,14 @@ namespace test::asset::mdb::text_reader
 
     TEST_CASE("MdbTextReader: Ensure can read color1", "[token][input]")
     {
-        constexpr static auto MDB_DATA =
-            "materials\n"
-            "{\n"
-            "  material \"wave\"\n"
-            "  {\n"
-            "    color1 255 0 12 62\n"
-            "  }\n"
-            "}\n";
-        constexpr static auto EXPECTED_RESULT =
-            "materials material:wave color1:255:0:12:62 end_material end_materials ";
+        constexpr static auto MDB_DATA = "materials\n"
+                                         "{\n"
+                                         "  material \"wave\"\n"
+                                         "  {\n"
+                                         "    color1 255 0 12 62\n"
+                                         "  }\n"
+                                         "}\n";
+        constexpr static auto EXPECTED_RESULT = "materials material:wave color1:255:0:12:62 end_material end_materials ";
 
         std::istringstream inputDataStream(MDB_DATA);
         MdbTestEmitter emitter;
@@ -222,16 +218,14 @@ namespace test::asset::mdb::text_reader
 
     TEST_CASE("MdbTextReader: Ensure can read texture", "[token][input]")
     {
-        constexpr static auto MDB_DATA =
-            "materials\n"
-            "{\n"
-            "  material \"wave\"\n"
-            "  {\n"
-            "    texture \"tex\"\n"
-            "  }\n"
-            "}\n";
-        constexpr static auto EXPECTED_RESULT =
-            "materials material:wave texture:tex end_material end_materials ";
+        constexpr static auto MDB_DATA = "materials\n"
+                                         "{\n"
+                                         "  material \"wave\"\n"
+                                         "  {\n"
+                                         "    texture \"tex\"\n"
+                                         "  }\n"
+                                         "}\n";
+        constexpr static auto EXPECTED_RESULT = "materials material:wave texture:tex end_material end_materials ";
 
         std::istringstream inputDataStream(MDB_DATA);
         MdbTestEmitter emitter;
@@ -245,14 +239,15 @@ namespace test::asset::mdb::text_reader
         const auto opacityValue = GENERATE(0, 127, 255);
         INFO("Opacity: " << opacityValue);
 
-        const auto mdbData =
-            "materials\n"
-            "{\n"
-            "  material \"wave\"\n"
-            "  {\n"
-            "    opacity " + std::to_string(opacityValue) + "\n"
-            "  }\n"
-            "}\n";
+        const auto mdbData = "materials\n"
+                             "{\n"
+                             "  material \"wave\"\n"
+                             "  {\n"
+                             "    opacity "
+                             + std::to_string(opacityValue)
+                             + "\n"
+                               "  }\n"
+                               "}\n";
         const auto expectedResult = "materials material:wave opacity:" + std::to_string(opacityValue) + " end_material end_materials ";
 
         std::istringstream inputDataStream(mdbData);
@@ -294,16 +289,16 @@ namespace test::asset::mdb::text_reader
             expectedValue = "keyword50";
         }
 
-        const auto mdbData =
-            "materials\n"
-            "{\n"
-            "  material \"wave\"\n"
-            "  {\n"
-            "    " + keyword + " " + std::to_string(testValue) + "\n"
-            "  }\n"
-            "}\n";
-        const auto expectedResult =
-            "materials material:wave " + expectedValue + ":" + std::to_string(testValue) + " end_material end_materials ";
+        const auto mdbData = "materials\n"
+                             "{\n"
+                             "  material \"wave\"\n"
+                             "  {\n"
+                             "    "
+                             + keyword + " " + std::to_string(testValue)
+                             + "\n"
+                               "  }\n"
+                               "}\n";
+        const auto expectedResult = "materials material:wave " + expectedValue + ":" + std::to_string(testValue) + " end_material end_materials ";
 
         std::istringstream inputDataStream(mdbData);
         MdbTestEmitter emitter;
@@ -389,14 +384,15 @@ namespace test::asset::mdb::text_reader
             expectedValue = "keyword4c";
         }
 
-        const auto mdbData =
-            "materials\n"
-            "{\n"
-            "  material \"wave\"\n"
-            "  {\n"
-            "    " + keyword + "\n"
-            "  }\n"
-            "}\n";
+        const auto mdbData = "materials\n"
+                             "{\n"
+                             "  material \"wave\"\n"
+                             "  {\n"
+                             "    "
+                             + keyword
+                             + "\n"
+                               "  }\n"
+                               "}\n";
         const auto expectedResult = "materials material:wave " + expectedValue + " end_material end_materials ";
 
         std::istringstream inputDataStream(mdbData);
@@ -423,14 +419,15 @@ namespace test::asset::mdb::text_reader
             expectedKeyword = "54"; // TOKEN_KEYWORD_2F_SUB_36
         }
 
-        const auto mdbData =
-            "materials\n"
-            "{\n"
-            "  material \"wave\"\n"
-            "  {\n"
-            "    keyword2F " + keyword + "\n"
-            "  }\n"
-            "}\n";
+        const auto mdbData = "materials\n"
+                             "{\n"
+                             "  material \"wave\"\n"
+                             "  {\n"
+                             "    keyword2F "
+                             + keyword
+                             + "\n"
+                               "  }\n"
+                               "}\n";
         const auto expectedResult = "materials material:wave keyword2f:" + expectedKeyword + ":0 end_material end_materials ";
 
         std::istringstream inputDataStream(mdbData);
@@ -481,14 +478,15 @@ namespace test::asset::mdb::text_reader
             expectedKeyword = "55"; // TOKEN_KEYWORD_2F_SUB_37
         }
 
-        const auto mdbData =
-            "materials\n"
-            "{\n"
-            "  material \"wave\"\n"
-            "  {\n"
-            "    keyword2F " + keyword + " 1337\n"
-            "  }\n"
-            "}\n";
+        const auto mdbData = "materials\n"
+                             "{\n"
+                             "  material \"wave\"\n"
+                             "  {\n"
+                             "    keyword2F "
+                             + keyword
+                             + " 1337\n"
+                               "  }\n"
+                               "}\n";
         const auto expectedResult = "materials material:wave keyword2f:" + expectedKeyword + ":1337 end_material end_materials ";
 
         std::istringstream inputDataStream(mdbData);
@@ -569,14 +567,15 @@ namespace test::asset::mdb::text_reader
             expectedKeyword = "67"; // TOKEN_KEYWORD_38_SUB_43
         }
 
-        const auto mdbData =
-            "materials\n"
-            "{\n"
-            "  material \"wave\"\n"
-            "  {\n"
-            "    keyword38 " + keyword + " " + keyword + "\n"
-            "  }\n"
-            "}\n";
+        const auto mdbData = "materials\n"
+                             "{\n"
+                             "  material \"wave\"\n"
+                             "  {\n"
+                             "    keyword38 "
+                             + keyword + " " + keyword
+                             + "\n"
+                               "  }\n"
+                               "}\n";
         const auto expectedResult = "materials material:wave keyword38:" + expectedKeyword + ":" + expectedKeyword + " end_material end_materials ";
 
         std::istringstream inputDataStream(mdbData);
@@ -585,4 +584,4 @@ namespace test::asset::mdb::text_reader
 
         REQUIRE(emitter.DebugStr() == expectedResult);
     }
-}
+} // namespace test::asset::mdb::text_reader

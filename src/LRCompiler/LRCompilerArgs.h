@@ -1,10 +1,10 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
 #include "Arguments/ArgumentParser.h"
 #include "Project/ProjectDefinition.h"
+
+#include <string>
+#include <vector>
 
 class LRCompilerArgs
 {

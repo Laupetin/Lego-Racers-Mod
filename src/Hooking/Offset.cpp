@@ -17,18 +17,19 @@ FunctionOffsetUsercallBase::FunctionOffsetUsercallBase(std::function<void(Userca
 {
 }
 
-void FunctionOffsetUsercallBase::InitWrapper(const uintptr_t offset, const size_t* paramSizes,
-                                             const int paramCount, const size_t returnParamSize)
+void FunctionOffsetUsercallBase::InitWrapper(const uintptr_t offset, const size_t* paramSizes, const int paramCount, const size_t returnParamSize)
 {
     if (m_usercall_init == nullptr)
-        throw std::exception(
-            "Usercall must have a valid init function. If there's no configuration to be made consider using a FunctionOffset instead.");
+        throw std::exception("Usercall must have a valid init function. If there's no configuration to be made consider using a FunctionOffset instead.");
 
     m_usercall_configuration = std::make_unique<UsercallConfiguration>();
     m_usercall_init(*m_usercall_configuration);
 
-    m_wrapper = StackToRegisterWrapperBuilder::BuildWrapper(reinterpret_cast<void*>(offset), *m_usercall_configuration, paramSizes,
-                                                            paramCount, CallDetails(MY_COMPILER, MY_CALLING_CONVENTION),
+    m_wrapper = StackToRegisterWrapperBuilder::BuildWrapper(reinterpret_cast<void*>(offset),
+                                                            *m_usercall_configuration,
+                                                            paramSizes,
+                                                            paramCount,
+                                                            CallDetails(MY_COMPILER, MY_CALLING_CONVENTION),
                                                             CallDetails(CallingConvention::C_CDECL));
 }
 
@@ -38,13 +39,14 @@ FunctionOffsetThiscallBase::FunctionOffsetThiscallBase()
 {
 }
 
-void FunctionOffsetThiscallBase::InitWrapper(const uintptr_t offset, const size_t* paramSizes,
-                                             const int paramCount, const size_t returnParamSize)
+void FunctionOffsetThiscallBase::InitWrapper(const uintptr_t offset, const size_t* paramSizes, const int paramCount, const size_t returnParamSize)
 {
     m_usercall_configuration = std::make_unique<UsercallConfiguration>();
     m_usercall_configuration->FirstParameter().InEcx();
 
-    m_wrapper = StackToRegisterWrapperBuilder::BuildWrapper(reinterpret_cast<void*>(offset), *m_usercall_configuration, paramSizes,
+    m_wrapper = StackToRegisterWrapperBuilder::BuildWrapper(reinterpret_cast<void*>(offset),
+                                                            *m_usercall_configuration,
+                                                            paramSizes,
                                                             paramCount,
                                                             CallDetails(MY_COMPILER, MY_CALLING_CONVENTION),
                                                             CallDetails(CallingConvention::C_THISCALL));

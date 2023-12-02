@@ -1,9 +1,9 @@
-#include <string>
-#include <filesystem>
-#include <iostream>
-
 #include "JamFileCreator.h"
 #include "JamFileDumper.h"
+
+#include <filesystem>
+#include <iostream>
+#include <string>
 
 namespace fs = std::filesystem;
 

@@ -1,13 +1,13 @@
 #include "ObjReader.h"
 
+#include "Utils/AbstractTextReader.h"
+
 #include <algorithm>
 #include <cassert>
 #include <exception>
 #include <iostream>
 #include <sstream>
 #include <unordered_map>
-
-#include "Utils/AbstractTextReader.h"
 
 using namespace obj;
 
@@ -131,21 +131,16 @@ namespace obj
                 {
                     float x, y, z;
                     float r, g, b;
-                    if (!SkipWhitespaceNoNewline() || !ReadFloatingPoint(x)
-                        || !SkipWhitespaceNoNewline() || !ReadFloatingPoint(y)
-                        || !SkipWhitespaceNoNewline() || !ReadFloatingPoint(z))
+                    if (!SkipWhitespaceNoNewline() || !ReadFloatingPoint(x) || !SkipWhitespaceNoNewline() || !ReadFloatingPoint(y) || !SkipWhitespaceNoNewline()
+                        || !ReadFloatingPoint(z))
                     {
                         ReportError("Invalid vertex");
                     }
 
-                    if (SkipWhitespaceNoNewline() && ReadFloatingPoint(r)
-                        && SkipWhitespaceNoNewline() && ReadFloatingPoint(g)
-                        && SkipWhitespaceNoNewline() && ReadFloatingPoint(b))
+                    if (SkipWhitespaceNoNewline() && ReadFloatingPoint(r) && SkipWhitespaceNoNewline() && ReadFloatingPoint(g) && SkipWhitespaceNoNewline()
+                        && ReadFloatingPoint(b))
                     {
-                        m_current_object.m_vertices.emplace_back(x, y, z,
-                                                                 std::clamp(r, 0.0f, 1.0f),
-                                                                 std::clamp(g, 0.0f, 1.0f),
-                                                                 std::clamp(b, 0.0f, 1.0f));
+                        m_current_object.m_vertices.emplace_back(x, y, z, std::clamp(r, 0.0f, 1.0f), std::clamp(g, 0.0f, 1.0f), std::clamp(b, 0.0f, 1.0f));
                         m_has_colors = true;
                     }
                     else
@@ -156,8 +151,7 @@ namespace obj
                 else if (identifier[0] == 'v' && identifier[1] == 't' && identifier[2] == '\0')
                 {
                     float u, v;
-                    if (!SkipWhitespaceNoNewline() || !ReadFloatingPoint(u)
-                        || !SkipWhitespaceNoNewline() || !ReadFloatingPoint(v))
+                    if (!SkipWhitespaceNoNewline() || !ReadFloatingPoint(u) || !SkipWhitespaceNoNewline() || !ReadFloatingPoint(v))
                     {
                         ReportError("Invalid uv");
                     }
@@ -167,9 +161,8 @@ namespace obj
                 else if (identifier[0] == 'v' && identifier[1] == 'n' && identifier[2] == '\0')
                 {
                     float x, y, z;
-                    if (!SkipWhitespaceNoNewline() || !ReadFloatingPoint(x)
-                        || !SkipWhitespaceNoNewline() || !ReadFloatingPoint(y)
-                        || !SkipWhitespaceNoNewline() || !ReadFloatingPoint(z))
+                    if (!SkipWhitespaceNoNewline() || !ReadFloatingPoint(x) || !SkipWhitespaceNoNewline() || !ReadFloatingPoint(y) || !SkipWhitespaceNoNewline()
+                        || !ReadFloatingPoint(z))
                     {
                         ReportError("Invalid normal");
                     }
@@ -245,9 +238,9 @@ namespace obj
             int uvIndices[3];
             int normalIndices[3];
 
-            if (!SkipWhitespaceNoNewline() || !ReadFaceIndices(vertexIndices[0], uvIndices[0], normalIndices[0])
-                || !SkipWhitespaceNoNewline() || !ReadFaceIndices(vertexIndices[1], uvIndices[1], normalIndices[1])
-                || !SkipWhitespaceNoNewline() || !ReadFaceIndices(vertexIndices[2], uvIndices[2], normalIndices[2]))
+            if (!SkipWhitespaceNoNewline() || !ReadFaceIndices(vertexIndices[0], uvIndices[0], normalIndices[0]) || !SkipWhitespaceNoNewline()
+                || !ReadFaceIndices(vertexIndices[1], uvIndices[1], normalIndices[1]) || !SkipWhitespaceNoNewline()
+                || !ReadFaceIndices(vertexIndices[2], uvIndices[2], normalIndices[2]))
             {
                 ReportError("Invalid vertex indices");
             }
@@ -263,50 +256,59 @@ namespace obj
             if (hasNormals && !hasUvs)
                 ReportError("Does not support faces with normals but without uvs");
 
-            if (static_cast<size_t>(vertexIndices[0]) < m_object_vertex_offset || static_cast<size_t>(vertexIndices[0])
-                >= m_object_vertex_offset + m_current_object.m_vertices.size()
-                || static_cast<size_t>(vertexIndices[1]) < m_object_vertex_offset || static_cast<size_t>(vertexIndices[1])
-                >= m_object_vertex_offset + m_current_object.m_vertices.size()
-                || static_cast<size_t>(vertexIndices[2]) < m_object_vertex_offset || static_cast<size_t>(vertexIndices[2])
-                >= m_object_vertex_offset + m_current_object.m_vertices.size())
+            if (static_cast<size_t>(vertexIndices[0]) < m_object_vertex_offset
+                || static_cast<size_t>(vertexIndices[0]) >= m_object_vertex_offset + m_current_object.m_vertices.size()
+                || static_cast<size_t>(vertexIndices[1]) < m_object_vertex_offset
+                || static_cast<size_t>(vertexIndices[1]) >= m_object_vertex_offset + m_current_object.m_vertices.size()
+                || static_cast<size_t>(vertexIndices[2]) < m_object_vertex_offset
+                || static_cast<size_t>(vertexIndices[2]) >= m_object_vertex_offset + m_current_object.m_vertices.size())
             {
                 ReportError("Face vertex out of bounds");
             }
 
             if (hasUvs)
             {
-                if (static_cast<size_t>(uvIndices[0]) < m_object_uv_offset || static_cast<size_t>(uvIndices[0]) >= m_object_uv_offset + m_current_object.m_uvs.size()
-                    || static_cast<size_t>(uvIndices[1]) < m_object_uv_offset || static_cast<size_t>(uvIndices[1]) >= m_object_uv_offset + m_current_object.m_uvs.size()
-                    || static_cast<size_t>(uvIndices[2]) < m_object_uv_offset || static_cast<size_t>(uvIndices[2]) >= m_object_uv_offset + m_current_object.m_uvs.size())
+                if (static_cast<size_t>(uvIndices[0]) < m_object_uv_offset
+                    || static_cast<size_t>(uvIndices[0]) >= m_object_uv_offset + m_current_object.m_uvs.size()
+                    || static_cast<size_t>(uvIndices[1]) < m_object_uv_offset
+                    || static_cast<size_t>(uvIndices[1]) >= m_object_uv_offset + m_current_object.m_uvs.size()
+                    || static_cast<size_t>(uvIndices[2]) < m_object_uv_offset
+                    || static_cast<size_t>(uvIndices[2]) >= m_object_uv_offset + m_current_object.m_uvs.size())
                 {
                     ReportError("Face uv out of bounds");
                 }
 
                 if (hasNormals)
                 {
-                    if (static_cast<size_t>(normalIndices[0]) < m_object_normal_offset || static_cast<size_t>(normalIndices[0])
-                        >= m_object_normal_offset + m_current_object.m_normals.size()
-                        || static_cast<size_t>(normalIndices[1]) < m_object_normal_offset || static_cast<size_t>(normalIndices[1])
-                        >= m_object_normal_offset + m_current_object.m_normals.size()
-                        || static_cast<size_t>(normalIndices[2]) < m_object_normal_offset || static_cast<size_t>(normalIndices[2])
-                        >= m_object_normal_offset + m_current_object.m_normals.size())
+                    if (static_cast<size_t>(normalIndices[0]) < m_object_normal_offset
+                        || static_cast<size_t>(normalIndices[0]) >= m_object_normal_offset + m_current_object.m_normals.size()
+                        || static_cast<size_t>(normalIndices[1]) < m_object_normal_offset
+                        || static_cast<size_t>(normalIndices[1]) >= m_object_normal_offset + m_current_object.m_normals.size()
+                        || static_cast<size_t>(normalIndices[2]) < m_object_normal_offset
+                        || static_cast<size_t>(normalIndices[2]) >= m_object_normal_offset + m_current_object.m_normals.size())
                     {
                         ReportError("Face normal out of bounds");
                     }
 
-                    m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset, uvIndices[0] - m_object_uv_offset,
+                    m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset,
+                                                          uvIndices[0] - m_object_uv_offset,
                                                           normalIndices[0] - m_object_normal_offset,
-                                                          vertexIndices[1] - m_object_vertex_offset, uvIndices[1] - m_object_uv_offset,
+                                                          vertexIndices[1] - m_object_vertex_offset,
+                                                          uvIndices[1] - m_object_uv_offset,
                                                           normalIndices[1] - m_object_normal_offset,
-                                                          vertexIndices[2] - m_object_vertex_offset, uvIndices[2] - m_object_uv_offset,
+                                                          vertexIndices[2] - m_object_vertex_offset,
+                                                          uvIndices[2] - m_object_uv_offset,
                                                           normalIndices[2] - m_object_normal_offset,
                                                           m_current_group);
                 }
                 else
                 {
-                    m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset, uvIndices[0] - m_object_uv_offset,
-                                                          vertexIndices[1] - m_object_vertex_offset, uvIndices[1] - m_object_uv_offset,
-                                                          vertexIndices[2] - m_object_vertex_offset, uvIndices[2] - m_object_uv_offset,
+                    m_current_object.m_faces.emplace_back(vertexIndices[0] - m_object_vertex_offset,
+                                                          uvIndices[0] - m_object_uv_offset,
+                                                          vertexIndices[1] - m_object_vertex_offset,
+                                                          uvIndices[1] - m_object_uv_offset,
+                                                          vertexIndices[2] - m_object_vertex_offset,
+                                                          uvIndices[2] - m_object_uv_offset,
                                                           m_current_group);
                 }
             }
@@ -415,7 +417,7 @@ namespace obj
         size_t m_object_normal_offset;
         bool m_has_colors;
     };
-}
+} // namespace obj
 
 std::unique_ptr<ObjReader> ObjReader::Create(std::istream& in)
 {

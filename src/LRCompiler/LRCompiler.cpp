@@ -1,7 +1,7 @@
 #include "LRCompiler.h"
 
-#include "LRCompilerArgs.h"
 #include "Compiler/Compiler.h"
+#include "LRCompilerArgs.h"
 #include "Linker/Linker.h"
 #include "Project/ProjectContextCreator.h"
 
@@ -27,7 +27,7 @@ namespace
 
         return settings;
     }
-}
+} // namespace
 
 bool LRCompiler::Start(const int argc, const char** argv)
 {

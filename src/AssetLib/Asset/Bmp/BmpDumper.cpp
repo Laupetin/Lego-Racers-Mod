@@ -1,15 +1,15 @@
 #include "BmpDumper.h"
 
+#include "Alignment.h"
+#include "Bmp.h"
+#include "FileUtils.h"
+#include "StreamUtils.h"
+
 #include <cassert>
 #include <cstring>
 #include <iostream>
 #include <memory>
 #include <sstream>
-
-#include "Bmp.h"
-#include "Alignment.h"
-#include "FileUtils.h"
-#include "StreamUtils.h"
 
 class BmpDumpingException final : public std::exception
 {
@@ -111,49 +111,31 @@ namespace bmp
 
             const auto outDataOffset = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader) + sizeof(BitmapRgbQuad) * paletteMaxSize;
             const auto imageByteSize = m_out_image_size_in_byte;
-            const BitmapFileHeader outFileHeader{
-                utils::MakeMagic16('B', 'M'),
-                outDataOffset + imageByteSize,
-                0,
-                0,
-                outDataOffset
-            };
+            const BitmapFileHeader outFileHeader{utils::MakeMagic16('B', 'M'), outDataOffset + imageByteSize, 0, 0, outDataOffset};
             m_out.write(reinterpret_cast<const char*>(&outFileHeader), sizeof(outFileHeader));
 
-            const BitmapInfoHeader outInfoHeader{
-                sizeof(BitmapInfoHeader),
-                static_cast<int32_t>(m_width),
-                static_cast<int32_t>(m_height),
-                1,
-                static_cast<uint16_t>(m_bits_per_pixel),
-                BMP_BI_RGB,
-                imageByteSize,
-                0,
-                0,
-                paletteMaxSize,
-                paletteMaxSize
-            };
+            const BitmapInfoHeader outInfoHeader{sizeof(BitmapInfoHeader),
+                                                 static_cast<int32_t>(m_width),
+                                                 static_cast<int32_t>(m_height),
+                                                 1,
+                                                 static_cast<uint16_t>(m_bits_per_pixel),
+                                                 BMP_BI_RGB,
+                                                 imageByteSize,
+                                                 0,
+                                                 0,
+                                                 paletteMaxSize,
+                                                 paletteMaxSize};
             m_out.write(reinterpret_cast<const char*>(&outInfoHeader), sizeof(outInfoHeader));
 
             for (auto paletteIndex = 0u; paletteIndex < m_palette_size; paletteIndex++)
             {
-                BitmapRgbQuad data{
-                    m_palette[paletteIndex].b,
-                    m_palette[paletteIndex].g,
-                    m_palette[paletteIndex].r,
-                    m_palette[paletteIndex].a
-                };
+                BitmapRgbQuad data{m_palette[paletteIndex].b, m_palette[paletteIndex].g, m_palette[paletteIndex].r, m_palette[paletteIndex].a};
                 m_out.write(reinterpret_cast<const char*>(&data), sizeof(data));
             }
 
             for (auto paletteIndex = m_palette_size; paletteIndex < paletteMaxSize; paletteIndex++)
             {
-                BitmapRgbQuad data{
-                    0,
-                    0,
-                    0,
-                    0
-                };
+                BitmapRgbQuad data{0, 0, 0, 0};
                 m_out.write(reinterpret_cast<const char*>(&data), sizeof(data));
             }
 
@@ -199,7 +181,8 @@ namespace bmp
                     const auto lenFromCurrentDecompressBuffer = std::min(remainingScanLineLen, m_decompress_size - m_decompress_pos);
                     if (lenFromCurrentDecompressBuffer > 0)
                     {
-                        memcpy(&scanLineInBuffer[scanLineDataLen - remainingScanLineLen], &m_decompress_buffer[m_decompress_pos], lenFromCurrentDecompressBuffer);
+                        memcpy(
+                            &scanLineInBuffer[scanLineDataLen - remainingScanLineLen], &m_decompress_buffer[m_decompress_pos], lenFromCurrentDecompressBuffer);
                         m_decompress_pos += lenFromCurrentDecompressBuffer;
                         remainingScanLineLen -= lenFromCurrentDecompressBuffer;
                     }
@@ -290,8 +273,7 @@ namespace bmp
                     }
                     commandByte <<= 1;
                 }
-            }
-            while (!commandsEnd);
+            } while (!commandsEnd);
 
             m_reader.SkipBytes(compressedSize);
             m_decompress_pos = 0;
@@ -336,4 +318,4 @@ namespace bmp
         dumper.Initialize();
         dumper.Write();
     }
-}
+} // namespace bmp

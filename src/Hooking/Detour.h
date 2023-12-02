@@ -1,12 +1,12 @@
 #pragma once
 
-#include <cstdint>
-
 #include "CallDetails.h"
-#include "IAsmWrapper.h"
 #include "FunctionLike.h"
+#include "IAsmWrapper.h"
 #include "OffsetBase.h"
 #include "UsercallConfiguration.h"
+
+#include <cstdint>
 
 class DetourBase
 {
@@ -69,8 +69,12 @@ protected:
     explicit DetourUsercallBase(uintptr_t address);
     explicit DetourUsercallBase(OffsetValue address);
 
-    void InitWrapper(const void* userFunc, const size_t* paramSizes, int paramCount, size_t returnParamSize,
-                     const UsercallConfiguration& usercallConfiguration, CallingConvention callingConvention);
+    void InitWrapper(const void* userFunc,
+                     const size_t* paramSizes,
+                     int paramCount,
+                     size_t returnParamSize,
+                     const UsercallConfiguration& usercallConfiguration,
+                     CallingConvention callingConvention);
 
 public:
     ~DetourUsercallBase();
@@ -89,8 +93,11 @@ protected:
     DetourTrampolineUsercallBase();
     explicit DetourTrampolineUsercallBase(uintptr_t address);
 
-    void BuildTrampoline(const size_t* paramSizes, int paramCount, size_t returnParamSize,
-                         const UsercallConfiguration& usercallConfiguration, CallingConvention callingConvention);
+    void BuildTrampoline(const size_t* paramSizes,
+                         int paramCount,
+                         size_t returnParamSize,
+                         const UsercallConfiguration& usercallConfiguration,
+                         CallingConvention callingConvention);
 
 public:
     ~DetourTrampolineUsercallBase();
@@ -100,13 +107,10 @@ public:
     DetourTrampolineUsercallBase& operator=(DetourTrampolineUsercallBase&& other) noexcept = default;
 };
 
-template <typename T>
-class FunctionDetour : public DetourBase
+template<typename T> class FunctionDetour : public DetourBase
 {
 public:
-    FunctionDetour()
-    {
-    }
+    FunctionDetour() {}
 
     FunctionDetour(const uintptr_t address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourBase(address, reinterpret_cast<void*>(detourFunc))
@@ -128,25 +132,22 @@ public:
     }
 };
 
-template <typename T>
-class FunctionDetourUsercall : public _Get_function_impl_param_capture<T>::type, public DetourUsercallBase
+template<typename T> class FunctionDetourUsercall : public _Get_function_impl_param_capture<T>::type, public DetourUsercallBase
 {
 public:
     using _Get_function_impl_param_capture<T>::type::func_ptr_t;
-    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_param_count;
+    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_return_size;
 
-    FunctionDetourUsercall()
-    {
-    }
+    FunctionDetourUsercall() {}
 
-    FunctionDetourUsercall(const uintptr_t address, const UsercallConfiguration usercallConfiguration,
+    FunctionDetourUsercall(const uintptr_t address,
+                           const UsercallConfiguration usercallConfiguration,
                            typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourUsercallBase(address)
     {
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    usercallConfiguration, CallingConvention::C_CDECL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         Install(DetourType::JUMP);
     }
 
@@ -156,34 +157,33 @@ public:
     FunctionDetourUsercall& operator=(const FunctionDetourUsercall& other) = delete;
     FunctionDetourUsercall& operator=(FunctionDetourUsercall&& other) noexcept = default;
 
-    void Init(const uintptr_t address, const UsercallConfiguration usercallConfiguration,
-              typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    void Init(const uintptr_t address, const UsercallConfiguration usercallConfiguration, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
     {
         m_address = address;
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    usercallConfiguration, CallingConvention::C_CDECL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         Install(DetourType::JUMP);
     }
 };
 
-template <typename T>
-class FunctionDetourThiscall : public _Get_function_impl_param_capture<T>::type, public DetourUsercallBase
+template<typename T> class FunctionDetourThiscall : public _Get_function_impl_param_capture<T>::type, public DetourUsercallBase
 {
 public:
     using _Get_function_impl_param_capture<T>::type::func_ptr_t;
-    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_param_count;
+    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_return_size;
 
-    FunctionDetourThiscall()
-    {
-    }
+    FunctionDetourThiscall() {}
 
     FunctionDetourThiscall(const uintptr_t address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourUsercallBase(address)
     {
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    UsercallConfiguration().FirstParameter().InEcx(), CallingConvention::C_THISCALL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc),
+                    m_param_sizes,
+                    m_param_count,
+                    m_return_size,
+                    UsercallConfiguration().FirstParameter().InEcx(),
+                    CallingConvention::C_THISCALL);
         Install(DetourType::JUMP);
     }
 
@@ -196,21 +196,22 @@ public:
     void Init(const uintptr_t address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
     {
         m_address = address;
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    UsercallConfiguration().FirstParameter().InEcx(), CallingConvention::C_THISCALL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc),
+                    m_param_sizes,
+                    m_param_count,
+                    m_return_size,
+                    UsercallConfiguration().FirstParameter().InEcx(),
+                    CallingConvention::C_THISCALL);
         Install(DetourType::JUMP);
     }
 };
 
-template <typename T>
-class FunctionDetourTrampoline : public _Get_function_impl<T>::type, public DetourTrampolineBase
+template<typename T> class FunctionDetourTrampoline : public _Get_function_impl<T>::type, public DetourTrampolineBase
 {
     using _Get_function_impl<T>::type::m_func;
 
 public:
-    FunctionDetourTrampoline()
-    {
-    }
+    FunctionDetourTrampoline() {}
 
     FunctionDetourTrampoline(const uintptr_t address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourTrampolineBase(address, reinterpret_cast<void*>(detourFunc))
@@ -243,7 +244,7 @@ public:
     }
 };
 
-template <typename T>
+template<typename T>
 class FunctionDetourTrampolineUsercall : public _Get_function_impl<T>::type,
                                          public _Get_function_impl_param_capture<T>::type,
                                          public DetourTrampolineUsercallBase
@@ -252,33 +253,31 @@ class FunctionDetourTrampolineUsercall : public _Get_function_impl<T>::type,
 
 public:
     using _Get_function_impl_param_capture<T>::type::func_ptr_t;
-    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_param_count;
+    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_return_size;
 
-    FunctionDetourTrampolineUsercall()
-    {
-    }
+    FunctionDetourTrampolineUsercall() {}
 
-    FunctionDetourTrampolineUsercall(const uintptr_t address, const UsercallConfiguration usercallConfiguration,
+    FunctionDetourTrampolineUsercall(const uintptr_t address,
+                                     const UsercallConfiguration usercallConfiguration,
                                      typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourUsercallBase(address)
     {
         BuildTrampoline(m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         m_func = m_trampoline_wrapper->GetPtr();
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    usercallConfiguration, CallingConvention::C_CDECL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         Install(DetourType::JUMP);
     }
 
-    FunctionDetourTrampolineUsercall(const OffsetValue address, const UsercallConfiguration usercallConfiguration,
+    FunctionDetourTrampolineUsercall(const OffsetValue address,
+                                     const UsercallConfiguration usercallConfiguration,
                                      typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourUsercallBase(address)
     {
         BuildTrampoline(m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         m_func = m_trampoline_wrapper->GetPtr();
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    usercallConfiguration, CallingConvention::C_CDECL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         Install(DetourType::JUMP);
     }
 
@@ -288,19 +287,16 @@ public:
     FunctionDetourTrampolineUsercall& operator=(const FunctionDetourTrampolineUsercall& other) = delete;
     FunctionDetourTrampolineUsercall& operator=(FunctionDetourTrampolineUsercall&& other) noexcept = default;
 
-    void Init(const uintptr_t address, const UsercallConfiguration usercallConfiguration,
-              typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    void Init(const uintptr_t address, const UsercallConfiguration usercallConfiguration, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
     {
         m_address = address;
         BuildTrampoline(m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         m_func = m_trampoline_wrapper->GetPtr();
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    usercallConfiguration, CallingConvention::C_CDECL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         Install(DetourType::JUMP);
     }
 
-    void Init(const OffsetValue address, const UsercallConfiguration usercallConfiguration,
-              typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    void Init(const OffsetValue address, const UsercallConfiguration usercallConfiguration, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
     {
         assert(address.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
         if (address.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
@@ -309,13 +305,12 @@ public:
         m_address = address.m_fixed_value;
         BuildTrampoline(m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         m_func = m_trampoline_wrapper->GetPtr();
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    usercallConfiguration, CallingConvention::C_CDECL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         Install(DetourType::JUMP);
     }
 };
 
-template <typename T>
+template<typename T>
 class FunctionDetourTrampolineThiscall : public _Get_function_impl<T>::type,
                                          public _Get_function_impl_param_capture<T>::type,
                                          public DetourTrampolineUsercallBase
@@ -324,16 +319,13 @@ class FunctionDetourTrampolineThiscall : public _Get_function_impl<T>::type,
 
 public:
     using _Get_function_impl_param_capture<T>::type::func_ptr_t;
-    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_param_count;
+    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_return_size;
 
-    FunctionDetourTrampolineThiscall()
-    {
-    }
+    FunctionDetourTrampolineThiscall() {}
 
-    FunctionDetourTrampolineThiscall(const uintptr_t address,
-                                     typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    FunctionDetourTrampolineThiscall(const uintptr_t address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourUsercallBase(address)
     {
         UsercallConfiguration configuration;
@@ -341,8 +333,7 @@ public:
 
         BuildTrampoline(m_param_sizes, m_param_count, m_return_size, configuration, CallingConvention::C_THISCALL);
         m_func = m_trampoline_wrapper->GetPtr();
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, configuration,
-                    CallingConvention::C_THISCALL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, configuration, CallingConvention::C_THISCALL);
         Install(DetourType::JUMP);
     }
 
@@ -360,8 +351,7 @@ public:
         m_address = address;
         BuildTrampoline(m_param_sizes, m_param_count, m_return_size, configuration, CallingConvention::C_THISCALL);
         m_func = m_trampoline_wrapper->GetPtr();
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, configuration,
-                    CallingConvention::C_THISCALL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, configuration, CallingConvention::C_THISCALL);
         Install(DetourType::JUMP);
     }
 
@@ -377,19 +367,15 @@ public:
         m_address = address.m_fixed_value;
         BuildTrampoline(m_param_sizes, m_param_count, m_return_size, configuration, CallingConvention::C_THISCALL);
         m_func = m_trampoline_wrapper->GetPtr();
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, configuration,
-                    CallingConvention::C_THISCALL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, configuration, CallingConvention::C_THISCALL);
         Install(DetourType::JUMP);
     }
 };
 
-template <typename T>
-class CallDetour : public DetourBase
+template<typename T> class CallDetour : public DetourBase
 {
 public:
-    CallDetour()
-    {
-    }
+    CallDetour() {}
 
     CallDetour(const uintptr_t address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourBase(address, reinterpret_cast<void*>(detourFunc))
@@ -428,34 +414,29 @@ public:
     }
 };
 
-template <typename T>
-class CallDetourUsercall : public _Get_function_impl_param_capture<T>::type, public DetourUsercallBase
+template<typename T> class CallDetourUsercall : public _Get_function_impl_param_capture<T>::type, public DetourUsercallBase
 {
 public:
     using _Get_function_impl_param_capture<T>::type::func_ptr_t;
-    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_param_count;
+    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_return_size;
 
-    CallDetourUsercall()
-    {
-    }
+    CallDetourUsercall() {}
 
-    CallDetourUsercall(const uintptr_t address, const UsercallConfiguration usercallConfiguration,
-                       typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    CallDetourUsercall(const uintptr_t address, const UsercallConfiguration usercallConfiguration, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourUsercallBase(address)
     {
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    usercallConfiguration, CallingConvention::C_CDECL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         Install(DetourType::CALL);
     }
 
-    CallDetourUsercall(const OffsetValue address, const UsercallConfiguration usercallConfiguration,
+    CallDetourUsercall(const OffsetValue address,
+                       const UsercallConfiguration usercallConfiguration,
                        typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourUsercallBase(address)
     {
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    usercallConfiguration, CallingConvention::C_CDECL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         Install(DetourType::CALL);
     }
 
@@ -465,55 +446,56 @@ public:
     CallDetourUsercall& operator=(const CallDetourUsercall& other) = delete;
     CallDetourUsercall& operator=(CallDetourUsercall&& other) noexcept = default;
 
-    void Init(const uintptr_t address, const UsercallConfiguration usercallConfiguration,
-              typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    void Init(const uintptr_t address, const UsercallConfiguration usercallConfiguration, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
     {
         m_address = address;
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    usercallConfiguration, CallingConvention::C_CDECL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         Install(DetourType::CALL);
     }
 
-    void Init(const OffsetValue address, const UsercallConfiguration usercallConfiguration,
-              typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
+    void Init(const OffsetValue address, const UsercallConfiguration usercallConfiguration, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
     {
         assert(address.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION);
         if (address.m_lazy_evaluation_index != OffsetValue::NO_LAZY_EVALUATION)
             throw std::exception("Offset cannot be lazy");
 
         m_address = address.m_fixed_value;
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    usercallConfiguration, CallingConvention::C_CDECL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size, usercallConfiguration, CallingConvention::C_CDECL);
         Install(DetourType::CALL);
     }
 };
 
-template <typename T>
-class CallDetourThiscall : public _Get_function_impl_param_capture<T>::type, public DetourUsercallBase
+template<typename T> class CallDetourThiscall : public _Get_function_impl_param_capture<T>::type, public DetourUsercallBase
 {
 public:
     using _Get_function_impl_param_capture<T>::type::func_ptr_t;
-    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_param_count;
+    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_return_size;
 
-    CallDetourThiscall()
-    {
-    }
+    CallDetourThiscall() {}
 
     CallDetourThiscall(const uintptr_t address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourUsercallBase(address)
     {
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    UsercallConfiguration().FirstParameter().InEcx(), CallingConvention::C_THISCALL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc),
+                    m_param_sizes,
+                    m_param_count,
+                    m_return_size,
+                    UsercallConfiguration().FirstParameter().InEcx(),
+                    CallingConvention::C_THISCALL);
         Install(DetourType::CALL);
     }
 
     CallDetourThiscall(const OffsetValue address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
         : DetourUsercallBase(address)
     {
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    UsercallConfiguration().FirstParameter().InEcx(), CallingConvention::C_THISCALL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc),
+                    m_param_sizes,
+                    m_param_count,
+                    m_return_size,
+                    UsercallConfiguration().FirstParameter().InEcx(),
+                    CallingConvention::C_THISCALL);
         Install(DetourType::CALL);
     }
 
@@ -526,8 +508,12 @@ public:
     void Init(const uintptr_t address, typename _Get_function_impl<T>::type::func_ptr_t detourFunc)
     {
         m_address = address;
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    UsercallConfiguration().FirstParameter().InEcx(), CallingConvention::C_THISCALL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc),
+                    m_param_sizes,
+                    m_param_count,
+                    m_return_size,
+                    UsercallConfiguration().FirstParameter().InEcx(),
+                    CallingConvention::C_THISCALL);
         Install(DetourType::CALL);
     }
 
@@ -538,8 +524,12 @@ public:
             throw std::exception("Offset cannot be lazy");
 
         m_address = address.m_fixed_value;
-        InitWrapper(reinterpret_cast<void*>(detourFunc), m_param_sizes, m_param_count, m_return_size,
-                    UsercallConfiguration().FirstParameter().InEcx(), CallingConvention::C_THISCALL);
+        InitWrapper(reinterpret_cast<void*>(detourFunc),
+                    m_param_sizes,
+                    m_param_count,
+                    m_return_size,
+                    UsercallConfiguration().FirstParameter().InEcx(),
+                    CallingConvention::C_THISCALL);
         Install(DetourType::CALL);
     }
 };

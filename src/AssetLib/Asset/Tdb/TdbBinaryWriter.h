@@ -1,9 +1,9 @@
 #pragma once
 
+#include "TdbEmitter.h"
+
 #include <memory>
 #include <ostream>
-
-#include "TdbEmitter.h"
 
 namespace tdb
 {
@@ -14,4 +14,4 @@ namespace tdb
 
         static std::unique_ptr<ITdbEmitter> Create(std::ostream& stream);
     };
-}
+} // namespace tdb

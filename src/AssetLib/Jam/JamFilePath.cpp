@@ -1,10 +1,10 @@
 #include "JamFilePath.h"
 
-#include <algorithm>
-#include <stdexcept>
-
 #include "FileUtils.h"
 #include "StringUtils.h"
+
+#include <algorithm>
+#include <stdexcept>
 
 using namespace jam;
 
@@ -76,8 +76,7 @@ namespace jam
         seed ^= (seed << 6) + (seed >> 2) + 0x1D87BAC0 + static_cast<std::size_t>(obj.m_depth);
         return seed;
     }
-}
-
+} // namespace jam
 
 namespace std
 {
@@ -85,7 +84,7 @@ namespace std
     {
         return hash_value(v);
     }
-}
+} // namespace std
 
 JamFilePath JamFilePath::Parent() const
 {

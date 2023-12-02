@@ -1,11 +1,11 @@
 #include "MdbUnitProcessor.h"
 
+#include "Asset/Mdb/MdbBinaryWriter.h"
+#include "Asset/Mdb/MdbTextReader.h"
+#include "StringUtils.h"
+
 #include <filesystem>
 #include <fstream>
-
-#include "StringUtils.h"
-#include "Asset/Mdb/MdbTextReader.h"
-#include "Asset/Mdb/MdbBinaryWriter.h"
 
 namespace fs = std::filesystem;
 

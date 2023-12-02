@@ -4,9 +4,9 @@
 
 #pragma warning(push, 0)
 #include "Parsing/Common/CommonGrammarHelper.h"
+#include "Parsing/Parser/Idb/IdbBaseListener.h"
 #include "Parsing/Parser/Idb/IdbLexer.h"
 #include "Parsing/Parser/Idb/IdbParser.h"
-#include "Parsing/Parser/Idb/IdbBaseListener.h"
 #pragma warning(pop)
 
 namespace idb
@@ -111,7 +111,11 @@ namespace idb
 
     class CustomTdbErrorListener final : public antlr4::BaseErrorListener
     {
-        void syntaxError(antlr4::Recognizer* recognizer, antlr4::Token* offendingSymbol, const size_t line, const size_t charPositionInLine, const std::string& msg,
+        void syntaxError(antlr4::Recognizer* recognizer,
+                         antlr4::Token* offendingSymbol,
+                         const size_t line,
+                         const size_t charPositionInLine,
+                         const std::string& msg,
                          std::exception_ptr e) override
         {
             std::ostringstream ss;
@@ -151,7 +155,7 @@ namespace idb
         std::istream& m_stream;
         IIdbEmitter& m_emitter;
     };
-}
+} // namespace idb
 
 using namespace idb;
 

@@ -1,11 +1,11 @@
 #include "TokenStream.h"
 
+#include "Endianness.h"
+#include "StreamUtils.h"
+
 #include <cassert>
 #include <deque>
 #include <vector>
-
-#include "Endianness.h"
-#include "StreamUtils.h"
 
 Token::Token()
     : m_type(TOKEN_INVALID),
@@ -208,88 +208,88 @@ private:
             switch (nextTokenType)
             {
             case TOKEN_STRING:
-                {
-                    auto str = m_reader.ReadStringZeroTerminated();
-                    m_current_token = Token(TOKEN_STRING, std::move(str));
-                    break;
-                }
+            {
+                auto str = m_reader.ReadStringZeroTerminated();
+                m_current_token = Token(TOKEN_STRING, std::move(str));
+                break;
+            }
 
             case TOKEN_FLOAT:
-                {
-                    const auto val = m_reader.ReadFp32();
-                    m_current_token = Token(TOKEN_FLOAT, val);
-                    break;
-                }
+            {
+                const auto val = m_reader.ReadFp32();
+                m_current_token = Token(TOKEN_FLOAT, val);
+                break;
+            }
 
             case TOKEN_INT:
-                {
-                    const auto val = m_reader.ReadInt32();
-                    m_current_token = Token(TOKEN_INT, static_cast<int>(val));
-                    break;
-                }
+            {
+                const auto val = m_reader.ReadInt32();
+                m_current_token = Token(TOKEN_INT, static_cast<int>(val));
+                break;
+            }
 
             case TOKEN_INT8:
-                {
-                    const auto val = m_reader.ReadInt8();
-                    m_current_token = Token(TOKEN_INT, static_cast<int>(val));
-                    break;
-                }
+            {
+                const auto val = m_reader.ReadInt8();
+                m_current_token = Token(TOKEN_INT, static_cast<int>(val));
+                break;
+            }
 
             case TOKEN_UINT8:
-                {
-                    const auto val = m_reader.ReadUInt8();
-                    m_current_token = Token(TOKEN_INT, static_cast<int>(val));
-                    break;
-                }
+            {
+                const auto val = m_reader.ReadUInt8();
+                m_current_token = Token(TOKEN_INT, static_cast<int>(val));
+                break;
+            }
 
             case TOKEN_INT16:
-                {
-                    const auto val = m_reader.ReadInt16();
-                    m_current_token = Token(TOKEN_INT, static_cast<int>(val));
-                    break;
-                }
+            {
+                const auto val = m_reader.ReadInt16();
+                m_current_token = Token(TOKEN_INT, static_cast<int>(val));
+                break;
+            }
 
             case TOKEN_UINT16:
-                {
-                    const auto val = m_reader.ReadUInt16();
-                    m_current_token = Token(TOKEN_INT, static_cast<int>(val));
-                    break;
-                }
+            {
+                const auto val = m_reader.ReadUInt16();
+                m_current_token = Token(TOKEN_INT, static_cast<int>(val));
+                break;
+            }
 
             case TOKEN_FP16_MAN_12:
-                {
-                    const auto val = m_reader.ReadInt16();
-                    m_current_token = Token(TOKEN_FLOAT, static_cast<float>(val) / 4096.0f);
-                    break;
-                }
+            {
+                const auto val = m_reader.ReadInt16();
+                m_current_token = Token(TOKEN_FLOAT, static_cast<float>(val) / 4096.0f);
+                break;
+            }
 
             case TOKEN_FP16_MAN_9:
-                {
-                    const auto val = m_reader.ReadInt16();
-                    m_current_token = Token(TOKEN_FLOAT, static_cast<float>(val) / 32.0f);
-                    break;
-                }
+            {
+                const auto val = m_reader.ReadInt16();
+                m_current_token = Token(TOKEN_FLOAT, static_cast<float>(val) / 32.0f);
+                break;
+            }
 
             case TOKEN_FP16_MAN_0:
-                {
-                    const auto val = m_reader.ReadInt16();
-                    m_current_token = Token(TOKEN_FLOAT, static_cast<float>(val));
-                    break;
-                }
+            {
+                const auto val = m_reader.ReadInt16();
+                m_current_token = Token(TOKEN_FLOAT, static_cast<float>(val));
+                break;
+            }
 
             case TOKEN_FP8:
-                {
-                    const auto val = m_reader.ReadInt8();
-                    m_current_token = Token(TOKEN_FLOAT, static_cast<float>(val) / 127.0f);
-                    break;
-                }
+            {
+                const auto val = m_reader.ReadInt8();
+                m_current_token = Token(TOKEN_FLOAT, static_cast<float>(val) / 127.0f);
+                break;
+            }
 
             case TOKEN_WCHAR:
-                {
-                    const auto val = m_reader.ReadUInt16();
-                    m_current_token = Token(static_cast<token_type_t>(val));
-                    break;
-                }
+            {
+                const auto val = m_reader.ReadUInt16();
+                m_current_token = Token(static_cast<token_type_t>(val));
+                break;
+            }
 
             case TOKEN_ARRAY:
                 ReadArrayDef();
@@ -329,8 +329,7 @@ private:
                     m_current_token = Token(nextTokenType);
                 break;
             }
-        }
-        while (shouldContinue);
+        } while (shouldContinue);
     }
 
     utils::BinaryReaderStream m_reader;

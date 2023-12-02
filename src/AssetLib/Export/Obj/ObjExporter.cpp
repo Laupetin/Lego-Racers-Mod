@@ -1,20 +1,20 @@
 #include "ObjExporter.h"
 
-#include <algorithm>
-#include <sstream>
-#include <cassert>
-#include <fstream>
-#include <iostream>
-#include <filesystem>
-#include <unordered_map>
-
+#include "Asset/Gdb/GdbStructWriter.h"
+#include "Asset/Gdb/GdbTextReader.h"
+#include "Asset/Mdb/MdbTextReader.h"
 #include "Obj.h"
 #include "ObjDeduplicator.h"
 #include "ObjMtlConverter.h"
 #include "ObjWriter.h"
-#include "Asset/Gdb/GdbStructWriter.h"
-#include "Asset/Gdb/GdbTextReader.h"
-#include "Asset/Mdb/MdbTextReader.h"
+
+#include <algorithm>
+#include <cassert>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <unordered_map>
 
 namespace fs = std::filesystem;
 
@@ -63,7 +63,9 @@ namespace obj
         {
             const auto& vertex = gdbModel.m_vertices[vertexSelector.m_vertex_offset + vertexIndex];
 
-            object.m_vertices.emplace_back(vertex.m_position.x, vertex.m_position.y, vertex.m_position.z,
+            object.m_vertices.emplace_back(vertex.m_position.x,
+                                           vertex.m_position.y,
+                                           vertex.m_position.z,
                                            static_cast<float>(vertex.m_color.r) / static_cast<float>(std::numeric_limits<unsigned char>::max()),
                                            static_cast<float>(vertex.m_color.g) / static_cast<float>(std::numeric_limits<unsigned char>::max()),
                                            static_cast<float>(vertex.m_color.b) / static_cast<float>(std::numeric_limits<unsigned char>::max()));
@@ -109,12 +111,17 @@ namespace obj
         }
     }
 
-    bool GetAbsoluteFaceVertex(const size_t relativeIndex, size_t& objIndex, const gdb::VertexSelector& vertexSelector, const gdb::VertexSelector& previousVertexSelector,
-                               const size_t vertexSelectorObjOffset, const size_t previousVertexSelectorObjOffset)
+    bool GetAbsoluteFaceVertex(const size_t relativeIndex,
+                               size_t& objIndex,
+                               const gdb::VertexSelector& vertexSelector,
+                               const gdb::VertexSelector& previousVertexSelector,
+                               const size_t vertexSelectorObjOffset,
+                               const size_t previousVertexSelectorObjOffset)
     {
         if (relativeIndex < vertexSelector.m_shift_forward_count)
         {
-            // In theory the game could load this (would reference back to selectors even before the previous) but i doubt the game's tools would build such a file
+            // In theory the game could load this (would reference back to selectors even before the previous) but i doubt the game's tools would build such a
+            // file
             if (previousVertexSelector.m_shift_forward_count > relativeIndex)
                 return false;
 
@@ -138,8 +145,12 @@ namespace obj
         return true;
     }
 
-    void AddFacesWithPosition(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector, const gdb::VertexSelector& previousVertexSelector,
-                              const gdb::FaceSelector& currentFaceSelector, const int currentGroup)
+    void AddFacesWithPosition(const gdb::Model& gdbModel,
+                              ObjObject& object,
+                              const gdb::VertexSelector& vertexSelector,
+                              const gdb::VertexSelector& previousVertexSelector,
+                              const gdb::FaceSelector& currentFaceSelector,
+                              const int currentGroup)
     {
         const auto vertexSelectorObjOffset = object.m_vertices.size() - vertexSelector.m_vertex_count;
         const auto previousVertexSelectorObjOffset = vertexSelectorObjOffset - previousVertexSelector.m_vertex_count;
@@ -149,9 +160,12 @@ namespace obj
             const auto& face = gdbModel.m_faces[currentFaceSelector.m_face_offset + faceIndex];
             size_t absoluteVertices[3];
 
-            if (!GetAbsoluteFaceVertex(face.m_indices[0], absoluteVertices[0], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
-                || !GetAbsoluteFaceVertex(face.m_indices[1], absoluteVertices[1], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
-                || !GetAbsoluteFaceVertex(face.m_indices[2], absoluteVertices[2], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset))
+            if (!GetAbsoluteFaceVertex(
+                    face.m_indices[0], absoluteVertices[0], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
+                || !GetAbsoluteFaceVertex(
+                    face.m_indices[1], absoluteVertices[1], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
+                || !GetAbsoluteFaceVertex(
+                    face.m_indices[2], absoluteVertices[2], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset))
             {
                 assert(false);
                 continue;
@@ -161,8 +175,12 @@ namespace obj
         }
     }
 
-    void AddFacesWithPositionUv(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector, const gdb::VertexSelector& previousVertexSelector,
-                                const gdb::FaceSelector& currentFaceSelector, const int currentGroup)
+    void AddFacesWithPositionUv(const gdb::Model& gdbModel,
+                                ObjObject& object,
+                                const gdb::VertexSelector& vertexSelector,
+                                const gdb::VertexSelector& previousVertexSelector,
+                                const gdb::FaceSelector& currentFaceSelector,
+                                const int currentGroup)
     {
         const auto vertexSelectorObjOffset = object.m_vertices.size() - vertexSelector.m_vertex_count;
         const auto previousVertexSelectorObjOffset = vertexSelectorObjOffset - previousVertexSelector.m_vertex_count;
@@ -172,23 +190,28 @@ namespace obj
             const auto& face = gdbModel.m_faces[currentFaceSelector.m_face_offset + faceIndex];
             size_t absoluteVertices[3];
 
-            if (!GetAbsoluteFaceVertex(face.m_indices[0], absoluteVertices[0], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
-                || !GetAbsoluteFaceVertex(face.m_indices[1], absoluteVertices[1], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
-                || !GetAbsoluteFaceVertex(face.m_indices[2], absoluteVertices[2], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset))
+            if (!GetAbsoluteFaceVertex(
+                    face.m_indices[0], absoluteVertices[0], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
+                || !GetAbsoluteFaceVertex(
+                    face.m_indices[1], absoluteVertices[1], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
+                || !GetAbsoluteFaceVertex(
+                    face.m_indices[2], absoluteVertices[2], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset))
             {
                 assert(false);
                 continue;
             }
 
-            object.m_faces.emplace_back(absoluteVertices[0], absoluteVertices[0],
-                                        absoluteVertices[1], absoluteVertices[1],
-                                        absoluteVertices[2], absoluteVertices[2],
-                                        currentGroup);
+            object.m_faces.emplace_back(
+                absoluteVertices[0], absoluteVertices[0], absoluteVertices[1], absoluteVertices[1], absoluteVertices[2], absoluteVertices[2], currentGroup);
         }
     }
 
-    void AddFacesWithPositionUvNormal(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector, const gdb::VertexSelector& previousVertexSelector,
-                                      const gdb::FaceSelector& currentFaceSelector, const int currentGroup)
+    void AddFacesWithPositionUvNormal(const gdb::Model& gdbModel,
+                                      ObjObject& object,
+                                      const gdb::VertexSelector& vertexSelector,
+                                      const gdb::VertexSelector& previousVertexSelector,
+                                      const gdb::FaceSelector& currentFaceSelector,
+                                      const int currentGroup)
     {
         const auto vertexSelectorObjOffset = object.m_vertices.size() - vertexSelector.m_vertex_count;
         const auto previousVertexSelectorObjOffset = vertexSelectorObjOffset - previousVertexSelector.m_vertex_count;
@@ -198,23 +221,36 @@ namespace obj
             const auto& face = gdbModel.m_faces[currentFaceSelector.m_face_offset + faceIndex];
             size_t absoluteVertices[3];
 
-            if (!GetAbsoluteFaceVertex(face.m_indices[0], absoluteVertices[0], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
-                || !GetAbsoluteFaceVertex(face.m_indices[1], absoluteVertices[1], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
-                || !GetAbsoluteFaceVertex(face.m_indices[2], absoluteVertices[2], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset))
+            if (!GetAbsoluteFaceVertex(
+                    face.m_indices[0], absoluteVertices[0], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
+                || !GetAbsoluteFaceVertex(
+                    face.m_indices[1], absoluteVertices[1], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset)
+                || !GetAbsoluteFaceVertex(
+                    face.m_indices[2], absoluteVertices[2], vertexSelector, previousVertexSelector, vertexSelectorObjOffset, previousVertexSelectorObjOffset))
             {
                 assert(false);
                 continue;
             }
 
-            object.m_faces.emplace_back(absoluteVertices[0], absoluteVertices[0], absoluteVertices[0],
-                                        absoluteVertices[1], absoluteVertices[1], absoluteVertices[1],
-                                        absoluteVertices[2], absoluteVertices[2], absoluteVertices[2],
+            object.m_faces.emplace_back(absoluteVertices[0],
+                                        absoluteVertices[0],
+                                        absoluteVertices[0],
+                                        absoluteVertices[1],
+                                        absoluteVertices[1],
+                                        absoluteVertices[1],
+                                        absoluteVertices[2],
+                                        absoluteVertices[2],
+                                        absoluteVertices[2],
                                         currentGroup);
         }
     }
 
-    void AddFacesToObject(const gdb::Model& gdbModel, ObjObject& object, const gdb::VertexSelector& vertexSelector, const gdb::VertexSelector& previousVertexSelector,
-                          const gdb::FaceSelector& currentFaceSelector, const int currentGroup)
+    void AddFacesToObject(const gdb::Model& gdbModel,
+                          ObjObject& object,
+                          const gdb::VertexSelector& vertexSelector,
+                          const gdb::VertexSelector& previousVertexSelector,
+                          const gdb::FaceSelector& currentFaceSelector,
+                          const int currentGroup)
     {
         switch (gdbModel.m_vertex_format)
         {
@@ -344,7 +380,8 @@ namespace obj
                 break;
 
             case gdb::TOKEN_META_VERTICES:
-                if (meta.m_value1 >= 0 && meta.m_value2 >= 0 && static_cast<size_t>(meta.m_value1) + static_cast<size_t>(meta.m_value2) <= gdbModel.m_vertices.size())
+                if (meta.m_value1 >= 0 && meta.m_value2 >= 0
+                    && static_cast<size_t>(meta.m_value1) + static_cast<size_t>(meta.m_value2) <= gdbModel.m_vertices.size())
                 {
                     previousVertexSelector = currentVertexSelector;
                     currentVertexSelector.m_shift_forward_count = meta.m_value0;
@@ -358,7 +395,8 @@ namespace obj
                 break;
 
             case gdb::TOKEN_META_FACES:
-                if (meta.m_value0 >= 0 && meta.m_value1 >= 0 && static_cast<size_t>(meta.m_value0) + static_cast<size_t>(meta.m_value1) <= gdbModel.m_faces.size())
+                if (meta.m_value0 >= 0 && meta.m_value1 >= 0
+                    && static_cast<size_t>(meta.m_value0) + static_cast<size_t>(meta.m_value1) <= gdbModel.m_faces.size())
                 {
                     currentFaceSelector.m_face_offset = meta.m_value0;
                     currentFaceSelector.m_face_count = meta.m_value1;
@@ -429,7 +467,7 @@ namespace obj
         writer.WriteMtl(out);
         return true;
     }
-}
+} // namespace obj
 
 using namespace obj;
 

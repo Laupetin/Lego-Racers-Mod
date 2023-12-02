@@ -1,13 +1,13 @@
 #pragma once
 
-#include <cstdint>
-#include <functional>
-
-#include "FunctionLike.h"
 #include "CallDetails.h"
+#include "FunctionLike.h"
 #include "OffsetBase.h"
 #include "StackToRegisterWrapperBuilder.h"
 #include "UsercallConfiguration.h"
+
+#include <cstdint>
+#include <functional>
 
 class BaseOffset;
 
@@ -26,8 +26,7 @@ public:
     void SetTargetCompiler(TargetCompiler targetCompiler);
 };
 
-template <class T>
-class FunctionOffset final : public _Get_function_impl<T>::type, ILazyOffsetInitTarget
+template<class T> class FunctionOffset final : public _Get_function_impl<T>::type, ILazyOffsetInitTarget
 {
 public:
     using _Get_function_impl<T>::type::m_func;
@@ -59,8 +58,7 @@ public:
     }
 };
 
-template <class T>
-class FunctionOffsetStdcall final : public _Get_function_impl_stdcall<T>::type, ILazyOffsetInitTarget
+template<class T> class FunctionOffsetStdcall final : public _Get_function_impl_stdcall<T>::type, ILazyOffsetInitTarget
 {
 public:
     using _Get_function_impl_stdcall<T>::type::m_func;
@@ -92,8 +90,7 @@ public:
     }
 };
 
-template <class T>
-class FunctionOffsetVarArgs final : public _Get_function_impl_varargs<T>::type, ILazyOffsetInitTarget
+template<class T> class FunctionOffsetVarArgs final : public _Get_function_impl_varargs<T>::type, ILazyOffsetInitTarget
 {
 public:
     using _Get_function_impl_varargs<T>::type::m_func;
@@ -136,13 +133,16 @@ protected:
     void InitWrapper(uintptr_t offset, const size_t* paramSizes, int paramCount, size_t returnParamSize);
 };
 
-template <class T>
-class FunctionOffsetUsercall final : public _Get_function_impl<T>::type, public _Get_function_impl_param_capture<T>::type, public FunctionOffsetUsercallBase, ILazyOffsetInitTarget
+template<class T>
+class FunctionOffsetUsercall final : public _Get_function_impl<T>::type,
+                                     public _Get_function_impl_param_capture<T>::type,
+                                     public FunctionOffsetUsercallBase,
+                                     ILazyOffsetInitTarget
 {
 public:
     using FunctionOffsetUsercallBase::m_wrapper;
-    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_param_count;
+    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_return_size;
     using _Get_function_impl<T>::type::m_func;
 
@@ -184,13 +184,16 @@ protected:
     void InitWrapper(uintptr_t offset, const size_t* paramSizes, int paramCount, size_t returnParamSize);
 };
 
-template <class T>
-class FunctionOffsetThiscall final : public _Get_function_impl<T>::type, public _Get_function_impl_param_capture<T>::type, public FunctionOffsetThiscallBase, ILazyOffsetInitTarget
+template<class T>
+class FunctionOffsetThiscall final : public _Get_function_impl<T>::type,
+                                     public _Get_function_impl_param_capture<T>::type,
+                                     public FunctionOffsetThiscallBase,
+                                     ILazyOffsetInitTarget
 {
 public:
     using FunctionOffsetThiscallBase::m_wrapper;
-    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_param_count;
+    using ParamCaptureFunc::m_param_sizes;
     using ParamCaptureFunc::m_return_size;
     using _Get_function_impl<T>::type::m_func;
 
@@ -222,7 +225,7 @@ public:
     }
 };
 
-template <typename T>
+template<typename T>
 // ReSharper disable once CppPolymorphicClassWithNonVirtualPublicDestructor
 class FieldOffset final : ILazyOffsetInitTarget
 {

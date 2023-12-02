@@ -1,9 +1,9 @@
 #pragma once
 
+#include "ProjectDefinition.h"
+
 #include <filesystem>
 #include <memory>
-
-#include "ProjectDefinition.h"
 
 class ProjectContext
 {

@@ -86,21 +86,21 @@ namespace idb
                 m_emitter.EmitTga();
                 break;
             case TOKEN_KEYWORD_CHROMA_KEY:
-                {
-                    const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    m_emitter.EmitChromaKey(value0, value1, value2);
-                    break;
-                }
+            {
+                const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                m_emitter.EmitChromaKey(value0, value1, value2);
+                break;
+            }
             case TOKEN_KEYWORD_TINT:
-                {
-                    const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    m_emitter.EmitTint(value0, value1, value2);
-                    break;
-                }
+            {
+                const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                m_emitter.EmitTint(value0, value1, value2);
+                break;
+            }
             default:
                 throw IdbBinaryReadingException("Unexpected token");
             }
@@ -111,7 +111,7 @@ namespace idb
         std::unique_ptr<ITokenInputStream> m_tokens;
         IIdbEmitter& m_emitter;
     };
-}
+} // namespace idb
 
 void IdbBinaryReader::Read(std::istream& input, IIdbEmitter& emitter)
 {

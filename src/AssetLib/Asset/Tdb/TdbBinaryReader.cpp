@@ -89,13 +89,13 @@ namespace tdb
                 m_emitter.EmitTga();
                 break;
             case TOKEN_KEYWORD_CHROMA_KEY:
-                {
-                    const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    m_emitter.EmitChromaKey(value0, value1, value2);
-                    break;
-                }
+            {
+                const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                m_emitter.EmitChromaKey(value0, value1, value2);
+                break;
+            }
             case TOKEN_KEYWORD_2D:
                 m_emitter.EmitKeyword2D();
                 break;
@@ -112,7 +112,7 @@ namespace tdb
         std::unique_ptr<ITokenInputStream> m_tokens;
         ITdbEmitter& m_emitter;
     };
-}
+} // namespace tdb
 
 void TdbBinaryReader::Read(std::istream& input, ITdbEmitter& emitter)
 {

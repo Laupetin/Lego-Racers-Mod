@@ -1,10 +1,10 @@
 #include "TdbCreator.h"
 
-#include <iostream>
-
-#include "TokenStream.h"
-#include "TdbTextReader.h"
 #include "TdbBinaryWriter.h"
+#include "TdbTextReader.h"
+#include "TokenStream.h"
+
+#include <iostream>
 
 using namespace tdb;
 

@@ -1,19 +1,18 @@
-#include <algorithm>
-#include <string>
-#include <filesystem>
-#include <iostream>
-#include <iterator>
-
 #include "Asset/IAssetConverter.h"
 #include "Export/Obj/ObjExporter.h"
 #include "Export/Obj/ObjImporter.h"
 
+#include <algorithm>
+#include <filesystem>
+#include <iostream>
+#include <iterator>
+#include <string>
+
 namespace fs = std::filesystem;
 
-IAssetConverter* availableConverters[]
-{
+IAssetConverter* availableConverters[]{
     new obj::ObjExporter(),
-    new obj::ObjImporter()
+    new obj::ObjImporter(),
 };
 
 int main(const int argc, const char** argv)
@@ -31,10 +30,12 @@ int main(const int argc, const char** argv)
         for (auto& c : extension)
             c = static_cast<char>(toupper(c));
 
-        const auto availableConverter = std::find_if(std::begin(availableConverters), std::end(availableConverters), [&extension](const IAssetConverter* converter)
-        {
-            return converter->SupportsExtension(extension);
-        });
+        const auto availableConverter = std::find_if(std::begin(availableConverters),
+                                                     std::end(availableConverters),
+                                                     [&extension](const IAssetConverter* converter)
+                                                     {
+                                                         return converter->SupportsExtension(extension);
+                                                     });
 
         if (availableConverter && availableConverter != std::end(availableConverters))
         {

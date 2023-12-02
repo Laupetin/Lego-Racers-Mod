@@ -1,11 +1,11 @@
 #include "SrfBinaryReader.h"
 
-#include <sstream>
-
 #include "Endianness.h"
 #include "StreamUtils.h"
 #include "StringUtils.h"
 #include "TokenStream.h"
+
+#include <sstream>
 
 namespace srf
 {
@@ -75,7 +75,7 @@ namespace srf
         std::istream& m_stream;
         ISrfEmitter& m_emitter;
     };
-}
+} // namespace srf
 
 using namespace srf;
 

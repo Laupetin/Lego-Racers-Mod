@@ -1,7 +1,7 @@
 #pragma once
-#include <vector>
-
 #include "Register.h"
+
+#include <vector>
 
 class UsercallConfiguration
 {

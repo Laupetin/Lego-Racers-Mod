@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
-#include <string>
 #include <memory>
+#include <string>
 
 enum TokenType
 {
@@ -20,12 +20,12 @@ enum TokenType
     TOKEN_UINT8 = 0xC,
     TOKEN_INT16 = 0xD,
     TOKEN_UINT16 = 0xE,
-    TOKEN_FP16_MAN_12 = 0xF,
     // 16bit number -> 4bit decimal + 12bit mantissa
-    TOKEN_FP16_MAN_9 = 0x10,
+    TOKEN_FP16_MAN_12 = 0xF,
     // 16bit number -> 7bit decimal + 9bit mantissa
-    TOKEN_FP16_MAN_0 = 0x11,
+    TOKEN_FP16_MAN_9 = 0x10,
     // 16bit number -> 16bit decimal + 0bit mantissa -> Basically int16 read as a float
+    TOKEN_FP16_MAN_0 = 0x11,
     TOKEN_FP8 = 0x12,
     TOKEN_WCHAR = 0x13,
     TOKEN_ARRAY = 0x14,

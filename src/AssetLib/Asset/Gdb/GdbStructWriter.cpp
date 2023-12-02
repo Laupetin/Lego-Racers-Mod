@@ -122,7 +122,7 @@ namespace gdb
     private:
         Model& m_model;
     };
-}
+} // namespace gdb
 
 using namespace gdb;
 

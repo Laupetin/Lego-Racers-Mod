@@ -142,28 +142,24 @@ namespace gdb
 
         Model();
     };
-}
+} // namespace gdb
 
-template <>
-struct std::hash<gdb::Vec2>
+template<> struct std::hash<gdb::Vec2>
 {
     std::size_t operator()(const gdb::Vec2& vec) const noexcept;
 };
 
-template <>
-struct std::hash<gdb::Vec3>
+template<> struct std::hash<gdb::Vec3>
 {
     std::size_t operator()(const gdb::Vec3& vec) const noexcept;
 };
 
-template <>
-struct std::hash<gdb::Color4>
+template<> struct std::hash<gdb::Color4>
 {
     std::size_t operator()(const gdb::Color4& clr) const noexcept;
 };
 
-template <>
-struct std::hash<gdb::Vertex>
+template<> struct std::hash<gdb::Vertex>
 {
     std::size_t operator()(const gdb::Vertex& v) const noexcept;
 };

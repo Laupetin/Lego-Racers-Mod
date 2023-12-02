@@ -2,8 +2,8 @@
 #include "IAsmWrapper.h"
 #include "Register.h"
 
-#include <mutex>
 #include <memory>
+#include <mutex>
 
 #pragma warning(push, 0)
 #include <asmjit.h>

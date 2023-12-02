@@ -13,6 +13,7 @@ namespace bmp
     constexpr auto BMP_BI_PNG = 5L;
 
 #pragma pack(push, 2)
+
     struct BitmapFileHeader
     {
         uint16_t bfType;
@@ -21,6 +22,7 @@ namespace bmp
         uint16_t bfReserved2;
         uint32_t bfOffBits;
     };
+
 #pragma pack(pop)
 
     static_assert(sizeof(BitmapFileHeader) == 14u);
@@ -51,4 +53,4 @@ namespace bmp
     };
 
     static_assert(sizeof(BitmapRgbQuad) == 4u);
-}
+} // namespace bmp

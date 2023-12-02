@@ -1,9 +1,9 @@
 #include "TdbBinaryWriter.h"
 
-#include <sstream>
-
 #include "Tdb.h"
 #include "TokenStream.h"
+
+#include <sstream>
 
 namespace tdb
 {
@@ -107,7 +107,7 @@ namespace tdb
         std::unique_ptr<ITokenOutputStream> m_temp_tokens;
         size_t m_current_count;
     };
-}
+} // namespace tdb
 
 using namespace tdb;
 

@@ -1,8 +1,8 @@
 #include "TdbTextWriter.h"
 
-#include <iomanip>
-
 #include "Utils/AbstractTextDumper.h"
+
+#include <iomanip>
 
 namespace tdb
 {
@@ -101,7 +101,7 @@ namespace tdb
 
         bool m_first_texture_element;
     };
-}
+} // namespace tdb
 
 using namespace tdb;
 

@@ -1,10 +1,10 @@
 #include "IdbCreator.h"
 
-#include <iostream>
-
-#include "TokenStream.h"
-#include "IdbTextReader.h"
 #include "IdbBinaryWriter.h"
+#include "IdbTextReader.h"
+#include "TokenStream.h"
+
+#include <iostream>
 
 using namespace idb;
 

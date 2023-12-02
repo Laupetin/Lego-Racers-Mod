@@ -1,10 +1,10 @@
 #include "GdbCreator.h"
 
-#include <iostream>
-
-#include "TokenStream.h"
-#include "GdbTextReader.h"
 #include "GdbBinaryWriter.h"
+#include "GdbTextReader.h"
+#include "TokenStream.h"
+
+#include <iostream>
 
 using namespace gdb;
 

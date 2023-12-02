@@ -1,13 +1,12 @@
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include <catch2/generators/catch_generators.hpp>
+#include "TokenStream.h"
 
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/generators/catch_generators.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <cstdint>
 #include <limits>
 #include <sstream>
 #include <type_traits>
-
-#include "TokenStream.h"
 
 using namespace Catch::Matchers;
 
@@ -241,7 +240,8 @@ namespace test::token_stream
         std::stringstream ss;
         const auto stream = ITokenInputStream::Create(ss);
 
-        const auto tokenType = GENERATE(TOKEN_COMMA, TOKEN_LEFT_CURLY, TOKEN_RIGHT_CURLY, TOKEN_LEFT_BRACKET, TOKEN_RIGHT_BRACKET, TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CUSTOM_FIRST, 99);
+        const auto tokenType = GENERATE(
+            TOKEN_COMMA, TOKEN_LEFT_CURLY, TOKEN_RIGHT_CURLY, TOKEN_LEFT_BRACKET, TOKEN_RIGHT_BRACKET, TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CUSTOM_FIRST, 99);
         ss << static_cast<char>(tokenType);
 
         INFO("Simple token recognized: " << tokenType);
@@ -617,12 +617,7 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_STRING),
-            'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd',
-            '\x00'
-        };
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_STRING), 'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '\x00'};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -637,13 +632,13 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_FLOAT),
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_FLOAT),
 
-            // 0x44a72000 -> 1337.0f
-            0x00, 0x20, 0xa7, 0x44
-        };
+                                           // 0x44a72000 -> 1337.0f
+                                           0x00,
+                                           0x20,
+                                           0xa7,
+                                           0x44};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -658,11 +653,7 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_INT),
-            0xBA, 0xE0, 0xCB, 0x00
-        };
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_INT), 0xBA, 0xE0, 0xCB, 0x00};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -713,9 +704,8 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        const uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(token)
+        const uint8_t expectedOutput[]{
+            static_cast<uint8_t>(token),
         };
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
@@ -731,11 +721,7 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_INT8),
-            0x2A
-        };
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_INT8), 0x2A};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -750,11 +736,7 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_UINT8),
-            0xAE
-        };
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_UINT8), 0xAE};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -769,11 +751,7 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_INT16),
-            0xAE, 0x60
-        };
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_INT16), 0xAE, 0x60};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -788,11 +766,7 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_UINT16),
-            0x96, 0xA4
-        };
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_UINT16), 0x96, 0xA4};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -807,11 +781,7 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_FP16_MAN_12),
-            0x80, 0x30
-        };
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_FP16_MAN_12), 0x80, 0x30};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -826,11 +796,7 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_FP16_MAN_9),
-            0x5F, 0x05
-        };
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_FP16_MAN_9), 0x5F, 0x05};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -845,11 +811,7 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_FP16_MAN_0),
-            0x4B, 0x65
-        };
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_FP16_MAN_0), 0x4B, 0x65};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -864,11 +826,7 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_FP8),
-            0x35
-        };
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_FP8), 0x35};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -883,11 +841,7 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            static_cast<uint8_t>(TOKEN_WCHAR),
-            0x3D, 0x56
-        };
+        constexpr uint8_t expectedOutput[]{static_cast<uint8_t>(TOKEN_WCHAR), 0x3D, 0x56};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
@@ -902,12 +856,9 @@ namespace test::token_stream
 
         const auto output = ss.str();
 
-        constexpr uint8_t expectedOutput[]
-        {
-            0x2A
-        };
+        constexpr uint8_t expectedOutput[]{0x2A};
 
         REQUIRE(output.size() == std::extent_v<decltype(expectedOutput)>);
         REQUIRE(output == std::string(reinterpret_cast<const char*>(expectedOutput), std::extent_v<decltype(expectedOutput)>));
     }
-}
+} // namespace test::token_stream

@@ -1,16 +1,16 @@
 #pragma once
 
-#include <istream>
-
 #include "MdbEmitter.h"
+
+#include <istream>
 
 namespace mdb
 {
     class MdbBinaryReader
     {
-	public:
-		MdbBinaryReader() = delete;
+    public:
+        MdbBinaryReader() = delete;
 
-		static void Read(std::istream& input, IMdbEmitter& emitter);
+        static void Read(std::istream& input, IMdbEmitter& emitter);
     };
-}
+} // namespace mdb

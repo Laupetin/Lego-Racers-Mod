@@ -13,4 +13,4 @@ namespace common_grammar
     bool UnsignedIntValue(antlr4::tree::TerminalNode* node, unsigned int& value);
     bool FloatingValue(antlr4::tree::TerminalNode* node, float& value);
     bool FloatingOrIntValue(antlr4::ParserRuleContext* ctx, float& value);
-}
+} // namespace common_grammar

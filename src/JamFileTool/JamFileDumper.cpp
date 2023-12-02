@@ -1,26 +1,26 @@
 #include "JamFileDumper.h"
 
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <exception>
-#include <filesystem>
-#include <sstream>
-#include <memory>
-#include <vector>
-#include <cstring>
-
-#include "Jam/JamDiskTypes.h"
-#include "Endianness.h"
-#include "Asset/IFileTypeProcessor.h"
 #include "Asset/Bmp/BmpDumper.h"
-#include "Asset/Mdb/MdbDumper.h"
-#include "StreamUtils.h"
-#include "Asset/PassthroughDumper.h"
 #include "Asset/Gdb/GdbDumper.h"
+#include "Asset/IFileTypeProcessor.h"
 #include "Asset/Idb/IdbDumper.h"
+#include "Asset/Mdb/MdbDumper.h"
+#include "Asset/PassthroughDumper.h"
 #include "Asset/Srf/SrfDumper.h"
 #include "Asset/Tdb/TdbDumper.h"
+#include "Endianness.h"
+#include "Jam/JamDiskTypes.h"
+#include "StreamUtils.h"
+
+#include <algorithm>
+#include <cstring>
+#include <exception>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <sstream>
+#include <vector>
 
 using namespace dumping;
 using namespace jam;
@@ -43,8 +43,7 @@ private:
     std::string m_msg;
 };
 
-const IFileTypeProcessor* availableFileTypeDumpers[]
-{
+const IFileTypeProcessor* availableFileTypeDumpers[]{
     new bmp::BmpDumper(),
     new gdb::GdbDumper(),
     new idb::IdbDumper(),
@@ -53,7 +52,7 @@ const IFileTypeProcessor* availableFileTypeDumpers[]
     new tdb::TdbDumper(),
 
     // Passthrough should be last due to it accepting any file and simply dumps its data unmodified
-    new PassthroughDumper()
+    new PassthroughDumper(),
 };
 
 class JamFileDumper
@@ -89,7 +88,8 @@ private:
         if (!currentPath.empty())
             ss << "/";
 
-        const std::string diskDirectoryName(diskDirectory.directoryName, strnlen(diskDirectory.directoryName, std::extent_v<decltype(diskDirectory.directoryName)>));
+        const std::string diskDirectoryName(diskDirectory.directoryName,
+                                            strnlen(diskDirectory.directoryName, std::extent_v<decltype(diskDirectory.directoryName)>));
         ss << diskDirectoryName;
         return ss.str();
     }
@@ -226,7 +226,8 @@ void dumping::DumpJamFile(const std::string& filePath)
     const auto dumpFolder = path.parent_path() / path.filename().replace_extension();
     fs::create_directories(dumpFolder);
 
-    std::cout << "Dumping JAM file \"" << filePath << "\"" << " to folder \"" << dumpFolder << "\"\n";
+    std::cout << "Dumping JAM file \"" << filePath << "\""
+              << " to folder \"" << dumpFolder << "\"\n";
 
     try
     {

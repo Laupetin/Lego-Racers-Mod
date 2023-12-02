@@ -1,12 +1,12 @@
 #include "JamFileWriter.h"
 
+#include "Endianness.h"
+#include "Jam/JamDiskTypes.h"
+#include "StreamUtils.h"
+
 #include <cstdint>
 #include <cstring>
 #include <deque>
-
-#include "Endianness.h"
-#include "StreamUtils.h"
-#include "Jam/JamDiskTypes.h"
 
 using namespace jam;
 
@@ -49,7 +49,7 @@ namespace jam
         int64_t m_offset;
         int64_t m_size;
     };
-}
+} // namespace jam
 
 class JamFileWriterImpl final : public IJamFileWriter
 {
@@ -119,10 +119,8 @@ private:
 
     bool WriteFileData(IJamFileWriterDataProvider& provider)
     {
-        const auto fileDataStartOffset = sizeof(JAM_FILE_MAGIC)
-            + (sizeof(uint32_t) + sizeof(uint32_t)) * m_directories.size()
-            + sizeof(DiskDirectoryEntry) * std::max(m_directories.size() - 1, 0u)
-            + sizeof(DiskFileEntry) * m_files.size();
+        const auto fileDataStartOffset = sizeof(JAM_FILE_MAGIC) + (sizeof(uint32_t) + sizeof(uint32_t)) * m_directories.size()
+                                         + sizeof(DiskDirectoryEntry) * std::max(m_directories.size() - 1, 0u) + sizeof(DiskFileEntry) * m_files.size();
 
         m_stream.seekp(fileDataStartOffset, std::ios::beg);
 
@@ -201,10 +199,8 @@ private:
                 const auto diskDirectoriesBeforeMe = std::max(subDir.m_sub_directory_start_index - 1, 0u);
                 const auto diskFilesBeforeMe = subDir.m_file_start_index;
 
-                diskDir.dataOffset = sizeof(JAM_FILE_MAGIC)
-                    + directoryDataBeforeMe * (sizeof(uint32_t) + sizeof(uint32_t))
-                    + diskDirectoriesBeforeMe * sizeof(DiskDirectoryEntry)
-                    + diskFilesBeforeMe * sizeof(DiskFileEntry);
+                diskDir.dataOffset = sizeof(JAM_FILE_MAGIC) + directoryDataBeforeMe * (sizeof(uint32_t) + sizeof(uint32_t))
+                                     + diskDirectoriesBeforeMe * sizeof(DiskDirectoryEntry) + diskFilesBeforeMe * sizeof(DiskFileEntry);
                 WriteData(&diskDir, sizeof(DiskDirectoryEntry));
             }
 

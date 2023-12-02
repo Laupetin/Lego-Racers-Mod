@@ -1,12 +1,12 @@
 #include "Debug.h"
 
-#include <iostream>
-#include <Windows.h>
-
-#include "RacersOffset.h"
 #include "Detour.h"
 #include "Offset.h"
 #include "Patch.h"
+#include "RacersOffset.h"
+
+#include <Windows.h>
+#include <iostream>
 
 namespace debug
 {
@@ -18,10 +18,10 @@ namespace debug
 
         std::cout << "Save check: Returning " << result << "\n";
 
-        // This crashes if the save has been tampered with, but later 
+        // This crashes if the save has been tampered with, but later
         return 0;
     }
-}
+} // namespace debug
 
 using namespace debug;
 

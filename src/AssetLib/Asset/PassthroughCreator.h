@@ -1,10 +1,10 @@
 #pragma once
 
-#include <cstddef>
-#include <string>
-#include <ostream>
-
 #include "IFileTypeProcessor.h"
+
+#include <cstddef>
+#include <ostream>
+#include <string>
 
 class PassthroughCreator final : public IFileTypeProcessor
 {

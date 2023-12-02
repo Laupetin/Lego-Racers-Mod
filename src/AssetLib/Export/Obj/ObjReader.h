@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Obj.h"
+
 #include <istream>
 #include <memory>
-
-#include "Obj.h"
 
 namespace obj
 {
@@ -22,4 +22,4 @@ namespace obj
         virtual std::unique_ptr<ObjModel> ReadModel() = 0;
         [[nodiscard]] virtual bool HasColors() const = 0;
     };
-}
+} // namespace obj

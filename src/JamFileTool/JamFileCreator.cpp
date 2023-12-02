@@ -1,26 +1,26 @@
 #include "JamFileCreator.h"
 
-#include <deque>
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <exception>
-#include <filesystem>
-#include <sstream>
-#include <memory>
-#include <vector>
-#include <cstring>
-
-#include "Jam/JamDiskTypes.h"
-#include "Endianness.h"
-#include "Asset/IFileTypeProcessor.h"
-#include "Asset/Mdb/MdbCreator.h"
-#include "StreamUtils.h"
-#include "Asset/PassthroughCreator.h"
 #include "Asset/Gdb/GdbCreator.h"
+#include "Asset/IFileTypeProcessor.h"
 #include "Asset/Idb/IdbCreator.h"
+#include "Asset/Mdb/MdbCreator.h"
+#include "Asset/PassthroughCreator.h"
 #include "Asset/Srf/SrfCreator.h"
 #include "Asset/Tdb/TdbCreator.h"
+#include "Endianness.h"
+#include "Jam/JamDiskTypes.h"
+#include "StreamUtils.h"
+
+#include <algorithm>
+#include <cstring>
+#include <deque>
+#include <exception>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <sstream>
+#include <vector>
 
 namespace fs = std::filesystem;
 using namespace jam;
@@ -42,8 +42,7 @@ private:
     std::string m_msg;
 };
 
-const IFileTypeProcessor* availableFileTypeCreators[]
-{
+const IFileTypeProcessor* availableFileTypeCreators[]{
     new gdb::GdbCreator(),
     new idb::IdbCreator(),
     new mdb::MdbCreator(),
@@ -51,7 +50,7 @@ const IFileTypeProcessor* availableFileTypeCreators[]
     new tdb::TdbCreator(),
 
     // Passthrough should be last due to it accepting any file and simply creates its data unmodified
-    new PassthroughCreator()
+    new PassthroughCreator(),
 };
 
 class JamFileDirectoryToCreate
@@ -156,10 +155,8 @@ private:
 
     void WriteFileData()
     {
-        const auto fileDataStartOffset = sizeof(JAM_FILE_MAGIC)
-            + (sizeof(uint32_t) + sizeof(uint32_t)) * m_directories.size()
-            + sizeof(DiskDirectoryEntry) * std::max(m_directories.size() - 1, 0u)
-            + sizeof(DiskFileEntry) * m_files.size();
+        const auto fileDataStartOffset = sizeof(JAM_FILE_MAGIC) + (sizeof(uint32_t) + sizeof(uint32_t)) * m_directories.size()
+                                         + sizeof(DiskDirectoryEntry) * std::max(m_directories.size() - 1, 0u) + sizeof(DiskFileEntry) * m_files.size();
 
         m_stream.seekp(fileDataStartOffset, std::ios::beg);
 
@@ -245,10 +242,8 @@ private:
                 const auto diskDirectoriesBeforeMe = std::max(subDir.m_sub_directory_start_index - 1, 0u);
                 const auto diskFilesBeforeMe = subDir.m_file_start_index;
 
-                diskDir.dataOffset = sizeof(JAM_FILE_MAGIC)
-                    + directoryDataBeforeMe * (sizeof(uint32_t) + sizeof(uint32_t))
-                    + diskDirectoriesBeforeMe * sizeof(DiskDirectoryEntry)
-                    + diskFilesBeforeMe * sizeof(DiskFileEntry);
+                diskDir.dataOffset = sizeof(JAM_FILE_MAGIC) + directoryDataBeforeMe * (sizeof(uint32_t) + sizeof(uint32_t))
+                                     + diskDirectoriesBeforeMe * sizeof(DiskDirectoryEntry) + diskFilesBeforeMe * sizeof(DiskFileEntry);
                 Write(&diskDir, sizeof(DiskDirectoryEntry));
             }
 
@@ -268,7 +263,8 @@ void creating::CreateJamFile(const std::string& directoryPath)
     const fs::path path(directoryPath);
     const auto jamPath = path.parent_path() / path.filename().replace_extension(".JAM");
 
-    std::cout << "Creating JAM file \"" << jamPath.string() << "\"" << " from folder \"" << path.string() << "\"\n";
+    std::cout << "Creating JAM file \"" << jamPath.string() << "\""
+              << " from folder \"" << path.string() << "\"\n";
     std::ofstream stream(jamPath, std::ios::out | std::ios::binary | std::ios::trunc);
     if (!stream.is_open())
     {

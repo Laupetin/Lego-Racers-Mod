@@ -14,4 +14,4 @@ namespace tdb
         TOKEN_KEYWORD_2D = 0x2D,
         TOKEN_KEYWORD_2E = 0x2E,
     };
-}
+} // namespace tdb

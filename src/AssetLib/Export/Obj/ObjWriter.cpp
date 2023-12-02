@@ -42,15 +42,14 @@ void ObjWriter::WriteObj(std::ostream& out, const std::string& matName) const
         if (m_include_colors)
         {
             for (const auto& v : object.m_vertices)
-                out << "v " << v.m_coordinates[0] << " " << v.m_coordinates[1] << " " << v.m_coordinates[2]
-                    << " " << v.m_colors[0] << " " << v.m_colors[1] << " " << v.m_colors[2] << "\n";
+                out << "v " << v.m_coordinates[0] << " " << v.m_coordinates[1] << " " << v.m_coordinates[2] << " " << v.m_colors[0] << " " << v.m_colors[1]
+                    << " " << v.m_colors[2] << "\n";
         }
         else
         {
             for (const auto& v : object.m_vertices)
                 out << "v " << v.m_coordinates[0] << " " << v.m_coordinates[1] << " " << v.m_coordinates[2] << "\n";
         }
-
 
         for (const auto& uv : object.m_uvs)
             out << "vt " << uv.m_uv[0] << " " << uv.m_uv[1] << "\n";
@@ -83,39 +82,31 @@ void ObjWriter::WriteObj(std::ostream& out, const std::string& matName) const
                 const auto& uv = f.m_uv_index;
                 const auto& n = f.m_normal_index;
 
-                out << "f " << v[0] + vertexObjectOffset + 1 << "/" << uv[0] + uvObjectOffset + 1 << "/" << n[0] + normalObjectOffset + 1
-                    << " " << v[1] + vertexObjectOffset + 1 << "/" << uv[1] + uvObjectOffset + 1 << "/" << n[1] + normalObjectOffset + 1
-                    << " " << v[2] + vertexObjectOffset + 1 << "/" << uv[2] + uvObjectOffset + 1 << "/" << n[2] + normalObjectOffset + 1
-                    << "\n";
+                out << "f " << v[0] + vertexObjectOffset + 1 << "/" << uv[0] + uvObjectOffset + 1 << "/" << n[0] + normalObjectOffset + 1 << " "
+                    << v[1] + vertexObjectOffset + 1 << "/" << uv[1] + uvObjectOffset + 1 << "/" << n[1] + normalObjectOffset + 1 << " "
+                    << v[2] + vertexObjectOffset + 1 << "/" << uv[2] + uvObjectOffset + 1 << "/" << n[2] + normalObjectOffset + 1 << "\n";
             }
             else if (faceHasUv && !faceHasNormal)
             {
                 const auto& v = f.m_vertex_index;
                 const auto& uv = f.m_uv_index;
 
-                out << "f " << v[0] + vertexObjectOffset + 1 << "/" << uv[0] + uvObjectOffset + 1
-                    << " " << v[1] + vertexObjectOffset + 1 << "/" << uv[1] + uvObjectOffset + 1
-                    << " " << v[2] + vertexObjectOffset + 1 << "/" << uv[2] + uvObjectOffset + 1
-                    << "\n";
+                out << "f " << v[0] + vertexObjectOffset + 1 << "/" << uv[0] + uvObjectOffset + 1 << " " << v[1] + vertexObjectOffset + 1 << "/"
+                    << uv[1] + uvObjectOffset + 1 << " " << v[2] + vertexObjectOffset + 1 << "/" << uv[2] + uvObjectOffset + 1 << "\n";
             }
             else if (faceHasNormal && !faceHasUv)
             {
                 const auto& v = f.m_vertex_index;
                 const auto& n = f.m_normal_index;
 
-                out << "f " << v[0] + vertexObjectOffset + 1 << "//" << n[0] + normalObjectOffset + 1
-                    << " " << v[1] + vertexObjectOffset + 1 << "//" << n[1] + normalObjectOffset + 1
-                    << " " << v[2] + vertexObjectOffset + 1 << "//" << n[2] + normalObjectOffset + 1
-                    << "\n";
+                out << "f " << v[0] + vertexObjectOffset + 1 << "//" << n[0] + normalObjectOffset + 1 << " " << v[1] + vertexObjectOffset + 1 << "//"
+                    << n[1] + normalObjectOffset + 1 << " " << v[2] + vertexObjectOffset + 1 << "//" << n[2] + normalObjectOffset + 1 << "\n";
             }
             else
             {
                 const auto& v = f.m_vertex_index;
 
-                out << "f " << v[0] + vertexObjectOffset + 1
-                    << " " << v[1] + vertexObjectOffset + 1
-                    << " " << v[2] + vertexObjectOffset + 1
-                    << "\n";
+                out << "f " << v[0] + vertexObjectOffset + 1 << " " << v[1] + vertexObjectOffset + 1 << " " << v[2] + vertexObjectOffset + 1 << "\n";
             }
         }
 

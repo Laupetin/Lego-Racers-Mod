@@ -146,8 +146,7 @@ namespace gdb
 {
     bool operator==(const Vec2& lhs, const Vec2& rhs)
     {
-        return std::fabs(lhs.x - rhs.x) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.y - rhs.y) < std::numeric_limits<float>::epsilon();
+        return std::fabs(lhs.x - rhs.x) < std::numeric_limits<float>::epsilon() && std::fabs(lhs.y - rhs.y) < std::numeric_limits<float>::epsilon();
     }
 
     bool operator!=(const Vec2& lhs, const Vec2& rhs)
@@ -162,9 +161,8 @@ namespace gdb
 
     bool operator==(const Vec3& lhs, const Vec3& rhs)
     {
-        return std::fabs(lhs.x - rhs.x) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.y - rhs.y) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.z - rhs.z) < std::numeric_limits<float>::epsilon();
+        return std::fabs(lhs.x - rhs.x) < std::numeric_limits<float>::epsilon() && std::fabs(lhs.y - rhs.y) < std::numeric_limits<float>::epsilon()
+               && std::fabs(lhs.z - rhs.z) < std::numeric_limits<float>::epsilon();
     }
 
     bool operator!=(const Vec3& lhs, const Vec3& rhs)
@@ -179,10 +177,7 @@ namespace gdb
 
     bool operator==(const Color4& lhs, const Color4& rhs)
     {
-        return lhs.r == rhs.r
-            && lhs.g == rhs.g
-            && lhs.b == rhs.b
-            && lhs.a == rhs.a;
+        return lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b && lhs.a == rhs.a;
     }
 
     bool operator!=(const Color4& lhs, const Color4& rhs)
@@ -197,10 +192,7 @@ namespace gdb
 
     bool operator==(const Vertex& lhs, const Vertex& rhs)
     {
-        return lhs.m_position == rhs.m_position
-            && lhs.m_uv == rhs.m_uv
-            && lhs.m_normal == rhs.m_normal
-            && lhs.m_color == rhs.m_color;
+        return lhs.m_position == rhs.m_position && lhs.m_uv == rhs.m_uv && lhs.m_normal == rhs.m_normal && lhs.m_color == rhs.m_color;
     }
 
     bool operator!=(const Vertex& lhs, const Vertex& rhs)
@@ -212,7 +204,7 @@ namespace gdb
     {
         return std::tie(lhs.m_position, lhs.m_uv, lhs.m_normal, lhs.m_color) < std::tie(rhs.m_position, rhs.m_uv, rhs.m_normal, rhs.m_color);
     }
-}
+} // namespace gdb
 
 namespace std
 {
@@ -252,4 +244,4 @@ namespace std
         seed ^= (seed << 6) + (seed >> 2) + 0x6D2F3E3A + std::hash<Color4>()(v.m_color);
         return seed;
     }
-}
+} // namespace std

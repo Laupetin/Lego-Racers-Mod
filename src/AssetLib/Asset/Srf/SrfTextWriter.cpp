@@ -10,13 +10,9 @@ namespace srf
         {
         }
 
-        void StartStrings() override
-        {
-        }
+        void StartStrings() override {}
 
-        void EndStrings() override
-        {
-        }
+        void EndStrings() override {}
 
         void EmitString(const std::string str) override
         {
@@ -45,7 +41,7 @@ namespace srf
     private:
         std::ostream& m_stream;
     };
-}
+} // namespace srf
 
 using namespace srf;
 

@@ -1,11 +1,11 @@
 #include "IdbUnitProcessor.h"
 
+#include "Asset/Idb/IdbBinaryWriter.h"
+#include "Asset/Idb/IdbTextReader.h"
+#include "StringUtils.h"
+
 #include <filesystem>
 #include <fstream>
-
-#include "StringUtils.h"
-#include "Asset/Idb/IdbTextReader.h"
-#include "Asset/Idb/IdbBinaryWriter.h"
 
 namespace fs = std::filesystem;
 

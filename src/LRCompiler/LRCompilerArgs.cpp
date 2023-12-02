@@ -1,10 +1,12 @@
 #include "LRCompilerArgs.h"
 
+#include "Arguments/UsageInformation.h"
+#include "Project/ProjectDefinition.h"
+
 #include <regex>
 #include <type_traits>
 
-#include "Arguments/UsageInformation.h"
-#include "Project/ProjectDefinition.h"
+// clang-format off
 
 const CommandLineOption* const OPTION_HELP =
     CommandLineOption::Builder::Create()
@@ -20,18 +22,20 @@ const CommandLineOption* const OPTION_VERBOSE =
     .WithDescription("Outputs a lot more and more detailed messages.")
     .Build();
 
-const CommandLineOption* const OPTION_DIST_FOLDER =
+const CommandLineOption* const OPTION_DIST_FOLDER = 
     CommandLineOption::Builder::Create()
     .WithShortName("d")
     .WithLongName("dist")
-    .WithDescription("Specifies the dist folder containing the compilation results. Defaults to \"" + std::string(ProjectDefinition::DEFAULT_DIST_FOLDER) + "\"")
+    .WithDescription("Specifies the dist folder containing the compilation results. Defaults to \"" 
+        + std::string(ProjectDefinition::DEFAULT_DIST_FOLDER) + "\"")
     .WithParameter("distFolderPath")
     .Build();
 
-const CommandLineOption* const OPTION_OBJ_FOLDER =
+const CommandLineOption* const OPTION_OBJ_FOLDER = 
     CommandLineOption::Builder::Create()
     .WithLongName("obj")
-    .WithDescription("Specifies the obj folder containing intermediate compilation files. Defaults to \"" + std::string(ProjectDefinition::DEFAULT_OBJ_FOLDER) + "\"")
+    .WithDescription("Specifies the obj folder containing intermediate compilation files. Defaults to \""
+        + std::string(ProjectDefinition::DEFAULT_OBJ_FOLDER) + "\"")
     .WithParameter("objFolderPath")
     .Build();
 
@@ -41,28 +45,29 @@ const CommandLineOption* const OPTION_RECOMPILE =
     .WithDescription("Recompiles everything regardless whether it is outdated or not.")
     .Build();
 
-const CommandLineOption* const OPTION_FORCE_LINKING =
+const CommandLineOption* const OPTION_FORCE_LINKING = 
     CommandLineOption::Builder::Create()
     .WithLongName("force-linking")
     .WithDescription("Forces the linker to produce new target regardless whether it is outdated or not.")
     .Build();
 
-const CommandLineOption* const OPTION_COPY_TO =
+const CommandLineOption* const OPTION_COPY_TO = 
     CommandLineOption::Builder::Create()
     .WithLongName("copy-to")
     .WithDescription("Copies the newly linked target to the specified location.")
     .WithParameter("copyToPath")
     .Build();
 
-const CommandLineOption* const COMMAND_LINE_OPTIONS[]
-{
+// clang-format on
+
+const CommandLineOption* const COMMAND_LINE_OPTIONS[]{
     OPTION_HELP,
     OPTION_VERBOSE,
     OPTION_DIST_FOLDER,
     OPTION_OBJ_FOLDER,
     OPTION_RECOMPILE,
     OPTION_FORCE_LINKING,
-    OPTION_COPY_TO
+    OPTION_COPY_TO,
 };
 
 LRCompilerArgs::LRCompilerArgs()

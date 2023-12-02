@@ -1,8 +1,8 @@
 #pragma once
 
-#include <ostream>
-
 #include "Obj.h"
+
+#include <ostream>
 
 namespace obj
 {
@@ -22,4 +22,4 @@ namespace obj
         bool m_include_colors;
         bool m_include_normals;
     };
-}
+} // namespace obj

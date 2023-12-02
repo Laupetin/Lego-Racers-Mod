@@ -6,10 +6,10 @@ class IAssetConverter
 {
 public:
     [[nodiscard]] virtual bool SupportsExtension(const std::string& extensionName) const = 0;
-	virtual bool Convert(const std::string& directory, const std::string& filePath) = 0;
+    virtual bool Convert(const std::string& directory, const std::string& filePath) = 0;
 
 protected:
-	IAssetConverter() = default;
+    IAssetConverter() = default;
 
 public:
     virtual ~IAssetConverter() = default;

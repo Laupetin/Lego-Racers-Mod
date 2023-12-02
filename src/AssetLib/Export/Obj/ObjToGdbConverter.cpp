@@ -1,14 +1,14 @@
 #include "ObjToGdbConverter.h"
 
-#include <algorithm>
-#include <cassert>
-#include <unordered_map>
-#include <limits>
-#include <regex>
-#include <vector>
-
 #include "Asset/Gdb/GdbStructReader.h"
 #include "Asset/Gdb/GdbTextWriter.h"
+
+#include <algorithm>
+#include <cassert>
+#include <limits>
+#include <regex>
+#include <unordered_map>
+#include <vector>
 
 namespace obj
 {
@@ -284,24 +284,25 @@ namespace obj
             }
 
             // Reorder indices
-            std::sort(m_vertex_indices_in_new_order.begin(), m_vertex_indices_in_new_order.end(), [this, orderByStatus](const size_t& i0, const size_t& i1)
-            {
-                const auto& v0 = m_vertices[i0];
-                const auto& v1 = m_vertices[i1];
+            std::sort(m_vertex_indices_in_new_order.begin(),
+                      m_vertex_indices_in_new_order.end(),
+                      [this, orderByStatus](const size_t& i0, const size_t& i1)
+                      {
+                          const auto& v0 = m_vertices[i0];
+                          const auto& v1 = m_vertices[i1];
 
-                const auto referenceStatus0 = v0.GetBackReferenceStatus();
-                const auto referenceStatus1 = v1.GetBackReferenceStatus();
-                if (referenceStatus0 != referenceStatus1)
-                    return orderByStatus[static_cast<size_t>(referenceStatus0)] < orderByStatus[static_cast<size_t>(referenceStatus1)];
+                          const auto referenceStatus0 = v0.GetBackReferenceStatus();
+                          const auto referenceStatus1 = v1.GetBackReferenceStatus();
+                          if (referenceStatus0 != referenceStatus1)
+                              return orderByStatus[static_cast<size_t>(referenceStatus0)] < orderByStatus[static_cast<size_t>(referenceStatus1)];
 
-                if (referenceStatus0 == BackReferenceStatus::BEING_BACK_REFERENCED
-                    || referenceStatus0 == BackReferenceStatus::BACK_REFERENCING)
-                {
-                    return v0.GetIndex() < v1.GetIndex();
-                }
+                          if (referenceStatus0 == BackReferenceStatus::BEING_BACK_REFERENCED || referenceStatus0 == BackReferenceStatus::BACK_REFERENCING)
+                          {
+                              return v0.GetIndex() < v1.GetIndex();
+                          }
 
-                return i0 < i1;
-            });
+                          return i0 < i1;
+                      });
 
             const auto shiftForwardCount = m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_BACK && m_own_vertex_count < m_vertices.size()
                                                ? MAX_VERTEX_COUNT - m_vertices.size()
@@ -322,9 +323,7 @@ namespace obj
             const auto gdbVertexOffset = gdb.m_vertices.size();
             gdb.m_vertices.resize(gdbVertexOffset + m_own_vertex_count);
 
-            const size_t ownVertexStart = m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_FRONT
-                                              ? m_vertices.size() - m_own_vertex_count
-                                              : 0u;
+            const size_t ownVertexStart = m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_FRONT ? m_vertices.size() - m_own_vertex_count : 0u;
             for (auto i = 0u; i < m_own_vertex_count; i++)
             {
                 const auto vertexIndex = m_vertex_indices_in_new_order[i + ownVertexStart];
@@ -335,7 +334,8 @@ namespace obj
             {
                 // Make sure always touches end of vertex buffer
                 const auto shiftForwardCount = static_cast<int>(MAX_VERTEX_COUNT - m_vertices.size());
-                gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_VERTICES, shiftForwardCount, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
+                gdb.m_meta.emplace_back(
+                    gdb::ModelToken::TOKEN_META_VERTICES, shiftForwardCount, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
             }
             else if (m_previous_sort_mode == VertexSelectorSortMode::NONE || m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_BACK)
             {
@@ -346,7 +346,8 @@ namespace obj
                 assert(m_previous_sort_mode == VertexSelectorSortMode::REFERENCEABLE_AT_FRONT);
 
                 const auto shiftForwardCount = static_cast<int>(m_vertices.size() - m_own_vertex_count);
-                gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_VERTICES, shiftForwardCount, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
+                gdb.m_meta.emplace_back(
+                    gdb::ModelToken::TOKEN_META_VERTICES, shiftForwardCount, static_cast<int>(gdbVertexOffset), static_cast<int>(m_own_vertex_count));
             }
         }
 
@@ -421,11 +422,9 @@ namespace obj
 
             for (const auto& face : m_faces)
             {
-                gdb.m_faces.emplace_back(
-                    static_cast<unsigned char>(vertexSelector.GetRemappedIndexForVertex(face.GetIndex(0))),
-                    static_cast<unsigned char>(vertexSelector.GetRemappedIndexForVertex(face.GetIndex(1))),
-                    static_cast<unsigned char>(vertexSelector.GetRemappedIndexForVertex(face.GetIndex(2)))
-                );
+                gdb.m_faces.emplace_back(static_cast<unsigned char>(vertexSelector.GetRemappedIndexForVertex(face.GetIndex(0))),
+                                         static_cast<unsigned char>(vertexSelector.GetRemappedIndexForVertex(face.GetIndex(1))),
+                                         static_cast<unsigned char>(vertexSelector.GetRemappedIndexForVertex(face.GetIndex(2))));
             }
 
             gdb.m_meta.emplace_back(gdb::ModelToken::TOKEN_META_FACES, static_cast<int>(gdbFaceOffset), static_cast<int>(m_faces.size()));
@@ -495,10 +494,12 @@ namespace obj
 
         void ConvertMaterials()
         {
-            m_any_null_materials = std::any_of(m_obj.m_objects.begin(), m_obj.m_objects.end(), [](const ObjObject& object)
-            {
-                return object.m_material_index < 0;
-            });
+            m_any_null_materials = std::any_of(m_obj.m_objects.begin(),
+                                               m_obj.m_objects.end(),
+                                               [](const ObjObject& object)
+                                               {
+                                                   return object.m_material_index < 0;
+                                               });
 
             m_gdb.m_materials.reserve(m_obj.m_materials.size() + (m_any_null_materials ? 1 : 0));
 
@@ -533,20 +534,34 @@ namespace obj
                     currentFaceSelector.SetBoneIndex(faceBoneIndex);
                 }
 
-                const gdb::Vertex gdbVertices[3]
-                {
+                const gdb::Vertex gdbVertices[3]{
                     CreateGdbVertex(object, face.m_vertex_index[0], face.m_uv_index[0], face.m_normal_index[0]),
                     CreateGdbVertex(object, face.m_vertex_index[1], face.m_uv_index[1], face.m_normal_index[1]),
-                    CreateGdbVertex(object, face.m_vertex_index[2], face.m_uv_index[2], face.m_normal_index[2])
+                    CreateGdbVertex(object, face.m_vertex_index[2], face.m_uv_index[2], face.m_normal_index[2]),
                 };
 
                 size_t pendingVertexIndex[3];
                 bool vertexAlreadyExists[3];
                 bool vertexIsFromPreviousSelector[3];
 
-                FindExistingVertex(previousVertexSelector, currentVertexSelector, gdbVertices[0], pendingVertexIndex[0], vertexAlreadyExists[0], vertexIsFromPreviousSelector[0]);
-                FindExistingVertex(previousVertexSelector, currentVertexSelector, gdbVertices[1], pendingVertexIndex[1], vertexAlreadyExists[1], vertexIsFromPreviousSelector[1]);
-                FindExistingVertex(previousVertexSelector, currentVertexSelector, gdbVertices[2], pendingVertexIndex[2], vertexAlreadyExists[2], vertexIsFromPreviousSelector[2]);
+                FindExistingVertex(previousVertexSelector,
+                                   currentVertexSelector,
+                                   gdbVertices[0],
+                                   pendingVertexIndex[0],
+                                   vertexAlreadyExists[0],
+                                   vertexIsFromPreviousSelector[0]);
+                FindExistingVertex(previousVertexSelector,
+                                   currentVertexSelector,
+                                   gdbVertices[1],
+                                   pendingVertexIndex[1],
+                                   vertexAlreadyExists[1],
+                                   vertexIsFromPreviousSelector[1]);
+                FindExistingVertex(previousVertexSelector,
+                                   currentVertexSelector,
+                                   gdbVertices[2],
+                                   pendingVertexIndex[2],
+                                   vertexAlreadyExists[2],
+                                   vertexIsFromPreviousSelector[2]);
 
                 if (GetRequiredVertexCapacity(vertexAlreadyExists, vertexIsFromPreviousSelector) > currentVertexSelector.GetRemainingCapacity())
                 {
@@ -566,11 +581,25 @@ namespace obj
                     AdvanceFoundVertices(vertexAlreadyExists, vertexIsFromPreviousSelector);
                 }
 
-                const size_t faceIndices[3]
-                {
-                    AddVertex(previousVertexSelector, currentVertexSelector, gdbVertices[0], pendingVertexIndex[0], vertexAlreadyExists[0], vertexIsFromPreviousSelector[0]),
-                    AddVertex(previousVertexSelector, currentVertexSelector, gdbVertices[1], pendingVertexIndex[1], vertexAlreadyExists[1], vertexIsFromPreviousSelector[1]),
-                    AddVertex(previousVertexSelector, currentVertexSelector, gdbVertices[2], pendingVertexIndex[2], vertexAlreadyExists[2], vertexIsFromPreviousSelector[2])
+                const size_t faceIndices[3]{
+                    AddVertex(previousVertexSelector,
+                              currentVertexSelector,
+                              gdbVertices[0],
+                              pendingVertexIndex[0],
+                              vertexAlreadyExists[0],
+                              vertexIsFromPreviousSelector[0]),
+                    AddVertex(previousVertexSelector,
+                              currentVertexSelector,
+                              gdbVertices[1],
+                              pendingVertexIndex[1],
+                              vertexAlreadyExists[1],
+                              vertexIsFromPreviousSelector[1]),
+                    AddVertex(previousVertexSelector,
+                              currentVertexSelector,
+                              gdbVertices[2],
+                              pendingVertexIndex[2],
+                              vertexAlreadyExists[2],
+                              vertexIsFromPreviousSelector[2]),
                 };
 
                 currentFaceSelector.AddFace(faceIndices[0], faceIndices[1], faceIndices[2]);
@@ -602,12 +631,10 @@ namespace obj
 
                 if (m_has_colors)
                 {
-                    const gdb::Color4 color(
-                        static_cast<unsigned char>(objVertex.m_colors[0] * std::numeric_limits<unsigned char>::max()),
-                        static_cast<unsigned char>(objVertex.m_colors[1] * std::numeric_limits<unsigned char>::max()),
-                        static_cast<unsigned char>(objVertex.m_colors[2] * std::numeric_limits<unsigned char>::max()),
-                        std::numeric_limits<unsigned char>::max()
-                    );
+                    const gdb::Color4 color(static_cast<unsigned char>(objVertex.m_colors[0] * std::numeric_limits<unsigned char>::max()),
+                                            static_cast<unsigned char>(objVertex.m_colors[1] * std::numeric_limits<unsigned char>::max()),
+                                            static_cast<unsigned char>(objVertex.m_colors[2] * std::numeric_limits<unsigned char>::max()),
+                                            std::numeric_limits<unsigned char>::max());
 
                     return gdb::Vertex(position, uv, color);
                 }
@@ -623,13 +650,15 @@ namespace obj
                 return gdb::Vertex(position, uv);
             }
 
-
             return gdb::Vertex(position);
         }
 
-        static void FindExistingVertex(PendingGdbVertexSelector& previousVertexSelector, PendingGdbVertexSelector& currentVertexSelector, const gdb::Vertex& vertex,
+        static void FindExistingVertex(PendingGdbVertexSelector& previousVertexSelector,
+                                       PendingGdbVertexSelector& currentVertexSelector,
+                                       const gdb::Vertex& vertex,
                                        size_t& pendingGdbVertexIndex,
-                                       bool& vertexAlreadyExists, bool& vertexIsFromPreviousSelector)
+                                       bool& vertexAlreadyExists,
+                                       bool& vertexIsFromPreviousSelector)
         {
             if (currentVertexSelector.GetExistingVertex(vertex, pendingGdbVertexIndex))
             {
@@ -650,13 +679,14 @@ namespace obj
 
         static size_t GetRequiredVertexCapacity(const bool (&vertexAlreadyExists)[3], const bool (&vertexIsFromPreviousSelector)[3])
         {
-            return 0u
-                + (!vertexAlreadyExists[0] || vertexIsFromPreviousSelector[0] ? 1u : 0u)
-                + (!vertexAlreadyExists[1] || vertexIsFromPreviousSelector[1] ? 1u : 0u)
-                + (!vertexAlreadyExists[2] || vertexIsFromPreviousSelector[2] ? 1u : 0u);
+            return 0u + (!vertexAlreadyExists[0] || vertexIsFromPreviousSelector[0] ? 1u : 0u)
+                   + (!vertexAlreadyExists[1] || vertexIsFromPreviousSelector[1] ? 1u : 0u)
+                   + (!vertexAlreadyExists[2] || vertexIsFromPreviousSelector[2] ? 1u : 0u);
         }
 
-        void AdvanceSelectors(PendingGdbVertexSelector& previousVertexSelector, PendingGdbVertexSelector& currentVertexSelector, PendingGdbFaceSelector& previousFaceSelector,
+        void AdvanceSelectors(PendingGdbVertexSelector& previousVertexSelector,
+                              PendingGdbVertexSelector& currentVertexSelector,
+                              PendingGdbFaceSelector& previousFaceSelector,
                               PendingGdbFaceSelector& currentFaceSelector) const
         {
             FinishSelector(previousVertexSelector, previousFaceSelector);
@@ -701,9 +731,12 @@ namespace obj
             }
         }
 
-        static size_t AddVertex(PendingGdbVertexSelector& previousVertexSelector, PendingGdbVertexSelector& currentVertexSelector, const gdb::Vertex& vertex,
+        static size_t AddVertex(PendingGdbVertexSelector& previousVertexSelector,
+                                PendingGdbVertexSelector& currentVertexSelector,
+                                const gdb::Vertex& vertex,
                                 const size_t pendingGdbVertexIndex,
-                                const bool vertexAlreadyExists, const bool vertexIsFromPreviousSelector)
+                                const bool vertexAlreadyExists,
+                                const bool vertexIsFromPreviousSelector)
         {
             if (vertexAlreadyExists)
             {
@@ -725,7 +758,7 @@ namespace obj
         const ObjModel& m_obj;
         BoneIndexSupplier m_bone_index_supplier;
     };
-}
+} // namespace obj
 
 using namespace obj;
 

@@ -49,4 +49,4 @@ namespace mdb
         TOKEN_KEYWORD_4F = 0x4F,
         TOKEN_KEYWORD_50 = 0x50,
     };
-}
+} // namespace mdb
