@@ -1,8 +1,8 @@
 #pragma once
 
-#include <iostream>
-
 #include "JamTypes.h"
+
+#include <iostream>
 
 namespace jam
 {
@@ -33,4 +33,4 @@ namespace jam
 
         virtual bool Write(const DirectoryTree& tree, IJamFileWriterDataProvider& provider) = 0;
     };
-}
+} // namespace jam

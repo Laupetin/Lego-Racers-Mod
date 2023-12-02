@@ -34,8 +34,8 @@ namespace gdb
 
         void Read() const
         {
-            for (auto nextSectionToken = m_tokens->NextValue(); nextSectionToken.m_type != TOKEN_INVALID && nextSectionToken.m_type != TOKEN_EOF; nextSectionToken = m_tokens->
-                 NextValue())
+            for (auto nextSectionToken = m_tokens->NextValue(); nextSectionToken.m_type != TOKEN_INVALID && nextSectionToken.m_type != TOKEN_EOF;
+                 nextSectionToken = m_tokens->NextValue())
             {
                 switch (nextSectionToken.m_type)
                 {
@@ -228,48 +228,48 @@ namespace gdb
                 switch (m_tokens->NextValue().m_type)
                 {
                 case TOKEN_META_VERTICES:
-                    {
-                        const auto value0 = m_tokens->NextIntegerValue();
-                        const auto value1 = m_tokens->NextIntegerValue();
-                        const auto value2 = m_tokens->NextIntegerValue();
+                {
+                    const auto value0 = m_tokens->NextIntegerValue();
+                    const auto value1 = m_tokens->NextIntegerValue();
+                    const auto value2 = m_tokens->NextIntegerValue();
 
-                        m_emitter.EmitMetaSelectVertices(value0, value1, value2);
-                    }
-                    break;
+                    m_emitter.EmitMetaSelectVertices(value0, value1, value2);
+                }
+                break;
                 case TOKEN_META_FACES:
-                    {
-                        const auto value0 = m_tokens->NextIntegerValue();
-                        const auto value1 = m_tokens->NextIntegerValue();
+                {
+                    const auto value0 = m_tokens->NextIntegerValue();
+                    const auto value1 = m_tokens->NextIntegerValue();
 
-                        m_emitter.EmitMetaAddFaces(value0, value1);
-                    }
-                    break;
+                    m_emitter.EmitMetaAddFaces(value0, value1);
+                }
+                break;
                 case TOKEN_META_2F:
-                    {
-                        const auto value0 = m_tokens->NextIntegerValue();
+                {
+                    const auto value0 = m_tokens->NextIntegerValue();
 
-                        m_emitter.EmitMetaKeyword2F(value0);
-                    }
-                    break;
+                    m_emitter.EmitMetaKeyword2F(value0);
+                }
+                break;
                 case TOKEN_META_30:
-                    {
-                        m_emitter.EmitMetaKeyword30();
-                    }
-                    break;
+                {
+                    m_emitter.EmitMetaKeyword30();
+                }
+                break;
                 case TOKEN_META_BONE:
-                    {
-                        const auto value0 = m_tokens->NextIntegerValue();
+                {
+                    const auto value0 = m_tokens->NextIntegerValue();
 
-                        m_emitter.EmitMetaBone(value0);
-                    }
-                    break;
+                    m_emitter.EmitMetaBone(value0);
+                }
+                break;
                 case TOKEN_META_NEW_OBJECT:
-                    {
-                        const auto value0 = m_tokens->NextIntegerValue();
+                {
+                    const auto value0 = m_tokens->NextIntegerValue();
 
-                        m_emitter.EmitMetaNewObject(value0);
-                    }
-                    break;
+                    m_emitter.EmitMetaNewObject(value0);
+                }
+                break;
                 default:
                     throw GdbBinaryReadingException("Unknown keyword for vertex meta");
                 }
@@ -298,7 +298,7 @@ namespace gdb
         std::unique_ptr<ITokenInputStream> m_tokens;
         IGdbEmitter& m_emitter;
     };
-}
+} // namespace gdb
 
 void GdbBinaryReader::Read(std::istream& input, IGdbEmitter& emitter)
 {

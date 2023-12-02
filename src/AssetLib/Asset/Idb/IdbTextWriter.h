@@ -1,9 +1,9 @@
 #pragma once
 
+#include "IdbEmitter.h"
+
 #include <memory>
 #include <ostream>
-
-#include "IdbEmitter.h"
 
 namespace idb
 {
@@ -14,4 +14,4 @@ namespace idb
 
         static std::unique_ptr<IIdbEmitter> Create(std::ostream& out);
     };
-}
+} // namespace idb

@@ -19,4 +19,4 @@ namespace srf
 
         virtual void EmitString(std::string str) = 0;
     };
-}
+} // namespace srf

@@ -1,9 +1,9 @@
 #include "ProjectContextCreator.h"
 
+#include "StringUtils.h"
+
 #include <filesystem>
 #include <fstream>
-
-#include "StringUtils.h"
 
 namespace fs = std::filesystem;
 

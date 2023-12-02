@@ -1,8 +1,8 @@
 #pragma once
 
-#include <istream>
-
 #include "IdbEmitter.h"
+
+#include <istream>
 
 namespace idb
 {
@@ -13,4 +13,4 @@ namespace idb
 
         static void Read(std::istream& input, IIdbEmitter& emitter);
     };
-}
+} // namespace idb

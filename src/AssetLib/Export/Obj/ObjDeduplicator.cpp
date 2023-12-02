@@ -66,50 +66,42 @@ ObjObject Deduplicator::Deduplicate()
     {
         assert(face.m_vertex_index[0] >= 0 && face.m_vertex_index[1] >= 0 && face.m_vertex_index[2] >= 0);
 
-        int indicesForVertices[3]
-        {
-            static_cast<int>(IndexForVertex(m_object.m_vertices[face.m_vertex_index[0]])),
-            static_cast<int>(IndexForVertex(m_object.m_vertices[face.m_vertex_index[1]])),
-            static_cast<int>(IndexForVertex(m_object.m_vertices[face.m_vertex_index[2]]))
-        };
+        int indicesForVertices[3]{static_cast<int>(IndexForVertex(m_object.m_vertices[face.m_vertex_index[0]])),
+                                  static_cast<int>(IndexForVertex(m_object.m_vertices[face.m_vertex_index[1]])),
+                                  static_cast<int>(IndexForVertex(m_object.m_vertices[face.m_vertex_index[2]]))};
 
         if (face.HasUv())
         {
-            int indicesForUvs[3]
-            {
-                static_cast<int>(IndexForUv(m_object.m_uvs[face.m_uv_index[0]])),
-                static_cast<int>(IndexForUv(m_object.m_uvs[face.m_uv_index[1]])),
-                static_cast<int>(IndexForUv(m_object.m_uvs[face.m_uv_index[2]]))
-            };
+            int indicesForUvs[3]{static_cast<int>(IndexForUv(m_object.m_uvs[face.m_uv_index[0]])),
+                                 static_cast<int>(IndexForUv(m_object.m_uvs[face.m_uv_index[1]])),
+                                 static_cast<int>(IndexForUv(m_object.m_uvs[face.m_uv_index[2]]))};
 
             if (face.HasNormals())
             {
-                int indicesForNormals[3]
-                {
-                    static_cast<int>(IndexForNormal(m_object.m_normals[face.m_normal_index[0]])),
-                    static_cast<int>(IndexForNormal(m_object.m_normals[face.m_normal_index[1]])),
-                    static_cast<int>(IndexForNormal(m_object.m_normals[face.m_normal_index[2]]))
-                };
+                int indicesForNormals[3]{static_cast<int>(IndexForNormal(m_object.m_normals[face.m_normal_index[0]])),
+                                         static_cast<int>(IndexForNormal(m_object.m_normals[face.m_normal_index[1]])),
+                                         static_cast<int>(IndexForNormal(m_object.m_normals[face.m_normal_index[2]]))};
 
-                m_deduplicated_object.m_faces.emplace_back(indicesForVertices[0], indicesForUvs[0], indicesForNormals[0],
-                                                           indicesForVertices[1], indicesForUvs[1], indicesForNormals[1],
-                                                           indicesForVertices[2], indicesForUvs[2], indicesForNormals[2],
+                m_deduplicated_object.m_faces.emplace_back(indicesForVertices[0],
+                                                           indicesForUvs[0],
+                                                           indicesForNormals[0],
+                                                           indicesForVertices[1],
+                                                           indicesForUvs[1],
+                                                           indicesForNormals[1],
+                                                           indicesForVertices[2],
+                                                           indicesForUvs[2],
+                                                           indicesForNormals[2],
                                                            face.m_group);
             }
             else
             {
-                m_deduplicated_object.m_faces.emplace_back(indicesForVertices[0], indicesForUvs[0],
-                                                           indicesForVertices[1], indicesForUvs[1],
-                                                           indicesForVertices[2], indicesForUvs[2],
-                                                           face.m_group);
+                m_deduplicated_object.m_faces.emplace_back(
+                    indicesForVertices[0], indicesForUvs[0], indicesForVertices[1], indicesForUvs[1], indicesForVertices[2], indicesForUvs[2], face.m_group);
             }
         }
         else
         {
-            m_deduplicated_object.m_faces.emplace_back(indicesForVertices[0],
-                                                       indicesForVertices[1],
-                                                       indicesForVertices[2],
-                                                       face.m_group);
+            m_deduplicated_object.m_faces.emplace_back(indicesForVertices[0], indicesForVertices[1], indicesForVertices[2], face.m_group);
         }
     }
 

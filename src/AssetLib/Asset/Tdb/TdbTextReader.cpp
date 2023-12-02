@@ -1,14 +1,14 @@
 #include "TdbTextReader.h"
 
-#include <iostream>
-
 #include "Tdb.h"
+
+#include <iostream>
 
 #pragma warning(push, 0)
 #include "Parsing/Common/CommonGrammarHelper.h"
+#include "Parsing/Parser/Tdb/TdbBaseListener.h"
 #include "Parsing/Parser/Tdb/TdbLexer.h"
 #include "Parsing/Parser/Tdb/TdbParser.h"
-#include "Parsing/Parser/Tdb/TdbBaseListener.h"
 #pragma warning(pop)
 
 namespace tdb
@@ -123,7 +123,11 @@ namespace tdb
 
     class CustomTdbErrorListener final : public antlr4::BaseErrorListener
     {
-        void syntaxError(antlr4::Recognizer* recognizer, antlr4::Token* offendingSymbol, const size_t line, const size_t charPositionInLine, const std::string& msg,
+        void syntaxError(antlr4::Recognizer* recognizer,
+                         antlr4::Token* offendingSymbol,
+                         const size_t line,
+                         const size_t charPositionInLine,
+                         const std::string& msg,
                          std::exception_ptr e) override
         {
             std::ostringstream ss;
@@ -163,7 +167,7 @@ namespace tdb
         std::istream& m_stream;
         ITdbEmitter& m_emitter;
     };
-}
+} // namespace tdb
 
 using namespace tdb;
 

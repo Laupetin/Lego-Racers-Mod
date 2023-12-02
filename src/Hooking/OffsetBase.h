@@ -1,11 +1,11 @@
 #pragma once
 
-#include <cstddef>
+#include <array>
 #include <cassert>
+#include <cstddef>
 #include <cstdint>
 #include <limits>
 #include <mutex>
-#include <array>
 #include <vector>
 
 // ReSharper disable once CppPolymorphicClassWithNonVirtualPublicDestructor
@@ -67,8 +67,7 @@ struct LazyOffsetInitializationTarget
     }
 };
 
-template <size_t EnvironmentCount>
-class OffsetManagerStorage final : OffsetManager
+template<size_t EnvironmentCount> class OffsetManagerStorage final : OffsetManager
 {
     static constexpr auto NO_ENVIRONMENT_SELECTED = SIZE_MAX;
     size_t m_selected_environment_index = NO_ENVIRONMENT_SELECTED;
@@ -182,8 +181,7 @@ public:
     }
 };
 
-template <size_t EnvCount>
-class OffsetBase
+template<size_t EnvCount> class OffsetBase
 {
 protected:
     static constexpr auto ENV_COUNT = EnvCount;
@@ -198,24 +196,24 @@ public:
     }
 };
 
-#define OFFSET_ENV(_envIndex, _envName) \
-    Offset& _envName(const uintptr_t value)                                                     \
-    {                                                                                           \
-        auto& storage = OffsetManagerStorage<ENV_COUNT>::Instance();                            \
-        if (!storage.IsAnyEnvironmentSelected())                                                \
-        {                                                                                       \
-            if (m_value.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)             \
-                m_value.m_lazy_evaluation_index = storage.ReserveLazyLookupIndex();             \
-            storage.SetLazyLookupValue(m_value.m_lazy_evaluation_index, (_envIndex), value);    \
-        }                                                                                       \
-        else if (storage.GetSelectedEnvironment() == (_envIndex))                               \
-        {                                                                                       \
-            m_value.m_fixed_value = value;                                                      \
-        }                                                                                       \
-                                                                                                \
-        return *this;                                                                           \
-    }                                                                                           \
-    static void Apply##_envName()                                                               \
-    {                                                                                           \
-        OffsetManagerStorage<ENV_COUNT>::Instance().SetSelectedEnvironment(_envIndex); \
+#define OFFSET_ENV(_envIndex, _envName)                                                                                                                        \
+    Offset& _envName(const uintptr_t value)                                                                                                                    \
+    {                                                                                                                                                          \
+        auto& storage = OffsetManagerStorage<ENV_COUNT>::Instance();                                                                                           \
+        if (!storage.IsAnyEnvironmentSelected())                                                                                                               \
+        {                                                                                                                                                      \
+            if (m_value.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)                                                                            \
+                m_value.m_lazy_evaluation_index = storage.ReserveLazyLookupIndex();                                                                            \
+            storage.SetLazyLookupValue(m_value.m_lazy_evaluation_index, (_envIndex), value);                                                                   \
+        }                                                                                                                                                      \
+        else if (storage.GetSelectedEnvironment() == (_envIndex))                                                                                              \
+        {                                                                                                                                                      \
+            m_value.m_fixed_value = value;                                                                                                                     \
+        }                                                                                                                                                      \
+                                                                                                                                                               \
+        return *this;                                                                                                                                          \
+    }                                                                                                                                                          \
+    static void Apply##_envName()                                                                                                                              \
+    {                                                                                                                                                          \
+        OffsetManagerStorage<ENV_COUNT>::Instance().SetSelectedEnvironment(_envIndex);                                                                         \
     }

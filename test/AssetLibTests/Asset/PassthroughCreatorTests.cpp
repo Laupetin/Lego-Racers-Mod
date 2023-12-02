@@ -1,10 +1,9 @@
-#include <catch2/catch_test_macros.hpp>
+#include "Asset/PassthroughCreator.h"
 #include "catch2/generators/catch_generators.hpp"
 
+#include <catch2/catch_test_macros.hpp>
 #include <sstream>
 #include <type_traits>
-
-#include "Asset/PassthroughCreator.h"
 
 namespace test::asset::passthrough_creator
 {
@@ -22,10 +21,7 @@ namespace test::asset::passthrough_creator
         const PassthroughCreator creator;
         std::ostringstream output;
 
-        constexpr uint8_t input[]
-        {
-            0x24, 0x00, 0x12, 0x20, 0x0A, 0xFF, 0xDA
-        };
+        constexpr uint8_t input[]{0x24, 0x00, 0x12, 0x20, 0x0A, 0xFF, 0xDA};
 
         creator.ProcessFile("TESTFILE", input, std::extent_v<decltype(input)>, output);
 
@@ -33,4 +29,4 @@ namespace test::asset::passthrough_creator
         const auto outputStr = output.str();
         REQUIRE(inputStr == outputStr);
     }
-}
+} // namespace test::asset::passthrough_creator

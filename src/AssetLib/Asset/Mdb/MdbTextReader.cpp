@@ -1,14 +1,14 @@
 #include "MdbTextReader.h"
 
-#include <iostream>
-
 #include "Mdb.h"
+
+#include <iostream>
 
 #pragma warning(push, 0)
 #include "Parsing/Common/CommonGrammarHelper.h"
+#include "Parsing/Parser/Mdb/MdbBaseListener.h"
 #include "Parsing/Parser/Mdb/MdbLexer.h"
 #include "Parsing/Parser/Mdb/MdbParser.h"
-#include "Parsing/Parser/Mdb/MdbBaseListener.h"
 #pragma warning(pop)
 
 namespace mdb
@@ -64,12 +64,11 @@ namespace mdb
         {
             const auto keywordType = context->colorMaterialPropertyKeyword()->getStart()->getType();
 
-            const uint8_t values[4]
-            {
+            const uint8_t values[4]{
                 GetUInt8(context->IntegerConstant(0)),
                 GetUInt8(context->IntegerConstant(1)),
                 GetUInt8(context->IntegerConstant(2)),
-                GetUInt8(context->IntegerConstant(3))
+                GetUInt8(context->IntegerConstant(3)),
             };
 
             if (keywordType == MdbLexer::Color0)
@@ -203,7 +202,7 @@ namespace mdb
         {
             MaterialToken subTokens[2];
 
-            for(auto i = 0u; i < 2u; i++)
+            for (auto i = 0u; i < 2u; i++)
             {
                 const auto* subToken = context->keyword38Subtoken(i);
                 switch (subToken->getStart()->getType())
@@ -275,7 +274,12 @@ namespace mdb
 
     class CustomMdbErrorListener final : public antlr4::BaseErrorListener
     {
-        void syntaxError(antlr4::Recognizer* recognizer, antlr4::Token* offendingSymbol, const size_t line, const size_t charPositionInLine, const std::string& msg, std::exception_ptr e) override
+        void syntaxError(antlr4::Recognizer* recognizer,
+                         antlr4::Token* offendingSymbol,
+                         const size_t line,
+                         const size_t charPositionInLine,
+                         const std::string& msg,
+                         std::exception_ptr e) override
         {
             std::ostringstream ss;
             ss << "Parsing MDB failed: L" << line << ':' << charPositionInLine << " " << msg;
@@ -314,7 +318,7 @@ namespace mdb
         std::istream& m_stream;
         IMdbEmitter& m_emitter;
     };
-}
+} // namespace mdb
 
 using namespace mdb;
 

@@ -1,13 +1,13 @@
 #include "Linker.h"
 
+#include "FileUtils.h"
+#include "Jam/JamFileWriter.h"
+#include "Jam/JamTypes.h"
+
 #include <cassert>
 #include <filesystem>
 #include <fstream>
 #include <vector>
-
-#include "FileUtils.h"
-#include "Jam/JamFileWriter.h"
-#include "Jam/JamTypes.h"
 
 namespace fs = std::filesystem;
 

@@ -161,7 +161,8 @@ bool AbstractTextReader::ReadFloatingPointStr(std::string& str)
     {
         while (isdigit(c))
         {
-            ss << static_cast<char>(c);;
+            ss << static_cast<char>(c);
+            ;
             c = m_stream.get();
         }
     }
@@ -170,7 +171,8 @@ bool AbstractTextReader::ReadFloatingPointStr(std::string& str)
 
     if (c == '.')
     {
-        ss << static_cast<char>(c);;
+        ss << static_cast<char>(c);
+        ;
         c = m_stream.get();
 
         if (!isdigit(c))

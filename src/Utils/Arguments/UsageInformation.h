@@ -1,10 +1,10 @@
 #pragma once
 
+#include "CommandLineOption.h"
+
+#include <sstream>
 #include <string>
 #include <vector>
-#include <sstream>
-
-#include "CommandLineOption.h"
 
 class UsageInformation
 {

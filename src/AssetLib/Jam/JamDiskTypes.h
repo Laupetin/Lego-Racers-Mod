@@ -1,8 +1,8 @@
 #pragma once
 
-#include <cstdint>
-
 #include "FileUtils.h"
+
+#include <cstdint>
 
 namespace jam
 {
@@ -24,4 +24,4 @@ namespace jam
     };
 
     static_assert(sizeof(DiskDirectoryEntry) == 0x10);
-}
+} // namespace jam

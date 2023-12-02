@@ -1,14 +1,14 @@
 #include "GdbTextReader.h"
 
-#include <iostream>
-
 #include "Gdb.h"
+
+#include <iostream>
 
 #pragma warning(push, 0)
 #include "Parsing/Common/CommonGrammarHelper.h"
+#include "Parsing/Parser/Gdb/GdbBaseListener.h"
 #include "Parsing/Parser/Gdb/GdbLexer.h"
 #include "Parsing/Parser/Gdb/GdbParser.h"
-#include "Parsing/Parser/Gdb/GdbBaseListener.h"
 #pragma warning(pop)
 
 namespace gdb
@@ -257,7 +257,11 @@ namespace gdb
 
     class CustomGdbErrorListener final : public antlr4::BaseErrorListener
     {
-        void syntaxError(antlr4::Recognizer* recognizer, antlr4::Token* offendingSymbol, size_t line, size_t charPositionInLine, const std::string& msg,
+        void syntaxError(antlr4::Recognizer* recognizer,
+                         antlr4::Token* offendingSymbol,
+                         size_t line,
+                         size_t charPositionInLine,
+                         const std::string& msg,
                          std::exception_ptr e) override
         {
             std::ostringstream ss;
@@ -297,7 +301,7 @@ namespace gdb
         std::istream& m_stream;
         IGdbEmitter& m_emitter;
     };
-}
+} // namespace gdb
 
 using namespace gdb;
 

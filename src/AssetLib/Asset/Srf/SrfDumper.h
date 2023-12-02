@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-
 #include "Asset/IFileTypeProcessor.h"
+
+#include <iostream>
+#include <string>
 
 namespace srf
 {
@@ -15,4 +15,4 @@ namespace srf
     protected:
         void ProcessFile(const std::string& filePath, std::istream& input, std::ostream& output) const override;
     };
-}
+} // namespace srf

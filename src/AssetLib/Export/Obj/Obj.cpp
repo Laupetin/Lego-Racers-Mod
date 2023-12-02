@@ -29,11 +29,11 @@ namespace obj
     bool operator==(const ObjVertex& lhs, const ObjVertex& rhs)
     {
         return std::fabs(lhs.m_coordinates[0] - rhs.m_coordinates[0]) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.m_coordinates[1] - rhs.m_coordinates[1]) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.m_coordinates[2] - rhs.m_coordinates[2]) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.m_colors[0] - rhs.m_colors[0]) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.m_colors[1] - rhs.m_colors[1]) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.m_colors[2] - rhs.m_colors[2]) < std::numeric_limits<float>::epsilon();
+               && std::fabs(lhs.m_coordinates[1] - rhs.m_coordinates[1]) < std::numeric_limits<float>::epsilon()
+               && std::fabs(lhs.m_coordinates[2] - rhs.m_coordinates[2]) < std::numeric_limits<float>::epsilon()
+               && std::fabs(lhs.m_colors[0] - rhs.m_colors[0]) < std::numeric_limits<float>::epsilon()
+               && std::fabs(lhs.m_colors[1] - rhs.m_colors[1]) < std::numeric_limits<float>::epsilon()
+               && std::fabs(lhs.m_colors[2] - rhs.m_colors[2]) < std::numeric_limits<float>::epsilon();
     }
 
     bool operator!=(const ObjVertex& lhs, const ObjVertex& rhs)
@@ -44,7 +44,7 @@ namespace obj
     bool operator<(const ObjVertex& lhs, const ObjVertex& rhs)
     {
         return std::tie(lhs.m_coordinates[0], lhs.m_coordinates[1], lhs.m_coordinates[2], lhs.m_colors[0], lhs.m_colors[1], lhs.m_colors[2])
-            < std::tie(rhs.m_coordinates[0], rhs.m_coordinates[1], rhs.m_coordinates[2], rhs.m_colors[0], rhs.m_colors[1], rhs.m_colors[2]);
+               < std::tie(rhs.m_coordinates[0], rhs.m_coordinates[1], rhs.m_coordinates[2], rhs.m_colors[0], rhs.m_colors[1], rhs.m_colors[2]);
     }
 
     ObjNormal::ObjNormal()
@@ -60,8 +60,8 @@ namespace obj
     bool operator==(const ObjNormal& lhs, const ObjNormal& rhs)
     {
         return std::fabs(lhs.m_normal[0] - rhs.m_normal[0]) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.m_normal[1] - rhs.m_normal[1]) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.m_normal[2] - rhs.m_normal[2]) < std::numeric_limits<float>::epsilon();
+               && std::fabs(lhs.m_normal[1] - rhs.m_normal[1]) < std::numeric_limits<float>::epsilon()
+               && std::fabs(lhs.m_normal[2] - rhs.m_normal[2]) < std::numeric_limits<float>::epsilon();
     }
 
     bool operator!=(const ObjNormal& lhs, const ObjNormal& rhs)
@@ -87,7 +87,7 @@ namespace obj
     bool operator==(const ObjUv& lhs, const ObjUv& rhs)
     {
         return std::fabs(lhs.m_uv[0] - rhs.m_uv[0]) < std::numeric_limits<float>::epsilon()
-            && std::fabs(lhs.m_uv[1] - rhs.m_uv[1]) < std::numeric_limits<float>::epsilon();
+               && std::fabs(lhs.m_uv[1] - rhs.m_uv[1]) < std::numeric_limits<float>::epsilon();
     }
 
     bool operator!=(const ObjUv& lhs, const ObjUv& rhs)
@@ -100,8 +100,7 @@ namespace obj
         return std::tie(lhs.m_uv[0], lhs.m_uv[1]) < std::tie(rhs.m_uv[0], rhs.m_uv[1]);
     }
 
-    MtlMaterial::MtlMaterial()
-    = default;
+    MtlMaterial::MtlMaterial() = default;
 
     MtlMaterial::MtlMaterial(std::string materialName)
         : m_material_name(std::move(materialName))
@@ -138,7 +137,15 @@ namespace obj
     {
     }
 
-    ObjFace::ObjFace(const int vertex0, const int uv0, const int normal0, const int vertex1, const int uv1, const int normal1, const int vertex2, const int uv2, const int normal2,
+    ObjFace::ObjFace(const int vertex0,
+                     const int uv0,
+                     const int normal0,
+                     const int vertex1,
+                     const int uv1,
+                     const int normal1,
+                     const int vertex2,
+                     const int uv2,
+                     const int normal2,
                      const int group)
         : m_vertex_index{vertex0, vertex1, vertex2},
           m_uv_index{uv0, uv1, uv2},
@@ -172,7 +179,7 @@ namespace obj
           m_material_index(materialIndex)
     {
     }
-}
+} // namespace obj
 
 std::size_t std::hash<ObjVertex>::operator()(const ObjVertex& v) const noexcept
 

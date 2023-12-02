@@ -1,10 +1,10 @@
 #include "MdbCreator.h"
 
-#include <iostream>
-
-#include "TokenStream.h"
-#include "MdbTextReader.h"
 #include "MdbBinaryWriter.h"
+#include "MdbTextReader.h"
+#include "TokenStream.h"
+
+#include <iostream>
 
 using namespace mdb;
 

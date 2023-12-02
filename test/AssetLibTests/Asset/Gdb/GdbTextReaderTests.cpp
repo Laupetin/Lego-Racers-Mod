@@ -1,13 +1,12 @@
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include <catch2/generators/catch_generators.hpp>
+#include "Asset/Gdb/GdbStructWriter.h"
+#include "Asset/Gdb/GdbTextReader.h"
 
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/generators/catch_generators.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <limits>
 #include <sstream>
 #include <string>
-
-#include "Asset/Gdb/GdbStructWriter.h"
-#include "Asset/Gdb/GdbTextReader.h"
 
 using namespace Catch::Matchers;
 
@@ -39,44 +38,43 @@ namespace test::asset::gdb::text_reader
 
     TEST_CASE("GdbTextReader: Ensure can read simple gdb", "[token][input]")
     {
-        constexpr static auto GDB_DATA =
-            "materials {\n"
-            "  \"testmaterial\"\n"
-            "}\n"
+        constexpr static auto GDB_DATA = "materials {\n"
+                                         "  \"testmaterial\"\n"
+                                         "}\n"
 
-            "vertices {\n"
-            "  v 3.5 4 -500.1\n"
-            "  uv 5 -1\n"
-            "  vn 0. -0.09 07\n"
+                                         "vertices {\n"
+                                         "  v 3.5 4 -500.1\n"
+                                         "  uv 5 -1\n"
+                                         "  vn 0. -0.09 07\n"
 
-            "  v -68.672043 0.000000 100.999977\n"
-            "  uv 7.000000 0.000000\n"
-            "  vn 0.135200 -0.108100 0.984900\n"
+                                         "  v -68.672043 0.000000 100.999977\n"
+                                         "  uv 7.000000 0.000000\n"
+                                         "  vn 0.135200 -0.108100 0.984900\n"
 
-            "  v 101.000015 34.667980 2.920081\n"
-            "  uv 0.000000 0.000000\n"
-            "  vn 0.135200 -0.108100 0.984900\n"
+                                         "  v 101.000015 34.667980 2.920081\n"
+                                         "  uv 0.000000 0.000000\n"
+                                         "  vn 0.135200 -0.108100 0.984900\n"
 
-            "  v 8.000011 35.000000 -2.000000\n"
-            "  uv -2.998455 0.468691\n"
-            "  vn 0.093800 -0.121700 0.988100\n"
+                                         "  v 8.000011 35.000000 -2.000000\n"
+                                         "  uv -2.998455 0.468691\n"
+                                         "  vn 0.093800 -0.121700 0.988100\n"
 
-            "  v 7.999974 -68.672005 -2.000000\n"
-            "  uv 5.248343 0.295957\n"
-            "  vn 0.438400 -0.898800 0.000000\n"
-            "}\n"
+                                         "  v 7.999974 -68.672005 -2.000000\n"
+                                         "  uv 5.248343 0.295957\n"
+                                         "  vn 0.438400 -0.898800 0.000000\n"
+                                         "}\n"
 
-            "faces {\n"
-            "  f 0 1 2"
-            "  f 3 4 1"
-            "  f 4 2 0"
-            "}\n"
+                                         "faces {\n"
+                                         "  f 0 1 2"
+                                         "  f 3 4 1"
+                                         "  f 4 2 0"
+                                         "}\n"
 
-            "meta {\n"
-            "  object 0"
-            "  vertices 0 0 5"
-            "  faces 0 3"
-            "}";
+                                         "meta {\n"
+                                         "  object 0"
+                                         "  vertices 0 0 5"
+                                         "  faces 0 3"
+                                         "}";
 
         std::istringstream inputDataStream(GDB_DATA);
 
@@ -137,4 +135,4 @@ namespace test::asset::gdb::text_reader
         REQUIRE(model.m_meta[2].m_value0 == 0);
         REQUIRE(model.m_meta[2].m_value1 == 3);
     }
-}
+} // namespace test::asset::gdb::text_reader

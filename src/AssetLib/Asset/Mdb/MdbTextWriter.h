@@ -1,9 +1,9 @@
 #pragma once
 
+#include "MdbEmitter.h"
+
 #include <memory>
 #include <ostream>
-
-#include "MdbEmitter.h"
 
 namespace mdb
 {
@@ -14,4 +14,4 @@ namespace mdb
 
         static std::unique_ptr<IMdbEmitter> Create(std::ostream& out);
     };
-}
+} // namespace mdb

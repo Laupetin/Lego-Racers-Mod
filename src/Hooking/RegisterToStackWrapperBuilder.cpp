@@ -16,8 +16,10 @@ class RegisterToStackWrapperBuilderInternal : public WrapperBuilderBase
     int m_params_word_count;
 
 public:
-    RegisterToStackWrapperBuilderInternal(const void* offset, const UsercallConfiguration& usercallConfiguration,
-                                          const size_t* paramSizes, const int paramCount)
+    RegisterToStackWrapperBuilderInternal(const void* offset,
+                                          const UsercallConfiguration& usercallConfiguration,
+                                          const size_t* paramSizes,
+                                          const int paramCount)
         : WrapperBuilderBase(usercallConfiguration),
           m_offset(offset),
           m_param_sizes(paramSizes),
@@ -55,8 +57,7 @@ public:
                 if (GetRegisterLocationForParam(paramIndex, &nextRegister))
                 {
                     if (paramSize > WORD_SIZE)
-                        throw std::exception(
-                            "Cannot move parameter from register that is bigger than the system's word size.");
+                        throw std::exception("Cannot move parameter from register that is bigger than the system's word size.");
 
                     ThrowIfError(assembler.push(AsmJitContext::GetRegister(nextRegister)));
                     pushedWordCount++;
@@ -99,9 +100,9 @@ public:
 };
 
 std::unique_ptr<IAsmWrapper> RegisterToStackWrapperBuilder::BuildWrapper(const void* offset,
-                                                                         const UsercallConfiguration&
-                                                                         usercallConfiguration,
-                                                                         const size_t* paramSizes, const int paramCount,
+                                                                         const UsercallConfiguration& usercallConfiguration,
+                                                                         const size_t* paramSizes,
+                                                                         const int paramCount,
                                                                          const CallDetails from,
                                                                          const CallDetails to)
 {

@@ -1,11 +1,11 @@
 #include "GdbUnitProcessor.h"
 
+#include "Asset/Gdb/GdbBinaryWriter.h"
+#include "Asset/Gdb/GdbTextReader.h"
+#include "StringUtils.h"
+
 #include <filesystem>
 #include <fstream>
-
-#include "StringUtils.h"
-#include "Asset/Gdb/GdbTextReader.h"
-#include "Asset/Gdb/GdbBinaryWriter.h"
 
 namespace fs = std::filesystem;
 

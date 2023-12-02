@@ -1,9 +1,9 @@
 #include "IdbBinaryWriter.h"
 
-#include <sstream>
-
 #include "Idb.h"
 #include "TokenStream.h"
+
+#include <sstream>
 
 namespace idb
 {
@@ -99,7 +99,7 @@ namespace idb
         std::unique_ptr<ITokenOutputStream> m_temp_tokens;
         size_t m_current_count;
     };
-}
+} // namespace idb
 
 using namespace idb;
 

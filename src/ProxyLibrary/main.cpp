@@ -1,18 +1,16 @@
-#include <Windows.h>
-#include <string>
-
-#include "RacersOffset.h"
-#include "Patch.h"
-#include "Offset.h"
-
 #include "Components/Core.h"
 #include "Components/Debug.h"
 #include "Components/JamFiles.h"
 #include "Components/Menus.h"
 #include "Components/Windowed.h"
+#include "Offset.h"
+#include "Patch.h"
+#include "RacersOffset.h"
 
-Component* components[]
-{
+#include <Windows.h>
+#include <string>
+
+Component* components[]{
     new ComponentCore(),
 
 #ifdef _DEBUG
@@ -21,7 +19,7 @@ Component* components[]
 
     new ComponentMenus(),
     new ComponentWindowed(),
-    new ComponentJamFiles()
+    new ComponentJamFiles(),
 };
 
 void DetectGameEnvironment()
@@ -47,10 +45,7 @@ BOOL MainInit(const HMODULE hModule)
     return TRUE;
 }
 
-BOOL APIENTRY DllMain(const HMODULE hModule,
-                      const DWORD ul_reason_for_call,
-                      LPVOID lpReserved
-)
+BOOL APIENTRY DllMain(const HMODULE hModule, const DWORD ul_reason_for_call, LPVOID lpReserved)
 {
     switch (ul_reason_for_call)
     {

@@ -11,4 +11,4 @@ namespace utils
     bool StringEqualsIgnoreCase(const std::string& str0, const std::string& str1);
     void MakeStringLowerCase(std::string& str);
     void MakeStringUpperCase(std::string& str);
-}
+} // namespace utils

@@ -1,8 +1,8 @@
 #include "JamTypes.h"
 
-#include <algorithm>
-
 #include "StringUtils.h"
+
+#include <algorithm>
 
 using namespace jam;
 
@@ -78,15 +78,19 @@ const std::unique_ptr<FileEntry>& DirectoryEntry::AddFile(std::unique_ptr<FileEn
 
 void DirectoryEntry::Sort()
 {
-    std::sort(m_sub_directories.begin(), m_sub_directories.end(), [](const std::unique_ptr<DirectoryEntry>& d0, const std::unique_ptr<DirectoryEntry>& d1)
-    {
-        return d0->Name() < d1->Name();
-    });
+    std::sort(m_sub_directories.begin(),
+              m_sub_directories.end(),
+              [](const std::unique_ptr<DirectoryEntry>& d0, const std::unique_ptr<DirectoryEntry>& d1)
+              {
+                  return d0->Name() < d1->Name();
+              });
 
-    std::sort(m_files.begin(), m_files.end(), [](const std::unique_ptr<FileEntry>& f0, const std::unique_ptr<FileEntry>& f1)
-    {
-        return f0->Name() < f1->Name();
-    });
+    std::sort(m_files.begin(),
+              m_files.end(),
+              [](const std::unique_ptr<FileEntry>& f0, const std::unique_ptr<FileEntry>& f1)
+              {
+                  return f0->Name() < f1->Name();
+              });
 }
 
 DirectoryTree::DirectoryTree()
@@ -113,10 +117,12 @@ FileEntry& DirectoryTree::AddFile(const JamFilePath& path)
     {
         const auto& subDirectories = currentDirectory->SubDirectories();
 
-        const auto existingSubDirectory = std::find_if(subDirectories.begin(), subDirectories.end(), [&pathSegment](const std::unique_ptr<DirectoryEntry>& dir)
-        {
-            return dir->Name() == pathSegment;
-        });
+        const auto existingSubDirectory = std::find_if(subDirectories.begin(),
+                                                       subDirectories.end(),
+                                                       [&pathSegment](const std::unique_ptr<DirectoryEntry>& dir)
+                                                       {
+                                                           return dir->Name() == pathSegment;
+                                                       });
 
         if (existingSubDirectory == subDirectories.end())
         {

@@ -1,8 +1,8 @@
 #include "MdbTextWriter.h"
 
-#include <iomanip>
-
 #include "Utils/AbstractTextDumper.h"
+
+#include <iomanip>
 
 namespace mdb
 {
@@ -275,7 +275,7 @@ namespace mdb
 
         bool m_first_material_element;
     };
-}
+} // namespace mdb
 
 using namespace mdb;
 

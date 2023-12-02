@@ -1,8 +1,8 @@
 #include "GdbTextWriter.h"
 
-#include <iomanip>
-
 #include "Utils/AbstractTextDumper.h"
+
+#include <iomanip>
 
 namespace gdb
 {
@@ -87,8 +87,8 @@ namespace gdb
             m_stream << "uv " << uv.x << " " << uv.y << "\n";
 
             Indent();
-            m_stream << "clr " << static_cast<unsigned>(color.r) << " " << static_cast<unsigned>(color.g)
-                << " " << static_cast<unsigned>(color.b) << " " << static_cast<unsigned>(color.a) << "\n";
+            m_stream << "clr " << static_cast<unsigned>(color.r) << " " << static_cast<unsigned>(color.g) << " " << static_cast<unsigned>(color.b) << " "
+                     << static_cast<unsigned>(color.a) << "\n";
         }
 
         void EmitVertex(const Vec3 position, const Vec2 uv, const Vec3 normal) override
@@ -165,7 +165,8 @@ namespace gdb
         void EmitMetaKeyword30() override
         {
             Indent();
-            m_stream << "keyword30 " << "\n";
+            m_stream << "keyword30 "
+                     << "\n";
         }
 
         void EmitMetaBone(const size_t value0) override
@@ -190,7 +191,7 @@ namespace gdb
     private:
         bool m_first_vertex_element;
     };
-}
+} // namespace gdb
 
 using namespace gdb;
 

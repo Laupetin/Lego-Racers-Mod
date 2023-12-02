@@ -58,7 +58,7 @@ void AsmJitContext::RemoveWrapper(void* wrapper)
 {
     std::scoped_lock<std::mutex> lock(m_runtime_lock);
 
-    if(m_runtime_active)
+    if (m_runtime_active)
         m_runtime.release(wrapper);
 }
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <istream>
-
 #include "SrfEmitter.h"
+
+#include <istream>
 
 namespace srf
 {
@@ -13,4 +13,4 @@ namespace srf
 
         static void Read(std::istream& input, ISrfEmitter& emitter);
     };
-}
+} // namespace srf

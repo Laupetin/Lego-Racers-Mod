@@ -96,25 +96,22 @@ namespace obj
         std::vector<ObjObject> m_objects;
         std::vector<MtlMaterial> m_materials;
     };
-}
+} // namespace obj
 
 namespace std
 {
-    template <>
-    struct hash<obj::ObjVertex>
+    template<> struct hash<obj::ObjVertex>
     {
         std::size_t operator()(const obj::ObjVertex& v) const noexcept;
     };
 
-    template <>
-    struct hash<obj::ObjNormal>
+    template<> struct hash<obj::ObjNormal>
     {
         std::size_t operator()(const obj::ObjNormal& n) const noexcept;
     };
 
-    template <>
-    struct hash<obj::ObjUv>
+    template<> struct hash<obj::ObjUv>
     {
         std::size_t operator()(const obj::ObjUv& uv) const noexcept;
     };
-}
+} // namespace std

@@ -1,12 +1,12 @@
 #include "SrfBinaryWriter.h"
 
-#include <limits>
-#include <sstream>
-#include <vector>
-
 #include "Endianness.h"
 #include "StringUtils.h"
 #include "TokenStream.h"
+
+#include <limits>
+#include <sstream>
+#include <vector>
 
 namespace srf
 {
@@ -36,9 +36,7 @@ namespace srf
         {
         }
 
-        void StartStrings() override
-        {
-        }
+        void StartStrings() override {}
 
         void EndStrings() override
         {
@@ -78,7 +76,7 @@ namespace srf
         size_t m_data_buffer_offset;
         std::vector<size_t> m_string_offsets;
     };
-}
+} // namespace srf
 
 using namespace srf;
 

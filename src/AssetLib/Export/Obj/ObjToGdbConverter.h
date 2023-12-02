@@ -1,9 +1,9 @@
 #pragma once
 
-#include <memory>
-
-#include "Obj.h"
 #include "Asset/Gdb/Gdb.h"
+#include "Obj.h"
+
+#include <memory>
 
 namespace obj
 {
@@ -22,4 +22,4 @@ namespace obj
         virtual void SetBoneIndexForGroup(std::string groupName, int boneIndex) = 0;
         virtual void Convert() = 0;
     };
-}
+} // namespace obj

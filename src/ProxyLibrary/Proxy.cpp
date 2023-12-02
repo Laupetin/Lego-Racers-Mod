@@ -9,7 +9,12 @@
 
 // Macro to declare an export
 // --------------------------------------+
-#define EXPORT(_export) extern "C" __declspec(naked) __declspec(dllexport) void _export() { SDLLP::GetExport(__FUNCTION__, LIBRARY); __asm { jmp eax } }  
+#define EXPORT(_export)                                                                                                                                        \
+    extern "C" __declspec(naked) __declspec(dllexport) void _export()                                                                                          \
+    {                                                                                                                                                          \
+        SDLLP::GetExport(__FUNCTION__, LIBRARY);                                                                                                               \
+        __asm { jmp eax }                                                                                                                                      \
+    }
 
 // Static class
 // --------------------------------------+
@@ -18,9 +23,9 @@ class SDLLP
 private:
     static std::map<std::string, HINSTANCE> mLibraries;
 
-    static void	Log(const char* message, ...);
-    static void	LoadLibrary(const char* library);
-    static bool	IsLibraryLoaded(const char* library);
+    static void Log(const char* message, ...);
+    static void LoadLibrary(const char* library);
+    static bool IsLibraryLoaded(const char* library);
 
 public:
     static FARPROC GetExport(const char* function, const char* library);
@@ -44,7 +49,8 @@ void SDLLP::LoadLibrary(const char* library)
 
     mLibraries[library] = ::LoadLibraryA(mPath);
 
-    if (!IsLibraryLoaded(library)) Log("[SDLLP] Unable to load library '%s'.", library);
+    if (!IsLibraryLoaded(library))
+        Log("[SDLLP] Unable to load library '%s'.", library);
 }
 
 // Check if export already loaded
@@ -60,11 +66,13 @@ FARPROC SDLLP::GetExport(const char* function, const char* library)
 {
     Log("[SDLLP] Export '%s' requested from %s.", function, library);
 
-    if (!IsLibraryLoaded(library)) LoadLibrary(library);
+    if (!IsLibraryLoaded(library))
+        LoadLibrary(library);
 
     FARPROC address = GetProcAddress(mLibraries[library], function);
 
-    if (!address) Log("[SDLLP] Unable to load export '%s' from library '%s'.", function, library);
+    if (!address)
+        Log("[SDLLP] Unable to load export '%s' from library '%s'.", function, library);
     return address;
 }
 

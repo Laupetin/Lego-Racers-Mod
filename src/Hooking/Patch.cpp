@@ -2,8 +2,8 @@
 
 #if defined(OS_TARGET_WINDOWS) && defined(ARCH_x86)
 
-#include <cassert>
 #include <Windows.h>
+#include <cassert>
 
 constexpr uint8_t OP_CALL_NEAR32 = 0xE8;
 constexpr uint8_t OP_JMP_NEAR32 = 0xE9;
@@ -54,8 +54,7 @@ void Patch::Call(const uintptr_t ptr, void* func, const int size)
     const auto nopSize = static_cast<size_t>(std::max(size - 5, 0));
 
     DWORD oldProtect;
-    VirtualProtect(reinterpret_cast<void*>(ptr), sizeof uint8_t + sizeof uintptr_t + nopSize, PAGE_EXECUTE_READWRITE,
-        &oldProtect);
+    VirtualProtect(reinterpret_cast<void*>(ptr), sizeof uint8_t + sizeof uintptr_t + nopSize, PAGE_EXECUTE_READWRITE, &oldProtect);
 
     *reinterpret_cast<uint8_t*>(ptr) = OP_CALL_NEAR32;
     *reinterpret_cast<uintptr_t*>(ptr + 1) = reinterpret_cast<uintptr_t>(func) - ptr - 5;
@@ -69,8 +68,7 @@ void Patch::Call(const uintptr_t ptr, void* func, const int size)
 void Patch::Jump(const uintptr_t ptr, void* func)
 {
     DWORD oldProtect;
-    VirtualProtect(reinterpret_cast<void*>(ptr), sizeof uint8_t + sizeof uintptr_t, PAGE_EXECUTE_READWRITE,
-        &oldProtect);
+    VirtualProtect(reinterpret_cast<void*>(ptr), sizeof uint8_t + sizeof uintptr_t, PAGE_EXECUTE_READWRITE, &oldProtect);
 
     *reinterpret_cast<uint8_t*>(ptr) = OP_JMP_NEAR32;
     *reinterpret_cast<uintptr_t*>(ptr + 1) = reinterpret_cast<uintptr_t>(func) - ptr - 5;
@@ -151,4 +149,3 @@ void Patch::Data(const OffsetValue ptr, const void* data, const size_t dataSize)
 }
 
 #endif
-

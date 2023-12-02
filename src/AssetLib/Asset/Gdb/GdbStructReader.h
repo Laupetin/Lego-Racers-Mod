@@ -5,11 +5,11 @@
 
 namespace gdb
 {
-	class GdbStructReader
-	{
-	public:
-		GdbStructReader() = delete;
+    class GdbStructReader
+    {
+    public:
+        GdbStructReader() = delete;
 
-		static void Read(const Model& model, IGdbEmitter& emitter);
-	};
-}
+        static void Read(const Model& model, IGdbEmitter& emitter);
+    };
+} // namespace gdb

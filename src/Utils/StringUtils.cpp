@@ -85,4 +85,4 @@ namespace utils
         for (auto& c : str)
             c = static_cast<char>(toupper(c));
     }
-}
+} // namespace utils

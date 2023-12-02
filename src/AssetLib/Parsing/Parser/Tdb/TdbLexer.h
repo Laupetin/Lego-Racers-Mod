@@ -3,52 +3,64 @@
 
 #pragma once
 
-
 #include "antlr4-runtime.h"
 
+namespace tdb
+{
 
-namespace tdb {
+    class TdbLexer : public antlr4::Lexer
+    {
+    public:
+        enum
+        {
+            T__0 = 1,
+            T__1 = 2,
+            Textures = 3,
+            Texture = 4,
+            FlipVertical = 5,
+            Keyword29 = 6,
+            Bmp = 7,
+            Tga = 8,
+            ChromaKey = 9,
+            Keyword2D = 10,
+            Keyword2E = 11,
+            IntegerConstant = 12,
+            FloatingConstant = 13,
+            DigitSequence = 14,
+            StringLiteral = 15,
+            Whitespace = 16,
+            Newline = 17,
+            BlockComment = 18,
+            LineComment = 19
+        };
 
+        explicit TdbLexer(antlr4::CharStream* input);
 
-class  TdbLexer : public antlr4::Lexer {
-public:
-  enum {
-    T__0 = 1, T__1 = 2, Textures = 3, Texture = 4, FlipVertical = 5, Keyword29 = 6, 
-    Bmp = 7, Tga = 8, ChromaKey = 9, Keyword2D = 10, Keyword2E = 11, IntegerConstant = 12, 
-    FloatingConstant = 13, DigitSequence = 14, StringLiteral = 15, Whitespace = 16, 
-    Newline = 17, BlockComment = 18, LineComment = 19
-  };
+        ~TdbLexer() override;
 
-  explicit TdbLexer(antlr4::CharStream *input);
+        std::string getGrammarFileName() const override;
 
-  ~TdbLexer() override;
+        const std::vector<std::string>& getRuleNames() const override;
 
+        const std::vector<std::string>& getChannelNames() const override;
 
-  std::string getGrammarFileName() const override;
+        const std::vector<std::string>& getModeNames() const override;
 
-  const std::vector<std::string>& getRuleNames() const override;
+        const antlr4::dfa::Vocabulary& getVocabulary() const override;
 
-  const std::vector<std::string>& getChannelNames() const override;
+        antlr4::atn::SerializedATNView getSerializedATN() const override;
 
-  const std::vector<std::string>& getModeNames() const override;
+        const antlr4::atn::ATN& getATN() const override;
 
-  const antlr4::dfa::Vocabulary& getVocabulary() const override;
+        // By default the static state used to implement the lexer is lazily initialized during the first
+        // call to the constructor. You can call this function if you wish to initialize the static state
+        // ahead of time.
+        static void initialize();
 
-  antlr4::atn::SerializedATNView getSerializedATN() const override;
+    private:
+        // Individual action functions triggered by action() above.
 
-  const antlr4::atn::ATN& getATN() const override;
+        // Individual semantic predicate functions triggered by sempred() above.
+    };
 
-  // By default the static state used to implement the lexer is lazily initialized during the first
-  // call to the constructor. You can call this function if you wish to initialize the static state
-  // ahead of time.
-  static void initialize();
-
-private:
-
-  // Individual action functions triggered by action() above.
-
-  // Individual semantic predicate functions triggered by sempred() above.
-
-};
-
-}  // namespace tdb
+} // namespace tdb

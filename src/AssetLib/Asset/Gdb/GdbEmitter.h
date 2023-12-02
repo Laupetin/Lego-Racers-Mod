@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Gdb.h"
+
 #include <cstdint>
 #include <string>
-
-#include "Gdb.h"
 
 namespace gdb
 {
@@ -43,4 +43,4 @@ namespace gdb
         virtual void EmitMetaNewObject(size_t materialIndex) = 0;
         virtual void EndMeta() = 0;
     };
-}
+} // namespace gdb

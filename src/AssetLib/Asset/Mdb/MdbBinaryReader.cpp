@@ -133,24 +133,24 @@ namespace mdb
             switch (token.m_type)
             {
             case TOKEN_KEYWORD_COLOR_1:
-                {
-                    const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value3 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    m_emitter.EmitColor1(value0, value1, value2, value3);
-                    break;
-                }
+            {
+                const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value3 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                m_emitter.EmitColor1(value0, value1, value2, value3);
+                break;
+            }
 
             case TOKEN_KEYWORD_COLOR_0:
-                {
-                    const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    const auto value3 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
-                    m_emitter.EmitColor0(value0, value1, value2, value3);
-                    break;
-                }
+            {
+                const auto value0 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value1 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value2 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                const auto value3 = static_cast<uint8_t>(m_tokens->NextIntegerValue());
+                m_emitter.EmitColor0(value0, value1, value2, value3);
+                break;
+            }
 
             case TOKEN_KEYWORD_TEXTURE:
                 m_emitter.EmitTexture(m_tokens->NextStringValue());
@@ -242,7 +242,7 @@ namespace mdb
         std::unique_ptr<ITokenInputStream> m_tokens;
         IMdbEmitter& m_emitter;
     };
-}
+} // namespace mdb
 
 void MdbBinaryReader::Read(std::istream& input, IMdbEmitter& emitter)
 {

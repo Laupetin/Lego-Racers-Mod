@@ -1,8 +1,8 @@
 #include "GdbBinaryWriter.h"
 
-#include <sstream>
-
 #include "TokenStream.h"
+
+#include <sstream>
 
 namespace gdb
 {
@@ -220,7 +220,7 @@ namespace gdb
         std::unique_ptr<ITokenOutputStream> m_temp_tokens;
         size_t m_current_count;
     };
-}
+} // namespace gdb
 
 using namespace gdb;
 

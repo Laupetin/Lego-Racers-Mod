@@ -3,191 +3,209 @@
 
 #pragma once
 
-
 #include "antlr4-runtime.h"
 
+namespace idb
+{
 
-namespace idb {
+    class IdbParser : public antlr4::Parser
+    {
+    public:
+        enum
+        {
+            T__0 = 1,
+            T__1 = 2,
+            Images = 3,
+            Image = 4,
+            FlipVertical = 5,
+            Bmp = 6,
+            Tga = 7,
+            ChromaKey = 8,
+            Tint = 9,
+            IntegerConstant = 10,
+            FloatingConstant = 11,
+            DigitSequence = 12,
+            StringLiteral = 13,
+            Whitespace = 14,
+            Newline = 15,
+            BlockComment = 16,
+            LineComment = 17
+        };
 
+        enum
+        {
+            RuleRoot = 0,
+            RuleImages = 1,
+            RuleImage = 2,
+            RuleImageName = 3,
+            RuleImageProperty = 4,
+            RuleColorImageProperty = 5,
+            RuleColorImagePropertyKeyword = 6,
+            RuleSingleValueKeywords = 7,
+            RuleFloatOrIntConstant = 8
+        };
 
-class  IdbParser : public antlr4::Parser {
-public:
-  enum {
-    T__0 = 1, T__1 = 2, Images = 3, Image = 4, FlipVertical = 5, Bmp = 6, 
-    Tga = 7, ChromaKey = 8, Tint = 9, IntegerConstant = 10, FloatingConstant = 11, 
-    DigitSequence = 12, StringLiteral = 13, Whitespace = 14, Newline = 15, 
-    BlockComment = 16, LineComment = 17
-  };
+        explicit IdbParser(antlr4::TokenStream* input);
 
-  enum {
-    RuleRoot = 0, RuleImages = 1, RuleImage = 2, RuleImageName = 3, RuleImageProperty = 4, 
-    RuleColorImageProperty = 5, RuleColorImagePropertyKeyword = 6, RuleSingleValueKeywords = 7, 
-    RuleFloatOrIntConstant = 8
-  };
+        IdbParser(antlr4::TokenStream* input, const antlr4::atn::ParserATNSimulatorOptions& options);
 
-  explicit IdbParser(antlr4::TokenStream *input);
+        ~IdbParser() override;
 
-  IdbParser(antlr4::TokenStream *input, const antlr4::atn::ParserATNSimulatorOptions &options);
+        std::string getGrammarFileName() const override;
 
-  ~IdbParser() override;
+        const antlr4::atn::ATN& getATN() const override;
 
-  std::string getGrammarFileName() const override;
+        const std::vector<std::string>& getRuleNames() const override;
 
-  const antlr4::atn::ATN& getATN() const override;
+        const antlr4::dfa::Vocabulary& getVocabulary() const override;
 
-  const std::vector<std::string>& getRuleNames() const override;
+        antlr4::atn::SerializedATNView getSerializedATN() const override;
 
-  const antlr4::dfa::Vocabulary& getVocabulary() const override;
+        class RootContext;
+        class ImagesContext;
+        class ImageContext;
+        class ImageNameContext;
+        class ImagePropertyContext;
+        class ColorImagePropertyContext;
+        class ColorImagePropertyKeywordContext;
+        class SingleValueKeywordsContext;
+        class FloatOrIntConstantContext;
 
-  antlr4::atn::SerializedATNView getSerializedATN() const override;
+        class RootContext : public antlr4::ParserRuleContext
+        {
+        public:
+            RootContext(antlr4::ParserRuleContext* parent, size_t invokingState);
+            virtual size_t getRuleIndex() const override;
+            ImagesContext* images();
 
+            virtual void enterRule(antlr4::tree::ParseTreeListener* listener) override;
+            virtual void exitRule(antlr4::tree::ParseTreeListener* listener) override;
+        };
 
-  class RootContext;
-  class ImagesContext;
-  class ImageContext;
-  class ImageNameContext;
-  class ImagePropertyContext;
-  class ColorImagePropertyContext;
-  class ColorImagePropertyKeywordContext;
-  class SingleValueKeywordsContext;
-  class FloatOrIntConstantContext; 
+        RootContext* root();
 
-  class  RootContext : public antlr4::ParserRuleContext {
-  public:
-    RootContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    ImagesContext *images();
+        class ImagesContext : public antlr4::ParserRuleContext
+        {
+        public:
+            ImagesContext(antlr4::ParserRuleContext* parent, size_t invokingState);
+            virtual size_t getRuleIndex() const override;
+            antlr4::tree::TerminalNode* Images();
+            std::vector<ImageContext*> image();
+            ImageContext* image(size_t i);
 
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
-  };
+            virtual void enterRule(antlr4::tree::ParseTreeListener* listener) override;
+            virtual void exitRule(antlr4::tree::ParseTreeListener* listener) override;
+        };
 
-  RootContext* root();
+        ImagesContext* images();
 
-  class  ImagesContext : public antlr4::ParserRuleContext {
-  public:
-    ImagesContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *Images();
-    std::vector<ImageContext *> image();
-    ImageContext* image(size_t i);
+        class ImageContext : public antlr4::ParserRuleContext
+        {
+        public:
+            ImageContext(antlr4::ParserRuleContext* parent, size_t invokingState);
+            virtual size_t getRuleIndex() const override;
+            antlr4::tree::TerminalNode* Image();
+            ImageNameContext* imageName();
+            std::vector<ImagePropertyContext*> imageProperty();
+            ImagePropertyContext* imageProperty(size_t i);
 
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
-  };
+            virtual void enterRule(antlr4::tree::ParseTreeListener* listener) override;
+            virtual void exitRule(antlr4::tree::ParseTreeListener* listener) override;
+        };
 
-  ImagesContext* images();
+        ImageContext* image();
 
-  class  ImageContext : public antlr4::ParserRuleContext {
-  public:
-    ImageContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *Image();
-    ImageNameContext *imageName();
-    std::vector<ImagePropertyContext *> imageProperty();
-    ImagePropertyContext* imageProperty(size_t i);
+        class ImageNameContext : public antlr4::ParserRuleContext
+        {
+        public:
+            ImageNameContext(antlr4::ParserRuleContext* parent, size_t invokingState);
+            virtual size_t getRuleIndex() const override;
+            antlr4::tree::TerminalNode* StringLiteral();
 
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
-  };
+            virtual void enterRule(antlr4::tree::ParseTreeListener* listener) override;
+            virtual void exitRule(antlr4::tree::ParseTreeListener* listener) override;
+        };
 
-  ImageContext* image();
+        ImageNameContext* imageName();
 
-  class  ImageNameContext : public antlr4::ParserRuleContext {
-  public:
-    ImageNameContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *StringLiteral();
+        class ImagePropertyContext : public antlr4::ParserRuleContext
+        {
+        public:
+            ImagePropertyContext(antlr4::ParserRuleContext* parent, size_t invokingState);
+            virtual size_t getRuleIndex() const override;
+            ColorImagePropertyContext* colorImageProperty();
+            SingleValueKeywordsContext* singleValueKeywords();
 
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
-  };
+            virtual void enterRule(antlr4::tree::ParseTreeListener* listener) override;
+            virtual void exitRule(antlr4::tree::ParseTreeListener* listener) override;
+        };
 
-  ImageNameContext* imageName();
+        ImagePropertyContext* imageProperty();
 
-  class  ImagePropertyContext : public antlr4::ParserRuleContext {
-  public:
-    ImagePropertyContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    ColorImagePropertyContext *colorImageProperty();
-    SingleValueKeywordsContext *singleValueKeywords();
+        class ColorImagePropertyContext : public antlr4::ParserRuleContext
+        {
+        public:
+            ColorImagePropertyContext(antlr4::ParserRuleContext* parent, size_t invokingState);
+            virtual size_t getRuleIndex() const override;
+            ColorImagePropertyKeywordContext* colorImagePropertyKeyword();
+            std::vector<antlr4::tree::TerminalNode*> IntegerConstant();
+            antlr4::tree::TerminalNode* IntegerConstant(size_t i);
 
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
-  };
+            virtual void enterRule(antlr4::tree::ParseTreeListener* listener) override;
+            virtual void exitRule(antlr4::tree::ParseTreeListener* listener) override;
+        };
 
-  ImagePropertyContext* imageProperty();
+        ColorImagePropertyContext* colorImageProperty();
 
-  class  ColorImagePropertyContext : public antlr4::ParserRuleContext {
-  public:
-    ColorImagePropertyContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    ColorImagePropertyKeywordContext *colorImagePropertyKeyword();
-    std::vector<antlr4::tree::TerminalNode *> IntegerConstant();
-    antlr4::tree::TerminalNode* IntegerConstant(size_t i);
+        class ColorImagePropertyKeywordContext : public antlr4::ParserRuleContext
+        {
+        public:
+            ColorImagePropertyKeywordContext(antlr4::ParserRuleContext* parent, size_t invokingState);
+            virtual size_t getRuleIndex() const override;
+            antlr4::tree::TerminalNode* ChromaKey();
+            antlr4::tree::TerminalNode* Tint();
 
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
-  };
+            virtual void enterRule(antlr4::tree::ParseTreeListener* listener) override;
+            virtual void exitRule(antlr4::tree::ParseTreeListener* listener) override;
+        };
 
-  ColorImagePropertyContext* colorImageProperty();
+        ColorImagePropertyKeywordContext* colorImagePropertyKeyword();
 
-  class  ColorImagePropertyKeywordContext : public antlr4::ParserRuleContext {
-  public:
-    ColorImagePropertyKeywordContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *ChromaKey();
-    antlr4::tree::TerminalNode *Tint();
+        class SingleValueKeywordsContext : public antlr4::ParserRuleContext
+        {
+        public:
+            SingleValueKeywordsContext(antlr4::ParserRuleContext* parent, size_t invokingState);
+            virtual size_t getRuleIndex() const override;
+            antlr4::tree::TerminalNode* FlipVertical();
+            antlr4::tree::TerminalNode* Bmp();
+            antlr4::tree::TerminalNode* Tga();
 
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
-  };
+            virtual void enterRule(antlr4::tree::ParseTreeListener* listener) override;
+            virtual void exitRule(antlr4::tree::ParseTreeListener* listener) override;
+        };
 
-  ColorImagePropertyKeywordContext* colorImagePropertyKeyword();
+        SingleValueKeywordsContext* singleValueKeywords();
 
-  class  SingleValueKeywordsContext : public antlr4::ParserRuleContext {
-  public:
-    SingleValueKeywordsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *FlipVertical();
-    antlr4::tree::TerminalNode *Bmp();
-    antlr4::tree::TerminalNode *Tga();
+        class FloatOrIntConstantContext : public antlr4::ParserRuleContext
+        {
+        public:
+            FloatOrIntConstantContext(antlr4::ParserRuleContext* parent, size_t invokingState);
+            virtual size_t getRuleIndex() const override;
+            antlr4::tree::TerminalNode* FloatingConstant();
+            antlr4::tree::TerminalNode* IntegerConstant();
 
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
-  };
+            virtual void enterRule(antlr4::tree::ParseTreeListener* listener) override;
+            virtual void exitRule(antlr4::tree::ParseTreeListener* listener) override;
+        };
 
-  SingleValueKeywordsContext* singleValueKeywords();
+        FloatOrIntConstantContext* floatOrIntConstant();
 
-  class  FloatOrIntConstantContext : public antlr4::ParserRuleContext {
-  public:
-    FloatOrIntConstantContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *FloatingConstant();
-    antlr4::tree::TerminalNode *IntegerConstant();
+        // By default the static state used to implement the parser is lazily initialized during the first
+        // call to the constructor. You can call this function if you wish to initialize the static state
+        // ahead of time.
+        static void initialize();
 
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
-  };
+    private:
+    };
 
-  FloatOrIntConstantContext* floatOrIntConstant();
-
-
-  // By default the static state used to implement the parser is lazily initialized during the first
-  // call to the constructor. You can call this function if you wish to initialize the static state
-  // ahead of time.
-  static void initialize();
-
-private:
-};
-
-}  // namespace idb
+} // namespace idb

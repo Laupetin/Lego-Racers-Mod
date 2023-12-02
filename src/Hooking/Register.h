@@ -10,6 +10,5 @@ enum class Register
     ESI,
     EDI,
 
-
     REGISTER_MAX
 };

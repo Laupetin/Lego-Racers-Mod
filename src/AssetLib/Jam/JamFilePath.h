@@ -37,10 +37,9 @@ namespace jam
         std::string m_path;
         size_t m_depth;
     };
-}
+} // namespace jam
 
-template <>
-struct std::hash<jam::JamFilePath>
+template<> struct std::hash<jam::JamFilePath>
 {
     std::size_t operator()(const jam::JamFilePath& v) const noexcept;
 };

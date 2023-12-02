@@ -1,11 +1,11 @@
 #include "ProjectDefinition.h"
 
+#include "FileUtils.h"
+#include "StringUtils.h"
+
 #include <filesystem>
 #include <iostream>
 #include <nlohmann/json.hpp>
-
-#include "FileUtils.h"
-#include "StringUtils.h"
 
 using namespace nlohmann;
 namespace fs = std::filesystem;
@@ -44,12 +44,11 @@ bool ProjectDefinition::Validate() const
 
 std::ostream& operator<<(std::ostream& os, const ProjectDefinition& obj)
 {
-    os
-        << "  Project Name: \"" << obj.m_project_name << "\"\n"
-        << "  Data Directory: \"" << obj.m_data_directory << "\"\n"
-        << "  Dist Directory: \"" << obj.m_dist_directory << "\"\n"
-        << "  Obj Directory: \"" << obj.m_obj_directory << "\"\n"
-        << "  Target Name: \"" << obj.m_target_name << "\"\n";
+    os << "  Project Name: \"" << obj.m_project_name << "\"\n"
+       << "  Data Directory: \"" << obj.m_data_directory << "\"\n"
+       << "  Dist Directory: \"" << obj.m_dist_directory << "\"\n"
+       << "  Obj Directory: \"" << obj.m_obj_directory << "\"\n"
+       << "  Target Name: \"" << obj.m_target_name << "\"\n";
 
     return os;
 }

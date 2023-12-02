@@ -1,11 +1,11 @@
 #include "SrfUnitProcessor.h"
 
-#include <filesystem>
-#include <fstream>
-
-#include "StringUtils.h"
 #include "Asset/Srf/SrfBinaryWriter.h"
 #include "Asset/Srf/SrfTextReader.h"
+#include "StringUtils.h"
+
+#include <filesystem>
+#include <fstream>
 
 namespace fs = std::filesystem;
 

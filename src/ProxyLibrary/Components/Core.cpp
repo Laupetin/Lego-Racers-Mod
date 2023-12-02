@@ -1,10 +1,10 @@
 #include "Core.h"
 
-#include <iostream>
-
-#include "RacersOffset.h"
 #include "Game/LEGORacers2001.h"
 #include "Patch.h"
+#include "RacersOffset.h"
+
+#include <iostream>
 
 namespace core
 {
@@ -36,7 +36,7 @@ namespace core
 
         std::cout << "Launching LegoRacersMod\n";
     }
-}
+} // namespace core
 
 using namespace core;
 

@@ -1,9 +1,9 @@
 #pragma once
 
+#include "SrfEmitter.h"
+
 #include <memory>
 #include <ostream>
-
-#include "SrfEmitter.h"
 
 namespace srf
 {
@@ -14,4 +14,4 @@ namespace srf
 
         static std::unique_ptr<ISrfEmitter> Create(std::ostream& out);
     };
-}
+} // namespace srf

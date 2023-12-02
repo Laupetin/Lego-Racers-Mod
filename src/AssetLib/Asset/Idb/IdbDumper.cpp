@@ -1,9 +1,9 @@
 #include "IdbDumper.h"
 
-#include <iostream>
-
 #include "IdbBinaryReader.h"
 #include "IdbTextWriter.h"
+
+#include <iostream>
 
 using namespace idb;
 

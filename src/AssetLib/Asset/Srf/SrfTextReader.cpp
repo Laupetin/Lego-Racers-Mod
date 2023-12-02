@@ -46,44 +46,44 @@ namespace srf
                 switch (c)
                 {
                 case '\\':
+                {
+                    const auto c1 = m_stream.get();
+                    if (c1 != EOF)
                     {
-                        const auto c1 = m_stream.get();
-                        if (c1 != EOF)
-                        {
-                            if (c1 == 'r')
-                                ss << "\r";
-                            else if (c1 == 'n')
-                                ss << "\n";
-                            else
-                                ss << c1;
-                            hasStringData = true;
-                        }
+                        if (c1 == 'r')
+                            ss << "\r";
+                        else if (c1 == 'n')
+                            ss << "\n";
                         else
-                            throw SrfCreationException("Last character of Srf cannot be \\");
-                        break;
+                            ss << c1;
+                        hasStringData = true;
                     }
+                    else
+                        throw SrfCreationException("Last character of Srf cannot be \\");
+                    break;
+                }
 
                 case '\r':
+                {
+                    const auto c1 = m_stream.get();
+                    if (c1 == '\n')
                     {
-                        const auto c1 = m_stream.get();
-                        if (c1 == '\n')
+                        if (hasStringData)
                         {
-                            if (hasStringData)
-                            {
-                                m_emitter.EmitString(ss.str());
-                                ss.str(std::string());
-                                hasStringData = false;
-                            }
+                            m_emitter.EmitString(ss.str());
+                            ss.str(std::string());
+                            hasStringData = false;
                         }
-                        else
-                        {
-                            ss << static_cast<char>(c);
-                            hasStringData = true;
-                            c = c1;
-                            goto handle_letter;
-                        }
-                        break;
                     }
+                    else
+                    {
+                        ss << static_cast<char>(c);
+                        hasStringData = true;
+                        c = c1;
+                        goto handle_letter;
+                    }
+                    break;
+                }
 
                 case '\n':
                     if (hasStringData)
@@ -113,7 +113,7 @@ namespace srf
         std::istream& m_stream;
         ISrfEmitter& m_emitter;
     };
-}
+} // namespace srf
 
 using namespace srf;
 

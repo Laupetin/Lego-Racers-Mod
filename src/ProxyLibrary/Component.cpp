@@ -1,8 +1,8 @@
 #include "Component.h"
 
+#include <Windows.h>
 #include <iostream>
 #include <sstream>
-#include <Windows.h>
 
 Component::Component(std::string name)
     : m_name(std::move(name))

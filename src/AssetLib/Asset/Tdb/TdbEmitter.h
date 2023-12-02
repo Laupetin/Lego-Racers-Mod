@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <cstdint>
+#include <string>
 
 namespace tdb
 {
@@ -28,4 +28,4 @@ namespace tdb
         virtual void EmitKeyword2E() = 0;
         virtual void EndTexture() = 0;
     };
-}
+} // namespace tdb

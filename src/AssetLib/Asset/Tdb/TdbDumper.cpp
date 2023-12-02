@@ -1,9 +1,9 @@
 #include "TdbDumper.h"
 
-#include <iostream>
-
 #include "TdbBinaryReader.h"
 #include "TdbTextWriter.h"
+
+#include <iostream>
 
 using namespace tdb;
 

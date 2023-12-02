@@ -150,4 +150,4 @@ namespace common_grammar
     {
         return FloatingValue(ctx->getToken(ctx->getStart()->getType(), 0), value);
     }
-}
+} // namespace common_grammar

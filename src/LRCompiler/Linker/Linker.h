@@ -1,8 +1,8 @@
 #pragma once
 
-#include <memory>
-
 #include "Compiler/Compiler.h"
+
+#include <memory>
 
 class LinkerSettings
 {

@@ -134,7 +134,8 @@ namespace gdb
                     break;
 
                 case TOKEN_META_VERTICES:
-                    m_emitter.EmitMetaSelectVertices(static_cast<uint8_t>(meta.m_value0), static_cast<size_t>(meta.m_value1), static_cast<uint8_t>(meta.m_value2));
+                    m_emitter.EmitMetaSelectVertices(
+                        static_cast<uint8_t>(meta.m_value0), static_cast<size_t>(meta.m_value1), static_cast<uint8_t>(meta.m_value2));
                     break;
 
                 case TOKEN_META_FACES:
@@ -161,7 +162,7 @@ namespace gdb
         const Model& m_model;
         IGdbEmitter& m_emitter;
     };
-}
+} // namespace gdb
 
 using namespace gdb;
 

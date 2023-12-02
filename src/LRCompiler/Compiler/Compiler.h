@@ -1,9 +1,9 @@
 #pragma once
 
+#include "IUnitProcessor.h"
+
 #include <memory>
 #include <vector>
-
-#include "IUnitProcessor.h"
 
 class CompilerSettings
 {

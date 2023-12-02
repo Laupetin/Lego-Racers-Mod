@@ -1,15 +1,15 @@
 #include "ObjImporter.h"
 
-#include <fstream>
-#include <iostream>
-#include <filesystem>
-
+#include "Asset/Gdb/GdbStructReader.h"
+#include "Asset/Gdb/GdbTextWriter.h"
 #include "Obj.h"
 #include "ObjReader.h"
 #include "ObjToGdbConverter.h"
 #include "ObjWriter.h"
-#include "Asset/Gdb/GdbStructReader.h"
-#include "Asset/Gdb/GdbTextWriter.h"
+
+#include <filesystem>
+#include <fstream>
+#include <iostream>
 
 using namespace obj;
 
@@ -40,7 +40,7 @@ namespace obj
 
         return true;
     }
-}
+} // namespace obj
 
 bool ObjImporter::SupportsExtension(const std::string& extensionName) const
 {

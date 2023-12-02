@@ -1,10 +1,10 @@
 #pragma once
 
-#include <string>
-#include <memory>
-
 #include "LRCompilerArgs.h"
 #include "ProjectContext.h"
+
+#include <memory>
+#include <string>
 
 class ProjectContextCreator
 {

@@ -15,8 +15,7 @@ void UnitProcessorInputsAndOutputs::AddOutput(std::filesystem::path file, jam::J
     m_outputs.emplace_back(std::move(file), std::move(jamPath));
 }
 
-UnitProcessorResult::UnitProcessorResult()
-= default;
+UnitProcessorResult::UnitProcessorResult() = default;
 
 UnitProcessorResult::UnitProcessorResult(std::filesystem::path file, jam::JamFilePath jamPath)
     : m_file(std::move(file)),

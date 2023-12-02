@@ -1,10 +1,10 @@
 #pragma once
 
+#include "Asset/Mdb/MdbEmitter.h"
+#include "Obj.h"
+
 #include <memory>
 #include <vector>
-
-#include "Obj.h"
-#include "Asset/Mdb/MdbEmitter.h"
 
 namespace obj
 {
@@ -14,11 +14,11 @@ namespace obj
         virtual std::vector<MtlMaterial> RetrieveConvertedMaterials() = 0;
     };
 
-	class ObjMtlConverter
-	{
-	public:
-		ObjMtlConverter() = delete;
+    class ObjMtlConverter
+    {
+    public:
+        ObjMtlConverter() = delete;
 
-		static std::unique_ptr<IObjMtlConverter> Create();
-	};
-}
+        static std::unique_ptr<IObjMtlConverter> Create();
+    };
+} // namespace obj

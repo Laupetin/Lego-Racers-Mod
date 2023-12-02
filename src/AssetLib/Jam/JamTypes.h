@@ -1,11 +1,11 @@
 #pragma once
 
+#include "JamFilePath.h"
+
 #include <cstdint>
 #include <memory>
 #include <string>
 #include <vector>
-
-#include "JamFilePath.h"
 
 namespace jam
 {
@@ -66,4 +66,4 @@ namespace jam
         jam_id_t m_next_directory_id;
         jam_id_t m_next_file_id;
     };
-}
+} // namespace jam
