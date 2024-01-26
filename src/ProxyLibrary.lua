@@ -52,14 +52,14 @@ function ProxyLibrary:project()
         
         -- Post-build
         if _OPTIONS["copy-to"] then
-            saneCopyToPath = string.gsub(_OPTIONS["copy-to"] .. "\\", "\\\\", "\\")
+            saneCopyToPath = string.gsub(_OPTIONS["copy-to"] .. "/", "\\\\", "\\")
             postbuildcommands {
-                "if not exist \"" .. saneCopyToPath .. "\" mkdir \"" .. saneCopyToPath .. "\"",
+                "if not exist \"" .. saneCopyToPath .. "\" {MKDIR} \"" .. saneCopyToPath .. "\"",
             }
 
             -- This has to be the last one, as otherwise VisualStudio will succeed building even if copying fails
             postbuildcommands {
-                "copy /y \"$(TargetDir)*.dll\" \"" .. saneCopyToPath .. "\"",
+                "{COPYFILE} \"%{cfg.buildtarget.abspath}\" \"" .. saneCopyToPath .. "\"",
             }
         end
 end
