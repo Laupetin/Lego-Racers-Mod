@@ -2,86 +2,94 @@ name: ci
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - "master"
   pull_request:
-    branches: [ "master" ]
-
-env:
-  PREMAKE_VERSION: "5.0.0-beta2"
+    branches:
+      - "master"
 
 jobs:
   build-test-linux:
-    env:
-      PREMAKE_CONFIG: gmake2
+    strategy:
+      matrix:
+        toolset: [gcc, clang]
+    name: Build-Test Linux ${{ matrix.toolset }}
     runs-on: ubuntu-latest
+    container: ubuntu:24.04
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        submodules: recursive
+      - name: Enable i386 architecture
+        if: ${{ matrix.build_arch == 'x86' }}
+        run: dpkg --add-architecture i386
 
-    - name: Install multilib
-      run: |
-        sudo apt-get update
-        sudo apt-get install gcc-multilib g++-multilib
+      - name: Install base packages
+        run: |
+          apt-get update
+          apt-get install -y wget tar git make curl ${{ matrix.gtk_packages }}
 
-    - name: Setup premake
-      uses: abel0b/setup-premake@v2.1
-      with:
-        version: ${{ env.PREMAKE_VERSION }}
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
 
-    - name: Premake generate
-      working-directory: ${{ github.workspace }}
-      run: premake5 ${{ env.PREMAKE_CONFIG }}
+      - name: Configure gcc
+        uses: ./.github/actions/configure-gcc
+        with:
+          gcc_version: 14
+          enable_x86: true
 
-    - name: Build
-      working-directory: ${{ github.workspace }}
-      run: make -C build -j$(nproc) config=release_x86 all
-      
-    - name: Test
-      working-directory: ${{ github.workspace }}/build/lib/Release_x86/tests
-      run: ./AssetLibTests
-      
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: lego-racers-mod-linux
-        path: |
-          ${{ github.workspace }}/build/bin/Release_x86
+      - name: Configure clang
+        if: ${{ matrix.toolset == 'clang' }}
+        uses: ./.github/actions/configure-clang
+        with:
+          clang_version: 20
+          enable_x86: true
+
+      - name: Premake generate
+        working-directory: ${{ github.workspace }}
+        env:
+          PREMAKE_NO_PROMPT: 1
+        run: ./generate.sh --cc=${{ matrix.toolset }}
+
+      - name: Build
+        working-directory: ${{ github.workspace }}
+        run: |
+          export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig:$PKG_CONFIG_PATH
+          echo "Package config path: $PKG_CONFIG_PATH"
+          scripts/build.sh release
+          chmod +x build/bin/Release_x86/{AssetConverter,JamFileTool,lrcompile}
+
+      - name: Test
+        working-directory: ${{ github.workspace }}/build/lib/Release_x86/tests
+        run: |
+          ./AssetLibTests
 
   build-test-windows:
-    env:
-      PREMAKE_CONFIG: vs2022
-    runs-on: windows-latest
+    name: Build-Test Windows
+    runs-on: windows-2025-vs2026
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        submodules: recursive
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v3.0.0
 
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
 
-    - name: Setup premake
-      uses: abel0b/setup-premake@v2.1
-      with:
-        version: ${{ env.PREMAKE_VERSION }}
+      - name: Premake generate
+        working-directory: ${{ github.workspace }}
+        env:
+          PREMAKE_NO_PROMPT: 1
+        run: ./generate.bat
 
-    - name: Premake generate
-      working-directory: ${{ github.workspace }}
-      run: premake5 ${{ env.PREMAKE_CONFIG }}
-
-    - name: Build
-      working-directory: ${{ github.workspace }}
-      run: msbuild /m /p:Configuration=Release /p:Platform=Win32 build
-      
-    - name: Test
-      working-directory: ${{ github.workspace }}/build/lib/Release_x86/tests
-      run: ./AssetLibTests
-
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: lego-racers-mod-windows
-        path: |
-          ${{ github.workspace }}/build/bin/Release_x86
+      - name: Build
+        working-directory: ${{ github.workspace }}
+        run: |
+          msbuild /m /p:Configuration=Release /p:Platform=Win32 build
+        
+      - name: Test
+        working-directory: ${{ github.workspace }}/build/lib/Release_x86/tests
+        run: |
+          $combinedExitCode = 0
+          ./AssetLibTests
+          $combinedExitCode = [System.Math]::max($combinedExitCode, $LASTEXITCODE)
+          exit $combinedExitCode
