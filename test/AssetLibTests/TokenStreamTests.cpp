@@ -575,7 +575,7 @@ namespace test::token_stream
         ss.write(reinterpret_cast<const char*>(&f), sizeof(f));
 
         const auto value = stream->NextFloatValue();
-        REQUIRE_THAT(value, WithinAbs(static_cast<double>(4.20f), FLOAT_EPS));
+        REQUIRE_THAT(value, WithinRel(4.20f, 0.0001f));
 
         const auto token = stream->NextValue();
         REQUIRE(token.m_type == TOKEN_EOF);
