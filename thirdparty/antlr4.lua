@@ -34,7 +34,7 @@ function antlr4:project()
 		kind "StaticLib"
 		language "C++"
 		
-		files { 
+		files {
 			path.join(folder, "antlr4/runtime/Cpp/runtime/src/**.h"),
 			path.join(folder, "antlr4/runtime/Cpp/runtime/src/**.cpp"),
 		}
