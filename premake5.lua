@@ -27,9 +27,11 @@ workspace "LegoRacersMod"
     }
     defaultplatform "x86"
 
-    disablewarnings {
-        "26812" -- Prefer enum class over unscoped
-    }
+    filter "toolset:msc"
+        disablewarnings {
+            "26812" -- Prefer enum class over unscoped
+        }
+    filter {}
 
     filter "platforms:x86"
         architecture "x86"
