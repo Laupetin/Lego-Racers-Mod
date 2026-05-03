@@ -13,7 +13,7 @@
     extern "C" __declspec(naked) __declspec(dllexport) void _export()                                                                                          \
     {                                                                                                                                                          \
         SDLLP::GetExport(__FUNCTION__, LIBRARY);                                                                                                               \
-        __asm { jmp eax }                                                                                                                                      \
+        __asm { jmp eax }                                                                                                                                        \
     }
 
 // Static class
