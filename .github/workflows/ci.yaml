@@ -16,6 +16,9 @@ jobs:
     name: Build-Test Linux ${{ matrix.toolset }}
     runs-on: ubuntu-latest
     container: ubuntu:24.04
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Enable i386 architecture
         if: ${{ matrix.build_arch == 'x86' }}
