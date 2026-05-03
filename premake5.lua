@@ -1,3 +1,5 @@
+require("premake", ">=5.0.0-beta8")
+
 include "tools/scripts/folders.lua"
 include "tools/scripts/including.lua"
 include "tools/scripts/linking.lua"
@@ -11,11 +13,9 @@ workspace "LegoRacersMod"
     location "build"
     objdir "%{wks.location}/obj"
     systemversion "latest"
-    cppdialect "C++17"
-
-    flags {
-        "MultiProcessorCompile"
-    }
+    cppdialect "C++23"
+    largeaddressaware "on"
+    multiprocessorcompile "on"
 
     configurations { 
         "Debug",
@@ -27,9 +27,11 @@ workspace "LegoRacersMod"
     }
     defaultplatform "x86"
 
-    disablewarnings {
-        "26812" -- Prefer enum class over unscoped
-    }
+    filter "toolset:msc"
+        disablewarnings {
+            "26812" -- Prefer enum class over unscoped
+        }
+    filter {}
 
     filter "platforms:x86"
         architecture "x86"
@@ -59,9 +61,7 @@ workspace "LegoRacersMod"
         defines "NDEBUG"
         optimize "Full"
         symbols "Off"
-        flags {
-            "FatalWarnings"
-        }
+        fatalwarnings { "All" }
     filter {}
 
     defines {

@@ -147,8 +147,7 @@ public:
     using _Get_function_impl<T>::type::m_func;
 
     FunctionOffsetUsercall(const OffsetValue value, const std::function<void(UsercallConfiguration& usercall)> usercallInit)
-        : _Func_class_param_capture(),
-          FunctionOffsetUsercallBase(usercallInit)
+        : FunctionOffsetUsercallBase(usercallInit)
     {
         if (value.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)
         {
@@ -198,8 +197,7 @@ public:
     using _Get_function_impl<T>::type::m_func;
 
     explicit FunctionOffsetThiscall(const OffsetValue value)
-        : _Func_class_param_capture(),
-          FunctionOffsetThiscallBase()
+        : FunctionOffsetThiscallBase()
     {
         if (value.m_lazy_evaluation_index == OffsetValue::NO_LAZY_EVALUATION)
         {

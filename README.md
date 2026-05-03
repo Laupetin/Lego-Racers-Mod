@@ -59,7 +59,7 @@ Currently the amount of support asset types is still a bit slim but support for 
 
 This is the stuff you need to have installed to get started:
 
-- Visual Studio 2022 (older versions might work as well)
+- Visual Studio 2026 (older versions might work as well)
 - Git
 - (Optional) Java (version 1.6 or higher; if you want to generate ANTLR4 parsers)
 
@@ -84,7 +84,7 @@ Any time the premake configuration is changed *or* any files part of the solutio
 To generate the solution, simply run `generate.bat`.
 This will first download all required thirdparty dependencies via git submodules (if any changed) and then generates the Visual Studio solution.
 Now you can open the generated solution file with Visual Studio.
-It is located in `build/LegoRacersMod.sln`.
+It is located in `build/LegoRacersMod.slnx`.
 
 #### 2. (Optional) Specify custom arguments for premake
 

@@ -114,7 +114,7 @@ public:
 
 template<typename T> struct _Return_param_size
 {
-    static constexpr size_t SIZE = sizeof T;
+    static constexpr size_t SIZE = sizeof(T);
 };
 
 template<> struct _Return_param_size<void>
@@ -139,7 +139,7 @@ public:
 };
 
 // CLASS TEMPLATE _Func_class
-template<class _Ret, class... _Types> class _Func_class_param_capture : public ParamCaptureFunc
+template<class _Ret, class... _Types> class Func_class_param_capture_ : public ParamCaptureFunc
 {
     const size_t m_param_sizes_array[sizeof...(_Types)]{sizeof(_Types)...};
 
@@ -147,15 +147,15 @@ public:
     using func_ptr_t = _Ret (*)(_Types..., ...);
     using ret_t = _Ret;
 
-    _Func_class_param_capture()
+    Func_class_param_capture_()
         : ParamCaptureFunc(m_param_sizes_array, sizeof...(_Types), _Return_param_size<_Ret>::SIZE)
     {
     }
 
-    _Func_class_param_capture(const _Func_class_param_capture& other) = default;
-    _Func_class_param_capture(_Func_class_param_capture&& other) noexcept = default;
+    Func_class_param_capture_(const Func_class_param_capture_& other) = default;
+    Func_class_param_capture_(Func_class_param_capture_&& other) noexcept = default;
 
-    _Func_class_param_capture& operator=(const _Func_class_param_capture& other)
+    Func_class_param_capture_& operator=(const Func_class_param_capture_& other)
     {
         if (this == &other)
             return *this;
@@ -163,7 +163,7 @@ public:
         return *this;
     }
 
-    _Func_class_param_capture& operator=(_Func_class_param_capture&& other) noexcept
+    Func_class_param_capture_& operator=(Func_class_param_capture_&& other) noexcept
     {
         if (this == &other)
             return *this;
@@ -190,7 +190,7 @@ template<class T> struct _Get_function_impl_param_capture;
 #define _GET_FUNCTION_IMPL(CALL_OPT, X1, X2, X3)                                                                                                               \
     template<class _Ret, class... _Types> struct _Get_function_impl_param_capture<_Ret CALL_OPT(_Types...)> /* determine type from argument list */            \
     {                                                                                                                                                          \
-        using type = _Func_class_param_capture<_Ret, _Types...>;                                                                                               \
+        using type = Func_class_param_capture_<_Ret, _Types...>;                                                                                               \
     };
 
 _NON_MEMBER_CALL(_GET_FUNCTION_IMPL, X1, X2, X3)
