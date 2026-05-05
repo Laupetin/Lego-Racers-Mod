@@ -48,7 +48,7 @@ void* AsmJitContext::AddWrapper(asmjit::CodeHolder* code)
     void* result;
     const auto error = m_runtime.add(&result, code);
 
-    if (error == asmjit::ErrorCode::kErrorOk)
+    if (error == asmjit::Error::kOk)
         return result;
 
     return nullptr;
