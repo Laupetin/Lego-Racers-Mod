@@ -6,7 +6,8 @@
 #include <mutex>
 
 #pragma warning(push, 0)
-#include <asmjit.h>
+#include <asmjit/core.h>
+#include <asmjit/x86.h>
 #pragma warning(pop)
 
 class AsmJitContext

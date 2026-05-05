@@ -10,7 +10,7 @@ function asmjit:include(includes)
         }
 
         includedirs {
-            path.join(ThirdPartyFolder(), "asmjit/src/asmjit")
+            path.join(ThirdPartyFolder(), "asmjit")
         }
 	end
 end
@@ -42,8 +42,8 @@ function asmjit:project()
 		language "C++"
 		
 		files { 
-			path.join(folder, "asmjit/src/asmjit/**.h"),
-			path.join(folder, "asmjit/src/asmjit/**.cpp")
+			path.join(folder, "asmjit/asmjit/**.h"),
+			path.join(folder, "asmjit/asmjit/**.cpp")
 		}
 		
         self:include(includes)

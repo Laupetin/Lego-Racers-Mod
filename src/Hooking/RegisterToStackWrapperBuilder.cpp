@@ -1,7 +1,7 @@
 #include "RegisterToStackWrapperBuilder.h"
 
 #pragma warning(push, 0)
-#include <asmjit.h>
+#include <asmjit/core.h>
 #pragma warning(pop)
 
 #include "Internal/AsmJitWrapper.h"

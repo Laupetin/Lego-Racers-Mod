@@ -21,11 +21,11 @@ bool WrapperBuilderBase::GetRegisterLocationForParam(const int paramIndex, Regis
 
 void WrapperBuilderBase::ThrowIfError(const asmjit::Error error)
 {
-    const auto errorCode = static_cast<asmjit::ErrorCode>(error);
+    const auto errorCode = static_cast<asmjit::Error>(error);
 
-    if (errorCode != asmjit::ErrorCode::kErrorOk)
+    if (errorCode != asmjit::Error::kOk)
     {
-        const char* errorMessage = asmjit::DebugUtils::errorAsString(error);
+        const char* errorMessage = asmjit::DebugUtils::error_as_string(error);
         printf("Could not assemble wrapper: %s\n", errorMessage);
 
         throw std::exception("Assemble wrapper failed");
