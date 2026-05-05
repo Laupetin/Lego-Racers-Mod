@@ -41,13 +41,8 @@ public:
         Assembler assembler(&m_code);
         bool omitJumpBack = false;
         while (m_current_offset < m_minimum_length
-               && ZYAN_SUCCESS(ZydisDecoderDecodeFull(&m_decoder,
-                                                      reinterpret_cast<void*>(m_start_address + m_current_offset),
-                                                      std::numeric_limits<ZyanUSize>::max(),
-                                                      &instr,
-                                                      operands,
-                                                      static_cast<ZyanU8>(std::extent_v<decltype(operands)>),
-                                                      0)))
+               && ZYAN_SUCCESS(ZydisDecoderDecodeFull(
+                   &m_decoder, reinterpret_cast<void*>(m_start_address + m_current_offset), std::numeric_limits<ZyanUSize>::max(), &instr, operands)))
         {
             switch (instr.mnemonic)
             {
