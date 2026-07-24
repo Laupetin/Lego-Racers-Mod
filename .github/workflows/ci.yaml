@@ -30,7 +30,7 @@ jobs:
           apt-get install -y wget tar git make curl
 
       - name: Checkout repository
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
         with:
           submodules: recursive
 
@@ -74,7 +74,7 @@ jobs:
         uses: microsoft/setup-msbuild@v3.0.0
 
       - name: Checkout repository
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
         with:
           submodules: recursive
 
